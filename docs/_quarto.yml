@@ -11,10 +11,15 @@ website:
       - href: about.qmd
         text: "About"
 
-# Format rules for files across your project
-lang: en
+# Format rules for files across project
+lang: en # for accessibility
 format:
-  html:                  # Default layout for your website/book pages
+  html:
     theme: cosmo
     toc: true
-    axe: true
+    axe: true # for accessibility
+    anchor-sections: true
+    embed-resources: false
+    smooth-scroll: true
+    link-external-icon: true
+    link-external-newwindow: true
