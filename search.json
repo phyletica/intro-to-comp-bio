@@ -1,0 +1,70 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome to Intro to Comp Bio",
+    "section": "",
+    "text": "Welcome to our Comp Bio! Below you will find the direct links to view the slide presentations compiled for this term.\n\nLecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\n\nNote: You can use your spacebar or arrow keys to navigate the slides once opened.",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "slides/topic-02.html#using-au-cosams-linux-thinlinc",
+    "href": "slides/topic-02.html#using-au-cosams-linux-thinlinc",
+    "title": "Topic 2: Getting setup",
+    "section": "Using AU COSAM’s Linux ThinLinc",
+    "text": "Using AU COSAM’s Linux ThinLinc\n\nCourse overview\nTools we will use\nGrading policies"
+  },
+  {
+    "objectID": "slides/topic-02.html#using-the-al-super-computer",
+    "href": "slides/topic-02.html#using-the-al-super-computer",
+    "title": "Topic 2: Getting setup",
+    "section": "Using the AL Super Computer",
+    "text": "Using the AL Super Computer\nThis is some content on slide two."
+  },
+  {
+    "objectID": "slides/topic-01.html#welcome-to-the-class",
+    "href": "slides/topic-01.html#welcome-to-the-class",
+    "title": "Topic 1: What is Comp Bio?",
+    "section": "Welcome to the Class",
+    "text": "Welcome to the Class\n\nCourse overview\nTools we will use\nGrading policies"
+  },
+  {
+    "objectID": "slides/topic-01.html#slide-two",
+    "href": "slides/topic-01.html#slide-two",
+    "title": "Topic 1: What is Comp Bio?",
+    "section": "Slide Two",
+    "text": "Slide Two\nThis is some content on slide two."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "What is Intro to Comp Bio?",
+    "section": "",
+    "text": "This class borrows from Dr. Laurie Stevison’s class of the same name, and the Computational Biology class developed by Justin Fay.",
+    "crumbs": [
+      "About"
+    ]
+  },
+  {
+    "objectID": "about.html#acknowledgements",
+    "href": "about.html#acknowledgements",
+    "title": "What is Intro to Comp Bio?",
+    "section": "",
+    "text": "This class borrows from Dr. Laurie Stevison’s class of the same name, and the Computational Biology class developed by Justin Fay.",
+    "crumbs": [
+      "About"
+    ]
+  },
+  {
+    "objectID": "about.html#license",
+    "href": "about.html#license",
+    "title": "What is Intro to Comp Bio?",
+    "section": "License",
+    "text": "License",
+    "crumbs": [
+      "About"
+    ]
+  }
+]
