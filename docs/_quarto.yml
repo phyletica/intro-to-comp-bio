@@ -1,0 +1,20 @@
+project:
+  type: website # "book" might be a good layout too
+  output-dir: _site
+
+website:
+  title: "Intro to Comp Bio"
+  sidebar:
+    contents:
+      - href: index.qmd
+        text: "Home"
+      - href: about.qmd
+        text: "About"
+
+# Format rules for files across your project
+lang: en
+format:
+  html:                  # Default layout for your website/book pages
+    theme: cosmo
+    toc: true
+    axe: true

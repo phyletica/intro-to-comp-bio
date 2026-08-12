@@ -1,0 +1,15 @@
+---
+title: "What is Intro to Comp Bio?"
+---
+
+## Acknowledgements
+
+This class borrows from
+[Dr.\ Laurie Stevison's](https://sites.google.com/site/lstevison)
+class of the same name,
+and the
+[Computational Biology](https://github.com/fayjustin/computational_biology)
+class developed by
+[Justin Fay](https://fayjustin.github.io/).
+
+## License

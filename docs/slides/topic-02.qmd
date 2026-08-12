@@ -1,0 +1,17 @@
+---
+title: "Topic 2: Getting setup"
+author: "Jamie Oaks"
+format: revealjs
+metadata-files:
+  - _metadata.yml
+---
+
+## Using AU COSAM's Linux ThinLinc
+
+- Course overview
+- Tools we will use
+- Grading policies
+
+## Using the AL Super Computer
+
+This is some content on slide two.

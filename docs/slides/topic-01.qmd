@@ -1,0 +1,17 @@
+---
+title: "Topic 1: What is Comp Bio?"
+author: "Jamie Oaks"
+format: revealjs
+metadata-files:
+  - _metadata.yml
+---
+
+## Welcome to the Class
+
+- Course overview
+- Tools we will use
+- Grading policies
+
+## Slide Two
+
+This is some content on slide two.
