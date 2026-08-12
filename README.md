@@ -13,7 +13,7 @@ See the `README.md` in the `docs` directory for more information.
 # Acknowledgements
 
 This class borrows from
-[Dr.\ Laurie Stevison's](https://sites.google.com/site/lstevison)
+[Dr. Laurie Stevison's](https://sites.google.com/site/lstevison)
 class of the same name,
 and the
 [Computational Biology](https://github.com/fayjustin/computational_biology)
