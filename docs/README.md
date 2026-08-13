@@ -12,6 +12,15 @@ The project's workspace has quarto included. To activate the workspace use:
 For info about setting up the pixi workspace (which you only need to do once),
 please see the README.md in the project's base directory.
 
+## Steps before first build of website
+
+If you are building the site for the first time, you will also need to run the
+following commands to install quarto dependencies (assuming you have activated
+the pixi workspace):
+
+    quarto install tinytex
+    quarto add r-wasm/quarto-live
+
 ## Building and publishing the class website
 
 The source content for the documentation is in the `.qmd` markdown-formatted

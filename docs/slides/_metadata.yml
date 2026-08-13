@@ -1,6 +1,5 @@
 format:
   revealjs:
-    # output-file: "index.slides.html" # Forces a unique file suffix to prevent collisions
     theme: simple
     scrollable: true
     controls: true

@@ -6,12 +6,47 @@ metadata-files:
   - _metadata.yml
 ---
 
-## Welcome to the Class
+# Welcome to Intro to Comp Bio
 
 - Course overview
 - Tools we will use
 - Grading policies
 
-## Slide Two
+# The team
 
-This is some content on slide two.
+## GTAs
+
+-   Sean
+-   Alex
+-   Kyndall
+
+## Prof Oaks
+
+-   About me
+-   A
+-   Very
+-   Long slide
+
+With lots of info and a code block
+
+```python
+import os
+import sys
+
+def main(name):
+    print(f"Hello world, I'm {name}")
+
+if __name__ == '__main__':
+    name = "Joe"
+    main(name)
+```
+
+How doe's this very long slide look?
+
+Bad?
+
+# Syllabus
+
+## Office hours
+
+By appt
