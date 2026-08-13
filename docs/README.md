@@ -3,15 +3,14 @@
 This directory contains the source files for the class website, which is built
 via quarto.
 
-## Create and activate conda env
+## Activate the project's pixi workspace
 
-To build the website, first create the conda environment that contains quarto:
+The project's workspace has quarto included. To activate the workspace use:
 
-    micromamba env create --file docs-env.yml --name cb-web
+    pixi shell
 
-Then, activate the conda env:
-
-    micromamba activate cb-web
+For info about setting up the pixi workspace (which you only need to do once),
+please see the README.md in the project's base directory.
 
 ## Building and publishing the class website
 

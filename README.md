@@ -4,6 +4,24 @@ This repo contains the materials for an Intro to Computational Biology college
 course.
 The course is designed for graduate students and upper-division undergraduates.
 
+# Setting up the project's pixi workspace
+
+Once you have cloned this repo, you can create the project's
+[pixi](https://pixi.prefix.dev/latest/)
+workspace by moving into the project directory:
+
+    cd intro-to-comp-bio
+
+and then running:
+
+    pixi install
+
+This assumes you have
+[pixi](https://pixi.prefix.dev/latest/)
+installed.
+See
+[here for how to install pixi](https://pixi.prefix.dev/latest/installation/).
+
 # Course website
 
 The course website is contained in the `docs` directory.
