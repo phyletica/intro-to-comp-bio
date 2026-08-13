@@ -10,34 +10,6 @@
     ]
   },
   {
-    "objectID": "slides/topic-02.html#using-au-cosams-linux-thinlinc",
-    "href": "slides/topic-02.html#using-au-cosams-linux-thinlinc",
-    "title": "Topic 2: Getting setup",
-    "section": "Using AU COSAM’s Linux ThinLinc",
-    "text": "Using AU COSAM’s Linux ThinLinc\n\nCourse overview\nTools we will use\nGrading policies"
-  },
-  {
-    "objectID": "slides/topic-02.html#using-the-al-super-computer",
-    "href": "slides/topic-02.html#using-the-al-super-computer",
-    "title": "Topic 2: Getting setup",
-    "section": "Using the AL Super Computer",
-    "text": "Using the AL Super Computer\nThis is some content on slide two."
-  },
-  {
-    "objectID": "slides/topic-01.html#welcome-to-the-class",
-    "href": "slides/topic-01.html#welcome-to-the-class",
-    "title": "Topic 1: What is Comp Bio?",
-    "section": "Welcome to the Class",
-    "text": "Welcome to the Class\n\nCourse overview\nTools we will use\nGrading policies"
-  },
-  {
-    "objectID": "slides/topic-01.html#slide-two",
-    "href": "slides/topic-01.html#slide-two",
-    "title": "Topic 1: What is Comp Bio?",
-    "section": "Slide Two",
-    "text": "Slide Two\nThis is some content on slide two."
-  },
-  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "What is Intro to Comp Bio?",
@@ -66,5 +38,40 @@
     "crumbs": [
       "About"
     ]
+  },
+  {
+    "objectID": "slides/topic-01.html#gtas",
+    "href": "slides/topic-01.html#gtas",
+    "title": "Topic 1: What is Comp Bio?",
+    "section": "GTAs",
+    "text": "GTAs\n\nSean\nAlex\nKyndall"
+  },
+  {
+    "objectID": "slides/topic-01.html#prof-oaks",
+    "href": "slides/topic-01.html#prof-oaks",
+    "title": "Topic 1: What is Comp Bio?",
+    "section": "Prof Oaks",
+    "text": "Prof Oaks\n\nAbout me\nA\nVery\nLong slide\n\nWith lots of info and a code block\nimport os\nimport sys\n\ndef main(name):\n    print(f\"Hello world, I'm {name}\")\n\nif __name__ == '__main__':\n    name = \"Joe\"\n    main(name)\nHow doe’s this very long slide look?\nBad?"
+  },
+  {
+    "objectID": "slides/topic-01.html#office-hours",
+    "href": "slides/topic-01.html#office-hours",
+    "title": "Topic 1: What is Comp Bio?",
+    "section": "Office hours",
+    "text": "Office hours\nBy appt"
+  },
+  {
+    "objectID": "slides/topic-02.html#using-au-cosams-linux-thinlinc",
+    "href": "slides/topic-02.html#using-au-cosams-linux-thinlinc",
+    "title": "Topic 2: Getting setup",
+    "section": "Using AU COSAM’s Linux ThinLinc",
+    "text": "Using AU COSAM’s Linux ThinLinc\n\nCourse overview\nTools we will use\nGrading policies"
+  },
+  {
+    "objectID": "slides/topic-02.html#using-the-al-super-computer",
+    "href": "slides/topic-02.html#using-the-al-super-computer",
+    "title": "Topic 2: Getting setup",
+    "section": "Using the AL Super Computer",
+    "text": "Using the AL Super Computer\nThis is some content on slide two."
   }
 ]
