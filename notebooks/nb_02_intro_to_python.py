@@ -7,20 +7,28 @@ app = marimo.App()
 @app.cell(hide_code=True)
 def _():
 
-    import os
-    import urllib.request
+    def setup_local_file(file_name):
+        import os
+        import urllib.request
 
-    fasta_url = "https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/first.fasta"
-    fasta_file = "first.fasta"
+        url = f"https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/{file_name}"
+        file_path = os.path.join("data", file_name)
 
-    # Download the file if it doesn't already exist in the environment
-    if not os.path.exists(fasta_file):
-        try:
-            urllib.request.urlretrieve(fasta_url, fasta_file)
-        except Exception as e:
-            print(f"Failed to download file: {fasta_url}")
-            raise e
-    return
+        # Download the file if it doesn't already exist in the environment
+        if not os.path.exists(file_path):
+            try:
+                urllib.request.urlretrieve(url, file_path)
+            except Exception as e:
+                print(f"Failed to download file: {url}")
+                raise e
+        return file_path
+
+    local_files = [
+        "first.fasta",
+    ]
+    local_paths = [setup_local_file(f) for f in local_files]
+
+    return (local_paths,)
 
 
 @app.cell
@@ -367,7 +375,7 @@ def _(mo):
 
 
 @app.cell
-def _():
+def _(local_paths):
     file_name = 'first.fasta'
     seq_2 = ''  # empty sequence
     with open(file_name, 'r') as in_stream:
