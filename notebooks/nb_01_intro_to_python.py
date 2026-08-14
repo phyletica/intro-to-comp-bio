@@ -357,7 +357,7 @@ def _(mo):
 @app.cell
 def _(local_files):
     local_files # Ignore this line, it just ensures the fasta file exists
-    file_name = 'data/first.fasta'
+    file_name = 'first.fasta'
     seq_2 = ''  # empty sequence
     with open(file_name, 'r') as in_stream:
         for line in in_stream:
