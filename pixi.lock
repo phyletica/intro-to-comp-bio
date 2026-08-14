@@ -209,6 +209,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/tktable-2.10-h5a7a40f_8.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/tornado-6.5.8-py314h5bd0f2a_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/typst-0.14.2-h4c46f8d_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/uv-0.12.4-hec9e821_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/xorg-libice-1.1.2-h280c20c_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/xorg-libsm-1.2.6-h0d788c3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/xorg-libx11-1.8.13-he1eb515_0.conda
@@ -3572,6 +3573,20 @@ packages:
   run_exports: {}
   size: 15445965
   timestamp: 1765697444419
+- conda: https://conda.anaconda.org/conda-forge/linux-64/uv-0.12.4-hec9e821_0.conda
+  sha256: 8d08cb867317186ee3baddd8ddffdcbeb7085fca1672cf9f4d5a95dd575453c9
+  md5: 751fe5b94b099523f55a2c886d8fe2bb
+  depends:
+  - __glibc >=2.17,<3.0.a0
+  - libgcc >=15
+  - libstdcxx >=15
+  constrains:
+  - __glibc >=2.17
+  license: Apache-2.0 OR MIT
+  purls: []
+  run_exports: {}
+  size: 17885005
+  timestamp: 1786661122834
 - conda: https://conda.anaconda.org/conda-forge/linux-64/xorg-libice-1.1.2-h280c20c_0.conda
   sha256: 49b532d1df875c6749d9078b56a76f3f5db49a5abe0ca620b593ed474ef0ebf1
   md5: 85c9442aec283b4e464fa9ecc484a2f3
