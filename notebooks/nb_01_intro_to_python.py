@@ -1,34 +1,14 @@
+# /// script
+# requires-python = ">=3.14"
+# dependencies = [
+#     "marimo>=0.23.16",
+# ]
+# ///
+
 import marimo
 
-__generated_with = "0.23.4"
+__generated_with = "0.23.16"
 app = marimo.App()
-
-
-@app.cell(hide_code=True)
-def _():
-
-    def setup_local_file(file_name):
-        import os
-        import urllib.request
-
-        url = f"https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/{file_name}"
-        file_path = os.path.join("data", file_name)
-
-        # Download the file if it doesn't already exist in the environment
-        if not os.path.exists(file_path):
-            try:
-                urllib.request.urlretrieve(url, file_path)
-            except Exception as e:
-                print(f"Failed to download file: {url}")
-                raise e
-        return file_path
-
-    local_files = [
-        "first.fasta",
-    ]
-    local_paths = [setup_local_file(f) for f in local_files]
-
-    return (local_paths,)
 
 
 @app.cell
@@ -376,7 +356,8 @@ def _(mo):
 
 @app.cell
 def _(local_paths):
-    file_name = 'first.fasta'
+    local_paths # Ignore this line, it just ensures the fasta file exists
+    file_name = 'data/first.fasta'
     seq_2 = ''  # empty sequence
     with open(file_name, 'r') as in_stream:
         for line in in_stream:
@@ -486,7 +467,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell()
 def _():
     seq_3 = 'TAACCCCTCAGCTTTATTTCTAGTTACAGTTACAACAAACTATCCCAAACCATAAATCTT' + 'AATATTTTAGGTGTCAAAAAATGAGGATCTCCAAATGAGAGTTTGGTACCATGACTTGTA' + 'ACTCCACTACCCTGATCTGCAATCTTGTTCTTAGAAGTGACGCATACTCTATATGGCCCG' + 'ACGCGACGCGCCAAAAAATGAAAAAAGAAGCAGCGACTCATTTTTATGGAAGGACAAAGT' + 'GCTGCGAAGTCATACGCTTCCAATTTCATTATTGTTTATTGGACATACTCTGTTAGCTTT' + 'ATTACCGTCCACGCTTTTTCTACAATAGTGTAAAAGTTTCTTTCTTATGTTCATCGTATT' + 'CATAAAATGCTTCACGAACACCGTCATTGATCAAATAGGTTTATAATATTAATATACATT'
 
@@ -501,6 +482,39 @@ def _():
     findpos(205, seq_3)  # replace code below
     findpos(705, seq_3)
     return
+
+
+@app.cell(hide_code=True)
+def _():
+    # You can ignore this cell
+
+    # This cell contains hidden code to make sure any files we use in this
+    # notebook are present.
+    # If you are curious, when you see the `local_paths` variable in the
+    # notebook, it gets created in this cell and its sole purpose is to ensure
+    # files are present before we try to work with them.
+
+    def setup_local_file(file_name):
+        import os
+        import urllib.request
+
+        url = f"https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/{file_name}"
+        file_path = os.path.join("data", file_name)
+
+        # Download the file if it doesn't already exist in the environment
+        if not os.path.exists(file_path):
+            try:
+                urllib.request.urlretrieve(url, file_path)
+            except Exception as e:
+                print(f"Failed to download file: {url}")
+                raise e
+        return file_path
+
+    local_files = [
+        "first.fasta",
+    ]
+    local_paths = [setup_local_file(f) for f in local_files]
+    return (local_paths,)
 
 
 if __name__ == "__main__":
