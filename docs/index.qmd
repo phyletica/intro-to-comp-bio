@@ -21,4 +21,4 @@ To work on an exercise:
     edit in your workspace." Then confirm by clicking "Fork notebook."
 
 
--   [Intro to Python](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb_01_intro_to_python.py) [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb_01_intro_to_python.py)
+-   [Intro to Python](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-01-intro-to-python/nb_01_intro_to_python.py) [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-01-intro-to-python/nb_01_intro_to_python.py)
