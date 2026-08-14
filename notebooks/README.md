@@ -6,3 +6,5 @@ These slides are converted and modified from the Jupyter notebooks from the
 [Computational Biology](https://github.com/fayjustin/computational_biology)
 class developed by
 [Justin Fay](https://fayjustin.github.io/).
+I am grateful to Justin for making his his class materials available under an
+open license.
