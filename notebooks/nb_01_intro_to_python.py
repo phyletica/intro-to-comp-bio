@@ -355,8 +355,8 @@ def _(mo):
 
 
 @app.cell
-def _(local_paths):
-    local_paths # Ignore this line, it just ensures the fasta file exists
+def _(local_files):
+    local_files # Ignore this line, it just ensures the fasta file exists
     file_name = 'data/first.fasta'
     seq_2 = ''  # empty sequence
     with open(file_name, 'r') as in_stream:
@@ -490,7 +490,7 @@ def _():
 
     # This cell contains hidden code to make sure any files we use in this
     # notebook are present.
-    # If you are curious, when you see the `local_paths` variable in the
+    # If you are curious, when you see the `local_files` variable in the
     # notebook, it gets created in this cell and its sole purpose is to ensure
     # files are present before we try to work with them.
 
@@ -499,22 +499,21 @@ def _():
         import urllib.request
 
         url = f"https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/{file_name}"
-        file_path = os.path.join("data", file_name)
 
         # Download the file if it doesn't already exist in the environment
-        if not os.path.exists(file_path):
+        if not os.path.exists(file_name):
             try:
-                urllib.request.urlretrieve(url, file_path)
+                urllib.request.urlretrieve(url, file_name)
             except Exception as e:
                 print(f"Failed to download file: {url}")
                 raise e
-        return file_path
+        return file_name
 
-    local_files = [
+    file_names = [
         "first.fasta",
     ]
-    local_paths = [setup_local_file(f) for f in local_files]
-    return (local_paths,)
+    local_files = [setup_local_file(f) for f in file_names]
+    return (local_files,)
 
 
 if __name__ == "__main__":
