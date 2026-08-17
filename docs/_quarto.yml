@@ -10,8 +10,8 @@ website:
         text: "Home"
       - href: about.qmd
         text: "About"
-      - href: test.qmd
-        text: "Test"
+      # - href: test.qmd
+      #   text: "Test"
 
 # Format rules for files across project
 lang: en # for accessibility

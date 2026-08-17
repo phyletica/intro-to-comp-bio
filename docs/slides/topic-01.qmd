@@ -1,52 +1,353 @@
 ---
-title: "Topic 1: What is Comp Bio?"
-author: "Jamie Oaks"
+# title: "Topic 1: What is Comp Bio?"
+# author: "Jamie Oaks"
 format: revealjs
 metadata-files:
   - _metadata.yml
 ---
 
-# Welcome to Intro to Comp Bio
+# Welcome to Intro to Comp Bio { .center }
 
-- Course overview
-- Tools we will use
-- Grading policies
+::: {.column-body style="text-align: center;"}
+![](
+    images/qr-code-class-site.jpg
+){
+    width="30%"
+    fig-align="center"
+    fig-alt="QR Code link to class website"
+}
 
-# The team
+[aub.ie/icb](https://phyletica.org/intro-to-comp-bio/)
+:::
+
+
+## Today's objectives
+
+-   What is Comp Bio?
+-   Course overview
+-   Exercise 1
+    -   Starting to setup ASC account
+
+
+# The Instructional Team
 
 ## GTAs
 
--   Sean
--   Alex
--   Kyndall
+-   Sean Onileowo (sao0027)
+-   Alex Systun (ats0100)
+-   Kyndall Skelton (kps0016)
 
-## Prof Oaks
+## Instructor
 
--   About me
--   A
--   Very
--   Long slide
+[Dr. Jamie Oaks](http://phyletica.org)
 
-With lots of info and a code block
+[phyletica.org](http://phyletica.org) | GitHub: [joaks1](https://github.com/joaks1)
 
-```python
-import os
-import sys
+## Phyletica Lab Research
 
-def main(name):
-    print(f"Hello world, I'm {name}")
+![](
+    images/phyletica-research.png
+){
+    width="90%"
+    fig-align="center"
+    fig-alt="Diagram of lab research"
+}
 
-if __name__ == '__main__':
-    name = "Joe"
-    main(name)
-```
 
-How doe's this very long slide look?
+# What is Comp Bio?
 
-Bad?
+---
 
-# Syllabus
+***Computational biology***
+
+-   The study of life using computational techniques, theoretical models, and
+    data
+-   Conceptual
+
+. . .
+
+***Bioinformatics***
+
+-   Creating tools (algorithms, databases) to solve biological problems
+-   More applied
+
+
+## Comp Bio is as broad as biology
+
+::: {.incremental}
+-   All fields of biology can now generate enormous quantities of data that
+    require computational approaches
+-   For this class, we will focus on:
+    -   Evolutionary biology
+    -   Molecular evolution & phylogenetics
+    -   Genomics
+-   Modeling and computational skills generalize to other fields
+:::
+
+## Algos & models used in comp bio
+
+A ***model*** is a parametric explanation of biological observations
+
+. . .
+
+An ***algorithm*** is a set of instructions for solving a problem
+
+## Probabilistic models
+
+-   Maximum likelihood
+-   Bayesian inference
+-   Machine learning
+-   Markov chain models
+
+Used across biology
+
+## Algorithms
+
+-   String algos
+    -   sort, search, etc
+-   Optimization algos
+    -   Dynamic programming
+    -   Linear programming
+    -   Greedy algos, heuristic methods
+    -   Expectation-maximization
+
+Used across biology
+
+## Science is based on models
+
+>   All science is based on models, and every scientific model comprises three
+>   distinct stages: statement of well-defined hypotheses; deduction of all the
+>   consequences of these hypotheses, and nothing but these consequences;
+>   confrontation of these consequences with observed data.
+>   - Maurice Allais
+
+. . .
+
+>   All models are wrong, but some models are useful.
+>   - George Box
+
+
+# Course overview
+
+## Course format
+
+::: {.incremental}
+-   This course will be in-person
+-   We will do a mix of
+    -   Lecture
+    -   "Follow-along" demos
+    -   Exercises
+-   I will record classes as Panopto webcasts and post them to Canvas
+    -   BUT, this will not replace exercises
+:::
+
+## Course objectives
+
+Enable you to:
+
+::: {.incremental}
+-   Apply basic Linux/Unix command-line utilities
+-   Use basic programming for data processing
+-   Use version-control tools for reproducibility
+-   Understand probabilistic models for biological questions
+-   Encode and apply computational algorithms to biological data
+:::
+
+. . .
+
+***Learn computational approaches to processing biological data and modeling
+biological ideas***
+
+## Course materials
+
+::: {.incremental}
+-   You will need a computer you can bring to class with you
+    -   Laptop/tablet running Linux, macOS, or Windows is ideal
+    -   Up-to-date browser
+-   A free [GitHub](https://github.com/) account
+-   A free [Marimo molab](https://molab.marimo.io/) account
+:::
+
+## Course content
+
+Found on the course
+
+-   [Website](https://phyletica.org/intro-to-comp-bio/)
+    -   Slides & documentation
+    -   Exercises
+-   Canvas page
+    -   Syllabus
+    -   Announcements
+    -   Some exercises
+    -   Assignment submission
+
+## Textbook
+
+::: {.incremental}
+-   There is no required textbook
+-   Practical Computing for Biologists, by Haddock and Dunn, is a good resource
+-   I might distribute readings throughout the semester
+:::
 
 ## Office hours
 
-By appt
+::: {.incremental}
+-   GTAs and I will setup booking pages in Outlook
+    -   [Here's mine](https://outlook.office.com/bookwithme/user/08127dcfceae4c999e18fa0c0a629d44@auburn.edu/meetingtype/WN-JhsVWeEeLrmmxWMNwLA2?anonymous&ismsaljsauthenabled&ep=mlink)
+-   Use these to book 30-minute appointments with us
+    -   1-on-1 meetings are ideal for computational topics
+:::
+
+## Where's Dr. Oaks?
+
+::: {.column-body style="text-align: center;"}
+![](
+    images/office-map.png
+){
+    width="50%"
+    fig-align="center"
+    fig-alt="Map of STEM-Ag complex"
+}
+
+STEM-Ag 2238
+:::
+
+
+# Assignments & Grading
+
+## My philosophy for high-level courses
+
+::: {.incremental}
+-   I assume you're here for the right reasons
+-   If so, I think you'll have fun and learn a lot
+-   At your stage, you should be motivated to acquire knowledge and skills
+    -   Not by grades
+-   Can you get a good grade without learning much?
+    -   Quite possibly
+:::
+
+## Lab exercises
+
+::: {.incremental}
+-   Low-stake opportunities to apply what you're learning
+-   Mostly completed in class
+-   Work together, but submit your own work
+-   Graded for effort
+-   We will do a number of these and your 2 lowest scores will be dropped
+:::
+
+## Capstone projects
+
+::: {.incremental}
+-   Similar in format to exercises, but more challenging
+-   Do not work together
+-   Graded for correctness
+-   Mostly done out of class, but you will have opportunities to work on them
+    in class
+-   Start early and use office hours
+:::
+
+## Late exercises and projects
+
+-   20% deduction per day late
+
+
+## Course grading 
+
+| Item | Grade % |
+|---|---|
+| Lab exercises | 60% |
+| Capstone projects | 40% |
+
+: Breakdown of grading component percentages {#tbl-points}
+
+Your final percentage will be calculated as:
+
+Final percent = ( lab exercises % $\times$ 0.6 )
+
+$+$ ( capstone projects % $\times$ 0.4 )
+
+## Grading scale
+
+| Percentage | Grade |
+|---|---|
+|  $\geq$ 90% | A |
+| 80.0 -- 90.0% | B |
+| 70.0 -- 80.0% | C |
+| 60.0 -- 70.0% | D |
+| < 60.0% | F |
+
+: Grading scale {#tbl-grades}
+
+
+# Course policies
+
+(see syllabus)
+
+## AI policy
+
+::: {.incremental}
+-   I will not teach it, but you are encouraged to try out generative AI tools
+-   Use them to help (not hinder) your learning
+-   When used, you need to disclose
+:::
+
+## Class courtesy
+
+::: {.incremental}
+-   It's our shared responsibility to create a positive learning environment for everyone
+-   Please use the "Anonymous Feedback" module in Canvas to report any issues
+:::
+
+
+# Exercise 1
+
+## Make sure your VPN is setup and working
+
+:::: {.columns}
+
+::: {.column width="55%"}
+-   Connect to AU's VPN
+-   Open browser and go to: [https://csm-earth.auburn.edu/](https://csm-earth.auburn.edu/)
+-   You should see log-in page
+-   Don't log in now, we will do that on Wednesday
+-   If you can't see the log-in page, your VPN is not working
+    -   Let us know
+    -   Reach out to [AU IT Service Desk](https://auburn.service-now.com/it?id=sc_cat_item&sys_id=d42cfd0cdbcd2340965cf9b9af961928)
+:::
+
+::: {.column width="45%"}
+![](
+    images/thinlinc-login.png
+){
+    fig-align="center"
+    fig-alt="Log in page for Linux Thinlinc"
+}
+:::
+
+::::
+
+## Setting up ASC account
+
+-   You should have received a Canvas message with your username and password
+    for the ASC
+    -   Please let me know if you didn't
+-   Go to the "Exercise-01" Module on Canvas and use the "Setting-up-DUO-for-ASC-account.pdf" PDF to:
+    -   Set up 2-factor authentication for your ASC account
+    -   Access the ASC user documentation
+    -   From "Getting started" page, read:
+        -   *About this website*
+        -   *Rules of behavior*
+        -   *Getting help*
+-   Then, answer the questions for the "Exercise 1" quiz
+-   Due before class next Monday
+
+
+# Coming up
+
+## Wednesday
+
+-   Intro to command-line shell environment
+-   Access Linux Thinlinc environment
+    -   COSAM IT will be on-hand to help troubleshoot
+

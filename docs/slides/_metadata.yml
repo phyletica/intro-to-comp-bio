@@ -1,7 +1,10 @@
 format:
   revealjs:
+    css: styles.css
     theme: simple
     scrollable: true
     controls: true
     slide-number: true
     embed-resources: true
+    transition: slide # none
+    transition-speed: default # fast slow

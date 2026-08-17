@@ -2,23 +2,23 @@
 title: "Welcome to Intro to Comp Bio"
 ---
 
-Welcome to our Comp Bio! Below you will find the direct links to view the slide
-presentations compiled for this term.
+Welcome to Intro to Comp Bio! Below you will find the direct links to view the
+slide presentations compiled for this term.
 
-### Lecture Presentations
+## Lecture Presentations
 
 *   [View Lecture 1 Slides](slides/topic-01.qmd)
-*   [View Lecture 2 Slides](slides/topic-02.qmd)
+<!-- *   [View Lecture 2 Slides](slides/topic-02.qmd) -->
 
-*Note: You can use your spacebar or arrow keys to navigate the slides once opened.*
+<!-- *Note: You can use your spacebar or arrow keys to navigate the slides once opened.* -->
 
-### Lab exercises
+<!-- ## Lab exercises -->
 
-To work on an exercise:
+<!-- To work on an exercise: -->
 
-1.  Click the link below to open it in marimo's molab
-2.  Once the notebook opens in molab, near the top of the page, click "fork to
-    edit in your workspace." Then confirm by clicking "Fork notebook."
+<!-- 1.  Click the link below to open it in marimo's molab -->
+<!-- 2.  Once the notebook opens in molab, near the top of the page, click "fork to -->
+<!--     edit in your workspace." Then confirm by clicking "Fork notebook." -->
 
 
--   [Intro to Python](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-01-intro-to-python/nb_01_intro_to_python.py) [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-01-intro-to-python/nb_01_intro_to_python.py)
+<!-- -   [Intro to Python](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-01-intro-to-python/nb_01_intro_to_python.py) [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-01-intro-to-python/nb_01_intro_to_python.py) -->
