@@ -4,7 +4,17 @@
     "href": "index.html",
     "title": "Welcome to Intro to Comp Bio",
     "section": "",
-    "text": "Welcome to our Comp Bio! Below you will find the direct links to view the slide presentations compiled for this term.\n\nLecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\n\nNote: You can use your spacebar or arrow keys to navigate the slides once opened.\n\n\nLab exercises\nTo work on an exercise:\n\nClick the link below to open it in marimo’s molab\nOnce the notebook opens in molab, near the top of the page, click “fork to edit in your workspace.” Then confirm by clicking “Fork notebook.”\n\n\nIntro to Python",
+    "text": "Welcome to Intro to Comp Bio! Below you will find the direct links to view the slide presentations compiled for this term.",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "index.html#lecture-presentations",
+    "href": "index.html#lecture-presentations",
+    "title": "Welcome to Intro to Comp Bio",
+    "section": "Lecture Presentations",
+    "text": "Lecture Presentations\n\nView Lecture 1 Slides",
     "crumbs": [
       "Home"
     ]
@@ -14,7 +24,7 @@
     "href": "about.html",
     "title": "What is Intro to Comp Bio?",
     "section": "",
-    "text": "This class borrows from Dr. Laurie Stevison’s class of the same name, and the Computational Biology class developed by Justin Fay.",
+    "text": "Computational Biology is a very broad field that entails the use of computational techniques to study biology.",
     "crumbs": [
       "About"
     ]
@@ -23,8 +33,8 @@
     "objectID": "about.html#acknowledgements",
     "href": "about.html#acknowledgements",
     "title": "What is Intro to Comp Bio?",
-    "section": "",
-    "text": "This class borrows from Dr. Laurie Stevison’s class of the same name, and the Computational Biology class developed by Justin Fay.",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nThis class borrows from Dr. Laurie Stevison’s class of the same name, and the Computational Biology class developed by Justin Fay.",
     "crumbs": [
       "About"
     ]
@@ -34,31 +44,199 @@
     "href": "about.html#license",
     "title": "What is Intro to Comp Bio?",
     "section": "License",
-    "text": "License",
+    "text": "License\nThis work is marked CC0 1.0",
     "crumbs": [
       "About"
     ]
   },
   {
-    "objectID": "slides/topic-01.html#gtas",
-    "href": "slides/topic-01.html#gtas",
-    "title": "Topic 1: What is Comp Bio?",
-    "section": "GTAs",
-    "text": "GTAs\n\nSean\nAlex\nKyndall"
+    "objectID": "slides/topic-01.html#todays-objectives",
+    "href": "slides/topic-01.html#todays-objectives",
+    "title": "Intro to Comp Bio",
+    "section": "Today’s objectives",
+    "text": "Today’s objectives\n\nWhat is Comp Bio?\nCourse overview\nExercise 1\n\nStarting to setup ASC account"
   },
   {
-    "objectID": "slides/topic-01.html#prof-oaks",
-    "href": "slides/topic-01.html#prof-oaks",
-    "title": "Topic 1: What is Comp Bio?",
-    "section": "Prof Oaks",
-    "text": "Prof Oaks\n\nAbout me\nA\nVery\nLong slide\n\nWith lots of info and a code block\nimport os\nimport sys\n\ndef main(name):\n    print(f\"Hello world, I'm {name}\")\n\nif __name__ == '__main__':\n    name = \"Joe\"\n    main(name)\nHow doe’s this very long slide look?\nBad?"
+    "objectID": "slides/topic-01.html#gtas",
+    "href": "slides/topic-01.html#gtas",
+    "title": "Intro to Comp Bio",
+    "section": "GTAs",
+    "text": "GTAs\n\nSean Onileowo (sao0027)\nAlex Systun (ats0100)\nKyndall Skelton (kps0016)"
+  },
+  {
+    "objectID": "slides/topic-01.html#instructor",
+    "href": "slides/topic-01.html#instructor",
+    "title": "Intro to Comp Bio",
+    "section": "Instructor",
+    "text": "Instructor\nDr. Jamie Oaks\nphyletica.org | GitHub: joaks1"
+  },
+  {
+    "objectID": "slides/topic-01.html#phyletica-lab-research",
+    "href": "slides/topic-01.html#phyletica-lab-research",
+    "title": "Intro to Comp Bio",
+    "section": "Phyletica Lab Research",
+    "text": "Phyletica Lab Research"
+  },
+  {
+    "objectID": "slides/topic-01.html#comp-bio-is-as-broad-as-biology",
+    "href": "slides/topic-01.html#comp-bio-is-as-broad-as-biology",
+    "title": "Intro to Comp Bio",
+    "section": "Comp Bio is as broad as biology",
+    "text": "Comp Bio is as broad as biology\n\nAll fields of biology can now generate enormous quantities of data that require computational approaches\nFor this class, we will focus on:\n\nEvolutionary biology\nMolecular evolution & phylogenetics\nGenomics\n\nModeling and computational skills generalize to other fields"
+  },
+  {
+    "objectID": "slides/topic-01.html#algos-models-used-in-comp-bio",
+    "href": "slides/topic-01.html#algos-models-used-in-comp-bio",
+    "title": "Intro to Comp Bio",
+    "section": "Algos & models used in comp bio",
+    "text": "Algos & models used in comp bio\nA model is a parametric explanation of biological observations\n\nAn algorithm is a set of instructions for solving a problem"
+  },
+  {
+    "objectID": "slides/topic-01.html#probabilistic-models",
+    "href": "slides/topic-01.html#probabilistic-models",
+    "title": "Intro to Comp Bio",
+    "section": "Probabilistic models",
+    "text": "Probabilistic models\n\nMaximum likelihood\nBayesian inference\nMachine learning\nMarkov chain models\n\nUsed across biology"
+  },
+  {
+    "objectID": "slides/topic-01.html#algorithms",
+    "href": "slides/topic-01.html#algorithms",
+    "title": "Intro to Comp Bio",
+    "section": "Algorithms",
+    "text": "Algorithms\n\nString algos\n\nsort, search, etc\n\nOptimization algos\n\nDynamic programming\nLinear programming\nGreedy algos, heuristic methods\nExpectation-maximization\n\n\nUsed across biology"
+  },
+  {
+    "objectID": "slides/topic-01.html#science-is-based-on-models",
+    "href": "slides/topic-01.html#science-is-based-on-models",
+    "title": "Intro to Comp Bio",
+    "section": "Science is based on models",
+    "text": "Science is based on models\n\nAll science is based on models, and every scientific model comprises three distinct stages: statement of well-defined hypotheses; deduction of all the consequences of these hypotheses, and nothing but these consequences; confrontation of these consequences with observed data. - Maurice Allais\n\n\n\nAll models are wrong, but some models are useful. - George Box"
+  },
+  {
+    "objectID": "slides/topic-01.html#course-format",
+    "href": "slides/topic-01.html#course-format",
+    "title": "Intro to Comp Bio",
+    "section": "Course format",
+    "text": "Course format\n\nThis course will be in-person\nWe will do a mix of\n\nLecture\n“Follow-along” demos\nExercises\n\nI will record classes as Panopto webcasts and post them to Canvas\n\nBUT, this will not replace exercises"
+  },
+  {
+    "objectID": "slides/topic-01.html#course-objectives",
+    "href": "slides/topic-01.html#course-objectives",
+    "title": "Intro to Comp Bio",
+    "section": "Course objectives",
+    "text": "Course objectives\nEnable you to:\n\nApply basic Linux/Unix command-line utilities\nUse basic programming for data processing\nUse version-control tools for reproducibility\nUnderstand probabilistic models for biological questions\nEncode and apply computational algorithms to biological data\n\n\nLearn computational approaches to processing biological data and modeling biological ideas"
+  },
+  {
+    "objectID": "slides/topic-01.html#course-materials",
+    "href": "slides/topic-01.html#course-materials",
+    "title": "Intro to Comp Bio",
+    "section": "Course materials",
+    "text": "Course materials\n\nYou will need a computer you can bring to class with you\n\nLaptop/tablet running Linux, macOS, or Windows is ideal\nUp-to-date browser\n\nA free GitHub account\nA free Marimo molab account"
+  },
+  {
+    "objectID": "slides/topic-01.html#course-content",
+    "href": "slides/topic-01.html#course-content",
+    "title": "Intro to Comp Bio",
+    "section": "Course content",
+    "text": "Course content\nFound on the course\n\nWebsite\n\nSlides & documentation\nExercises\n\nCanvas page\n\nSyllabus\nAnnouncements\nSome exercises\nAssignment submission"
+  },
+  {
+    "objectID": "slides/topic-01.html#textbook",
+    "href": "slides/topic-01.html#textbook",
+    "title": "Intro to Comp Bio",
+    "section": "Textbook",
+    "text": "Textbook\n\nThere is no required textbook\nPractical Computing for Biologists, by Haddock and Dunn, is a good resource\nI might distribute readings throughout the semester"
   },
   {
     "objectID": "slides/topic-01.html#office-hours",
     "href": "slides/topic-01.html#office-hours",
-    "title": "Topic 1: What is Comp Bio?",
+    "title": "Intro to Comp Bio",
     "section": "Office hours",
-    "text": "Office hours\nBy appt"
+    "text": "Office hours\n\nGTAs and I will setup booking pages in Outlook\n\nHere’s mine\n\nUse these to book 30-minute appointments with us\n\n1-on-1 meetings are ideal for computational topics"
+  },
+  {
+    "objectID": "slides/topic-01.html#wheres-dr.-oaks",
+    "href": "slides/topic-01.html#wheres-dr.-oaks",
+    "title": "Intro to Comp Bio",
+    "section": "Where’s Dr. Oaks?",
+    "text": "Where’s Dr. Oaks?\n\n\n\n\n\n\nSTEM-Ag 2238"
+  },
+  {
+    "objectID": "slides/topic-01.html#my-philosophy-for-high-level-courses",
+    "href": "slides/topic-01.html#my-philosophy-for-high-level-courses",
+    "title": "Intro to Comp Bio",
+    "section": "My philosophy for high-level courses",
+    "text": "My philosophy for high-level courses\n\nI assume you’re here for the right reasons\nIf so, I think you’ll have fun and learn a lot\nAt your stage, you should be motivated to acquire knowledge and skills\n\nNot by grades\n\nCan you get a good grade without learning much?\n\nQuite possibly"
+  },
+  {
+    "objectID": "slides/topic-01.html#lab-exercises",
+    "href": "slides/topic-01.html#lab-exercises",
+    "title": "Intro to Comp Bio",
+    "section": "Lab exercises",
+    "text": "Lab exercises\n\nLow-stake opportunities to apply what you’re learning\nMostly completed in class\nWork together, but submit your own work\nGraded for effort\nWe will do a number of these and your 2 lowest scores will be dropped"
+  },
+  {
+    "objectID": "slides/topic-01.html#capstone-projects",
+    "href": "slides/topic-01.html#capstone-projects",
+    "title": "Intro to Comp Bio",
+    "section": "Capstone projects",
+    "text": "Capstone projects\n\nSimilar in format to exercises, but more challenging\nDo not work together\nGraded for correctness\nMostly done out of class, but you will have opportunities to work on them in class\nStart early and use office hours"
+  },
+  {
+    "objectID": "slides/topic-01.html#late-exercises-and-projects",
+    "href": "slides/topic-01.html#late-exercises-and-projects",
+    "title": "Intro to Comp Bio",
+    "section": "Late exercises and projects",
+    "text": "Late exercises and projects\n\n20% deduction per day late"
+  },
+  {
+    "objectID": "slides/topic-01.html#course-grading",
+    "href": "slides/topic-01.html#course-grading",
+    "title": "Intro to Comp Bio",
+    "section": "Course grading",
+    "text": "Course grading\n\n\n\nTable 1: Breakdown of grading component percentages\n\n\n\n\n\nItem\nGrade %\n\n\n\n\nLab exercises\n60%\n\n\nCapstone projects\n40%\n\n\n\n\n\n\nYour final percentage will be calculated as:\nFinal percent = ( lab exercises % \\(\\times\\) 0.6 )\n\\(+\\) ( capstone projects % \\(\\times\\) 0.4 )"
+  },
+  {
+    "objectID": "slides/topic-01.html#grading-scale",
+    "href": "slides/topic-01.html#grading-scale",
+    "title": "Intro to Comp Bio",
+    "section": "Grading scale",
+    "text": "Grading scale\n\n\n\nTable 2: Grading scale\n\n\n\n\n\nPercentage\nGrade\n\n\n\n\n\\(\\geq\\) 90%\nA\n\n\n80.0 – 90.0%\nB\n\n\n70.0 – 80.0%\nC\n\n\n60.0 – 70.0%\nD\n\n\n&lt; 60.0%\nF"
+  },
+  {
+    "objectID": "slides/topic-01.html#ai-policy",
+    "href": "slides/topic-01.html#ai-policy",
+    "title": "Intro to Comp Bio",
+    "section": "AI policy",
+    "text": "AI policy\n\nI will not teach it, but you are encouraged to try out generative AI tools\nUse them to help (not hinder) your learning\nWhen used, you need to disclose"
+  },
+  {
+    "objectID": "slides/topic-01.html#class-courtesy",
+    "href": "slides/topic-01.html#class-courtesy",
+    "title": "Intro to Comp Bio",
+    "section": "Class courtesy",
+    "text": "Class courtesy\n\nIt’s our shared responsibility to create a positive learning environment for everyone\nPlease use the “Anonymous Feedback” module in Canvas to report any issues"
+  },
+  {
+    "objectID": "slides/topic-01.html#make-sure-your-vpn-is-setup-and-working",
+    "href": "slides/topic-01.html#make-sure-your-vpn-is-setup-and-working",
+    "title": "Intro to Comp Bio",
+    "section": "Make sure your VPN is setup and working",
+    "text": "Make sure your VPN is setup and working\n\n\n\nConnect to AU’s VPN\nOpen browser and go to: https://csm-earth.auburn.edu/\nYou should see log-in page\nDon’t log in now, we will do that on Wednesday\nIf you can’t see the log-in page, your VPN is not working\n\nLet us know\nReach out to AU IT Service Desk"
+  },
+  {
+    "objectID": "slides/topic-01.html#setting-up-asc-account",
+    "href": "slides/topic-01.html#setting-up-asc-account",
+    "title": "Intro to Comp Bio",
+    "section": "Setting up ASC account",
+    "text": "Setting up ASC account\n\nYou should have received a Canvas message with your username and password for the ASC\n\nPlease let me know if you didn’t\n\nGo to the “Exercise-01” Module on Canvas and use the “Setting-up-DUO-for-ASC-account.pdf” PDF to:\n\nSet up 2-factor authentication for your ASC account\nAccess the ASC user documentation\nFrom “Getting started” page, read:\n\nAbout this website\nRules of behavior\nGetting help\n\n\nThen, answer the questions for the “Exercise 1” quiz\nDue before class next Monday"
+  },
+  {
+    "objectID": "slides/topic-01.html#wednesday",
+    "href": "slides/topic-01.html#wednesday",
+    "title": "Intro to Comp Bio",
+    "section": "Wednesday",
+    "text": "Wednesday\n\nIntro to command-line shell environment\nAccess Linux Thinlinc environment\n\nCOSAM IT will be on-hand to help troubleshoot"
   },
   {
     "objectID": "slides/topic-02.html#using-au-cosams-linux-thinlinc",
