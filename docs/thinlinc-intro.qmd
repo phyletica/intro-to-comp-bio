@@ -1,0 +1,138 @@
+---
+title: "AU COSAM Linux ThinLinc"
+subtitle: "Logging in and setting up"
+---
+
+The IT group of the Collage of Sciences & Mathematics
+([COSAM IT](https://cosam.auburn.edu/it/))
+hosts a Linux desktop environment that can be run in a web browser using the
+software called ThinLinc.
+COSAM IT was kind enough to provide access to this Linux ThinLinc environment
+to all the students in our class.
+
+**Important! Please read the next 2 sections and don't skip to logging in!**
+
+## Logging out of a ThinLinc session
+
+Before we learn how to log in to a ThinLinc session, you need to know how to
+log out.
+
+***You cannot log out by closing your browser window!***
+
+Instead you need to:
+
+1.  Click the power icon a the top right of the Linux desktop in your browser
+    window
+2.  Click "Power Off/Log Out"
+3.  Click "Log Out"
+
+![How to log out of a Linux ThinLinc session.](
+    slides/images/thinlinc-logout.png
+){
+    #fig-tl-logout
+    fig-align="center"
+    fig-alt="How to log out of a Linux ThinLinc session"
+}
+
+***If you do close your brower by mistake, it's OK!***
+Just go back to
+[https://csm-earth.auburn.edu](https://csm-earth.auburn.edu/).
+The screen might look black, but that is just the Linux desktop's lock screen.
+Click the black screen and you will be prompted to enter your
+password to unlock the screen.
+Use the same AU password as when you logged in (see
+below).
+
+If you close your browser without logging out,
+your ThinLinc session remains active and uses resources on COSAM's servers.
+So, please remember to log out when you're done.
+
+## I was using ThinLinc but now have a black screen!
+
+No worries, the black screen is the Linux desktop's lock screen.
+Click on it and you will be asked to enter your password to unlock
+the screen. Use the same AU password as when you logged in.
+
+## Logging in to a ThinLinc session
+
+1.  Make sure you are connected to
+    [AU's VPN](https://auburn.service-now.com/it/en/using-the-palo-alto-global-protect-vpn-client?id=kb_article_view&sysparm_article=KB0011274&sys_kb_id=78247a6883dd4b109fe117e0deaad3fe&spa=1).
+
+2.  Open your web browser and go to
+    [https://csm-earth.auburn.edu](https://csm-earth.auburn.edu/).
+    You should see a login screen that looks like the screenshot below.
+
+    ![Linux ThinLinc log in page.](
+        slides/images/thinlinc-login.png
+    ){
+        #fig-tl-login
+        fig-align="center"
+        fig-alt="Log in page for Linux Thinlinc"
+    }
+
+3.  In the "Username" field, enter your AU username (the first part of your AU
+    email before the "@" symbol).
+    For the password, enter the password for you AU account.
+    Then, click "Log in"
+
+4.  You will see a prompt for 2-factor authentication like the one below.
+    Enter the number associated with your preferred mode of authentication. In
+    the example below, to use DUO, type "1" and click "Next."
+
+    ![Linux ThinLinc prompt for 2-factor authentication.](
+        slides/images/thinlinc-2factor.png
+    ){
+        #fig-tl-twofactor
+        fig-align="center"
+        fig-alt="2-factor authentication prompt when logging in to ThinLinc"
+    }
+
+5.  After authenticating, the Linux Desktop will begin to load in your browser.
+    This can take 30 seconds or so.
+    Once the Linux Desktop has loaded, you can click "Activities" in the upper
+    left of the desktop to reveal a dock along the bottom of the desktop.
+    You can use the dock to launch applications (@fig-tl-dock).
+
+    ![How to view the dock and launch apps.](
+        slides/images/thinlinc-dock.png
+    ){
+        #fig-tl-dock
+        fig-align="center"
+        fig-alt="How to view the dock and launch apps"
+    }
+
+## Setting up our shared folder in ThinLinc
+
+COSAM IT has created a shared folder we can all access within our ThinLinc
+environment. To set up the shared folder, follow these steps.
+***You only need to do this once!***
+
+1.  Click "Activities" in the upper left of the desktop.
+
+2.  From the dock along the bottom, open the "Files" application (its icon is a
+    filing cabinet; see @fig-tl-dock)
+
+3.  Along the left of the Files window, click "+ Other Locations"
+
+4.  Along the bottom of the window you will see "Connect to Server" and "Enter server address..."
+    In the "Enter server address..." field type (or copy and paste):
+    
+        smb://auo11.auburn.edu/csm
+
+    and then click "Connect"
+
+5.  Along the left of the you shoud now see "csm on auo11.auburn.edu".
+    Click on that and then the "Academic - Class Resources" folder
+
+6.  Within the "Academic - Class Resources" folder, you should now see the
+    "Biol5800-6800" folder.
+    Click and drag the "Biol5800-6800" folder to the left of the window,
+    and drop it where you see "New bookmark".
+
+You can now access the "Biol5800-6800" folder via the "Files" app whenever you
+are logged into ThinLinc.
+The whole class has access to this folder, and this is where I will put any files
+you need to use within the ThinLinc Linux environment.
+
+
+
