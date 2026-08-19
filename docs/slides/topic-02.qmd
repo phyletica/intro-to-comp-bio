@@ -1,7 +1,9 @@
 ---
 # title: "Topic 2: Intro to Bash"
 # author: "Jamie Oaks"
-format: revealjs
+format:
+  revealjs:
+    code-line-numbers: false
 metadata-files:
   - _metadata.yml
 ---
@@ -55,7 +57,7 @@ metadata-files:
 ---
 
 <ul>
-	<li class="fragment fade-up">
+	<li>
         If you vacation in a foreign country, a translator is very helpful
     </li>
 	<li class="fragment fade-up">
@@ -76,8 +78,8 @@ metadata-files:
 I use "<code>$</code>" at the beginning of lines to signify that we are typing at the
 command prompt
 
-```bash
-$ echo "Hello World!"
+```{.bash filename="Bash command line"}
+ echo "Hello World!"
 ```
 
 
@@ -85,30 +87,20 @@ $ echo "Hello World!"
 
 ---
 
-```bash
-$ echo -e "Hello, World!"
+```{.bash filename="Bash command line"}
+echo -e "Hello, World!"
 ```
 
-<dl>
-    <dt class = "fragment fade-up">
-        <code>echo</code>
-    </dt>
-        <dd class = "fragment fade-up">
-            Command (program)
-        </dd>
-    <dt class = "fragment fade-up">
-        <code>-e</code>
-    </dt>
-        <dd class = "fragment fade-up">
-            Option or "flag"
-        </dd>
-    <dt class = "fragment fade-up">
-        <code>"Hello, World!"</code>
-    </dt>
-        <dd class = "fragment fade-up">
-            Argument
-        </dd>
-<dl>
+::: {.incremental}
+`echo`
+:   Command (program)
+
+`-e`
+:   Option or "flag"
+
+`"Hello, World!"`
+:   Argument
+:::
 
 
 ---
