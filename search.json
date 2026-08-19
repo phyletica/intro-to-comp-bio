@@ -20,6 +20,16 @@
     ]
   },
   {
+    "objectID": "index.html#resources",
+    "href": "index.html#resources",
+    "title": "Welcome to Intro to Comp Bio",
+    "section": "Resources",
+    "text": "Resources\n\nIntro to Linux ThinLinc",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "What is Intro to Comp Bio?",
@@ -239,17 +249,59 @@
     "text": "Wednesday\n\nIntro to command-line shell environment\nAccess Linux Thinlinc environment\n\nCOSAM IT will be on-hand to help troubleshoot"
   },
   {
-    "objectID": "slides/topic-02.html#using-au-cosams-linux-thinlinc",
-    "href": "slides/topic-02.html#using-au-cosams-linux-thinlinc",
-    "title": "Topic 2: Getting setup",
-    "section": "Using AU COSAM’s Linux ThinLinc",
-    "text": "Using AU COSAM’s Linux ThinLinc\n\nCourse overview\nTools we will use\nGrading policies"
+    "objectID": "slides/topic-02.html#about-these-slides",
+    "href": "slides/topic-02.html#about-these-slides",
+    "title": "Intro to Comp Bio",
+    "section": "About these slides",
+    "text": "About these slides\nI use “$” at the beginning of lines to signify that we are typing at the command prompt\n\n\nBash command line\n\n echo \"Hello World!\""
   },
   {
-    "objectID": "slides/topic-02.html#using-the-al-super-computer",
-    "href": "slides/topic-02.html#using-the-al-super-computer",
-    "title": "Topic 2: Getting setup",
-    "section": "Using the AL Super Computer",
-    "text": "Using the AL Super Computer\nThis is some content on slide two."
+    "objectID": "slides/topic-02.html#getting-help-with-a-command",
+    "href": "slides/topic-02.html#getting-help-with-a-command",
+    "title": "Intro to Comp Bio",
+    "section": "Getting help with a command",
+    "text": "Getting help with a command\n$ man echo\n\n\nThis shows the manual for the echo command\n\n\n\nNavigate with arrow keys (or ‘j’/‘k’)\n\n\nPress ‘q’ to exit the manual\n\n\n\nNote, man is the command (program) and echo is an argument"
+  },
+  {
+    "objectID": "slides/topic-02.html#support",
+    "href": "slides/topic-02.html#support",
+    "title": "Intro to Comp Bio",
+    "section": "Support",
+    "text": "Support\nThis work was made possible by funding provided to Jamie Oaks from the National Science Foundation (DEB 1656004)."
+  },
+  {
+    "objectID": "thinlinc-intro.html",
+    "href": "thinlinc-intro.html",
+    "title": "AU COSAM Linux ThinLinc",
+    "section": "",
+    "text": "The IT group of the Collage of Sciences & Mathematics (COSAM IT) hosts a Linux desktop environment that can be run in a web browser using the software called ThinLinc. COSAM IT was kind enough to provide access to this Linux ThinLinc environment to all the students in our class.\nImportant! Please read the next 2 sections and don’t skip to logging in!"
+  },
+  {
+    "objectID": "thinlinc-intro.html#logging-out-of-a-thinlinc-session",
+    "href": "thinlinc-intro.html#logging-out-of-a-thinlinc-session",
+    "title": "AU COSAM Linux ThinLinc",
+    "section": "Logging out of a ThinLinc session",
+    "text": "Logging out of a ThinLinc session\nBefore we learn how to log in to a ThinLinc session, you need to know how to log out.\nYou cannot log out by closing your browser window!\nInstead you need to:\n\nClick the power icon a the top right of the Linux desktop in your browser window\nClick “Power Off/Log Out”\nClick “Log Out”\n\n\n\n\n\n\n\nFigure 1: How to log out of a Linux ThinLinc session.\n\n\n\nIf you do close your brower by mistake, it’s OK! Just go back to https://csm-earth.auburn.edu. The screen might look black, but that is just the Linux desktop’s lock screen. Click the black screen and you will be prompted to enter your password to unlock the screen. Use the same AU password as when you logged in (see below).\nIf you close your browser without logging out, your ThinLinc session remains active and uses resources on COSAM’s servers. So, please remember to log out when you’re done."
+  },
+  {
+    "objectID": "thinlinc-intro.html#i-was-using-thinlinc-but-now-have-a-black-screen",
+    "href": "thinlinc-intro.html#i-was-using-thinlinc-but-now-have-a-black-screen",
+    "title": "AU COSAM Linux ThinLinc",
+    "section": "I was using ThinLinc but now have a black screen!",
+    "text": "I was using ThinLinc but now have a black screen!\nNo worries, the black screen is the Linux desktop’s lock screen. Click on it and you will be asked to enter your password to unlock the screen. Use the same AU password as when you logged in."
+  },
+  {
+    "objectID": "thinlinc-intro.html#logging-in-to-a-thinlinc-session",
+    "href": "thinlinc-intro.html#logging-in-to-a-thinlinc-session",
+    "title": "AU COSAM Linux ThinLinc",
+    "section": "Logging in to a ThinLinc session",
+    "text": "Logging in to a ThinLinc session\n\nMake sure you are connected to AU’s VPN.\nOpen your web browser and go to https://csm-earth.auburn.edu. You should see a login screen that looks like the screenshot below.\n\n\n\n\n\n\nFigure 2: Linux ThinLinc log in page.\n\n\n\nIn the “Username” field, enter your AU username (the first part of your AU email before the “@” symbol). For the password, enter the password for you AU account. Then, click “Log in”\nYou will see a prompt for 2-factor authentication like the one below. Enter the number associated with your preferred mode of authentication. In the example below, to use DUO, type “1” and click “Next.”\n\n\n\n\n\n\nFigure 3: Linux ThinLinc prompt for 2-factor authentication.\n\n\n\nAfter authenticating, the Linux Desktop will begin to load in your browser. This can take 30 seconds or so. Once the Linux Desktop has loaded, you can click “Activities” in the upper left of the desktop to reveal a dock along the bottom of the desktop. You can use the dock to launch applications (Figure 4).\n\n\n\n\n\n\nFigure 4: How to view the dock and launch apps."
+  },
+  {
+    "objectID": "thinlinc-intro.html#setting-up-our-shared-folder-in-thinlinc",
+    "href": "thinlinc-intro.html#setting-up-our-shared-folder-in-thinlinc",
+    "title": "AU COSAM Linux ThinLinc",
+    "section": "Setting up our shared folder in ThinLinc",
+    "text": "Setting up our shared folder in ThinLinc\nCOSAM IT has created a shared folder we can all access within our ThinLinc environment. To set up the shared folder, follow these steps. You only need to do this once!\n\nClick “Activities” in the upper left of the desktop.\nFrom the dock along the bottom, open the “Files” application (its icon is a filing cabinet; see Figure 4)\nAlong the left of the Files window, click “+ Other Locations”\nAlong the bottom of the window you will see “Connect to Server” and “Enter server address…” In the “Enter server address…” field type (or copy and paste):\nsmb://auo11.auburn.edu/csm\nand then click “Connect”\nAlong the left of the you shoud now see “csm on auo11.auburn.edu”. Click on that and then the “Academic - Class Resources” folder\nWithin the “Academic - Class Resources” folder, you should now see the “Biol5800-6800” folder. Click and drag the “Biol5800-6800” folder to the left of the window, and drop it where you see “New bookmark”.\n\nYou can now access the “Biol5800-6800” folder via the “Files” app whenever you are logged into ThinLinc. The whole class has access to this folder, and this is where I will put any files you need to use within the ThinLinc Linux environment."
   }
 ]
