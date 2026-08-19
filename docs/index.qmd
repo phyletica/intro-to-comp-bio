@@ -8,11 +8,13 @@ slide presentations compiled for this term.
 ## Lecture Presentations
 
 *   [View Lecture 1 Slides](slides/topic-01.qmd)
-<!-- *   [View Lecture 2 Slides](slides/topic-02.qmd) -->
+*   [View Lecture 2 Slides](slides/topic-02.qmd)
 
 <!-- *Note: You can use your spacebar or arrow keys to navigate the slides once opened.* -->
 
-<!-- ## Lab exercises -->
+## Lab exercises
+
+-   [Intro to Bash](bash-exercise.qmd)
 
 <!-- To work on an exercise: -->
 

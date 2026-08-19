@@ -23,6 +23,13 @@ metadata-files:
 :::
 
 
+## Today's objectives
+
+-   [Linux ThinLinc: Log in and set up](https://phyletica.org/intro-to-comp-bio/thinlinc-intro.html)
+-   Intro to the command line shell (Bash)
+-   [Exercise 2](https://phyletica.org/intro-to-comp-bio/bash-exercise.html)
+
+
 # Topic 2: Intro to Bash
 
 ---
