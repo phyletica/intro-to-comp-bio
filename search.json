@@ -14,7 +14,17 @@
     "href": "index.html#lecture-presentations",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lecture Presentations",
-    "text": "Lecture Presentations\n\nView Lecture 1 Slides",
+    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "index.html#lab-exercises",
+    "href": "index.html#lab-exercises",
+    "title": "Welcome to Intro to Comp Bio",
+    "section": "Lab exercises",
+    "text": "Lab exercises\n\nIntro to Bash",
     "crumbs": [
       "Home"
     ]
@@ -30,34 +40,81 @@
     ]
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "What is Intro to Comp Bio?",
+    "objectID": "thinlinc-intro.html",
+    "href": "thinlinc-intro.html",
+    "title": "AU COSAM Linux ThinLinc",
     "section": "",
-    "text": "Computational Biology is a very broad field that entails the use of computational techniques to study biology.",
-    "crumbs": [
-      "About"
-    ]
+    "text": "The IT group of the Collage of Sciences & Mathematics (COSAM IT) hosts a Linux desktop environment that can be run in a web browser using the software called ThinLinc. COSAM IT was kind enough to provide access to this Linux ThinLinc environment to all the students in our class.\nImportant! Please read the next 2 sections and don’t skip to logging in!"
   },
   {
-    "objectID": "about.html#acknowledgements",
-    "href": "about.html#acknowledgements",
-    "title": "What is Intro to Comp Bio?",
-    "section": "Acknowledgements",
-    "text": "Acknowledgements\nThis class borrows from Dr. Laurie Stevison’s class of the same name, and the Computational Biology class developed by Justin Fay.",
-    "crumbs": [
-      "About"
-    ]
+    "objectID": "thinlinc-intro.html#logging-out-of-a-thinlinc-session",
+    "href": "thinlinc-intro.html#logging-out-of-a-thinlinc-session",
+    "title": "AU COSAM Linux ThinLinc",
+    "section": "Logging out of a ThinLinc session",
+    "text": "Logging out of a ThinLinc session\nBefore we learn how to log in to a ThinLinc session, you need to know how to log out.\nYou cannot log out by closing your browser window!\nInstead you need to:\n\nClick the power icon a the top right of the Linux desktop in your browser window\nClick “Power Off/Log Out”\nClick “Log Out”\n\n\n\n\n\n\n\nFigure 1: How to log out of a Linux ThinLinc session.\n\n\n\nIf you do close your brower by mistake, it’s OK! Just go back to https://csm-earth.auburn.edu. The screen might look black, but that is just the Linux desktop’s lock screen. Click the black screen and you will be prompted to enter your password to unlock the screen. Use the same AU password as when you logged in (see below).\nIf you close your browser without logging out, your ThinLinc session remains active and uses resources on COSAM’s servers. So, please remember to log out when you’re done."
   },
   {
-    "objectID": "about.html#license",
-    "href": "about.html#license",
-    "title": "What is Intro to Comp Bio?",
-    "section": "License",
-    "text": "License\nThis work is marked CC0 1.0",
-    "crumbs": [
-      "About"
-    ]
+    "objectID": "thinlinc-intro.html#i-was-using-thinlinc-but-now-have-a-black-screen",
+    "href": "thinlinc-intro.html#i-was-using-thinlinc-but-now-have-a-black-screen",
+    "title": "AU COSAM Linux ThinLinc",
+    "section": "I was using ThinLinc but now have a black screen!",
+    "text": "I was using ThinLinc but now have a black screen!\nNo worries, the black screen is the Linux desktop’s lock screen. Click on it and you will be asked to enter your password to unlock the screen. Use the same AU password as when you logged in."
+  },
+  {
+    "objectID": "thinlinc-intro.html#logging-in-to-a-thinlinc-session",
+    "href": "thinlinc-intro.html#logging-in-to-a-thinlinc-session",
+    "title": "AU COSAM Linux ThinLinc",
+    "section": "Logging in to a ThinLinc session",
+    "text": "Logging in to a ThinLinc session\n\nMake sure you are connected to AU’s VPN.\nOpen your web browser and go to https://csm-earth.auburn.edu. You should see a login screen that looks like the screenshot below.\n\n\n\n\n\n\nFigure 2: Linux ThinLinc log in page.\n\n\n\nIn the “Username” field, enter your AU username (the first part of your AU email before the “@” symbol). For the password, enter the password for you AU account. Then, click “Log in”\nYou will see a prompt for 2-factor authentication like the one below. Enter the number associated with your preferred mode of authentication. In the example below, to use DUO, type “1” and click “Next.”\n\n\n\n\n\n\nFigure 3: Linux ThinLinc prompt for 2-factor authentication.\n\n\n\nAfter authenticating, the Linux Desktop will begin to load in your browser. This can take 30 seconds or so. Once the Linux Desktop has loaded, you can click “Activities” in the upper left of the desktop to reveal a dock along the bottom of the desktop. You can use the dock to launch applications (Figure 4).\n\n\n\n\n\n\nFigure 4: How to view the dock and launch apps."
+  },
+  {
+    "objectID": "thinlinc-intro.html#setting-up-our-shared-folder-in-thinlinc",
+    "href": "thinlinc-intro.html#setting-up-our-shared-folder-in-thinlinc",
+    "title": "AU COSAM Linux ThinLinc",
+    "section": "Setting up our shared folder in ThinLinc",
+    "text": "Setting up our shared folder in ThinLinc\nCOSAM IT has created a shared folder we can all access within our ThinLinc environment. To set up the shared folder, follow these steps. You only need to do this once!\n\nClick “Activities” in the upper left of the desktop.\nFrom the dock along the bottom, open the “Files” application (its icon is a filing cabinet; see Figure 4)\nAlong the left of the Files window, click “+ Other Locations”\nAlong the bottom of the window you will see “Connect to Server” and “Enter server address…” In the “Enter server address…” field type (or copy and paste):\nsmb://auo11.auburn.edu/csm\nand then click “Connect”\nAlong the left of the you shoud now see “csm on auo11.auburn.edu”. Click on that and then the “Academic - Class Resources” folder\nWithin the “Academic - Class Resources” folder, you should now see the “Biol5800-6800” folder. Click and drag the “Biol5800-6800” folder to the left of the window, and drop it where you see “New bookmark”.\n\nYou can now access the “Biol5800-6800” folder via the “Files” app whenever you are logged into ThinLinc. The whole class has access to this folder, and this is where I will put any files you need to use within the ThinLinc Linux environment."
+  },
+  {
+    "objectID": "slides/topic-02.html#todays-objectives",
+    "href": "slides/topic-02.html#todays-objectives",
+    "title": "Intro to Comp Bio",
+    "section": "Today’s objectives",
+    "text": "Today’s objectives\n\nLinux ThinLinc: Log in and set up\nIntro to the command line shell (Bash)\nExercise 2"
+  },
+  {
+    "objectID": "slides/topic-02.html#about-these-slides",
+    "href": "slides/topic-02.html#about-these-slides",
+    "title": "Intro to Comp Bio",
+    "section": "About these slides",
+    "text": "About these slides\nI will use a “Bash command line” heading for lines we type at the command prompt\n\n\nBash command line\n\necho \"Hello World!\"\n\nI will use a “Bash script” heading for lines we type in a file\n\n\nBash script\n\necho \"Hello World!\""
+  },
+  {
+    "objectID": "slides/topic-02.html#getting-help-with-a-command",
+    "href": "slides/topic-02.html#getting-help-with-a-command",
+    "title": "Intro to Comp Bio",
+    "section": "Getting help with a command",
+    "text": "Getting help with a command\n\n\nBash command line\n\nman echo\n\n\n\nThis shows the manual for the echo command\n\n\n\nNavigate with arrow keys (or ‘j’/‘k’)\n\n\nPress ‘q’ to exit the manual\n\n\n\nNote, man is the command (program) and echo is an argument"
+  },
+  {
+    "objectID": "slides/topic-02.html#macos-users",
+    "href": "slides/topic-02.html#macos-users",
+    "title": "Intro to Comp Bio",
+    "section": "macOS users",
+    "text": "macOS users\nYou have a Terminal app already\n\nOpen Spotlight, type “Terminal”, and press Return\nThe default shell is Zsh (not Bash), but it is very similar\n\nI recommend installing Xcode command line tools\n\nOpen terminal and use this command:\n\n\nZsh command line\n\nxcode-select --install"
+  },
+  {
+    "objectID": "slides/topic-02.html#windows-users",
+    "href": "slides/topic-02.html#windows-users",
+    "title": "Intro to Comp Bio",
+    "section": "Windows users",
+    "text": "Windows users\nYou can install Linux via the Windows Subsystem for Linux (WSL)\nI recommend you use the default Linux distribution (Ubuntu)\nRunning WSL will be very similar to Red Hat (ThinLinc)"
+  },
+  {
+    "objectID": "slides/topic-02.html#support",
+    "href": "slides/topic-02.html#support",
+    "title": "Intro to Comp Bio",
+    "section": "Support",
+    "text": "Support\nThis work was made possible by funding provided to Jamie Oaks from the National Science Foundation (DEB 1656004)."
   },
   {
     "objectID": "slides/topic-01.html#todays-objectives",
@@ -249,59 +306,54 @@
     "text": "Wednesday\n\nIntro to command-line shell environment\nAccess Linux Thinlinc environment\n\nCOSAM IT will be on-hand to help troubleshoot"
   },
   {
-    "objectID": "slides/topic-02.html#about-these-slides",
-    "href": "slides/topic-02.html#about-these-slides",
-    "title": "Intro to Comp Bio",
-    "section": "About these slides",
-    "text": "About these slides\nI use “$” at the beginning of lines to signify that we are typing at the command prompt\n\n\nBash command line\n\n echo \"Hello World!\""
-  },
-  {
-    "objectID": "slides/topic-02.html#getting-help-with-a-command",
-    "href": "slides/topic-02.html#getting-help-with-a-command",
-    "title": "Intro to Comp Bio",
-    "section": "Getting help with a command",
-    "text": "Getting help with a command\n$ man echo\n\n\nThis shows the manual for the echo command\n\n\n\nNavigate with arrow keys (or ‘j’/‘k’)\n\n\nPress ‘q’ to exit the manual\n\n\n\nNote, man is the command (program) and echo is an argument"
-  },
-  {
-    "objectID": "slides/topic-02.html#support",
-    "href": "slides/topic-02.html#support",
-    "title": "Intro to Comp Bio",
-    "section": "Support",
-    "text": "Support\nThis work was made possible by funding provided to Jamie Oaks from the National Science Foundation (DEB 1656004)."
-  },
-  {
-    "objectID": "thinlinc-intro.html",
-    "href": "thinlinc-intro.html",
-    "title": "AU COSAM Linux ThinLinc",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "What is Intro to Comp Bio?",
     "section": "",
-    "text": "The IT group of the Collage of Sciences & Mathematics (COSAM IT) hosts a Linux desktop environment that can be run in a web browser using the software called ThinLinc. COSAM IT was kind enough to provide access to this Linux ThinLinc environment to all the students in our class.\nImportant! Please read the next 2 sections and don’t skip to logging in!"
+    "text": "Computational Biology is a very broad field that entails the use of computational techniques to study biology.",
+    "crumbs": [
+      "About"
+    ]
   },
   {
-    "objectID": "thinlinc-intro.html#logging-out-of-a-thinlinc-session",
-    "href": "thinlinc-intro.html#logging-out-of-a-thinlinc-session",
-    "title": "AU COSAM Linux ThinLinc",
-    "section": "Logging out of a ThinLinc session",
-    "text": "Logging out of a ThinLinc session\nBefore we learn how to log in to a ThinLinc session, you need to know how to log out.\nYou cannot log out by closing your browser window!\nInstead you need to:\n\nClick the power icon a the top right of the Linux desktop in your browser window\nClick “Power Off/Log Out”\nClick “Log Out”\n\n\n\n\n\n\n\nFigure 1: How to log out of a Linux ThinLinc session.\n\n\n\nIf you do close your brower by mistake, it’s OK! Just go back to https://csm-earth.auburn.edu. The screen might look black, but that is just the Linux desktop’s lock screen. Click the black screen and you will be prompted to enter your password to unlock the screen. Use the same AU password as when you logged in (see below).\nIf you close your browser without logging out, your ThinLinc session remains active and uses resources on COSAM’s servers. So, please remember to log out when you’re done."
+    "objectID": "about.html#acknowledgements",
+    "href": "about.html#acknowledgements",
+    "title": "What is Intro to Comp Bio?",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nThis class borrows from Dr. Laurie Stevison’s class of the same name, and the Computational Biology class developed by Justin Fay.",
+    "crumbs": [
+      "About"
+    ]
   },
   {
-    "objectID": "thinlinc-intro.html#i-was-using-thinlinc-but-now-have-a-black-screen",
-    "href": "thinlinc-intro.html#i-was-using-thinlinc-but-now-have-a-black-screen",
-    "title": "AU COSAM Linux ThinLinc",
-    "section": "I was using ThinLinc but now have a black screen!",
-    "text": "I was using ThinLinc but now have a black screen!\nNo worries, the black screen is the Linux desktop’s lock screen. Click on it and you will be asked to enter your password to unlock the screen. Use the same AU password as when you logged in."
+    "objectID": "about.html#license",
+    "href": "about.html#license",
+    "title": "What is Intro to Comp Bio?",
+    "section": "License",
+    "text": "License\nThis work is marked CC0 1.0",
+    "crumbs": [
+      "About"
+    ]
   },
   {
-    "objectID": "thinlinc-intro.html#logging-in-to-a-thinlinc-session",
-    "href": "thinlinc-intro.html#logging-in-to-a-thinlinc-session",
-    "title": "AU COSAM Linux ThinLinc",
-    "section": "Logging in to a ThinLinc session",
-    "text": "Logging in to a ThinLinc session\n\nMake sure you are connected to AU’s VPN.\nOpen your web browser and go to https://csm-earth.auburn.edu. You should see a login screen that looks like the screenshot below.\n\n\n\n\n\n\nFigure 2: Linux ThinLinc log in page.\n\n\n\nIn the “Username” field, enter your AU username (the first part of your AU email before the “@” symbol). For the password, enter the password for you AU account. Then, click “Log in”\nYou will see a prompt for 2-factor authentication like the one below. Enter the number associated with your preferred mode of authentication. In the example below, to use DUO, type “1” and click “Next.”\n\n\n\n\n\n\nFigure 3: Linux ThinLinc prompt for 2-factor authentication.\n\n\n\nAfter authenticating, the Linux Desktop will begin to load in your browser. This can take 30 seconds or so. Once the Linux Desktop has loaded, you can click “Activities” in the upper left of the desktop to reveal a dock along the bottom of the desktop. You can use the dock to launch applications (Figure 4).\n\n\n\n\n\n\nFigure 4: How to view the dock and launch apps."
+    "objectID": "bash-exercise.html",
+    "href": "bash-exercise.html",
+    "title": "Bash exercise",
+    "section": "",
+    "text": "For this exercise, please log in to the Linux ThinLinc environment. You can find instructions to log in and setup ThinLinc here.\nFollow the instructions below to complete this exercise, and put your answers to the questions into the Exercise 2 quiz on Canvas."
   },
   {
-    "objectID": "thinlinc-intro.html#setting-up-our-shared-folder-in-thinlinc",
-    "href": "thinlinc-intro.html#setting-up-our-shared-folder-in-thinlinc",
-    "title": "AU COSAM Linux ThinLinc",
-    "section": "Setting up our shared folder in ThinLinc",
-    "text": "Setting up our shared folder in ThinLinc\nCOSAM IT has created a shared folder we can all access within our ThinLinc environment. To set up the shared folder, follow these steps. You only need to do this once!\n\nClick “Activities” in the upper left of the desktop.\nFrom the dock along the bottom, open the “Files” application (its icon is a filing cabinet; see Figure 4)\nAlong the left of the Files window, click “+ Other Locations”\nAlong the bottom of the window you will see “Connect to Server” and “Enter server address…” In the “Enter server address…” field type (or copy and paste):\nsmb://auo11.auburn.edu/csm\nand then click “Connect”\nAlong the left of the you shoud now see “csm on auo11.auburn.edu”. Click on that and then the “Academic - Class Resources” folder\nWithin the “Academic - Class Resources” folder, you should now see the “Biol5800-6800” folder. Click and drag the “Biol5800-6800” folder to the left of the window, and drop it where you see “New bookmark”.\n\nYou can now access the “Biol5800-6800” folder via the “Files” app whenever you are logged into ThinLinc. The whole class has access to this folder, and this is where I will put any files you need to use within the ThinLinc Linux environment."
+    "objectID": "bash-exercise.html#creating-a-new-directory-and-copying-files-into-it",
+    "href": "bash-exercise.html#creating-a-new-directory-and-copying-files-into-it",
+    "title": "Bash exercise",
+    "section": "Creating a new directory and copying files into it",
+    "text": "Creating a new directory and copying files into it\n\nOpen the “Terminal” app and navigate to your home directory:\n\n\nBash command line\n\ncd ~\n\nCreate a new directory called “exercise2”\n\n\nBash command line\n\nmkdir exercise2\n\nOpen the “Files” app (filing cabinet icon in the dock)\nAlong the left, click on the “Biol5800-6800” folder\nRight-click on the “answer1.txt” file, and click on “Copy to…”\n\n\n\n\n\n\nFigure 1: Copying shared file in Files app.\n\n\n\nIn the “Select Copy Destination” window:\n\nClick “Home” along the left and then select the “exercise2” folder\nClick “Select” in the upper right of the window\n\n\n\n\n\n\n\nFigure 2: Selecting “exercise2 folder as copy destination.\n\n\n\nRepeat the 2 previous steps for the “SARS-CoV-2.fasta” file to copy it to the “exercise2” folder\nNow, go back to your Terminal window and move into the “exercise2” directory and confirm the files you copied are there:\n\n\nBash command line\n\ncd exercise2\nls\n\n\n\nQuestion 1\nUse the command line to see what is in the answer1.txt file. Enter what you find in the file into Question 1 of the Exercise 2 quiz on Canvas.\n\nHint: The commands cat or less would be useful. You can use man to learn more about both of them.\nHint: If you log in to Canvas within ThinLinc, you can copy and paste the answer!"
+  },
+  {
+    "objectID": "bash-exercise.html#manipulating-sequence-data",
+    "href": "bash-exercise.html#manipulating-sequence-data",
+    "title": "Bash exercise",
+    "section": "Manipulating sequence data",
+    "text": "Manipulating sequence data\nThe “SARS-CoV-2.fasta” file contains nucleotide sequence data from different strains of the SARS-CoV-2 virus. The sequences are in a format called FASTA. The FASTA format looks like:\n&gt;Name1\nAATCGGCTA\n&gt;Name2\nATTCGCCTA\n\nQuestion 2\nUse the command line to determine the number of sequences in the “SARS-CoV-2.fasta” file.\n\nNotice all sequences start with a “&gt;” character to specify the seqence’s name. We can use that to count the sequences efficiently. Try:\n\n\nBash command line\n\ngrep \"&gt;\" SARS-CoV-2.fasta\n\nNOTE: Putting quotes around the &gt; character is important, because in the Bash language, this character is normally used to redirect output!\ngrep is very useful command for finding string patterns. You can learn more about it with man grep.\ngrep works okay for this small FASTA file, but what if there were 1000s of sequences in the file? You wouldn’t want to count them “by hand!”\nWe can use the wc command (word count) for counting the sequences. Try:\n\n\nBash command line\n\ngrep \"&gt;\" SARS-CoV-2.fasta | wc -l\n\nThe pipe (|) character converts, or “pipes”, the output of one command to input to another command. wc -l will count the number of lines output by grep\n\nPut the number of sequences into Question 2 of the Exercise 2 quiz on Canvas.\n\n\nQuestion 3\nWhat does the -l flag in the wc -l do? Hint: use the man command to find out!\n\n\nQuestion 4\nWhat is your output for the following command?\n\n\nBash command line\n\nwhoami\n\n\n\nQuestion 5\nWhat is your output for the following command?\n\n\nBash command line\n\necho $MACHTYPE\n\n\n\nQuestion 6\nWhat is your output for the following command?\n\n\nBash command line\n\nuname -a\n\n\n\nQuestion 7\nWhat does the -a flag do in the uname -a command (use man to find out!)."
   }
 ]
