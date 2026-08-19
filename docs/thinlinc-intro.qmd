@@ -27,7 +27,7 @@ Instead you need to:
 3.  Click "Log Out"
 
 ![How to log out of a Linux ThinLinc session.](
-    slides/images/thinlinc-logout.png
+    images/thinlinc-logout.png
 ){
     #fig-tl-logout
     fig-align="center"
@@ -63,7 +63,7 @@ the screen. Use the same AU password as when you logged in.
     You should see a login screen that looks like the screenshot below.
 
     ![Linux ThinLinc log in page.](
-        slides/images/thinlinc-login.png
+        images/thinlinc-login.png
     ){
         #fig-tl-login
         fig-align="center"
@@ -80,7 +80,7 @@ the screen. Use the same AU password as when you logged in.
     the example below, to use DUO, type "1" and click "Next."
 
     ![Linux ThinLinc prompt for 2-factor authentication.](
-        slides/images/thinlinc-2factor.png
+        images/thinlinc-2factor.png
     ){
         #fig-tl-twofactor
         fig-align="center"
@@ -94,7 +94,7 @@ the screen. Use the same AU password as when you logged in.
     You can use the dock to launch applications (@fig-tl-dock).
 
     ![How to view the dock and launch apps.](
-        slides/images/thinlinc-dock.png
+        images/thinlinc-dock.png
     ){
         #fig-tl-dock
         fig-align="center"

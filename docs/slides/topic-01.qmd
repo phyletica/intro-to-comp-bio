@@ -10,7 +10,7 @@ metadata-files:
 
 ::: {.column-body style="text-align: center;"}
 ![](
-    images/qr-code-class-site.jpg
+    ../images/qr-code-class-site.jpg
 ){
     width="30%"
     fig-align="center"
@@ -46,7 +46,7 @@ metadata-files:
 ## Phyletica Lab Research
 
 ![](
-    images/phyletica-research.png
+    ../images/phyletica-research.png
 ){
     width="90%"
     fig-align="center"
@@ -202,7 +202,7 @@ Found on the course
 
 ::: {.column-body style="text-align: center;"}
 ![](
-    images/office-map.png
+    ../images/office-map.png
 ){
     width="50%"
     fig-align="center"
@@ -318,7 +318,7 @@ $+$ ( capstone projects % $\times$ 0.4 )
 
 ::: {.column width="45%"}
 ![](
-    images/thinlinc-login.png
+    ../images/thinlinc-login.png
 ){
     fig-align="center"
     fig-alt="Log in page for Linux Thinlinc"
