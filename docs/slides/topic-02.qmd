@@ -75,11 +75,16 @@ metadata-files:
 
 ## About these slides
 
-I use "<code>$</code>" at the beginning of lines to signify that we are typing at the
-command prompt
+I will use a "Bash command line" heading for lines we type at the command prompt
 
 ```{.bash filename="Bash command line"}
- echo "Hello World!"
+echo "Hello World!"
+```
+
+I will use a "Bash script" heading for lines we type in a file
+
+```{.bash filename="Bash script"}
+echo "Hello World!"
 ```
 
 
@@ -107,23 +112,17 @@ echo -e "Hello, World!"
 
 Precision (spelling, case, and spaces) matters
 
-```bash
-$ echo - e "hello"
-```
-
-```bash
-$ Echo "hello"
-```
-
-```bash
-$ eco "hello"
+```{.bash filename="Bash command line" code-line-numbers="1|2|3"}
+echo - e "hello"
+Echo "hello"
+eco "hello"
 ```
 
 ## Getting help with a command
 
 
-```bash
-$ man echo
+```{.bash filename="Bash command line"}
+man echo
 ```
 
 <ul>
@@ -149,53 +148,82 @@ $ man echo
 
 ---
 
+::: {.column-body style="text-align: center;"}
 <figure>
     <img src="../images/file-system-tree.gif" alt="File-system tree" style="max-width: 100%; height: auto;">
     <figcaption><a href="https://flylib.com/books/en/1.295.1.47/1/">flylib.com</a></figcaption>
 </figure>
+:::
 
 ---
 
-```bash
-$ pwd
-$ ls /
-$ ls /home
-$ ls /home/jamie
-$ ls
+```{.bash filename="Bash command line"}
+pwd
+ls /
+ls /arc
+ls /arc/homes/jro0014
+ls
 ```
+
+`pwd` shows the path to your current location in the file system (***p***rint ***w***orking ***d***irectory)
+
+`ls` lists files and directories
+
 ---
 
-```bash
-$ mkdir foo bar
-$ cd foo
-$ pwd
-$ cd ..
-$ pwd
-$ cd /home/jamie/foo
-$ pwd
-$ cd ..
+Let's make 2 new directories move into/out of them
+
+```{.bash filename="Bash command line"}
+mkdir foo bar
+cd foo
+pwd
+cd ..
+pwd
+cd /arc/homes/jro0014/foo
+pwd
+cd ..
 ```
+. . .
+
+<br>
+
+```{.bash filename="Bash command line"}
+cd foo
+pwd
+cd ../bar # same as cd /arc/homes/jro0014/bar
+```
+
 ---
 
-```bash
-$ cd foo
-$ pwd
-$ cd ../bar # same as cd /home/jamie/bar
+How to get home?
+
+-   There are several ways
+
+```{.bash filename="Bash command line"}
+cd
+pwd
+cd ~
+pwd
+cd $HOME
+pwd
 ```
 
-```bash
-$ cd
-$ pwd
-$ cd ~
-$ pwd
-$ cd $HOME
-$ pwd
-$ echo $HOME
+---
+
+`$HOME` and `~` are just variables for your home directory
+
+```{.bash filename="Bash command line"}
+echo $HOME
+echo ~
 ```
 
-```bash
-$ cd foo
-$ cd ~/bar # same as ../bar or /home/jamie/bar
+. . .
+
+You can use these variables for relative paths
+
+```{.bash filename="Bash command line"}
+cd foo
+cd ~/bar # same as ../bar or /arc/homes/jro0014/bar
 ```
 
 
@@ -209,109 +237,164 @@ $ cd ~/bar # same as ../bar or /home/jamie/bar
 
 ---
 
+`whereis` is a command for finding files in your `PATH`
 
-```bash
-$ which pwd
-$ which ls
-$ ls
-$ /usr/bin/ls
-$ which which
+```{.bash filename="Bash command line" code-line-numbers="1-3|4-6|7"}
+whereis -b pwd
+pwd
+/bin/pwd
+whereis -b ls
+ls
+/bin/ls
+whereis -b whereis
 ```
 
 ---
 
--   The reason you don't have to type `/usr/bin/ls` is because `/usr/bin` is in your `PATH`
+-   The reason you don't have to type `/bin/pwd` is because `/bin` is in your `PATH`
 
-```bash
-$ echo $PATH
+```{.bash filename="Bash command line"}
+echo $PATH
 ```
 
--   When you type `ls`, Bash will look for it in these directories
+-   When you type `pwd`, Bash will look for it in these directories
 
 
 # For loop
 
 ---
 
-```bash
-$ for x in 1 2 3 4; do echo hello; done
+```{.bash filename="Bash command line"}
+for x in 1 2 3 4; do echo hello; done
 ```
 
-```bash
-$ for x in 1 2 3 4; do echo $x; done
+. . .
+
+<br>
+
+```{.bash filename="Bash command line"}
+for x in 1 2 3 4; do echo $x; done
 ```
 
 ---
 
 Let's make a file with one word in it
 
-```bash
-$ echo how > file1.txt
+```{.bash filename="Bash command line"}
+echo how > file1.txt
 ```
 
-Confirm the file now exists and has "how" in it
+-   "`>`" ***redirects*** the output of `echo` into the file "file1.txt"
 
-```bash
-$ ls
-$ cat file1.txt
+. . .
+
+Confirm the `file1.txt` exists and has "how" in it
+
+```{.bash filename="Bash command line"}
+ls
+cat file1.txt
 ```
 
 ---
 
 Let's make 2 more files
 
-```bash
-$ echo are > file2.txt
-$ echo you? > file3.txt
+```{.bash filename="Bash command line"}
+echo are > file2.txt
+echo you? > file3.txt
 ```
 
 ---
 
 Let's loop over the files and print their content
 
-```bash
-$ for f in file1.txt file2.txt file3.txt; do cat $f; done
+```{.bash filename="Bash command line"}
+for f in file1.txt file2.txt file3.txt; do cat $f; done
 ```
 
 ---
 
 We can use wildcards to make this easier
 
-```bash
-$ for f in file?.txt; do cat $f; done
+```{.bash filename="Bash command line"}
+for f in file?.txt; do cat $f; done
 ```
 
-```bash
-$ for f in f*.txt; do cat $f; done
+-   "`?`" will match any character at that position
+
+. . .
+
+<br>
+
+```{.bash filename="Bash command line"}
+for f in f*.txt; do cat $f; done
 ```
+
+-   "`f*.txt`" will match any file that starts with "f" and ends with ".txt"
 
 # You are coding!
 
 ---
 
-Let's make a file and put some of our commands in it
+Let's make a file and open it with a text editor
 
-(I use nano below, but you can use any text editor)
+(I use VS Code below, but you can use any text editor)
 
-```bash
-$ nano my_bash_script.sh
+```{.bash filename="Bash command line"}
+touch my_bash_script.sh
+code my_bash_script.sh
 ```
+
+VS Code might open an authentication prompt; use your AU password
+
+---
 
 Add these lines to `my_bash_script.sh`
 
-```bash
+```{.bash filename="Bash script" code-line-numbers=true}
 echo "Hello, World!"
 
 for x in 1 2 3 4; do echo $x; done
 ```
 
+Save and close the `my_bash_script.sh` file
+
 ---
 
 Now, you can run `my_bash_script.sh` as a script with Bash!
 
+```{.bash filename="Bash command line"}
+bash my_bash_script.sh
 ```
-$ bash my_bash_script.sh
-```
+
+# How to do this on your computer?
+
+Not required! But, if you want to use a Unix-like command line on your
+computer, you can!
+
+## macOS users
+
+You have a Terminal app already
+
+-   Open Spotlight, type "Terminal", and press Return
+-   The default shell is Zsh (not Bash), but it is *very* similar
+
+I recommend installing Xcode command line tools
+
+-   Open terminal and use this command:
+
+    ```{.bash filename="Zsh command line"}
+    xcode-select --install
+    ```
+
+## Windows users
+
+You can [install Linux via the Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install)
+
+I recommend you use the default Linux distribution (Ubuntu)
+
+Running WSL will be very similar to Red Hat (ThinLinc)
+
 
 # Resources 
 
