@@ -15,6 +15,7 @@ slide presentations compiled for this term.
 ## Lab exercises
 
 -   [Intro to Bash](bash-exercise.qmd)
+-   [Setting up a molab account](molab-sign-up.qmd)
 
 <!-- To work on an exercise: -->
 

@@ -1,0 +1,113 @@
+---
+title: "Signing up for free GitHub and molab accounts"
+---
+
+For learning core concepts of computational biology, we will be using
+[marimo python notebooks](https://marimo.io/)
+via marimo's
+[molab service](https://molab.marimo.io).
+To access these notebooks, you will need to sign up for a free account on
+GitHub and molab.
+
+## Signing up for a free GitHub account
+
+If you already have a GitHub account, you are welcome to use it for our class
+and can skip this section.
+
+Please go to
+[GitHub's website](https://github.com/)
+and click "Sign up" in the upper right of the screen (@fig-gh-signup).
+
+![GitHub sign up.](
+    images/gh-sign-up.png
+){
+    #fig-gh-signup
+    fig-align="center"
+    fig-alt="GitHub sign up"
+}
+
+Create a username and enter your information.
+***I recommend creating a username you will want to continue using for many
+years***.
+Also, please feel free to use a personal email address for your GitHub account
+(*i.e.*, you are not required to use your AU account).
+
+## Signing up for a free molab account
+
+If you already have a molab account, you are welcome to use it for out class
+and can skip this section.
+
+1.  Please go to
+    [marimo's molab website](https://molab.marimo.io)
+
+2.  Click the "Sign in" button near the top right of the screen, and in the
+    "Create your account" window that pops up, click "GitHub" (@fig-ml-acct).
+
+    ![Create molab account.](
+        images/molab-create-acct.png
+    ){
+        #fig-ml-acct
+        fig-align="center"
+        fig-alt="Create molab account"
+    }
+
+3.  A "Sign in to GitHub to continue to marimo" window should pop open.
+    Enter the username/email and password for your GitHub account
+    and click "Sign in" (@fig-ml-gh-signin).
+
+    ![Sign in using your GitHub credentials.](
+        images/molab-gh-sign-in.png
+    ){
+        #fig-ml-gh-signin
+        fig-align="center"
+        fig-alt="Sign in using your GitHub credentials"
+    }
+
+4.  An "Authorize marimo" window should pop up. Click "Authorize marimo-team" (@fig-ml-auth).
+
+    ![Authorize marimo to access info from GitHub.](
+        images/molab-gh-authorize.png
+    ){
+        #fig-ml-auth
+        fig-align="center"
+        fig-alt="Click to authorize marimo to access info from GitHub"
+    }
+
+5.  You should now be logged in to your new molab account (@fig-ml-success)!
+
+    ![Succesfully logged in to molab.](
+        images/molab-success.png
+    ){
+        #fig-ml-success
+        fig-align="center"
+        fig-alt="Successfully logged in to molab"
+    }
+
+## molab account info
+
+While logged in to your
+[marimo molab](https://molab.marimo.io) account,
+click on the icon near the upper right corner of the browser window, and, from
+the drop-down, click "Manage account" (@fig-ml-acct-info).
+This should open a "Profile details" window.
+
+![Accessing molab account details.](
+    images/molab-acct-info.png
+){
+    #fig-ml-acct-info
+    fig-align="center"
+    fig-alt="Accessing molab account details"
+}
+
+Please open the Exercise 3 quiz on Canvas and use the information in your molab
+"Profile details" window to answer the questions below.
+
+### Question 1
+
+What is the primary email address listed in your molab profile details?
+
+
+### Question 2
+
+You should see your GitHub account listed for "Connected accounts."
+Please enter your GitHub username that is displayed.
