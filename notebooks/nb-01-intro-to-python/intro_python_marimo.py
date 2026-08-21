@@ -719,7 +719,8 @@ def _(mo):
 
 @app.function
 def print_sequence_section(sequence, start_index, stop_index):
-    # Write your Challenge 5 code here
+    # replace the line below with your Challenge 5 code
+    print("Not working yet!")
     return
 
 
@@ -755,6 +756,7 @@ def _(mo):
     - F-strings
     - Flow control: **Loops** and **conditionals**
     - **Functions**
+    - **File IO**
     - marimo's signature feature: **reactivity**
 
     This is most of the core Python you'll need to get started — everything else
