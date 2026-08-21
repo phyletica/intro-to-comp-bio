@@ -138,8 +138,8 @@ def _(mo):
 
     And enumerated lists
 
-    3. Notice
-    1. The numbers
+    1. Notice
+    3. The numbers
     2. Get worked out automatically
 
     You can use single backticks for `code` statements in a line of regular
@@ -367,7 +367,7 @@ def _():
     print(seq_list[1])
     print(seq_str[-1])
     print(seq_list[-1])
-    return(seq_str, seq_list)
+    return seq_list, seq_str
 
 
 @app.cell(hide_code=True)
@@ -387,9 +387,10 @@ def _(mo):
 
 
 @app.cell
-def _(seq_str, seq_list):
+def _(seq_list, seq_str):
     print(seq_str[1:4])
     print(seq_list[1:4])
+    return
 
 
 @app.cell(hide_code=True)
@@ -414,7 +415,7 @@ def _():
     number_of_genes_in_dict = len(gene_dict)
 
     cytb_seq, coi_seq, number_of_genes_in_dict
-    return (gene_dict,)
+    return
 
 
 @app.cell(hide_code=True)
@@ -580,8 +581,8 @@ def _(local_files):
         # The second square brackets get the first 10 bases from the sequence
         first_10_bases = sars_sequences[seq_name][:10]
         print(f"Sequence {seq_name} starts with: {first_10_bases}")
-    return(sars_sequences,)
-    
+    return
+
 
 @app.cell(hide_code=True)
 def _(mo):
@@ -744,19 +745,20 @@ def _(mo):
     mo.md(r"""
     ## Recap
 
-    In about an hour, you've covered:
+    You've learned:
 
     - The difference between **Python cells** and **Markdown cells** in marimo
     - Basic **markdown** formatting
     - **Variables**, and marimo's one-name-per-notebook rule
-    - Core **data types**: `int`, `float`, `str`, `bool`
-    - **Arithmetic**, **strings**/f-strings, **lists**, **loops**, **conditionals**, and
-      **functions**
+    - Core **data types**: `int`, `float`, `str`, `bool`, `list`, `dict`
+    - **Arithmetic operators**
+    - F-strings
+    - Flow control: **Loops** and **conditionals**
+    - **Functions**
     - marimo's signature feature: **reactivity**
 
-    This is genuinely most of the core Python you'll need to get started — everything else
-    this semester builds on these same pieces. Next time, we'll start applying this to
-    real biological datasets.
+    This is most of the core Python you'll need to get started — everything else
+    this semester builds on these same pieces.
     """)
     return
 
