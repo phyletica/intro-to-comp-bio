@@ -19,19 +19,22 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # Welcome to Computational Biology: Python & marimo Basics
+    # Introduction to Python & marimo notebooks
 
     This notebook is a hands-on introduction to two things at once:
 
-    1. **The Python programming language** — the basics you'll need for the rest of the course.
-    2. **marimo notebooks** — the tool we'll use to write and run Python code.
+    1. **The Python programming language**: The basics you'll need for the rest of the course.
+    2. **marimo notebooks**: The primary tool we'll use to write and run Python code.
 
-    You should be able to work through this in about 45–60 minutes. There's no need to
-    memorize anything today — the goal is just to get comfortable clicking around and
-    running code. We'll use these same ideas over and over throughout the semester.
+    There's no need to memorize anything today; the goal is to get comfortable
+    clicking around and running code. We'll use these same ideas over and over
+    throughout the semester.
 
-    **How to use this notebook:** click on a cell, then press `Shift + Enter` to run it
-    and move to the next one. Feel free to edit any cell and re-run it to see what changes.
+    ## How to use this notebook
+    Click on a cell, then press `Shift + Enter` to run it and move to the next one.
+    You can also click the run icon near the top-right of a cell when your mouse is
+    hovering over it.
+    Feel free to edit any cell and re-run it to see what changes.
     """)
     return
 
@@ -43,19 +46,20 @@ def _(mo):
 
     A marimo notebook is built out of **cells**, and there are two kinds you'll see today:
 
-    - **Python cells** — contain Python code that gets executed.
-    - **Markdown cells** — contain formatted text, like the one you're reading right now.
+    - **Python cells**: Contain Python code that gets executed.
+    - **Markdown cells**: Contain formatted text, like the one you're reading right now.
       They're used for explanations, notes, and instructions, not for running code.
 
     You're reading a markdown cell right now. Under the hood, it's actually just a Python
-    cell that calls a function called `mo.md(...)` with some text inside it — marimo
-    renders that text as formatted markdown instead of showing it as code. In molab, you
-    can also switch a cell into "markdown mode" from the cell menu, which hides the
-    `mo.md(...)` wrapper and lets you type formatted text directly.
+    cell that calls a function called `mo.md(...)` with some text inside it.
+    Marimo renders that text as formatted markdown instead of showing it as code.
+    In molab, you can also switch a cell into "markdown mode" from the cell menu
+    (the icon with three dots near the top-right of the cell your cursor is over),
+    which hides the `mo.md(...)` wrapper and lets you type formatted text directly.
 
     **A quick note about SQL cells:** molab also supports a third cell type for SQL
-    queries. We're going to completely ignore those for now — just Python and Markdown
-    today.
+    queries. We're going to ignore those for now and focus on Python and Markdown
+    cells.
     """)
     return
 
@@ -66,8 +70,10 @@ def _(mo):
     ## A crash course in Markdown
 
     Markdown is a simple way to format text using plain characters.
-    To show you the basics of Markdown,
-    the next cell is created using the Markdown-formatted text below:
+    To show you the basics of Markdown syntax,
+    the next cell is created using the plain text below.
+    Compare the Markdown syntax in the text below to how the text is formatted in
+    the following cell.
 
         # A Big Heading
 
@@ -94,7 +100,7 @@ def _(mo):
         3. The numbers
         2. Get worked out automatically
 
-        You can use single backticks for statements, like `print(x)` in a line
+        You can use single backticks for code statements, like `print(x)` in a line
         of regular text.
 
         To create a block of code (multiple lines of code), use three backticks
@@ -104,10 +110,6 @@ def _(mo):
         x = "Python is great!"
         print(x)
         ```
-
-    Using Markdown cells is a great way to explain and document your code
-    within a notebook!
-    In case you're curious, the entire course website is created with Markdown!
     """)
     return
 
@@ -125,11 +127,9 @@ def _(mo):
 
     Maybe you want ***bold italics***?
 
-    Note,
-    this
-    sentence gets
-    rendered
-    on on line!
+    Note, this
+    sentence gets shown
+    on one line!
 
     It's easy to make bulleted lists
 
@@ -142,10 +142,11 @@ def _(mo):
     3. The numbers
     2. Get worked out automatically
 
-    You can use single backticks for `code` statements in a line of regular
-    text.
+    You can use single backticks for code statements, like `print(x)` in a line
+    of regular text.
 
-    You use three backticks to create a block of code:
+    To create a block of code (multiple lines of code), use three backticks
+    before and after the code:
 
     ```
     x = "Python is great!"
@@ -186,10 +187,13 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    Notice, the output of the the Python code in the cell appears under the cell when
+    it is run.
+
     ## Variables
 
     A **variable** is just a name that points to a piece of data. In Python, you create
-    one with `=`. Let's store some information about a made-up gene.
+    one with the `=` symbol. Let's store some (made-up) information about a gene.
     """)
     return
 
@@ -211,20 +215,22 @@ def _(mo):
     mo.md(r"""
     Notice that the last line of a cell — just `gene_name, dna_sequence, exon_count,
     average_expression` with no `print()` — is displayed automatically as the cell's
-    output. This is a marimo/Python notebook convention: the value of the last expression
-    in a cell gets shown, similar to Jupyter.
+    output.
+    This is a marimo/Python notebook convention: the value of the last expression in
+    a cell gets shown, similar to Jupyter.
 
     ### An important marimo rule
 
-    One thing that trips people up coming from other notebook tools: **in marimo, a
-    variable name can only be defined in one cell in the whole notebook.** If you try to
-    reuse a name like `gene_name` in a different cell, marimo will show an error instead
-    of letting you overwrite it. This is different from Jupyter, where you can reassign
-    the same variable name anywhere.
+    One thing that trips people up coming from other notebook tools: **In marimo, a
+    variable name can only be defined in one cell in the whole notebook.**
+    If you try to reassign a name like `gene_name` in a different cell, marimo will
+    show an error instead of letting you overwrite it.
+    This is different from Jupyter, where you can reassign the same variable name
+    anywhere.
 
-    This is a deliberate design choice — it keeps the notebook's logic consistent no
+    This is a deliberate design choice. It keeps the notebook's logic consistent no
     matter what order you run cells in, which will make more sense as we go. For now,
-    just remember: **give each new variable a distinct name.**
+    just remember: **Give each new variable a distinct name**.
     """)
     return
 
@@ -257,8 +263,8 @@ def _(mo):
     mo.md(r"""
     ## Doing arithmetic
 
-    Python supports the usual math operators: `+`, `-`, `*`, `/`. Let's use them to
-    compute something biologically meaningful: the **GC content** of our sequence — the
+    Python supports the usual math operators: `+`, `-`, `*`, `/`.
+    Let's use them to compute the **GC content** of our sequence — the
     fraction of bases that are G or C, which affects things like DNA stability and melting
     temperature.
     """)
@@ -281,17 +287,18 @@ def _(mo):
     mo.md(r"""
     A few new things happened in that cell:
 
-    - `dna_sequence.count("G")` — strings have built-in **methods** (functions attached to
+    - `dna_sequence.count("G")`: Strings have built-in **methods** (functions attached to
       them) — `.count()` counts how many times a character appears.
-    - `len(dna_sequence)` — the built-in `len()` function gives the length of a string
-      (or list).
-    - `/` performs division, giving us a proportion.
+    - `len(dna_sequence)`: The built-in `len()` function gives the length of a string
+      (or other collection types like lists).
+    - `/` performs division, giving us a decimel number (a proportion in this case).
 
     ## Strings and f-strings
 
     We already saw a string above (`dna_sequence`). One extremely useful trick is the
-    **f-string**, which lets you drop variables directly into text by putting an `f`
+    **f-string**, which lets you drop values of variables directly into a string by putting an `f`
     before the quotes and wrapping variable names in `{ }`.
+    Checkout the f-string in the next cell as an example.
     """)
     return
 
@@ -306,14 +313,15 @@ def _(gc_content, gene_name):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    The `:.2f` inside the curly braces just tells Python to round to 2 decimal places —
-    you'll see this formatting trick a lot when reporting numeric results.
+    The `:.2f` inside the curly braces just tells Python to round to 2 decimal
+    places.
+    You'll see this formatting trick a lot when reporting numeric results.
 
     ## Lists
 
-    A **list** holds multiple values in order, written with square brackets `[ ]`. Lists
-    are everywhere in computational biology — a list of gene names, a list of sequences, a
-    list of expression values.
+    A **list** holds multiple values in order, written with square brackets `[ ]`.
+    Lists are everywhere in computational biology.
+    In the next cell we create a list of genes.
     """)
     return
 
@@ -328,8 +336,9 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    You can access items in a list by their **index**. Python counts starting at `0`, not
-    `1` — this trips up almost everyone at first, so don't worry if it feels strange.
+    You can access items in a list by their **index**. Python counts starting at
+    `0`, not `1`, so the first item in a list has an index of zero.
+    This trips up almost everyone at first, so don't worry if it feels strange.
     """)
     return
 
@@ -352,16 +361,18 @@ def _(mo):
 
     ## Lists and strings are both sequences
 
-    Lists and strings are both part of larger class of Python types called
+    Lists and strings are both part of a larger class of Python types called
     sequence types.
     This means they both share attributes and behaviors, like indexing.
+    Below represent the same sequence as a string and a list and see how indexing is
+    the same for both data types.
     """)
     return
 
 
 @app.cell
 def _():
-    seq_str = "ATTATGC"
+    seq_str = "AGTATTC"
     seq_list = ["A", "G", "T", "A", "T", "T", "C"]
     print(seq_str[1])
     print(seq_list[1])
@@ -373,15 +384,16 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    What is the negative one index (`-1`) index doing above?
+    What is the negative one (`-1`) index doing above?
 
     Negative numbers start at the end of the list (or string) and count
     backward!
 
     ## Slicing
     ***Slicing*** a list or string (or any sequence type) in Python is similar to
-    indexing, but allows you to extract a specific portion of the elements in
+    indexing, but allows you to extract a specific portion of the items in
     the sequence.
+    Let's try slicing our `seq_str` and `seq_list`:
     """)
     return
 
@@ -396,6 +408,14 @@ def _(seq_list, seq_str):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    Notice, the resulting slice goes from the item indexed by the number left of the
+    colon (`:`) up to, but not including, the index on the right of the colon.
+    In the `seq_list[1:4]` example above:
+
+        Included:         *    *    *
+        Index:       0    1    2    3    4    5    6
+        Item:      ["A", "G", "T", "A", "T", "T", "C"]
+
     ## Dictionaries
 
     A **dictionary** stores data in key-value pairs, and is written with curly
@@ -423,14 +443,18 @@ def _(mo):
     mo.md(r"""
     Notice, above, instead of using a number (index) to access items,
     we use the key the item is paired with.
+    We can also use the `len` function with dictionaries; it returns the number of
+    entries (key-value pairs).
 
     **Learning the lingo**: In other coding languages, a dictionary might be
     called a map, hash, hashmap, or an associative array.
 
     ## Loops
 
-    A `for` loop lets you repeat an action for every item in a list — instead of writing
-    the same line of code five times for five genes, you write it once.
+    A `for` loop lets you repeat an action for every item in a list (or other
+    collection type).
+    For example, instead of writing the same line of code five times for five genes,
+    you write it once:
     """)
     return
 
@@ -445,14 +469,15 @@ def _(gene_list):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    Notice the **indentation** (the spaces before `print`) — Python uses indentation to
-    know what's "inside" the loop. This is different from many other languages that use
-    curly braces `{ }` instead. Getting the indentation right matters a lot in Python!
+    Notice the **indentation** (four spaces) before `print`.
+    Python uses indentation to know what's "inside" the loop.
+    This is different from many other languages that use curly braces `{ }` instead.
+    Getting the indentation right matters a lot in Python!
 
     ## Conditionals
 
-    `if` / `elif` / `else` statements let your code make decisions. Let's classify our GC
-    content from earlier.
+    `if` / `elif` / `else` statements let your code make decisions.
+    Let's classify our GC content from earlier.
     """)
     return
 
@@ -475,10 +500,11 @@ def _(mo):
     mo.md(r"""
     ## Functions
 
-    A **function** packages up a block of code so you can reuse it without retyping it.
-    You've already been using functions like `len()` and `print()` — now let's write our
-    own, generalizing the GC content calculation from before so it works on *any*
-    sequence, not just `dna_sequence`.
+    A **function** packages up a block of code so you can reuse the code without
+    retyping it.
+    You've already been using functions like `len()` and `print()`.
+    Now, let's write our own, generalizing the GC content calculation from before so
+    it works on *any* sequence, not just `dna_sequence`.
     """)
     return
 
@@ -505,15 +531,20 @@ def _(mo):
 
     ## File IO (Input/Output)
 
-    In many cases one would want to read sequences (or other data) from a file.
+    Of course, we usually can't type sequences into our code like we've been doing
+    in our toy examples.
+    We want to read real sequences (or other data) from a file.
     FASTA-formatted files are a common convention in Computational Biology and
     Bioinformatics and are used for storing named sequences of nucleotides.
 
-    The hallmark of the FASTA format is that it contains two types of lines;
-    some sequence identifier line that will always begin with the `>` symbol,
-    and actual nucleotide sequence.
-    The sequence identifier line needs to only take up one line, and so is
-    separated from nucleotide sequence by the newline character (`\n`).
+    The hallmark of the FASTA format is that it contains two types of lines:
+
+    1. Lines with the identifier (name) of a sequence; these lines always begin with
+       the `>` symbol.
+    2. Lines containing nucleotide sequence.
+
+    A sequence identifier line must only take up one line, and so is separated from
+    nucleotide sequence by the newline character (`\n`).
 
     The nucleotide sequence itself consists of the 4 nucleotides, Adenine,
     Thymine, Cytosine and Guanine, indicated by A, T, C and G.
@@ -578,22 +609,24 @@ def _(local_files):
     # Loop over all the keys the dict of sequences
     for seq_name in sars_sequences:
         # The first square brackets get the sequence from the dict
-        # The second square brackets get the first 10 bases from the sequence
-        first_10_bases = sars_sequences[seq_name][:10]
-        print(f"Sequence {seq_name} starts with: {first_10_bases}")
+        # The second square brackets get the first 50 bases from the sequence
+        first_50_bases = sars_sequences[seq_name][:50]
+        print(f"Sequence {seq_name} starts with: {first_50_bases}")
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    We will use the data in the `sars_sequences` dictionary in an exercise below.
+    We will use the data in the `sars_sequences` dictionary in the exercise below.
+    The SARS-CoV-2 are aligned with one another, so some sequences begin
+    with gap (`-`) or ambiguous (`N`) characters.
 
     ## Why marimo? A quick reactivity demo
 
-    Here's the feature that makes marimo different from a typical notebook: when a
-    variable changes, **every cell that depends on it re-runs automatically** — you never
-    need to remember to manually re-run downstream cells.
+    One feature that makes marimo different from a typical notebook: When a variable
+    changes, **every cell that depends on it re-runs automatically**.
+    You never need to remember to manually re-run downstream cells.
     Try running the next 2 cells and then drag the slider below and watch the
     cell underneath it update on its own.
     """)
@@ -618,15 +651,19 @@ def _(gc_slider, mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    No `Shift + Enter` needed for that last cell — it updated by itself. This "reactive"
-    behavior is the main thing that sets marimo apart from tools like Jupyter, and it's
-    especially handy for building little interactive tools to explore your data.
+    No `Shift + Enter` needed for that last cell; it updated by itself.
+    This "reactive" behavior sets marimo apart from tools like Jupyter, and it's
+    especially handy for building interactive tools to explore your data.
+
+    Another feature that makes marimo unique is that each notebook is pure Python.
+    Other types of notebooks embed the Python code inside another data
+    structure, which makes it impossible to read when you peak under the hood.
 
     ## Your turn: Exercise what you've learned
 
     You can work with your classmates on these questions, but please do your own work.
-    Edit the empty cells below and run them with `Shift + Enter`.
-    Remember the marimo rule from earlier — give any new variable you create a name that
+    Edit the empty cells below and run them with `Shift + Enter` (or the run/play icon).
+    Remember the marimo rule from earlier: Give any new variable you create a name that
     hasn't been used already in this notebook!
     """)
     return
@@ -691,7 +728,7 @@ def _(mo):
 
     Using the `sars_sequences` dictionary we created earlier,
     add code to the cell below to print the part of
-    the `"Omicron"` sequence from the 127th base to the 139th base.
+    the `"Omicron"` sequence from the 227th base to the 239th base.
     Remember, the first base is stored at index 0 in the list.
     """)
     return
@@ -708,11 +745,11 @@ def _(mo):
     mo.md(r"""
     ### <font color=red> Challenge 5 </font>
 
-    Write a function that will print any section of a sequence
-    Using the `sars_sequences` dictionary we created earlier,
-    add code to the cell below to print the part of
-    the `"Omicron"` sequence from the 127th base to the 139th base.
-    Remember, the first base is stored at index 0 in the list.
+    Write a function that will print any section of a given sequence.
+    I've started a function called `print_sequence_section`
+    that takes three arguments: the sequence, and the start and stop index
+    associated with the section to be printed.
+    See if you can complete the function and get it working.
     """)
     return
 
@@ -721,7 +758,6 @@ def _(mo):
 def print_sequence_section(sequence, start_index, stop_index):
     # replace the line below with your Challenge 5 code
     print("Not working yet!")
-    return
 
 
 @app.cell(hide_code=True)
@@ -736,8 +772,8 @@ def _(mo):
 @app.cell
 def _():
     test_seq = "AAGCCGCCTAAT"
-    print(print_sequence_section(test_seq, 1, 4))
-    print(print_sequence_section(test_seq, 8, -1))
+    print_sequence_section(test_seq, 1, 4)
+    print_sequence_section(test_seq, 8, -1)
     return
 
 
@@ -757,10 +793,9 @@ def _(mo):
     - Flow control: **Loops** and **conditionals**
     - **Functions**
     - **File IO**
-    - marimo's signature feature: **reactivity**
 
-    This is most of the core Python you'll need to get started — everything else
-    this semester builds on these same pieces.
+    This is most of the core Python you'll need to get started.
+    Everything else this semester builds on these same pieces.
     """)
     return
 
