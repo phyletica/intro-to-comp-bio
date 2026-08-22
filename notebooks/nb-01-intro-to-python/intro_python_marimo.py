@@ -31,9 +31,10 @@ def _(mo):
     throughout the semester.
 
     ## How to use this notebook
+
     Click on a cell, then press `Shift + Enter` to run it and move to the next one.
-    You can also click the run icon near the top-right of a cell when your mouse is
-    hovering over it.
+    You can also click the run icon near the top-right of a cell when your
+    cursor is hovering over it.
     Feel free to edit any cell and re-run it to see what changes.
     """)
     return
@@ -53,9 +54,8 @@ def _(mo):
     You're reading a markdown cell right now. Under the hood, it's actually just a Python
     cell that calls a function called `mo.md(...)` with some text inside it.
     Marimo renders that text as formatted markdown instead of showing it as code.
-    In molab, you can also switch a cell into "markdown mode" from the cell menu
-    (the icon with three dots near the top-right of the cell your cursor is over),
-    which hides the `mo.md(...)` wrapper and lets you type formatted text directly.
+    If you double-click this cell, marimo will reveal the plain text with
+    Markdown syntax.
 
     **A quick note about SQL cells:** molab also supports a third cell type for SQL
     queries. We're going to ignore those for now and focus on Python and Markdown
@@ -70,51 +70,22 @@ def _(mo):
     ## A crash course in Markdown
 
     Markdown is a simple way to format text using plain characters.
-    To show you the basics of Markdown syntax,
-    the next cell is created using the plain text below.
-    Compare the Markdown syntax in the text below to how the text is formatted in
-    the following cell.
+    For the next cell below,
+    I've "told" marimo to show both the plain "raw" text with Markdown syntax,
+    and the formatted HTML text that gets created from this plain text.
+    Compare the plain text at the top of the next cell to the "pretty"
+    HTML text it encodes at the bottom of the cell.
+    **This will show you the basics of Markdown syntax.**
 
-        # A Big Heading
-
-        ## A sub-heading
-
-        ### A sub-sub-heading
-
-        Here is some **bold text** and *italicised text*.
-
-        Maybe you want ***bold italics***?
-
-        Note, this
-        sentence gets shown
-        on one line!
-
-        It's easy to make bulleted lists
-
-        - Item 1
-        - Item 2
-
-        And enumerated lists
-
-        1. Notice
-        3. The numbers
-        2. Get worked out automatically
-
-        You can use single backticks for code statements, like `print(x)` in a line
-        of regular text.
-
-        To create a block of code (multiple lines of code), use three backticks
-        before and after the code:
-
-        ```
-        x = "Python is great!"
-        print(x)
-        ```
+    **Pro tip**: You can tell marimo to show the plain text for any cell by
+    clicking the icon with three dots near the top-right of the cell your
+    cursor is over, and then clicking "Show code". You can also use the
+    `Ctrl + H` keyboard shortcut.
     """)
     return
 
 
-@app.cell(hide_code=True)
+@app.cell(hide_code=False)
 def _(mo):
     mo.md(r"""
     # A Big Heading
@@ -152,6 +123,9 @@ def _(mo):
     x = "Python is great!"
     print(x)
     ```
+
+    **NOTE**: This is how you display code in a Markdown cell, not how you
+    write code you want to run. We'll see how to do that in just a bit.
     """)
     return
 
@@ -215,7 +189,7 @@ def _(mo):
     mo.md(r"""
     Notice that the last line of a cell — just `gene_name, dna_sequence, exon_count,
     average_expression` with no `print()` — is displayed automatically as the cell's
-    output.
+    output when you run it.
     This is a marimo/Python notebook convention: the value of the last expression in
     a cell gets shown, similar to Jupyter.
 
@@ -336,6 +310,22 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    Let's add one more gene to our list, using the `.append()` method that all
+    lists have.
+    """)
+    return
+
+
+@app.cell
+def _(gene_list):
+    gene_list.append("NADH")
+    gene_list
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
     You can access items in a list by their **index**. Python counts starting at
     `0`, not `1`, so the first item in a list has an index of zero.
     This trips up almost everyone at first, so don't worry if it feels strange.
@@ -349,7 +339,9 @@ def _(gene_list):
     third_gene = gene_list[2]
     number_of_genes = len(gene_list)
 
-    first_gene, third_gene, number_of_genes
+    print("The first gene is", first_gene)
+    print("The third gene is", third_gene)
+    print("The number of genes is", number_of_genes)
     return
 
 
@@ -364,8 +356,8 @@ def _(mo):
     Lists and strings are both part of a larger class of Python types called
     sequence types.
     This means they both share attributes and behaviors, like indexing.
-    Below represent the same sequence as a string and a list and see how indexing is
-    the same for both data types.
+    Below, we represent the same sequence as a string and a list and see how
+    indexing is the same for both data types.
     """)
     return
 
@@ -388,6 +380,8 @@ def _(mo):
 
     Negative numbers start at the end of the list (or string) and count
     backward!
+    So, you can always use the index `-1` to access the last item in a list or
+    string. `-2` will be the second to last item, etc.
 
     ## Slicing
     ***Slicing*** a list or string (or any sequence type) in Python is similar to
@@ -410,11 +404,13 @@ def _(mo):
     mo.md(r"""
     Notice, the resulting slice goes from the item indexed by the number left of the
     colon (`:`) up to, but not including, the index on the right of the colon.
-    In the `seq_list[1:4]` example above:
+    Let's look at a diagram of the `seq_list[1:4]` example above:
 
-        Included:         *    *    *
-        Index:       0    1    2    3    4    5    6
-        Item:      ["A", "G", "T", "A", "T", "T", "C"]
+        Included in slice:        *    *    *
+        Index:               0    1    2    3    4    5    6
+        Item:              ["A", "G", "T", "A", "T", "T", "C"]
+
+    The slice included Index 1, up to, but not including, Index 4.
 
     ## Dictionaries
 
@@ -430,12 +426,15 @@ def _(mo):
 @app.cell
 def _():
     gene_dict = {"CYTB" : "AAGCTTCGA", "ND2" : "TGCCAATGC", "COI" : "GATCCGCA" }
-    cytb_seq = gene_dict["CYTB"]
+    cytb_seq = gene_dict["CYTB"] # We use the key to get the value, not an index!
     coi_seq = gene_dict["COI"]
     number_of_genes_in_dict = len(gene_dict)
 
-    cytb_seq, coi_seq, number_of_genes_in_dict
-    return
+    print("The sequence for CYTB is", cytb_seq)
+    print("The sequence for COI is", coi_seq)
+    print("The number of genes is", number_of_genes_in_dict)
+    return(gene_dict,)
+
 
 
 @app.cell(hide_code=True)
@@ -446,6 +445,20 @@ def _(mo):
     We can also use the `len` function with dictionaries; it returns the number of
     entries (key-value pairs).
 
+    Let's add one more gene to our dictionary.
+    """)
+    return
+
+
+@app.cell
+def _(gene_dict):
+    gene_dict["ND4"] = "GGCCTTAAAT" # Adding a key-value pair to an existing dict
+    gene_dict
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
     **Learning the lingo**: In other coding languages, a dictionary might be
     called a map, hash, hashmap, or an associative array.
 
@@ -473,6 +486,8 @@ def _(mo):
     Python uses indentation to know what's "inside" the loop.
     This is different from many other languages that use curly braces `{ }` instead.
     Getting the indentation right matters a lot in Python!
+    Most modern text editors (including marimo notebooks) will create the
+    correct indents for you.
 
     ## Conditionals
 
@@ -516,9 +531,29 @@ def gc_content_of(sequence):
     return (g + c) / len(sequence)
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    Now, let's use our new function to calculate the GC content of any sequence.
+    """)
+    return
+
+
 @app.cell
 def _():
-    gc_content_of("ATGCGTACGTTAGC"), gc_content_of("GGCCGGCC"), gc_content_of("ATATATAT")
+    gc_content_of("ATGCGTACGTTAGC")
+    return
+
+
+@app.cell
+def _():
+    gc_content_of("GGCCGGCC")
+    return
+
+
+@app.cell
+def _():
+    gc_content_of("ATATATAT")
     return
 
 
@@ -531,7 +566,7 @@ def _(mo):
 
     ## File IO (Input/Output)
 
-    Of course, we usually can't type sequences into our code like we've been doing
+    Of course, we usually can't type sequences "by hand," like we've been doing
     in our toy examples.
     We want to read real sequences (or other data) from a file.
     FASTA-formatted files are a common convention in Computational Biology and
@@ -570,11 +605,13 @@ def _(mo):
 def parse_fasta_file(file_name):
     sequences = {}
     current_id = None
+    # Open the file with a `with` statement to ensure it gets closed
     with open(file_name, "r") as in_stream:
+        # Loop over each line of the file
         for line in in_stream:
-            line = line.strip()
+            line = line.strip() # Remove any empty spaces from the ends of the line
             if not line:
-                continue  # Skip empty lines
+                continue  # Line is empty, skip it!
             if line[0] == ">":
                 # Extract sequence name (removing the ">" symbol)
                 current_id = line[1:]
@@ -602,11 +639,11 @@ def _(mo):
 
 @app.cell
 def _(local_files):
-    local_files # Ignore this line, it just ensures the fasta file exists
+    local_files # Ignore this line, it's just my molab trick to ensure the fasta file is present
     sars_file_name = "SARS-CoV-2.fasta"
     sars_sequences = parse_fasta_file(sars_file_name)
-    print(f"Number of SARS-CoV-2 sequences: {len(sars_sequences)}")
-    # Loop over all the keys the dict of sequences
+    print("Number of SARS-CoV-2 sequences:", len(sars_sequences))
+    # Loop over all the keys in the dict of sequences
     for seq_name in sars_sequences:
         # The first square brackets get the sequence from the dict
         # The second square brackets get the first 50 bases from the sequence
@@ -619,8 +656,8 @@ def _(local_files):
 def _(mo):
     mo.md(r"""
     We will use the data in the `sars_sequences` dictionary in the exercise below.
-    The SARS-CoV-2 are aligned with one another, so some sequences begin
-    with gap (`-`) or ambiguous (`N`) characters.
+    The SARS-CoV-2 sequences are ***aligned*** with one another, so some
+    sequences begin with gap (`-`) or ambiguous (`N`) characters.
 
     ## Why marimo? A quick reactivity demo
 
