@@ -629,7 +629,7 @@ def parse_fasta_file(file_name):
 def _(mo):
     mo.md(r"""
     Let's use our new `parse_fasta_file` function to load sequence data
-    from a FASTA-formatted file called "SARS-CoV-2.fasta".
+    from a FASTA-formatted file called "SARS-CoV-2-short.fasta".
     It contains sequences of several strains of the SARS-CoV-2 virus.
     Below, we use a for-loop to print the first 10 bases of each viral
     sequence.
@@ -640,7 +640,7 @@ def _(mo):
 @app.cell
 def _(local_files):
     local_files # Ignore this line, it's just my molab trick to ensure the fasta file is present
-    sars_file_name = "SARS-CoV-2.fasta"
+    sars_file_name = "SARS-CoV-2-short.fasta"
     sars_sequences = parse_fasta_file(sars_file_name)
     print("Number of SARS-CoV-2 sequences:", len(sars_sequences))
     # Loop over all the keys in the dict of sequences
@@ -656,8 +656,6 @@ def _(local_files):
 def _(mo):
     mo.md(r"""
     We will use the data in the `sars_sequences` dictionary in the exercise below.
-    The SARS-CoV-2 sequences are ***aligned*** with one another, so some
-    sequences begin with gap (`-`) or ambiguous (`N`) characters.
 
     ## Why marimo? A quick reactivity demo
 
@@ -863,7 +861,7 @@ def _():
         return file_name
 
     file_names = [
-        "SARS-CoV-2.fasta",
+        "SARS-CoV-2-short.fasta",
     ]
     local_files = [setup_local_file(f) for f in file_names]
     return (local_files,)
