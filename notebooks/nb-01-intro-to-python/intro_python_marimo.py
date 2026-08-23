@@ -227,8 +227,23 @@ def _(mo):
 
 
 @app.cell
-def _(average_expression, dna_sequence, exon_count):
-    type(exon_count), type(average_expression), type(dna_sequence)
+def _(exon_count):
+    # What type is `exon_count`?
+    type(exon_count)
+    return
+
+
+@app.cell
+def _(average_expression):
+    # What type is `average_expression`?
+    type(average_expression)
+    return
+
+
+@app.cell
+def _(dna_sequence):
+    # What type is `dna_sequence`?
+    type(dna_sequence)
     return
 
 
@@ -825,8 +840,10 @@ def _(mo):
        Marimo is good about auto saving, but it doesn't hurt to be sure!
     2. Download the notebook as a PDF.
        To do this, click the icon near the top-right of the page that has three
-       horizontal lines, then click "Download", and then "Download as PDF."
-    3. Go to the corresponding Lab exercise assignment on Canvas and upload the
+       horizontal lines, then click "Download", and then "Download as PDF".
+       In the pop-up window, leave all the settings at their defaults and
+       click "Export PDF".
+    3. Go to the corresponding Lab Exercise assignment on Canvas and upload the
        PDF file of your notebook to complete the assignment.
     """)
     return
