@@ -815,6 +815,26 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ## How to submit your notebook on Canvas
+
+    Once you've completed this notebook. Follow these steps to submit
+    it on Canvas.
+
+    1. Save the notebook by clicking the the disk icon near the bottom-right of
+       the notebook page (or use the `Ctrl + S` keyboard shortcut).
+       Marimo is good about auto saving, but it doesn't hurt to be sure!
+    2. Download the notebook as a PDF.
+       To do this, click the icon near the top-right of the page that has three
+       horizontal lines, then click "Download", and then "Download as PDF."
+    3. Go to the corresponding Lab exercise assignment on Canvas and upload the
+       PDF file of your notebook to complete the assignment.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
     ## Recap
 
     You've learned:

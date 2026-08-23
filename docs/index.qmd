@@ -17,14 +17,19 @@ slide presentations compiled for this term.
 -   [Intro to Bash](bash-exercise.qmd)
 -   [Setting up a molab account](molab-sign-up.qmd)
 
-<!-- To work on an exercise: -->
+### Python notebook exercises
 
-<!-- 1.  Click the link below to open it in marimo's molab -->
-<!-- 2.  Once the notebook opens in molab, near the top of the page, click "fork to -->
-<!--     edit in your workspace." Then confirm by clicking "Fork notebook." -->
+To work on one of the marimo Python notebooks below in molab:
 
+1.  Go to [marimo's molab website](https://molab.marimo.io)
+    and make sure you are logged into your account
+2.  Click the link below to open the notebook in marimo's molab
+3.  Once the notebook opens in molab, at the top of the page, click the green
+    "Fork" button and confirm on the pop-up screen by clicking "Fork notebook."
+    Do ***NOT*** click the dropdown next to the "Fork" button and select "Sync
+    to workspace.
 
-<!-- -   [Intro to Python](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-01-intro-to-python/nb_01_intro_to_python.py) [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-01-intro-to-python/nb_01_intro_to_python.py) -->
+<!-- -   [Exercise 4: Intro to Python & marimo notebooks](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-01-intro-to-python/intro_python_marimo.py) [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-01-intro-to-python/intro_python_marimo.py) -->
 
 ## Resources
 
