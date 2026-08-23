@@ -85,7 +85,7 @@ def _(mo):
     return
 
 
-@app.cell(hide_code=False)
+@app.cell
 def _(mo):
     mo.md(r"""
     # A Big Heading
@@ -448,8 +448,7 @@ def _():
     print("The sequence for CYTB is", cytb_seq)
     print("The sequence for COI is", coi_seq)
     print("The number of genes is", number_of_genes_in_dict)
-    return(gene_dict,)
-
+    return (gene_dict,)
 
 
 @app.cell(hide_code=True)
@@ -469,6 +468,7 @@ def _(mo):
 def _(gene_dict):
     gene_dict["ND4"] = "GGCCTTAAAT" # Adding a key-value pair to an existing dict
     gene_dict
+    return
 
 
 @app.cell(hide_code=True)
@@ -579,6 +579,42 @@ def _(mo):
     want, as shown above, without copy-pasting the calculation each time. This kind of
     reuse is a big part of why we write code instead of doing calculations by hand.
 
+    **Learn what's available**: For your reference,
+    [here is a list of all the built-in functions](https://docs.python.org/3/library/functions.html)
+    that are always available in Python.
+    Countless other functions are provided by Python packages.
+
+    ## Modules
+
+    A Python module is just a file containing Python code that you can import and
+    use.
+    Modules are distributed in Python packages.
+    We will use modules a lot in this course, so let's look at an example where
+    we import and use the `math` module.
+    """)
+    return
+
+
+@app.cell
+def _():
+    # We use `import` to import modules
+    import math
+
+    # The math module has a Pi attribute
+    math.pi
+    return (math,)
+
+
+@app.cell
+def _(math):
+    # The math module also has useful functions
+    math.log10(100)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
     ## File IO (Input/Output)
 
     Of course, we usually can't type sequences "by hand," like we've been doing
@@ -868,6 +904,21 @@ def _(mo):
 
     This is most of the core Python you'll need to get started.
     Everything else this semester builds on these same pieces.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Acknowledgements
+
+    The FASTA-file parsing section was modified from a
+    [Jupyter notebook](https://github.com/fayjustin/computational_biology/blob/main/Labs/Lab02.ipynb)
+    written by
+    [Justin Fay](https://fayjustin.github.io/).
+    I worked with Anthropic's Claude (Sonnet 5 model) to generate early drafts of
+    some sections of this notebook.
     """)
     return
 
