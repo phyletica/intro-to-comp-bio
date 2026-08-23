@@ -24,7 +24,7 @@
     "href": "index.html#lab-exercises",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lab exercises",
-    "text": "Lab exercises\n\nIntro to Bash\nSetting up a molab account",
+    "text": "Lab exercises\n\nIntro to Bash\nSetting up a molab account\n\n\nPython notebook exercises\nTo work on one of the marimo Python notebooks below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button and select “Sync to workspace.",
     "crumbs": [
       "Home"
     ]
