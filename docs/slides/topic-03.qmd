@@ -1,0 +1,254 @@
+---
+title: "Why Computation?"
+subtitle: "BIOL 5/6800 — Intro to Comp Bio"
+# author: "Jamie Oaks"
+format:
+  revealjs:
+    code-line-numbers: true
+    highlight-style: github
+    smaller: false
+    center-title-slide: true
+execute:
+  echo: true
+  eval: false
+metadata-files:
+  - _metadata.yml
+bibliography: ../references.bib
+---
+
+## Today's objectives
+
+-   Why computational biology?
+-   Intro to Python & marimo notebooks
+-   Exercise 4
+    -   Learning Python and notebooks
+
+
+# Why computational biology? {background-color="#1b3a5c"}
+
+## Origins of Comp Bio
+
+::: {.columns}
+::: {.column width="50%"}
+-   Fred Sanger seqeunced first protein (insulin) in 1952
+
+-   Margaret Dayhoff & colleagues stored protein sequence data in the Protein
+    Information Resource (1960s & 70s)
+
+-   1960s: Dayhoff, Cavalli-Sforza & Edwards use computers to infer phylogenies
+:::
+
+::: {.column width="50%"}
+
+![Margaret Dayhoff](
+    ../images/dayhoff.jpg
+){
+    fig-align="center"
+    fig-alt="Picture of Margaret Dayhoff"
+}
+
+![McLaughlin & Dayhoff 1973^[@McLaughlinDayhoff1973]](
+    ../images/mclaughlin-dayhoff-1973-tree.png
+){
+    fig-align="center"
+    fig-alt="Phylogeny of eukaryotes"
+}
+
+:::
+
+
+## Biology became a data science
+
+::: {.incremental}
+- One human genome: ~3.1 billion base pairs
+- One MiSeq run: tens of millions of reads
+- GenBank, SRA, UniProt, PDB: petabytes, doubling every couple of years
+- Sequencing costs have fallen faster than computing has gotten cheaper
+:::
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+The bottleneck in modern biology is rarely *generating* data.
+It is deciding what to **do** with it.
+:::
+
+::: {.notes}
+Ask: how long would it take to read 3 billion characters at 200 words/min?
+Roughly 100+ years without sleeping. This is not a "work harder" problem.
+:::
+
+## Example 1 — Reading a genome you never see
+
+You sequence a bacterial isolate and get back 4 million short reads,
+each ~150 bp, in random order, with errors.
+
+. . .
+
+**The question:** what is the genome?
+
+. . .
+
+**The problem:** this is a jigsaw puzzle with millions of pieces, no picture on
+the box, some pieces duplicated, and some pieces wrong.
+
+. . .
+
+Nobody solves this by hand. An *assembly algorithm* does — by building a graph
+of overlapping *k*-mers and finding a path through it.
+
+::: {.notes}
+Don't explain de Bruijn graphs. The point is: a well-posed biological question
+becomes a computational object (a graph) with a procedure attached.
+:::
+
+## Example 2 — Pathogen surveillance in real time
+
+During SARS-CoV-2, sequences were deposited daily and phylogenies were rebuilt
+continuously to track which lineages were spreading where.
+
+. . .
+
+That pipeline is a stack of algorithms:
+
+::: {.incremental}
+- align millions of genomes to a reference
+- infer a tree relating them
+- map the tree onto geography and time
+:::
+
+. . .
+
+If the tree takes six weeks to compute, the answer is useless.
+**Speed is not a convenience here — it is the whole point.**
+
+## The takeaway
+
+> A biological question becomes a computational question when we have to specify
+> **exactly how** to get from data to answer.
+
+
+## Comp Bio is also a mindset
+
+![](
+    ../images/transcription-factor.png
+){
+    fig-align="center"
+    fig-alt="Diagram of transcription factor binding DNA to initiate transcription"
+}
+
+**Biology**: GATGAG sequence is necessary and sufficient to induce expression
+
+. . .
+
+**Comp Bio**:
+-   What is the probability of TF binding given GATGAG sequence? — $P$(TF binding | GATGAG)
+-   What is the probability of gene expression? — $P$(Gene x expression | GATGAG & TF)
+
+. . .
+
+Biology isn't black & white: Think probabilistically using models!
+
+
+# Intro to Python {background-color="#1b3a5c"}
+
+## What is Python?
+
+It's a programming language that is
+<ul>
+	<li class="fragment fade-up">Interpreted</li>
+	<li class="fragment fade-up">Largely procedural, but flexible</li>
+	<li class="fragment fade-up">Terse and clear</li>
+    <ul>
+	    <li class="fragment fade-up">"Pseudocode that works"</li>
+    </ul>
+	<li class="fragment fade-up">Comes with standard libraries for interacting with the OS</li>
+	<li class="fragment fade-up">Diverse, stable libraries for work across many domains</li>
+	<li class="fragment fade-up">Industry standard in many fields: Machine learning, data science</li>
+</ul>
+
+## What is a Python notebook?
+
+::: {.incremental}
+-   An interactive web-based document that allows you to combine runnable
+    Python code, formatted text, and visualizations in one place.
+-   Composed of modular building blocks called "cells"
+    -   Instead of running a whole script of Python code, snippets of code in
+        each cell run individually
+:::
+
+## Types of cells
+
+::: {.incremental}
+Code (Python) cells
+:   Snippets of Python code that run individually; output of code appears underneath the cell   
+
+Markdown cells:
+:   Formatted text and images created using Markdown syntax; used to explain/document the code
+:::
+
+## What is marimo?
+
+-   One type of Python notebook
+-   Jupyter is another type that is more popular
+
+. . .
+
+So, why marimo?
+
+## Why marimo?
+
+IMHO, marimo solved two big problems with other types of notebooks:
+
+::: {.incremental}
+-   Results can vary depending on the order cells are run
+    -   marimo soflves this by being "**reactive**"
+
+-   The plain text files of other notebooks are illegible (nested in JSON syntax)
+    -   marimo is pure Python
+:::
+
+## What is molab?
+
+::: {.incremental}
+-   A free, cloud-hosted workspace for running marimo Python notebooks
+-   The name is a play on Google colab, a popular service for Jypyter notebooks
+-   It will be our primary means of practicing comp bio
+:::
+
+## Ten simple rules for biologists learning to program^[@Carey2018]
+
+::: {.incremental}
+1.  Begin with the end in mind
+2.  Baby steps are steps
+3.  Immersion is the best learning tool
+4.  Phone a friend
+5.  Learn how to ask questions
+6.  Don’t reinvent the wheel
+7.  Develop good habits early on
+8.  Practice makes perfect
+9.  Teach yourself
+10. Just do it
+:::
+
+
+# Exercise 4 {background-color="#1b3a5c"}
+
+
+## Intro to Python & marimo
+
+We are transitioning to marimo Python notebooks in molab as our primary
+environment for learning comp bio
+
+. . .
+
+The
+[class website](https://phyletica.org/intro-to-comp-bio/)
+([aub.ie/icb](https://phyletica.org/intro-to-comp-bio/))
+has instructions for Python notebook exercises:
+
+. . .
+
+1.  Go to [molab]() and make sure you're logged in
+2.  Click the notebook link on the class website
+3.  Click the "Fork" button
