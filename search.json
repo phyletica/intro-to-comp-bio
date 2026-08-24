@@ -14,7 +14,7 @@
     "href": "index.html#lecture-presentations",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lecture Presentations",
-    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides",
+    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides",
     "crumbs": [
       "Home"
     ]
@@ -24,7 +24,7 @@
     "href": "index.html#lab-exercises",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lab exercises",
-    "text": "Lab exercises\n\nIntro to Bash\nSetting up a molab account\n\n\nPython notebook exercises\nTo work on one of the marimo Python notebooks below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button and select “Sync to workspace”.",
+    "text": "Lab exercises\n\nIntro to Bash\nSetting up a molab account\n\n\nPython notebook exercises\nTo work on one of the marimo Python notebooks below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button.\n\n\nExercise 4: Intro to Python & marimo notebooks",
     "crumbs": [
       "Home"
     ]
@@ -89,6 +89,48 @@
     "crumbs": [
       "About"
     ]
+  },
+  {
+    "objectID": "slides/topic-02.html#todays-objectives",
+    "href": "slides/topic-02.html#todays-objectives",
+    "title": "Intro to Comp Bio",
+    "section": "Today’s objectives",
+    "text": "Today’s objectives\n\nLinux ThinLinc: Log in and set up\nIntro to the command line shell (Bash)\nExercise 2"
+  },
+  {
+    "objectID": "slides/topic-02.html#about-these-slides",
+    "href": "slides/topic-02.html#about-these-slides",
+    "title": "Intro to Comp Bio",
+    "section": "About these slides",
+    "text": "About these slides\nI will use a “Bash command line” heading for lines we type at the command prompt\n\n\nBash command line\n\necho \"Hello World!\"\n\nI will use a “Bash script” heading for lines we type in a file\n\n\nBash script\n\necho \"Hello World!\""
+  },
+  {
+    "objectID": "slides/topic-02.html#getting-help-with-a-command",
+    "href": "slides/topic-02.html#getting-help-with-a-command",
+    "title": "Intro to Comp Bio",
+    "section": "Getting help with a command",
+    "text": "Getting help with a command\n\n\nBash command line\n\nman echo\n\n\n\nThis shows the manual for the echo command\n\n\n\nNavigate with arrow keys (or ‘j’/‘k’)\n\n\nPress ‘q’ to exit the manual\n\n\n\nNote, man is the command (program) and echo is an argument"
+  },
+  {
+    "objectID": "slides/topic-02.html#macos-users",
+    "href": "slides/topic-02.html#macos-users",
+    "title": "Intro to Comp Bio",
+    "section": "macOS users",
+    "text": "macOS users\nYou have a Terminal app already\n\nOpen Spotlight, type “Terminal”, and press Return\nThe default shell is Zsh (not Bash), but it is very similar\n\nI recommend installing Xcode command line tools\n\nOpen terminal and use this command:\n\n\nZsh command line\n\nxcode-select --install"
+  },
+  {
+    "objectID": "slides/topic-02.html#windows-users",
+    "href": "slides/topic-02.html#windows-users",
+    "title": "Intro to Comp Bio",
+    "section": "Windows users",
+    "text": "Windows users\nYou can install Linux via the Windows Subsystem for Linux (WSL)\nI recommend you use the default Linux distribution (Ubuntu)\nRunning WSL will be very similar to Red Hat (ThinLinc)"
+  },
+  {
+    "objectID": "slides/topic-02.html#support",
+    "href": "slides/topic-02.html#support",
+    "title": "Intro to Comp Bio",
+    "section": "Support",
+    "text": "Support\nThis work was made possible by funding provided to Jamie Oaks from the National Science Foundation (DEB 1656004)."
   },
   {
     "objectID": "slides/topic-01.html#todays-objectives",
@@ -280,46 +322,109 @@
     "text": "Wednesday\n\nIntro to command-line shell environment\nAccess Linux Thinlinc environment\n\nCOSAM IT will be on-hand to help troubleshoot"
   },
   {
-    "objectID": "slides/topic-02.html#todays-objectives",
-    "href": "slides/topic-02.html#todays-objectives",
-    "title": "Intro to Comp Bio",
+    "objectID": "slides/topic-03.html#todays-objectives",
+    "href": "slides/topic-03.html#todays-objectives",
+    "title": "Why Computation?",
     "section": "Today’s objectives",
-    "text": "Today’s objectives\n\nLinux ThinLinc: Log in and set up\nIntro to the command line shell (Bash)\nExercise 2"
+    "text": "Today’s objectives\n\nWhy computational biology?\nIntro to Python & marimo notebooks\nExercise 4\n\nLearning Python and notebooks"
   },
   {
-    "objectID": "slides/topic-02.html#about-these-slides",
-    "href": "slides/topic-02.html#about-these-slides",
-    "title": "Intro to Comp Bio",
-    "section": "About these slides",
-    "text": "About these slides\nI will use a “Bash command line” heading for lines we type at the command prompt\n\n\nBash command line\n\necho \"Hello World!\"\n\nI will use a “Bash script” heading for lines we type in a file\n\n\nBash script\n\necho \"Hello World!\""
+    "objectID": "slides/topic-03.html#origins-of-comp-bio",
+    "href": "slides/topic-03.html#origins-of-comp-bio",
+    "title": "Why Computation?",
+    "section": "Origins of Comp Bio",
+    "text": "Origins of Comp Bio\n\n\n\n\n1952: Fred Sanger sequenced first protein (insulin)\nMargaret Dayhoff & colleagues stored protein sequences in the Protein Information Resource (1960s & 70s)\n1960s: Dayhoff & others use computers to infer phylogenies\n\n\n\n\n\n\n\nMargaret Dayhoff\n\n\n\n\n\n\n\nMcLaughlin & Dayhoff 19731\n\n\n\n\nMcLaughlin and Dayhoff (1973)"
   },
   {
-    "objectID": "slides/topic-02.html#getting-help-with-a-command",
-    "href": "slides/topic-02.html#getting-help-with-a-command",
-    "title": "Intro to Comp Bio",
-    "section": "Getting help with a command",
-    "text": "Getting help with a command\n\n\nBash command line\n\nman echo\n\n\n\nThis shows the manual for the echo command\n\n\n\nNavigate with arrow keys (or ‘j’/‘k’)\n\n\nPress ‘q’ to exit the manual\n\n\n\nNote, man is the command (program) and echo is an argument"
+    "objectID": "slides/topic-03.html#biology-became-a-data-science",
+    "href": "slides/topic-03.html#biology-became-a-data-science",
+    "title": "Why Computation?",
+    "section": "Biology became a data science",
+    "text": "Biology became a data science\n\nOne human genome: ~3.1 billion base pairs\nOne NovaSeq run: tens of billions of reads\nGenBank, SRA, UniProt, PDB: petabytes, doubling every couple of years\nSequencing costs have fallen faster than computing has gotten cheaper\n\n\n\n\n\nThe bottleneck in modern biology is rarely generating data. It is deciding what to do with it.\n\n\n\n\nAsk: how long would it take to read 3 billion characters at 200 words/min? Roughly 100+ years without sleeping. This is not a “work harder” problem."
   },
   {
-    "objectID": "slides/topic-02.html#macos-users",
-    "href": "slides/topic-02.html#macos-users",
-    "title": "Intro to Comp Bio",
-    "section": "macOS users",
-    "text": "macOS users\nYou have a Terminal app already\n\nOpen Spotlight, type “Terminal”, and press Return\nThe default shell is Zsh (not Bash), but it is very similar\n\nI recommend installing Xcode command line tools\n\nOpen terminal and use this command:\n\n\nZsh command line\n\nxcode-select --install"
+    "objectID": "slides/topic-03.html#the-takeaway",
+    "href": "slides/topic-03.html#the-takeaway",
+    "title": "Why Computation?",
+    "section": "The takeaway",
+    "text": "The takeaway\n\nA biological question becomes a computational question when we have to specify exactly how to get from data to answer."
   },
   {
-    "objectID": "slides/topic-02.html#windows-users",
-    "href": "slides/topic-02.html#windows-users",
-    "title": "Intro to Comp Bio",
-    "section": "Windows users",
-    "text": "Windows users\nYou can install Linux via the Windows Subsystem for Linux (WSL)\nI recommend you use the default Linux distribution (Ubuntu)\nRunning WSL will be very similar to Red Hat (ThinLinc)"
+    "objectID": "slides/topic-03.html#comp-bio-is-also-a-mindset",
+    "href": "slides/topic-03.html#comp-bio-is-also-a-mindset",
+    "title": "Why Computation?",
+    "section": "Comp Bio is also a mindset",
+    "text": "Comp Bio is also a mindset"
   },
   {
-    "objectID": "slides/topic-02.html#support",
-    "href": "slides/topic-02.html#support",
-    "title": "Intro to Comp Bio",
-    "section": "Support",
-    "text": "Support\nThis work was made possible by funding provided to Jamie Oaks from the National Science Foundation (DEB 1656004)."
+    "objectID": "slides/topic-03.html#what-is-python",
+    "href": "slides/topic-03.html#what-is-python",
+    "title": "Why Computation?",
+    "section": "What is Python?",
+    "text": "What is Python?\nIt’s a programming language that is\n\n\nInterpreted\n\n\nLargely procedural, but flexible\n\n\nTerse and clear\n\n\n\n“Pseudocode that works”\n\n\n\nComes with standard libraries for interacting with the OS\n\n\nDiverse, stable libraries for work across many domains\n\n\nIndustry standard in many fields: Machine learning, data science"
+  },
+  {
+    "objectID": "slides/topic-03.html#what-is-a-python-notebook",
+    "href": "slides/topic-03.html#what-is-a-python-notebook",
+    "title": "Why Computation?",
+    "section": "What is a Python notebook?",
+    "text": "What is a Python notebook?\n\nAn interactive web-based document that allows you to combine runnable Python code, formatted text, and visualizations in one place.\nComposed of modular building blocks called “cells”\n\nInstead of running a whole script of Python code, snippets of code in each cell run individually"
+  },
+  {
+    "objectID": "slides/topic-03.html#types-of-cells",
+    "href": "slides/topic-03.html#types-of-cells",
+    "title": "Why Computation?",
+    "section": "Types of cells",
+    "text": "Types of cells\n\nCode (Python) cells\n\nSnippets of Python code that run individually; output of code appears underneath the cell\n\nMarkdown cells:\n\nFormatted text and images created using Markdown syntax; used to explain/document the code"
+  },
+  {
+    "objectID": "slides/topic-03.html#what-is-marimo",
+    "href": "slides/topic-03.html#what-is-marimo",
+    "title": "Why Computation?",
+    "section": "What is marimo?",
+    "text": "What is marimo?\n\nOne type of Python notebook\nJupyter is another type that is more popular\n\n\nSo, why marimo?"
+  },
+  {
+    "objectID": "slides/topic-03.html#why-marimo",
+    "href": "slides/topic-03.html#why-marimo",
+    "title": "Why Computation?",
+    "section": "Why marimo?",
+    "text": "Why marimo?\nIMHO, marimo solved two big problems with other types of notebooks:\n\nResults can vary depending on the order cells are run\n\nmarimo solves this by being “reactive”\n\nThe plain text files of other notebooks are illegible (nested in JSON syntax)\n\nmarimo is pure Python"
+  },
+  {
+    "objectID": "slides/topic-03.html#what-is-molab",
+    "href": "slides/topic-03.html#what-is-molab",
+    "title": "Why Computation?",
+    "section": "What is molab?",
+    "text": "What is molab?\n\nA free, cloud-hosted workspace for running marimo Python notebooks\nThe name is a play on Google colab, a popular service for Jypyter notebooks\nIt will be our primary means of practicing comp bio"
+  },
+  {
+    "objectID": "slides/topic-03.html#ten-simple-rules",
+    "href": "slides/topic-03.html#ten-simple-rules",
+    "title": "Why Computation?",
+    "section": "Ten simple rules",
+    "text": "Ten simple rules\nFor biologists learning to program1\n\nBegin with the end in mind\nBaby steps are steps\nImmersion is the best learning tool\nPhone a friend\nLearn how to ask questions\n\nCarey and Papin (2018)"
+  },
+  {
+    "objectID": "slides/topic-03.html#ten-simple-rules-1",
+    "href": "slides/topic-03.html#ten-simple-rules-1",
+    "title": "Why Computation?",
+    "section": "Ten simple rules",
+    "text": "Ten simple rules\nFor biologists learning to program1\n\nDon’t reinvent the wheel\nDevelop good habits early on\nPractice makes perfect\nTeach yourself\nJust do it\n\nCarey and Papin (2018)"
+  },
+  {
+    "objectID": "slides/topic-03.html#intro-to-python-marimo",
+    "href": "slides/topic-03.html#intro-to-python-marimo",
+    "title": "Why Computation?",
+    "section": "Intro to Python & marimo",
+    "text": "Intro to Python & marimo\nWe are transitioning to marimo Python notebooks in molab as our primary environment for learning comp bio\n\nThe class website (aub.ie/icb) has instructions for Python notebook exercises:\n\n\n\nGo to molab and make sure you’re logged in\nClick the notebook link on the class website\nClick the “Fork” button"
+  },
+  {
+    "objectID": "slides/topic-03.html#references",
+    "href": "slides/topic-03.html#references",
+    "title": "Why Computation?",
+    "section": "",
+    "text": "Carey, Maureen A., and Jason A. Papin. 2018. “Ten Simple Rules for Biologists Learning to Program.” PLOS Computational Biology 14 (1): 1–11. https://doi.org/10.1371/journal.pcbi.1005871.\n\n\nMcLaughlin, P. J., and M. O. Dayhoff. 1973. “Eukaryote Evolution: A View Based on Cytochrome c Sequence Data.” Journal of Molecular Evolution 2 (2): 99–116. https://doi.org/10.1007/BF01653990."
   },
   {
     "objectID": "thinlinc-intro.html",
