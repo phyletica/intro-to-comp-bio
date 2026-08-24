@@ -9,6 +9,7 @@ slide presentations compiled for this term.
 
 *   [View Lecture 1 Slides](slides/topic-01.qmd)
 *   [View Lecture 2 Slides](slides/topic-02.qmd)
+*   [View Lecture 3 Slides](slides/topic-03.qmd)
 
 <!-- *Note: You can use your spacebar or arrow keys to navigate the slides once opened.* -->
 

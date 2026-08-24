@@ -6,5 +6,5 @@ format:
     controls: true
     slide-number: true
     embed-resources: true
-    transition: slide # none
     transition-speed: default # fast slow
+    citations-hover: true

@@ -4,6 +4,7 @@
 format:
   revealjs:
     code-line-numbers: false
+    transition: slide # none
 metadata-files:
   - _metadata.yml
 ---

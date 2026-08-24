@@ -1,7 +1,9 @@
 ---
 # title: "Topic 1: What is Comp Bio?"
 # author: "Jamie Oaks"
-format: revealjs
+format:
+  revealjs:
+    transition: slide # none
 metadata-files:
   - _metadata.yml
 ---

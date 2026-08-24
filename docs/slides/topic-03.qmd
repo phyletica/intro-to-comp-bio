@@ -8,6 +8,7 @@ format:
     highlight-style: github
     smaller: false
     center-title-slide: true
+    transition: none
 execute:
   echo: true
   eval: false
@@ -31,30 +32,36 @@ bibliography: ../references.bib
 ::: {.columns}
 ::: {.column width="50%"}
 
--   Fred Sanger seqeunced first protein (insulin) in 1952
-
--   Margaret Dayhoff & colleagues stored protein sequence data in the Protein
+::: {style="font-size: 80%;"}
+-   1952: Fred Sanger sequenced first protein (insulin)
+-   Margaret Dayhoff & colleagues stored protein sequences in the Protein
     Information Resource (1960s & 70s)
-
--   1960s: Dayhoff, Cavalli-Sforza & Edwards use computers to infer phylogenies
+-   1960s: Dayhoff & others use computers to infer phylogenies
+:::
 
 :::
 
 ::: {.column width="50%"}
 
+::: {style="text-align: center;"}
 ![Margaret Dayhoff](
     ../images/dayhoff.jpg
 ){
+    width="30%"
     fig-align="center"
     fig-alt="Picture of Margaret Dayhoff"
 }
+:::
 
+::: {style="text-align: center;"}
 ![McLaughlin & Dayhoff 1973^[@McLaughlinDayhoff1973]](
     ../images/mclaughlin-dayhoff-1973-tree.png
 ){
+    width="65%"
     fig-align="center"
     fig-alt="Phylogeny of eukaryotes"
 }
+:::
 
 :::
 :::
@@ -64,7 +71,7 @@ bibliography: ../references.bib
 
 ::: {.incremental}
 - One human genome: ~3.1 billion base pairs
-- One MiSeq run: tens of millions of reads
+- One NovaSeq run: tens of billions of reads
 - GenBank, SRA, UniProt, PDB: petabytes, doubling every couple of years
 - Sequencing costs have fallen faster than computing has gotten cheaper
 :::
@@ -81,7 +88,9 @@ Ask: how long would it take to read 3 billion characters at 200 words/min?
 Roughly 100+ years without sleeping. This is not a "work harder" problem.
 :::
 
-## Example 1 — Reading a genome you never see
+---
+
+**Example 1 — Reading a genome you never see**
 
 You sequence a bacterial isolate and get back 4 million short reads,
 each ~150 bp, in random order, with errors.
@@ -105,10 +114,12 @@ Don't explain de Bruijn graphs. The point is: a well-posed biological question
 becomes a computational object (a graph) with a procedure attached.
 :::
 
-## Example 2 — Pathogen surveillance in real time
+--- 
+
+**Example 2 — Pathogen surveillance in real time**
 
 During SARS-CoV-2, sequences were deposited daily and phylogenies were rebuilt
-continuously to track which lineages were spreading where.
+continuously to track which lineages were spreading where
 
 . . .
 
@@ -131,26 +142,38 @@ If the tree takes six weeks to compute, the answer is useless.
 > **exactly how** to get from data to answer.
 
 
-## Comp Bio is also a mindset
+## Comp Bio is also a mindset {style="font-size: 2.5em; text-align: center;"}
+
+---
 
 ![](
     ../images/transcription-factor.png
 ){
+    width="55%"
     fig-align="center"
     fig-alt="Diagram of transcription factor binding DNA to initiate transcription"
 }
+
+. . .
 
 **Biology**: GATGAG sequence is necessary and sufficient to induce expression
 
 . . .
 
 **Comp Bio**:
--   What is the probability of TF binding given GATGAG sequence? — $P$(TF binding | GATGAG)
--   What is the probability of gene expression? — $P$(Gene x expression | GATGAG & TF)
+
+::: {style="font-size: 75%;"}
+-   What is probability of TF binding given GATGAG?
+    -   $P$(TF binding | GATGAG)
+-   What is the probability of gene expression?
+    -   $P$( expression | GATGAG & TF)
+:::
 
 . . .
 
+::: {.callout-note appearance="minimal"}
 Biology isn't black & white: Think probabilistically using models!
+:::
 
 
 # Intro to Python {background-color="#1b3a5c"}
@@ -205,7 +228,7 @@ IMHO, marimo solved two big problems with other types of notebooks:
 
 ::: {.incremental}
 -   Results can vary depending on the order cells are run
-    -   marimo soflves this by being "**reactive**"
+    -   marimo solves this by being "**reactive**"
 
 -   The plain text files of other notebooks are illegible (nested in JSON syntax)
     -   marimo is pure Python
@@ -219,7 +242,9 @@ IMHO, marimo solved two big problems with other types of notebooks:
 -   It will be our primary means of practicing comp bio
 :::
 
-## Ten simple rules for biologists learning to program^[@Carey2018]
+## Ten simple rules
+
+For biologists learning to program^[@Carey2018]
 
 ::: {.incremental}
 1.  Begin with the end in mind
@@ -227,6 +252,13 @@ IMHO, marimo solved two big problems with other types of notebooks:
 3.  Immersion is the best learning tool
 4.  Phone a friend
 5.  Learn how to ask questions
+:::
+
+## Ten simple rules
+
+For biologists learning to program^[@Carey2018]
+
+::: {.incremental}
 6.  Don’t reinvent the wheel
 7.  Develop good habits early on
 8.  Practice makes perfect
@@ -252,6 +284,14 @@ has instructions for Python notebook exercises:
 
 . . .
 
-1.  Go to [molab]() and make sure you're logged in
+1.  Go to [molab](https://molab.marimo.io) and make sure you're logged in
 2.  Click the notebook link on the class website
 3.  Click the "Fork" button
+
+
+# References
+
+---
+
+::: {#refs}
+:::
