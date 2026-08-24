@@ -30,12 +30,14 @@ bibliography: ../references.bib
 
 ::: {.columns}
 ::: {.column width="50%"}
+
 -   Fred Sanger seqeunced first protein (insulin) in 1952
 
 -   Margaret Dayhoff & colleagues stored protein sequence data in the Protein
     Information Resource (1960s & 70s)
 
 -   1960s: Dayhoff, Cavalli-Sforza & Edwards use computers to infer phylogenies
+
 :::
 
 ::: {.column width="50%"}
@@ -54,6 +56,7 @@ bibliography: ../references.bib
     fig-alt="Phylogeny of eukaryotes"
 }
 
+:::
 :::
 
 
