@@ -1,0 +1,644 @@
+---
+title: "What Is an Algorithm?"
+subtitle: "BIOL 5/6800 — Intro to Comp Bio"
+# author: "Jamie Oaks"
+format:
+  revealjs:
+    code-line-numbers: true
+    highlight-style: github
+    smaller: false
+    center-title-slide: true
+    transition: none
+execute:
+  echo: true
+  eval: false
+metadata-files:
+  - _metadata.yml
+bibliography: ../references.bib
+---
+
+## Today's objectives
+
+-   What is an algorithm?
+    -   Basic types
+-   How do we compare/choose algorithms?
+    -   Time/space complexity: "Big O" notation
+-   Time-memory trade-off
+-   Exercise 5
+
+
+# Why computational biology? (Review from last time) {background-color="#1b3a5c"}
+
+---
+
+**Example 1 — Reading a genome you never see**
+
+You sequence a bacterial isolate and get back 4 million short reads,
+each ~150 bp, in random order, with errors.
+
+
+**The question:** what is the genome?
+
+
+**The problem:** this is a jigsaw puzzle with millions of pieces, no picture on
+the box, some pieces duplicated, and some pieces wrong.
+
+
+Nobody solves this by hand. An *assembly algorithm* does — by building a graph
+of overlapping *k*-mers and finding a path through it.
+
+--- 
+
+**Example 2 — Pathogen surveillance in real time**
+
+During SARS-CoV-2, sequences were deposited daily and phylogenies were rebuilt
+continuously to track which lineages were spreading where
+
+
+That pipeline is a stack of algorithms:
+
+- align millions of genomes to a reference
+- infer a tree relating them
+- map the tree onto geography and time
+
+
+If the tree takes six weeks to compute, the answer is useless.
+**Speed is not a convenience here — it is the whole point.**
+
+## Another example
+
+How many possible trees relate $n$ species?
+
+$$(2n - 3)!!$$
+
+. . .
+
+| Taxa | Possible trees |
+|------|----------------|
+| 5    | 105 |
+| 10   | ~$3.4 \times 10^{7}$ |
+| 20   | ~$8.2 \times 10^{21}$ |
+| 52   | ~$2.8 \times 10^{80}$ |
+
+. . .
+
+There are roughly $10^{80}$ atoms in the observable universe.
+
+::: {.notes}
+This is the transition slide into Part 2. The number is absurd on purpose.
+"We cannot check them all" is exactly the situation that forces us to think
+about *how* we search, not just *what* we are searching for.
+:::
+
+## The takeaway
+
+> A biological question becomes a computational question when we have to specify
+> **exactly how** to get from data to answer.
+
+
+
+# Algorithms {background-color="#1b3a5c"}
+
+::: {.notes}
+Target: ~20 minutes. Structure:
+  - what an algorithm is (2 min)
+  - families of algorithmic strategies (8 min)
+  - big-O (7 min)
+  - time/memory trade-off (3 min)
+Keep it high level. Resist writing full implementations on the board.
+:::
+
+## What is an algorithm?
+
+::: {.callout-tip appearance="simple"}
+A finite, unambiguous sequence of steps that transforms an **input** into an
+**output**.
+:::
+
+. . .
+
+A recipe is an algorithm. So is long division. So is:
+
+. . .
+
+```python
+def gc_content(seq):
+    gc = 0
+    for base in seq:
+        if base in "GCgc":
+            gc += 1
+    return gc / len(seq)
+```
+
+. . .
+
+**An algorithm is the idea; code is one expression of it**
+
+## Two questions about any algorithm
+
+::: {.columns}
+::: {.column width="50%"}
+### Is it correct?
+
+Does it give the right answer for **every** valid input, not just the one you
+tested?
+:::
+
+::: {.column width="50%"}
+### Is it feasible?
+
+Will it finish before your grant does?
+Will it fit in memory?
+:::
+:::
+
+. . .
+
+For most of biology, correctness is necessary but ***feasibility decides what you
+can actually ask***
+
+## Families of algorithmic strategies
+
+Rather than memorize algorithms, learn to recognize **strategies**:
+
+::: {style="font-size: 80%;"}
+::: {.incremental}
+1. **Exhaustive / brute force**: try everything
+2. **Divide and conquer**: split, solve, recombine
+3. **Dynamic programming**: solve subproblems once and reuse
+4. **Greedy**: take the locally best step, never look back
+5. **Heuristic**: trade guarantees for speed
+6. **Stochastic**: use randomness deliberately
+:::
+:::
+
+. . .
+
+***These are not mutually exclusive; real tools mix them***
+
+## 1. Exhaustive search
+
+**Idea**: enumerate every candidate solution, score each, keep the best
+
+. . .
+
+::: {.columns}
+::: {.column width="50%"}
+**Pros**
+
+- Guaranteed optimal
+- Easy to reason about
+- Great for small problems
+:::
+
+::: {.column width="50%"}
+**Cons**
+
+- Cost (time and/or memory) explodes with input size
+- Usually impossible in practice
+:::
+:::
+
+. . .
+
+***Biology***: finding the optimal tree for 7 taxa (10,395 trees — fine).
+For 30 taxa — not fine, ever.
+
+## 2. Divide and conquer
+
+**Idea**: break the problem into smaller versions of itself, solve those,
+combine the results.
+
+```python
+def binary_search(sorted_values, target):
+    lo = 0
+    hi = len(sorted_values) - 1
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        if sorted_values[mid] == target:
+            return mid
+        elif sorted_values[mid] < target:
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    return None
+```
+
+. . .
+
+Each step throws away half the remaining data; searching 1 billion sorted
+values takes ~30 comparisons
+
+## 3. Dynamic programming {.smaller}
+
+**Idea**: the problem has overlapping subproblems. Solve each one *once*,
+store the answer, look it up later.
+
+. . .
+
+A canonical example in biology is the Needleman–Wunsch
+algorithm for aligning sequences
+
+
+## Needleman-Wunsch alignment^[@NeedlemanWunsch] {.smaller}
+
+$$
+F(i,j) = \max
+\begin{cases}
+F(i-1,\,j-1) + s(A_i, B_j) & \text{(match/mismatch)}\\
+F(i-1,\,j) + g & \text{(gap in }B)\\
+F(i,\,j-1) + g & \text{(gap in }A)
+\end{cases}
+$$
+
+. . .
+
+Every cell is computed from cells we already filled in; fill a
+<!-- an $(n{+}1) \times (m{+}1)$ table -->
+table, then trace back.
+
+![](
+    ../images/needleman-wunsch.png
+){
+    width="30%"
+    fig-align="center"
+    fig-alt="Needleman-Wunsch table"
+}
+
+. . .
+
+**Guaranteed optimal** and ***way*** faster than enumerating alignments.
+
+::: {.notes}
+a smart strategy can turn an impossible problem (exponentially many alignments)
+into a tractable one (fill a table).
+:::
+
+## Dynamic programming: why it wins
+
+Example: Calculating Fibonacci numbers ($F_{n}$)
+
++:---------+:---:+:---:+:---:+:---:+:---:+:---:+:---:+:---:+:---:+:--------:+
+| $n$      | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | $\ldots$ |
++----------+-----+-----+-----+-----+-----+-----+-----+-----+-----+----------+
+| $F_{n}$  | 0   | 1   | 1   | 2   | 3   | 5   | 8   | 13  | 21  | $\ldots$ |
++----------+-----+-----+-----+-----+-----+-----+-----+-----+-----+----------+
+
+. . .
+
+$F_{0} = 0, F_{1} = 1, F_{n} = F{n-1} + F{n-2}$
+
+---
+
+Naive recursive algo recomputes the same values over and over:
+
+```python
+def fib_slow(n):
+    if n < 2:
+        return n
+    return fib_slow(n - 1) + fib_slow(n - 2)
+```
+
+. . .
+
+What if we store all previous Fibonacci numbers?
+
+```python
+def fib_fast(n):
+    if n < 2:
+        return n
+    fib_nums = [0] * (n + 1) # Create list of n+1 zeros
+    fib_nums[1] = 1
+    for i in range(2, n + 1):
+        fib_nums[i] = fib_nums[i - 1] + fib_nums[i - 2]
+    return fib_nums[n]
+```
+
+. . .
+
+`fib_slow(40)` takes about a minute; `fib_fast(40)` is instant
+
+Same answer; we just stopped throwing work away
+
+## 4. Greedy algorithms
+
+**Idea**: at each step, take whatever looks best *right now*. Commit. Move on.
+
+. . .
+
+::: {.columns}
+::: {.column width="50%"}
+**Pros**
+
+- Fast and simple
+- Often very good in practice
+:::
+
+::: {.column width="50%"}
+**Cons**
+
+- No guarantee of the global optimum
+- One early bad call propagates
+:::
+:::
+
+## 4. Greedy algorithms
+
+***Biology example***: UPGMA and neighbor-joining methods for estimating trees
+
+. . .
+
+-   Both methods repeatedly join the closest pair of clusters and never revisit
+    that decision.
+
+. . .
+
+***Analogy***: Hiking to the highest peak by always walking uphill. You will reach
+***a*** summit. Not necessarily the tallest one.
+
+## 5. Heuristics
+
+**Idea**: deliberately give up the guarantee of optimality in exchange for an
+answer you can actually get (greedy is one type)
+
+. . .
+
+::: {style="font-size: 80%;"}
+***Biology example***: Searching databases for similar sequences with BLAST^[@blast]
+
+-   Smith–Waterman algorithm^[@SmithWaterman] is optimal but far too slow to scan all of GenBank
+-   BLAST first finds short exact seed matches, then only extends around those
+:::
+
+. . .
+
+BLAST can miss things, but it is used billions of times a year
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+"Approximate answer today" beats "exact answer in nine years."
+:::
+
+## 6. Stochastic / randomized
+
+**Idea**: use randomness as part of the procedure.
+
+::: {.incremental}
+- **Bootstrapping**: resample data to assess variance
+- **MCMC**: random walk through model space, guided by the likelihood
+- **Randomized starts**: restart a heuristic search from many points; keep the best
+:::
+
+. . .
+
+Slightly different answers from each run; this is a feature
+
+## Checkpoint
+
+Which strategy would you reach for?
+
+::: {.incremental}
+- Find the optimal alignment of two 500-bp sequences
+- Find homologs of one protein across all of UniProt (a huge database)
+- Find the best phylogenetic tree for 5 species
+- Find the best phylogenetic tree for 500 species
+:::
+
+::: {.notes}
+- Find the optimal alignment of two 500-bp sequences: **dynamic programming**
+- Find homologs of one protein across all of UniProt: **heuristic**
+- Find the best tree for 5 taxa: **exhaustive**
+- Find the best tree for 500 taxa: **heuristic + greedy + stochastic**
+:::
+
+# How do we compare algorithms? {background-color="#1b3a5c"}
+
+## The problem with "it took 12 seconds"
+
+::: {.incremental}
+- On which machine?
+- With which input?
+- In Python or C?
+- How many other things were running?
+:::
+
+. . .
+
+We want something that describes the **algorithm**, not the afternoon
+
+## Big O notation
+
+**Idea**: count how the number of operations grows as the input ($n$) grows,
+and ignore everything else.
+
+. . .
+
+Specifically, we throw away:
+
+::: {.incremental}
+- constant factors — $3n$ and $n$ are both $O(n)$
+- lower-order terms — $n^2 + 500n + 900$ is $O(n^2)$
+:::
+
+. . .
+
+We keep only the term that dominates as $n$ gets large.
+
+::: {.notes}
+Emphasize: big O is about *scaling behavior*, not about predicting seconds.
+It answers "what happens when my dataset gets 10x bigger?"
+:::
+
+## Reading big O from code {.smaller}
+
+```python
+def count_bases(sequence):
+    counts = {}
+    for base in sequence:  # O(n) — one pass over n bases
+        counts[base] = counts.get(base, 0) + 1
+    return counts
+```
+
+$O(n)$: Loop over $n$ bases
+
+. . .
+
+```python
+def pairwise_distances(sequences):
+    d = {}
+    for i, seq_a in enumerate(sequences):  # O(n^2) — every pair of n sequences
+        for j, seq_b in enumerate(sequences):
+            if i < j:
+                d[(i, j)] = hamming(seq_a, seq_b)
+    return d
+```
+
+$O(n^2)$: Nested `for` loops for all pairs of $n$ sequences
+
+. . .
+
+Rough rule of thumb: **each nested loop over the input multiplies by another
+factor of $n$.**
+
+## Common complexity classes
+
+| Notation | Name | Example |
+|----------|------|---------|
+| $O(1)$ | constant | dict lookup |
+| $O(\log n)$ | logarithmic | binary search |
+| $O(n)$ | linear | scanning a sequence |
+| $O(n \log n)$ | linearithmic | sorting |
+| $O(n^2)$ | quadratic | all pairwise comparisons |
+| $O(n^3)$ | cubic | some matrix operations |
+| $O(2^n)$ | exponential | all subsets |
+| $O(n!)$ | factorial | all orderings |
+
+## Why the complexity class matters {.smaller}
+
+Assume ~10 million simple Python operations per second:
+
+| $n$ | $O(n)$ | $O(n \log n)$ | $O(n^2)$ | $O(n^3)$ |
+|-----|--------|---------------|----------|----------|
+| 10 | 1 µs | 3 µs | 10 µs | 100 µs |
+| 100 | 10 µs | 66 µs | 1 ms | 100 ms |
+| 1,000 | 100 µs | 1 ms | 100 ms | 1.7 min |
+| 1,000,000 | 100 ms | 2 s | **1.2 days** | **3,000 yr** |
+
+. . .
+
+::: {.callout-warning appearance="minimal"}
+A better algorithm can scale to lots of data
+:::
+
+## Exponential is a different universe
+
+| $n$ | $O(2^n)$ | $O(n!)$ |
+|-----|----------|---------|
+| 10 | 100 µs | 0.4 s |
+| 20 | 100 ms | 7,700 yr |
+| 30 | 1.8 min | $8 \times 10^{17}$ yr |
+| 50 | 3.6 yr | — |
+
+. . .
+
+**Example**: the exhaustive tree search from earlier
+
+It is not a hardware problem,
+and buying a cluster does not fix it
+
+## Space complexity
+
+The same notation describes **memory**.
+
+::: {.incremental}
+- Storing a sequence of length $n$: $O(n)$
+- Storing all pairwise distances among $n$ sequences: $O(n^2)$
+- The Needleman–Wunsch table for two length-$n$ sequences: $O(n^2)$
+:::
+
+. . .
+
+Two 100,000-bp sequences:
+
+-   A table with $10^{10}$ cells
+-   At 4 bytes per cell that is ~40 GB.
+
+# The trade-off {background-color="#1b3a5c"}
+
+## Time and memory pull against each other
+
+::: {.columns}
+::: {.column width="49%"}
+### Spend memory, save time
+
+- Precompute and store results so you never recompute them
+:::
+
+::: {.column width="49%"}
+### Spend time, save memory
+
+- Recompute on-demand and store as little as possible
+:::
+:::
+
+. . .
+
+Almost every real bioinformatics tool sits somewhere on this spectrum, and
+the position is a **design choice**.
+
+## Trade-off in Python: lists vs sets {.smaller}
+
+```python
+gene_ids_list = [...]         # 1,000,000 IDs
+gene_ids_set  = set(gene_ids_list)
+
+"BRCA1" in gene_ids_list      # O(n) — scans until found
+"BRCA1" in gene_ids_set       # O(1) — hashes and jumps
+```
+
+. . .
+
+The set is dramatically faster to search — and uses noticeably more memory,
+because it stores a hash table.
+
+. . .
+
+If you do one lookup, use the list
+
+If you do a million lookups,
+building the set pays for itself
+
+## Trade-off example
+
+::: {.incremental}
+- **BLAST** builds a *k*-mer index of the database in memory so it never has to
+  scan the whole thing
+  - Memory buys speed
+- **Hirschberg's algorithm**^[@Hirschberg1975] aligns sequences with $O(n)$
+  memory instead of
+  $O(n^2)$, at roughly twice the runtime
+  - Time buys memory
+:::
+
+## Choosing an algorithm
+
+::: {.incremental}
+1. How big is $n$, and how big will it be next year?
+2. Do I need the guaranteed optimum, or a good answer?
+3. Am I running this once, or a million times?
+4. What resource am I actually short of: hours or RAM?
+:::
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+There is no "best" algorithm. There is a best algorithm *for your problem, at
+your scale, under your constraints.*
+:::
+
+## Summary
+
+::: {.incremental}
+- Biology's data outgrew our ability to inspect it
+  - algorithms are how we cope
+- A handful of **strategies** (exhaustive, divide and conquer, DP, greedy,
+  heuristic, stochastic) explain most of what tools actually do
+- **Big O** describes how cost scales with input size, in time *and* memory
+  - Constant factors are a hardware problem; complexity class is a *thinking*
+    problem
+- Choosing an algorithm means choosing where to spend time and where to
+  spend memory
+:::
+
+# References
+
+---
+
+::: {#refs}
+:::
+
+# Acknowledgements
+
+I used Anthropic's Claude (Opus 5 model) to generate early drafts of
+some sections of these slides.
