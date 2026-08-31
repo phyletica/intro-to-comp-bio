@@ -14,7 +14,7 @@
     "href": "index.html#lecture-presentations",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lecture Presentations",
-    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides",
+    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides\nView Lecture 4 Slides",
     "crumbs": [
       "Home"
     ]
@@ -91,46 +91,109 @@
     ]
   },
   {
-    "objectID": "slides/topic-02.html#todays-objectives",
-    "href": "slides/topic-02.html#todays-objectives",
-    "title": "Intro to Comp Bio",
+    "objectID": "slides/topic-03.html#todays-objectives",
+    "href": "slides/topic-03.html#todays-objectives",
+    "title": "Why Computation?",
     "section": "Today’s objectives",
-    "text": "Today’s objectives\n\nLinux ThinLinc: Log in and set up\nIntro to the command line shell (Bash)\nExercise 2"
+    "text": "Today’s objectives\n\nWhy computational biology?\nIntro to Python & marimo notebooks\nExercise 4\n\nLearning Python and notebooks"
   },
   {
-    "objectID": "slides/topic-02.html#about-these-slides",
-    "href": "slides/topic-02.html#about-these-slides",
-    "title": "Intro to Comp Bio",
-    "section": "About these slides",
-    "text": "About these slides\nI will use a “Bash command line” heading for lines we type at the command prompt\n\n\nBash command line\n\necho \"Hello World!\"\n\nI will use a “Bash script” heading for lines we type in a file\n\n\nBash script\n\necho \"Hello World!\""
+    "objectID": "slides/topic-03.html#origins-of-comp-bio",
+    "href": "slides/topic-03.html#origins-of-comp-bio",
+    "title": "Why Computation?",
+    "section": "Origins of Comp Bio",
+    "text": "Origins of Comp Bio\n\n\n\n\n1952: Fred Sanger sequenced first protein (insulin)\nMargaret Dayhoff & colleagues stored protein sequences in the Protein Information Resource (1960s & 70s)\n1960s: Dayhoff & others use computers to infer phylogenies\n\n\n\n\n\n\n\nMargaret Dayhoff\n\n\n\n\n\n\n\nMcLaughlin & Dayhoff 19731\n\n\n\n\nMcLaughlin and Dayhoff (1973)"
   },
   {
-    "objectID": "slides/topic-02.html#getting-help-with-a-command",
-    "href": "slides/topic-02.html#getting-help-with-a-command",
-    "title": "Intro to Comp Bio",
-    "section": "Getting help with a command",
-    "text": "Getting help with a command\n\n\nBash command line\n\nman echo\n\n\n\nThis shows the manual for the echo command\n\n\n\nNavigate with arrow keys (or ‘j’/‘k’)\n\n\nPress ‘q’ to exit the manual\n\n\n\nNote, man is the command (program) and echo is an argument"
+    "objectID": "slides/topic-03.html#biology-became-a-data-science",
+    "href": "slides/topic-03.html#biology-became-a-data-science",
+    "title": "Why Computation?",
+    "section": "Biology became a data science",
+    "text": "Biology became a data science\n\nOne human genome: ~3.1 billion base pairs\nOne NovaSeq run: tens of billions of reads\nGenBank, SRA, UniProt, PDB: petabytes, doubling every couple of years\nSequencing costs have fallen faster than computing has gotten cheaper\n\n\n\n\n\nThe bottleneck in modern biology is rarely generating data. It is deciding what to do with it.\n\n\n\n\nAsk: how long would it take to read 3 billion characters at 200 words/min? Roughly 100+ years without sleeping. This is not a “work harder” problem."
   },
   {
-    "objectID": "slides/topic-02.html#macos-users",
-    "href": "slides/topic-02.html#macos-users",
-    "title": "Intro to Comp Bio",
-    "section": "macOS users",
-    "text": "macOS users\nYou have a Terminal app already\n\nOpen Spotlight, type “Terminal”, and press Return\nThe default shell is Zsh (not Bash), but it is very similar\n\nI recommend installing Xcode command line tools\n\nOpen terminal and use this command:\n\n\nZsh command line\n\nxcode-select --install"
+    "objectID": "slides/topic-03.html#the-takeaway",
+    "href": "slides/topic-03.html#the-takeaway",
+    "title": "Why Computation?",
+    "section": "The takeaway",
+    "text": "The takeaway\n\nA biological question becomes a computational question when we have to specify exactly how to get from data to answer."
   },
   {
-    "objectID": "slides/topic-02.html#windows-users",
-    "href": "slides/topic-02.html#windows-users",
-    "title": "Intro to Comp Bio",
-    "section": "Windows users",
-    "text": "Windows users\nYou can install Linux via the Windows Subsystem for Linux (WSL)\nI recommend you use the default Linux distribution (Ubuntu)\nRunning WSL will be very similar to Red Hat (ThinLinc)"
+    "objectID": "slides/topic-03.html#comp-bio-is-also-a-mindset",
+    "href": "slides/topic-03.html#comp-bio-is-also-a-mindset",
+    "title": "Why Computation?",
+    "section": "Comp Bio is also a mindset",
+    "text": "Comp Bio is also a mindset"
   },
   {
-    "objectID": "slides/topic-02.html#support",
-    "href": "slides/topic-02.html#support",
-    "title": "Intro to Comp Bio",
-    "section": "Support",
-    "text": "Support\nThis work was made possible by funding provided to Jamie Oaks from the National Science Foundation (DEB 1656004)."
+    "objectID": "slides/topic-03.html#what-is-python",
+    "href": "slides/topic-03.html#what-is-python",
+    "title": "Why Computation?",
+    "section": "What is Python?",
+    "text": "What is Python?\nIt’s a programming language that is\n\n\nInterpreted\n\n\nLargely procedural, but flexible\n\n\nTerse and clear\n\n\n\n“Pseudocode that works”\n\n\n\nComes with standard libraries for interacting with the OS\n\n\nDiverse, stable libraries for work across many domains\n\n\nIndustry standard in many fields: Machine learning, data science"
+  },
+  {
+    "objectID": "slides/topic-03.html#what-is-a-python-notebook",
+    "href": "slides/topic-03.html#what-is-a-python-notebook",
+    "title": "Why Computation?",
+    "section": "What is a Python notebook?",
+    "text": "What is a Python notebook?\n\nAn interactive web-based document that allows you to combine runnable Python code, formatted text, and visualizations in one place.\nComposed of modular building blocks called “cells”\n\nInstead of running a whole script of Python code, snippets of code in each cell run individually"
+  },
+  {
+    "objectID": "slides/topic-03.html#types-of-cells",
+    "href": "slides/topic-03.html#types-of-cells",
+    "title": "Why Computation?",
+    "section": "Types of cells",
+    "text": "Types of cells\n\nCode (Python) cells\n\nSnippets of Python code that run individually; output of code appears underneath the cell\n\nMarkdown cells:\n\nFormatted text and images created using Markdown syntax; used to explain/document the code"
+  },
+  {
+    "objectID": "slides/topic-03.html#what-is-marimo",
+    "href": "slides/topic-03.html#what-is-marimo",
+    "title": "Why Computation?",
+    "section": "What is marimo?",
+    "text": "What is marimo?\n\nOne type of Python notebook\nJupyter is another type that is more popular\n\n\nSo, why marimo?"
+  },
+  {
+    "objectID": "slides/topic-03.html#why-marimo",
+    "href": "slides/topic-03.html#why-marimo",
+    "title": "Why Computation?",
+    "section": "Why marimo?",
+    "text": "Why marimo?\nIMHO, marimo solved two big problems with other types of notebooks:\n\nResults can vary depending on the order cells are run\n\nmarimo solves this by being “reactive”\n\nThe plain text files of other notebooks are illegible (nested in JSON syntax)\n\nmarimo is pure Python"
+  },
+  {
+    "objectID": "slides/topic-03.html#what-is-molab",
+    "href": "slides/topic-03.html#what-is-molab",
+    "title": "Why Computation?",
+    "section": "What is molab?",
+    "text": "What is molab?\n\nA free, cloud-hosted workspace for running marimo Python notebooks\nThe name is a play on Google colab, a popular service for Jypyter notebooks\nIt will be our primary means of practicing comp bio"
+  },
+  {
+    "objectID": "slides/topic-03.html#ten-simple-rules",
+    "href": "slides/topic-03.html#ten-simple-rules",
+    "title": "Why Computation?",
+    "section": "Ten simple rules",
+    "text": "Ten simple rules\nFor biologists learning to program1\n\nBegin with the end in mind\nBaby steps are steps\nImmersion is the best learning tool\nPhone a friend\nLearn how to ask questions\n\nCarey and Papin (2018)"
+  },
+  {
+    "objectID": "slides/topic-03.html#ten-simple-rules-1",
+    "href": "slides/topic-03.html#ten-simple-rules-1",
+    "title": "Why Computation?",
+    "section": "Ten simple rules",
+    "text": "Ten simple rules\nFor biologists learning to program1\n\nDon’t reinvent the wheel\nDevelop good habits early on\nPractice makes perfect\nTeach yourself\nJust do it\n\nCarey and Papin (2018)"
+  },
+  {
+    "objectID": "slides/topic-03.html#intro-to-python-marimo",
+    "href": "slides/topic-03.html#intro-to-python-marimo",
+    "title": "Why Computation?",
+    "section": "Intro to Python & marimo",
+    "text": "Intro to Python & marimo\nWe are transitioning to marimo Python notebooks in molab as our primary environment for learning comp bio\n\nThe class website (aub.ie/icb) has instructions for Python notebook exercises:\n\n\n\nGo to molab and make sure you’re logged in\nClick the notebook link on the class website\nClick the “Fork” button"
+  },
+  {
+    "objectID": "slides/topic-03.html#references",
+    "href": "slides/topic-03.html#references",
+    "title": "Why Computation?",
+    "section": "",
+    "text": "Carey, Maureen A., and Jason A. Papin. 2018. “Ten Simple Rules for Biologists Learning to Program.” PLOS Computational Biology 14 (1): 1–11. https://doi.org/10.1371/journal.pcbi.1005871.\n\n\nMcLaughlin, P. J., and M. O. Dayhoff. 1973. “Eukaryote Evolution: A View Based on Cytochrome c Sequence Data.” Journal of Molecular Evolution 2 (2): 99–116. https://doi.org/10.1007/BF01653990."
   },
   {
     "objectID": "slides/topic-01.html#todays-objectives",
@@ -322,109 +385,249 @@
     "text": "Wednesday\n\nIntro to command-line shell environment\nAccess Linux Thinlinc environment\n\nCOSAM IT will be on-hand to help troubleshoot"
   },
   {
-    "objectID": "slides/topic-03.html#todays-objectives",
-    "href": "slides/topic-03.html#todays-objectives",
-    "title": "Why Computation?",
+    "objectID": "slides/topic-02.html#todays-objectives",
+    "href": "slides/topic-02.html#todays-objectives",
+    "title": "Intro to Comp Bio",
     "section": "Today’s objectives",
-    "text": "Today’s objectives\n\nWhy computational biology?\nIntro to Python & marimo notebooks\nExercise 4\n\nLearning Python and notebooks"
+    "text": "Today’s objectives\n\nLinux ThinLinc: Log in and set up\nIntro to the command line shell (Bash)\nExercise 2"
   },
   {
-    "objectID": "slides/topic-03.html#origins-of-comp-bio",
-    "href": "slides/topic-03.html#origins-of-comp-bio",
-    "title": "Why Computation?",
-    "section": "Origins of Comp Bio",
-    "text": "Origins of Comp Bio\n\n\n\n\n1952: Fred Sanger sequenced first protein (insulin)\nMargaret Dayhoff & colleagues stored protein sequences in the Protein Information Resource (1960s & 70s)\n1960s: Dayhoff & others use computers to infer phylogenies\n\n\n\n\n\n\n\nMargaret Dayhoff\n\n\n\n\n\n\n\nMcLaughlin & Dayhoff 19731\n\n\n\n\nMcLaughlin and Dayhoff (1973)"
+    "objectID": "slides/topic-02.html#about-these-slides",
+    "href": "slides/topic-02.html#about-these-slides",
+    "title": "Intro to Comp Bio",
+    "section": "About these slides",
+    "text": "About these slides\nI will use a “Bash command line” heading for lines we type at the command prompt\n\n\nBash command line\n\necho \"Hello World!\"\n\nI will use a “Bash script” heading for lines we type in a file\n\n\nBash script\n\necho \"Hello World!\""
   },
   {
-    "objectID": "slides/topic-03.html#biology-became-a-data-science",
-    "href": "slides/topic-03.html#biology-became-a-data-science",
-    "title": "Why Computation?",
-    "section": "Biology became a data science",
-    "text": "Biology became a data science\n\nOne human genome: ~3.1 billion base pairs\nOne NovaSeq run: tens of billions of reads\nGenBank, SRA, UniProt, PDB: petabytes, doubling every couple of years\nSequencing costs have fallen faster than computing has gotten cheaper\n\n\n\n\n\nThe bottleneck in modern biology is rarely generating data. It is deciding what to do with it.\n\n\n\n\nAsk: how long would it take to read 3 billion characters at 200 words/min? Roughly 100+ years without sleeping. This is not a “work harder” problem."
+    "objectID": "slides/topic-02.html#getting-help-with-a-command",
+    "href": "slides/topic-02.html#getting-help-with-a-command",
+    "title": "Intro to Comp Bio",
+    "section": "Getting help with a command",
+    "text": "Getting help with a command\n\n\nBash command line\n\nman echo\n\n\n\nThis shows the manual for the echo command\n\n\n\nNavigate with arrow keys (or ‘j’/‘k’)\n\n\nPress ‘q’ to exit the manual\n\n\n\nNote, man is the command (program) and echo is an argument"
   },
   {
-    "objectID": "slides/topic-03.html#the-takeaway",
-    "href": "slides/topic-03.html#the-takeaway",
-    "title": "Why Computation?",
+    "objectID": "slides/topic-02.html#macos-users",
+    "href": "slides/topic-02.html#macos-users",
+    "title": "Intro to Comp Bio",
+    "section": "macOS users",
+    "text": "macOS users\nYou have a Terminal app already\n\nOpen Spotlight, type “Terminal”, and press Return\nThe default shell is Zsh (not Bash), but it is very similar\n\nI recommend installing Xcode command line tools\n\nOpen terminal and use this command:\n\n\nZsh command line\n\nxcode-select --install"
+  },
+  {
+    "objectID": "slides/topic-02.html#windows-users",
+    "href": "slides/topic-02.html#windows-users",
+    "title": "Intro to Comp Bio",
+    "section": "Windows users",
+    "text": "Windows users\nYou can install Linux via the Windows Subsystem for Linux (WSL)\nI recommend you use the default Linux distribution (Ubuntu)\nRunning WSL will be very similar to Red Hat (ThinLinc)"
+  },
+  {
+    "objectID": "slides/topic-02.html#support",
+    "href": "slides/topic-02.html#support",
+    "title": "Intro to Comp Bio",
+    "section": "Support",
+    "text": "Support\nThis work was made possible by funding provided to Jamie Oaks from the National Science Foundation (DEB 1656004)."
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#todays-objectives",
+    "href": "slides/topic-04-algos-intro.html#todays-objectives",
+    "title": "What Is an Algorithm?",
+    "section": "Today’s objectives",
+    "text": "Today’s objectives\n\nWhat is an algorithm?\n\nBasic types\n\nHow do we compare/choose algorithms?\n\nTime/space complexity: “Big O” notation\n\nTime-memory trade-off\nExercise 5 (next time)"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#another-example",
+    "href": "slides/topic-04-algos-intro.html#another-example",
+    "title": "What Is an Algorithm?",
+    "section": "Another example",
+    "text": "Another example\nHow many possible trees relate \\(n\\) species?\n\\[(2n - 3)!!\\]\n\n\n\n\nTaxa\nPossible trees\n\n\n\n\n5\n105\n\n\n10\n~\\(3.4 \\times 10^{7}\\)\n\n\n20\n~\\(8.2 \\times 10^{21}\\)\n\n\n52\n~\\(2.8 \\times 10^{80}\\)\n\n\n\n\n\nThere are roughly \\(10^{80}\\) atoms in the observable universe.\n\nThis is the transition slide into Part 2. The number is absurd on purpose. “We cannot check them all” is exactly the situation that forces us to think about how we search, not just what we are searching for."
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#the-takeaway",
+    "href": "slides/topic-04-algos-intro.html#the-takeaway",
+    "title": "What Is an Algorithm?",
     "section": "The takeaway",
     "text": "The takeaway\n\nA biological question becomes a computational question when we have to specify exactly how to get from data to answer."
   },
   {
-    "objectID": "slides/topic-03.html#comp-bio-is-also-a-mindset",
-    "href": "slides/topic-03.html#comp-bio-is-also-a-mindset",
-    "title": "Why Computation?",
-    "section": "Comp Bio is also a mindset",
-    "text": "Comp Bio is also a mindset"
+    "objectID": "slides/topic-04-algos-intro.html#what-is-an-algorithm",
+    "href": "slides/topic-04-algos-intro.html#what-is-an-algorithm",
+    "title": "What Is an Algorithm?",
+    "section": "What is an algorithm?",
+    "text": "What is an algorithm?\n\n\n\n\n\n\nA finite, unambiguous sequence of steps that transforms an input into an output.\n\n\n\n\nA recipe is an algorithm. So is long division. So is:\n\n\ndef gc_content(seq):\n    gc = 0\n    for base in seq:\n        if base in \"GCgc\":\n            gc += 1\n    return gc / len(seq)\n\n\nAn algorithm is the idea; code is one expression of it"
   },
   {
-    "objectID": "slides/topic-03.html#what-is-python",
-    "href": "slides/topic-03.html#what-is-python",
-    "title": "Why Computation?",
-    "section": "What is Python?",
-    "text": "What is Python?\nIt’s a programming language that is\n\n\nInterpreted\n\n\nLargely procedural, but flexible\n\n\nTerse and clear\n\n\n\n“Pseudocode that works”\n\n\n\nComes with standard libraries for interacting with the OS\n\n\nDiverse, stable libraries for work across many domains\n\n\nIndustry standard in many fields: Machine learning, data science"
+    "objectID": "slides/topic-04-algos-intro.html#two-questions-about-any-algorithm",
+    "href": "slides/topic-04-algos-intro.html#two-questions-about-any-algorithm",
+    "title": "What Is an Algorithm?",
+    "section": "Two questions about any algorithm",
+    "text": "Two questions about any algorithm\n\n\nIs it correct?\nDoes it give the right answer for every valid input, not just the one you tested?\n\nIs it feasible?\nWill it finish before your grant does? Will it fit in memory?\n\n\nFor most of biology, correctness is necessary but feasibility decides what you can actually ask"
   },
   {
-    "objectID": "slides/topic-03.html#what-is-a-python-notebook",
-    "href": "slides/topic-03.html#what-is-a-python-notebook",
-    "title": "Why Computation?",
-    "section": "What is a Python notebook?",
-    "text": "What is a Python notebook?\n\nAn interactive web-based document that allows you to combine runnable Python code, formatted text, and visualizations in one place.\nComposed of modular building blocks called “cells”\n\nInstead of running a whole script of Python code, snippets of code in each cell run individually"
+    "objectID": "slides/topic-04-algos-intro.html#families-of-algorithmic-strategies",
+    "href": "slides/topic-04-algos-intro.html#families-of-algorithmic-strategies",
+    "title": "What Is an Algorithm?",
+    "section": "Families of algorithmic strategies",
+    "text": "Families of algorithmic strategies\nRather than memorize algorithms, learn to recognize strategies:\n\n\nExhaustive / brute force: try everything\nDivide and conquer: split, solve, recombine\nDynamic programming: solve subproblems once and reuse\nGreedy: take the locally best step, never look back\nHeuristic: trade guarantees for speed\nStochastic: use randomness deliberately\n\n\n\nThese are not mutually exclusive; real tools mix them"
   },
   {
-    "objectID": "slides/topic-03.html#types-of-cells",
-    "href": "slides/topic-03.html#types-of-cells",
-    "title": "Why Computation?",
-    "section": "Types of cells",
-    "text": "Types of cells\n\nCode (Python) cells\n\nSnippets of Python code that run individually; output of code appears underneath the cell\n\nMarkdown cells:\n\nFormatted text and images created using Markdown syntax; used to explain/document the code"
+    "objectID": "slides/topic-04-algos-intro.html#exhaustive-search",
+    "href": "slides/topic-04-algos-intro.html#exhaustive-search",
+    "title": "What Is an Algorithm?",
+    "section": "1. Exhaustive search",
+    "text": "1. Exhaustive search\nIdea: enumerate every candidate solution, score each, keep the best\n\n\n\nPros\n\nGuaranteed optimal\nEasy to reason about\nGreat for small problems\n\n\nCons\n\nCost (time and/or memory) explodes with input size\nUsually impossible in practice\n\n\n\n\nBiology: finding the optimal tree for 7 taxa (10,395 trees — fine). For 30 taxa — not fine, ever."
   },
   {
-    "objectID": "slides/topic-03.html#what-is-marimo",
-    "href": "slides/topic-03.html#what-is-marimo",
-    "title": "Why Computation?",
-    "section": "What is marimo?",
-    "text": "What is marimo?\n\nOne type of Python notebook\nJupyter is another type that is more popular\n\n\nSo, why marimo?"
+    "objectID": "slides/topic-04-algos-intro.html#divide-and-conquer",
+    "href": "slides/topic-04-algos-intro.html#divide-and-conquer",
+    "title": "What Is an Algorithm?",
+    "section": "2. Divide and conquer",
+    "text": "2. Divide and conquer\nIdea: break the problem into smaller versions of itself, solve those, combine the results.\ndef binary_search(sorted_values, target):\n    lo = 0\n    hi = len(sorted_values) - 1\n    while lo &lt;= hi:\n        mid = (lo + hi) // 2\n        if sorted_values[mid] == target:\n            return mid\n        elif sorted_values[mid] &lt; target:\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return None\n\nEach step throws away half the remaining data; searching 1 billion sorted values takes ~30 comparisons"
   },
   {
-    "objectID": "slides/topic-03.html#why-marimo",
-    "href": "slides/topic-03.html#why-marimo",
-    "title": "Why Computation?",
-    "section": "Why marimo?",
-    "text": "Why marimo?\nIMHO, marimo solved two big problems with other types of notebooks:\n\nResults can vary depending on the order cells are run\n\nmarimo solves this by being “reactive”\n\nThe plain text files of other notebooks are illegible (nested in JSON syntax)\n\nmarimo is pure Python"
+    "objectID": "slides/topic-04-algos-intro.html#dynamic-programming",
+    "href": "slides/topic-04-algos-intro.html#dynamic-programming",
+    "title": "What Is an Algorithm?",
+    "section": "3. Dynamic programming",
+    "text": "3. Dynamic programming\nIdea: the problem has overlapping subproblems. Solve each one once, store the answer, look it up later.\n\nA canonical example in biology is the Needleman–Wunsch algorithm for aligning sequences"
   },
   {
-    "objectID": "slides/topic-03.html#what-is-molab",
-    "href": "slides/topic-03.html#what-is-molab",
-    "title": "Why Computation?",
-    "section": "What is molab?",
-    "text": "What is molab?\n\nA free, cloud-hosted workspace for running marimo Python notebooks\nThe name is a play on Google colab, a popular service for Jypyter notebooks\nIt will be our primary means of practicing comp bio"
+    "objectID": "slides/topic-04-algos-intro.html#needleman-wunsch-alignment",
+    "href": "slides/topic-04-algos-intro.html#needleman-wunsch-alignment",
+    "title": "What Is an Algorithm?",
+    "section": "Needleman-Wunsch alignment1",
+    "text": "Needleman-Wunsch alignment1\n\\[\nF(i,j) = \\max\n\\begin{cases}\nF(i-1,\\,j-1) + s(A_i, B_j) & \\text{(match/mismatch)}\\\\\nF(i-1,\\,j) + g & \\text{(gap in }B)\\\\\nF(i,\\,j-1) + g & \\text{(gap in }A)\n\\end{cases}\n\\]\n\nEvery cell is computed from cells we already filled in; fill a  table, then trace back.\n\n\n\n\n\n\n\nGuaranteed optimal and way faster than enumerating alignments.\n\na smart strategy can turn an impossible problem (exponentially many alignments) into a tractable one (fill a table).\n\n\nNeedleman and Wunsch (1970)"
   },
   {
-    "objectID": "slides/topic-03.html#ten-simple-rules",
-    "href": "slides/topic-03.html#ten-simple-rules",
-    "title": "Why Computation?",
-    "section": "Ten simple rules",
-    "text": "Ten simple rules\nFor biologists learning to program1\n\nBegin with the end in mind\nBaby steps are steps\nImmersion is the best learning tool\nPhone a friend\nLearn how to ask questions\n\nCarey and Papin (2018)"
+    "objectID": "slides/topic-04-algos-intro.html#dynamic-programming-why-it-wins",
+    "href": "slides/topic-04-algos-intro.html#dynamic-programming-why-it-wins",
+    "title": "What Is an Algorithm?",
+    "section": "Dynamic programming: why it wins",
+    "text": "Dynamic programming: why it wins\nExample: Calculating Fibonacci numbers (\\(F_{n}\\))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\\(n\\)\n0\n1\n2\n3\n4\n5\n6\n7\n8\n\\(\\ldots\\)\n\n\n\\(F_{n}\\)\n0\n1\n1\n2\n3\n5\n8\n13\n21\n\\(\\ldots\\)\n\n\n\n\n\\(F_{0} = 0, F_{1} = 1, F_{n} = F{n-1} + F{n-2}\\)"
   },
   {
-    "objectID": "slides/topic-03.html#ten-simple-rules-1",
-    "href": "slides/topic-03.html#ten-simple-rules-1",
-    "title": "Why Computation?",
-    "section": "Ten simple rules",
-    "text": "Ten simple rules\nFor biologists learning to program1\n\nDon’t reinvent the wheel\nDevelop good habits early on\nPractice makes perfect\nTeach yourself\nJust do it\n\nCarey and Papin (2018)"
+    "objectID": "slides/topic-04-algos-intro.html#greedy-algorithms",
+    "href": "slides/topic-04-algos-intro.html#greedy-algorithms",
+    "title": "What Is an Algorithm?",
+    "section": "4. Greedy algorithms",
+    "text": "4. Greedy algorithms\nIdea: at each step, take whatever looks best right now. Commit. Move on.\n\n\n\nPros\n\nFast and simple\nOften very good in practice\n\n\nCons\n\nNo guarantee of the global optimum\nOne early bad call propagates"
   },
   {
-    "objectID": "slides/topic-03.html#intro-to-python-marimo",
-    "href": "slides/topic-03.html#intro-to-python-marimo",
-    "title": "Why Computation?",
-    "section": "Intro to Python & marimo",
-    "text": "Intro to Python & marimo\nWe are transitioning to marimo Python notebooks in molab as our primary environment for learning comp bio\n\nThe class website (aub.ie/icb) has instructions for Python notebook exercises:\n\n\n\nGo to molab and make sure you’re logged in\nClick the notebook link on the class website\nClick the “Fork” button"
+    "objectID": "slides/topic-04-algos-intro.html#greedy-algorithms-1",
+    "href": "slides/topic-04-algos-intro.html#greedy-algorithms-1",
+    "title": "What Is an Algorithm?",
+    "section": "4. Greedy algorithms",
+    "text": "4. Greedy algorithms\nBiology example: UPGMA and neighbor-joining methods for estimating trees\n\n\nBoth methods repeatedly join the closest pair of clusters and never revisit that decision.\n\n\n\nAnalogy: Hiking to the highest peak by always walking uphill. You will reach a summit. Not necessarily the tallest one."
   },
   {
-    "objectID": "slides/topic-03.html#references",
-    "href": "slides/topic-03.html#references",
-    "title": "Why Computation?",
+    "objectID": "slides/topic-04-algos-intro.html#heuristics",
+    "href": "slides/topic-04-algos-intro.html#heuristics",
+    "title": "What Is an Algorithm?",
+    "section": "5. Heuristics",
+    "text": "5. Heuristics\nIdea: deliberately give up the guarantee of optimality in exchange for an answer you can actually get (greedy is one type)\n\n\nBiology example: Searching databases for similar sequences with BLAST1\n\nSmith–Waterman algorithm2 is optimal but far too slow to scan all of GenBank\nBLAST first finds short exact seed matches, then only extends around those\n\n\n\n\nBLAST can miss things, but it is used billions of times a year\n\n\n\n\n\n“Approximate answer today” beats “exact answer in nine years.”\n\n\n\n\nAltschul et al. (1990)Smith and Waterman (1981)"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#stochastic-randomized",
+    "href": "slides/topic-04-algos-intro.html#stochastic-randomized",
+    "title": "What Is an Algorithm?",
+    "section": "6. Stochastic / randomized",
+    "text": "6. Stochastic / randomized\nIdea: use randomness as part of the procedure.\n\nBootstrapping: resample data to assess variance\nMCMC: random walk through model space, guided by the likelihood\nRandomized starts: restart a heuristic search from many points; keep the best\n\n\nSlightly different answers from each run; this is a feature"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#checkpoint",
+    "href": "slides/topic-04-algos-intro.html#checkpoint",
+    "title": "What Is an Algorithm?",
+    "section": "Checkpoint",
+    "text": "Checkpoint\nWhich strategy would you reach for?\n\nFind the optimal alignment of two 500-bp sequences\nFind homologs of one protein across all of UniProt (a huge database)\nFind the best phylogenetic tree for 5 species\nFind the best phylogenetic tree for 500 species\n\n\n\nFind the optimal alignment of two 500-bp sequences: dynamic programming\nFind homologs of one protein across all of UniProt: heuristic\nFind the best tree for 5 taxa: exhaustive\nFind the best tree for 500 taxa: heuristic + greedy + stochastic"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#the-problem-with-it-took-12-seconds",
+    "href": "slides/topic-04-algos-intro.html#the-problem-with-it-took-12-seconds",
+    "title": "What Is an Algorithm?",
+    "section": "The problem with “it took 12 seconds”",
+    "text": "The problem with “it took 12 seconds”\n\nOn which machine?\nWith which input?\nIn Python or C?\nHow many other things were running?\n\n\nWe want something that describes the algorithm, not the afternoon"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#big-o-notation",
+    "href": "slides/topic-04-algos-intro.html#big-o-notation",
+    "title": "What Is an Algorithm?",
+    "section": "Big O notation",
+    "text": "Big O notation\nIdea: count how the number of operations grows as the input (\\(n\\)) grows, and ignore everything else.\n\nSpecifically, we throw away:\n\nconstant factors — \\(3n\\) and \\(n\\) are both \\(O(n)\\)\nlower-order terms — \\(n^2 + 500n + 900\\) is \\(O(n^2)\\)\n\n\n\nWe keep only the term that dominates as \\(n\\) gets large.\n\nEmphasize: big O is about scaling behavior, not about predicting seconds. It answers “what happens when my dataset gets 10x bigger?”"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#reading-big-o-from-code",
+    "href": "slides/topic-04-algos-intro.html#reading-big-o-from-code",
+    "title": "What Is an Algorithm?",
+    "section": "Reading big O from code",
+    "text": "Reading big O from code\ndef count_bases(sequence):\n    counts = {}\n    for base in sequence:  # O(n) — one pass over n bases\n        counts[base] = counts.get(base, 0) + 1\n    return counts\n\\(O(n)\\): Loop over \\(n\\) bases\n\ndef pairwise_distances(sequences):\n    d = {}\n    for i, seq_a in enumerate(sequences):  # O(n^2) — every pair of n sequences\n        for j, seq_b in enumerate(sequences):\n            if i &lt; j:\n                d[(i, j)] = hamming(seq_a, seq_b)\n    return d\n\\(O(n^2)\\): Nested for loops for all pairs of \\(n\\) sequences\n\n\nRough rule of thumb: each nested loop over the input multiplies by another factor of \\(n\\)."
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#common-complexity-classes",
+    "href": "slides/topic-04-algos-intro.html#common-complexity-classes",
+    "title": "What Is an Algorithm?",
+    "section": "Common complexity classes",
+    "text": "Common complexity classes\n\n\n\nNotation\nName\nExample\n\n\n\n\n\\(O(1)\\)\nconstant\ndict lookup\n\n\n\\(O(\\log n)\\)\nlogarithmic\nbinary search\n\n\n\\(O(n)\\)\nlinear\nscanning a sequence\n\n\n\\(O(n \\log n)\\)\nlinearithmic\nsorting\n\n\n\\(O(n^2)\\)\nquadratic\nall pairwise comparisons\n\n\n\\(O(n^3)\\)\ncubic\nsome matrix operations\n\n\n\\(O(2^n)\\)\nexponential\nall subsets\n\n\n\\(O(n!)\\)\nfactorial\nall orderings"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#why-the-complexity-class-matters",
+    "href": "slides/topic-04-algos-intro.html#why-the-complexity-class-matters",
+    "title": "What Is an Algorithm?",
+    "section": "Why the complexity class matters",
+    "text": "Why the complexity class matters\nAssume ~10 million simple Python operations per second:\n\n\n\n\\(n\\)\n\\(O(n)\\)\n\\(O(n \\log n)\\)\n\\(O(n^2)\\)\n\\(O(n^3)\\)\n\n\n\n\n10\n1 µs\n3 µs\n10 µs\n100 µs\n\n\n100\n10 µs\n66 µs\n1 ms\n100 ms\n\n\n1,000\n100 µs\n1 ms\n100 ms\n1.7 min\n\n\n1,000,000\n100 ms\n2 s\n1.2 days\n3,000 yr\n\n\n\n\n\n\n\nA better algorithm can scale to lots of data"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#exponential-is-a-different-universe",
+    "href": "slides/topic-04-algos-intro.html#exponential-is-a-different-universe",
+    "title": "What Is an Algorithm?",
+    "section": "Exponential is a different universe",
+    "text": "Exponential is a different universe\n\n\n\n\\(n\\)\n\\(O(2^n)\\)\n\\(O(n!)\\)\n\n\n\n\n10\n100 µs\n0.4 s\n\n\n20\n100 ms\n7,700 yr\n\n\n30\n1.8 min\n\\(8 \\times 10^{17}\\) yr\n\n\n50\n3.6 yr\n—\n\n\n\n\nExample: the exhaustive tree search from earlier\nIt is not a hardware problem, and buying a cluster does not fix it"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#space-complexity",
+    "href": "slides/topic-04-algos-intro.html#space-complexity",
+    "title": "What Is an Algorithm?",
+    "section": "Space complexity",
+    "text": "Space complexity\nThe same notation describes memory.\n\nStoring a sequence of length \\(n\\): \\(O(n)\\)\nStoring all pairwise distances among \\(n\\) sequences: \\(O(n^2)\\)\nThe Needleman–Wunsch table for two length-\\(n\\) sequences: \\(O(n^2)\\)\n\n\nTwo 100,000-bp sequences:\n\nA table with \\(10^{10}\\) cells\nAt 4 bytes per cell that is ~40 GB."
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#time-and-memory-pull-against-each-other",
+    "href": "slides/topic-04-algos-intro.html#time-and-memory-pull-against-each-other",
+    "title": "What Is an Algorithm?",
+    "section": "Time and memory pull against each other",
+    "text": "Time and memory pull against each other\n\n\nSpend memory, save time\n\nPrecompute and store results so you never recompute them\n\n\nSpend time, save memory\n\nRecompute on-demand and store as little as possible\n\n\n\nAlmost every real bioinformatics tool sits somewhere on this spectrum, and the position is a design choice."
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#trade-off-in-python-lists-vs-sets",
+    "href": "slides/topic-04-algos-intro.html#trade-off-in-python-lists-vs-sets",
+    "title": "What Is an Algorithm?",
+    "section": "Trade-off in Python: lists vs sets",
+    "text": "Trade-off in Python: lists vs sets\ngene_ids_list = [...]         # 1,000,000 IDs\ngene_ids_set  = set(gene_ids_list)\n\n\"BRCA1\" in gene_ids_list      # O(n) — scans until found\n\"BRCA1\" in gene_ids_set       # O(1) — hashes and jumps\n\nThe set is dramatically faster to search — and uses noticeably more memory, because it stores a hash table.\n\n\nIf you do one lookup, use the list\nIf you do a million lookups, building the set pays for itself"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#trade-off-example",
+    "href": "slides/topic-04-algos-intro.html#trade-off-example",
+    "title": "What Is an Algorithm?",
+    "section": "Trade-off example",
+    "text": "Trade-off example\n\nBLAST builds a k-mer index of the database in memory so it never has to scan the whole thing\n\nMemory buys speed\n\nHirschberg’s algorithm1 aligns sequences with \\(O(n)\\) memory instead of \\(O(n^2)\\), at roughly twice the runtime\n\nTime buys memory\n\n\nHirschberg (1975)"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#choosing-an-algorithm",
+    "href": "slides/topic-04-algos-intro.html#choosing-an-algorithm",
+    "title": "What Is an Algorithm?",
+    "section": "Choosing an algorithm",
+    "text": "Choosing an algorithm\n\nHow big is \\(n\\), and how big will it be next year?\nDo I need the guaranteed optimum, or a good answer?\nAm I running this once, or a million times?\nWhat resource am I actually short of: hours or RAM?\n\n\n\n\n\nThere is no “best” algorithm. There is a best algorithm for your problem, at your scale, under your constraints."
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#summary",
+    "href": "slides/topic-04-algos-intro.html#summary",
+    "title": "What Is an Algorithm?",
+    "section": "Summary",
+    "text": "Summary\n\nBiology’s data outgrew our ability to inspect it\n\nalgorithms are how we cope\n\nA handful of strategies (exhaustive, divide and conquer, DP, greedy, heuristic, stochastic) explain most of what tools actually do\nBig O describes how cost scales with input size, in time and memory\n\nConstant factors are a hardware problem; complexity class is a thinking problem\n\nChoosing an algorithm means choosing where to spend time and where to spend memory"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#references",
+    "href": "slides/topic-04-algos-intro.html#references",
+    "title": "What Is an Algorithm?",
     "section": "",
-    "text": "Carey, Maureen A., and Jason A. Papin. 2018. “Ten Simple Rules for Biologists Learning to Program.” PLOS Computational Biology 14 (1): 1–11. https://doi.org/10.1371/journal.pcbi.1005871.\n\n\nMcLaughlin, P. J., and M. O. Dayhoff. 1973. “Eukaryote Evolution: A View Based on Cytochrome c Sequence Data.” Journal of Molecular Evolution 2 (2): 99–116. https://doi.org/10.1007/BF01653990."
+    "text": "Altschul, Stephen F., Warren Gish, Webb Miller, Eugene W. Myers, and David J. Lipman. 1990. “Basic Local Alignment Search Tool.” Journal of Molecular Biology 215 (3): 403–10. https://doi.org/10.1016/S0022-2836(05)80360-2.\n\n\nHirschberg, D. S. 1975. “A Linear Space Algorithm for Computing Maximal Common Subsequences.” Communications of the ACM (New York, NY, USA) 18 (6): 341–43. https://doi.org/10.1145/360825.360861.\n\n\nNeedleman, Saul B., and Christian D. Wunsch. 1970. “A General Method Applicable to the Search for Similarities in the Amino Acid Sequence of Two Proteins.” Journal of Molecular Biology 48 (3): 443–53. https://doi.org/10.1016/0022-2836(70)90057-4.\n\n\nSmith, T. F., and M. S. Waterman. 1981. “Identification of Common Molecular Subsequences.” Journal of Molecular Biology 147 (1): 195–97. https://doi.org/10.1016/0022-2836(81)90087-5."
   },
   {
     "objectID": "thinlinc-intro.html",
