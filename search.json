@@ -501,7 +501,7 @@
     "href": "slides/topic-04-algos-intro.html#dynamic-programming-why-it-wins",
     "title": "What Is an Algorithm?",
     "section": "Dynamic programming: why it wins",
-    "text": "Dynamic programming: why it wins\nExample: Calculating Fibonacci numbers (\\(F_{n}\\))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\\(n\\)\n0\n1\n2\n3\n4\n5\n6\n7\n8\n\\(\\ldots\\)\n\n\n\\(F_{n}\\)\n0\n1\n1\n2\n3\n5\n8\n13\n21\n\\(\\ldots\\)\n\n\n\n\n\\(F_{0} = 0, F_{1} = 1, F_{n} = F{n-1} + F{n-2}\\)"
+    "text": "Dynamic programming: why it wins\nExample: Calculating Fibonacci numbers (\\(F_{n}\\))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\\(n\\)\n0\n1\n2\n3\n4\n5\n6\n7\n8\n\\(\\ldots\\)\n\n\n\\(F_{n}\\)\n0\n1\n1\n2\n3\n5\n8\n13\n21\n\\(\\ldots\\)\n\n\n\n\n\\(F_{0} = 0, F_{1} = 1, F_{n} = F_{n-1} + F_{n-2}\\)"
   },
   {
     "objectID": "slides/topic-04-algos-intro.html#greedy-algorithms",
