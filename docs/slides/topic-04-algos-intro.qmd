@@ -286,7 +286,7 @@ Example: Calculating Fibonacci numbers ($F_{n}$)
 
 . . .
 
-$F_{0} = 0, F_{1} = 1, F_{n} = F{n-1} + F{n-2}$
+$F_{0} = 0, F_{1} = 1, F_{n} = F_{n-1} + F_{n-2}$
 
 ---
 
