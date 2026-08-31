@@ -24,7 +24,7 @@ bibliography: ../references.bib
 -   How do we compare/choose algorithms?
     -   Time/space complexity: "Big O" notation
 -   Time-memory trade-off
--   Exercise 5
+-   Exercise 5 (next time)
 
 
 # Why computational biology? (Review from last time) {background-color="#1b3a5c"}
