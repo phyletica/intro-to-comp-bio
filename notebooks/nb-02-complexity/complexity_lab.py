@@ -1137,6 +1137,17 @@ def _(mo):
     return
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Acknowledgements
+
+    I used Anthropic's Claude (Opus 5 model) to generate early drafts of
+    some parts of this lab exercise.
+    """)
+    return
+
+
 @app.cell
 def _():
     return
