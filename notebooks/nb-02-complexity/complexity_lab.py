@@ -18,13 +18,24 @@ def _(mo):
 
     **BIOL 5/6800 — Introduction to Computational Biology**
 
-    **Claim**: An algorithm's *complexity class* matters more than
-    the speed of your laptop.
+    ### <font color=red> Add your name </font>
+
+    Double-click this cell and add your name below.
+
+    **Name**: Your name here
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ### **Claim**: An algorithm's *complexity class* matters more than the speed of your laptop
 
     Today we check this claim.
 
-    The method throughout is the same: **double the input, look at the ratio of
-    the running times.**
+    The method we use to check this claim throughout this note book is the same:
+    **double the input, look at the ratio of the running times.**
 
     | If the algorithm is... | doubling $n$ multiplies the time by... |
     |------------------------|-----------------------------------------|
@@ -49,6 +60,7 @@ def _():
 
 @app.cell
 def _():
+    # Import some Python modules we'll use below
     import random
     import sys
     import time
@@ -81,10 +93,10 @@ def _(mo):
 
 
 @app.cell
-def _(number):
+def _():
     # `range` assumes start = 0, stop = 5, step = 1
     for num_1 in range(5):
-        print(number)
+        print(num_1)
     return
 
 
@@ -109,7 +121,9 @@ def _(mo):
     mo.md(r"""
     If we don't need to use the the number within the `for` loop, programmers often
     give the loop variable the name "`_`".
-    This is just a convention.
+    This is just a convention to let the reader know the loop variable isn't used
+    within the loop.
+    For example:
     """)
     return
 
@@ -121,7 +135,7 @@ def _():
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
     ### Randomness in Python
@@ -158,7 +172,7 @@ def _(random):
 def _(mo):
     mo.md(r"""
     The numbers above are not truly random. To see this, let's reinitialize
-    (re-seed) `rand_num_gen` and generate three more random numbers.
+    (re-seed) `rand_num_gen` with zero again and generate three more random numbers.
     We get the same numbers!
     """)
     return
@@ -175,8 +189,9 @@ def _(rand_num_gen):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    Later in this exercise, we will use `.choice()` method of the `random.Random`
-    class to randomly choose nucleotides to build up random DNA sequences.
+    Later in this exercise, we will use the `.choice()` method of the
+    `random.Random` class to randomly choose nucleotides to build up random DNA
+    sequences.
     Let's try that now.
     """)
     return
@@ -195,13 +210,16 @@ def _(rand_num_gen):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    Re-run the cell above several times.
+    You get a different random sequence each time!
+
     ### Python docstrings
 
-    Python has really nice feature that allows you to embed documentation right into
-    your code using what are called docstrings.
+    Python has a really nice feature that allows you to embed documentation right
+    into your code using what are called ***docstrings***.
     Docstrings are just plain-old strings put in the right location for Python to
-    know they are intended to be used as documentation.
-    One of those those locations is the first line inside a function definition.
+    use them as documentation.
+    One of these locations is the first line inside a function definition.
 
     Let's define a `hello` function with a docstring.
     """)
@@ -210,7 +228,7 @@ def _(mo):
 
 @app.function
 def hello(name):
-    "Print greeting to `name`."
+    "Print greeting to `name`." # This is the docstring!
     print(f"Hello, {name}")
 
 
@@ -303,8 +321,82 @@ def _(mo):
 
 @app.cell
 def _(ten_k_1):
-    ten_k_string = f"{ten_k_1:,}"
+    # Create a string including our `ten_k_1` variable from above
+    # Notice the `:,` syntax in the curly braces
+    ten_k_string = f"A pretty number: {ten_k_1:,}"
     ten_k_string
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ### Python sets
+
+    We've used strings, lists, and dictionaries as "containers" in Python.
+    A `set` is another type of Python container.
+    You can think of a set as a dictionary without values, only keys.
+    That might not sound useful, but they can be.
+
+    First, let's create a set of gene names, test it for membership, and loop over
+    it.
+    """)
+    return
+
+
+@app.cell
+def _():
+    # You create a set using curly braces and items separated by commas
+    my_gene_set = {"cytb", "ND2", "CMOS", "cmyc"}
+
+    if "cytb" in my_gene_set:
+        print("cytb is in the set!")
+
+    # Add one more gene
+    my_gene_set.add("KRAS")
+
+    for my_gene in my_gene_set:
+        print(my_gene)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    **Note**, the order of items in a set does not matter (unlike a list!).
+
+    Sets only hold unique items, so they can be useful for finding out how many
+    unique items are in a list, for example.
+    """)
+    return
+
+
+@app.cell
+def _():
+    my_list = ["a", "a", "b", "b", "c"]
+    print(len(my_list))
+    # Create a set from the items in the list
+    my_set = set(my_list)
+    print(len(my_set))
+    print(my_set)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    Sets are also (unsurprisingly) good for set operations like union and
+    intersection.
+    """)
+    return
+
+
+@app.cell
+def _():
+    cancer_genes = {"MYC", "IDH1", "IDH2", "TP53"}
+    metabolic_genes = {"GBA", "IDH1", "IDH2", "PAH"}
+    metab_cancer_genes = cancer_genes.intersection(metabolic_genes)
+    metab_cancer_genes
     return
 
 
@@ -318,16 +410,27 @@ def _(mo):
     We will use these later to empirically compare the runtime of algorithms against
     our expectations based on their complexity class.
 
+    You don't need to 100% understand how these functions work, but I recommend you
+    read through the code to reinforce your learning of the Python language.
+
     First, let's define a function that creates a given number of random DNA
     sequences of a given length.
+
+    Notice, for the `seed` argument of the function, we specify a default value of
+    `seed = None`.
+    When using the function, this allows us to choose whether to specify a seed or
+    not.
     """)
     return
 
 
 @app.cell
 def _(random):
-    def random_dna_sequences(count, length, seed=0):
+    def random_dna_sequences(count, length, seed = None):
         """Generate `count` random DNA sequences of the given length."""
+        # If a seed isn't given, get a random number based on the computer's clock
+        if seed is None:
+            seed = random.random()
         # Create a (pseudo-)random number generator
         rng = random.Random(seed)
         # Create an empty list to store the random sequences
@@ -341,6 +444,7 @@ def _(random):
                 seq += next_nucleotide
             # Add sequence to our list
             dna_seqs.append(seq)
+        # Deliver the random sequences
         return dna_seqs
 
     return (random_dna_sequences,)
@@ -349,8 +453,34 @@ def _(random):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    Let's try it out!
+
+    Run the cell below several times and notice you get different sequences each
+    time.
+
+    ### <font color=red> Challenge 1 </font>
+
+    Try changing the code below to specify a seed.
+    For example, `random_dna_sequences(4, 10, 1)`.
+
+    After specifying the seed, run the cell several times.
+    Do the sequences change?
+    """)
+    return
+
+
+@app.cell
+def _(random_dna_sequences):
+    some_random_seqs = random_dna_sequences(4, 10)
+    some_random_seqs
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
     Next, let's create a `get_best_runtime` function that runs any given function
-    function several times and keeps the **fastest** run.
+    several times and keeps the **fastest** run.
     That may look like cheating, but it isn't.
     A run can only be slowed down by background noise (another process, garbage
     collection, your browser), never sped up.
@@ -376,6 +506,21 @@ def _(time):
         return fastest
 
     return (get_best_runtime,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    Let's try it out by timing our `random_dna_sequences` function:
+    """)
+    return
+
+
+@app.cell
+def _(get_best_runtime, random_dna_sequences):
+    rand_seq_run_time = get_best_runtime(random_dna_sequences, 20, 1000, trials = 5)
+    rand_seq_run_time
+    return (rand_seq_run_time,)
 
 
 @app.cell(hide_code=True)
@@ -408,6 +553,21 @@ def format_seconds(seconds):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    Let's test it out using our `rand_seq_run_time` from above.
+    """)
+    return
+
+
+@app.cell
+def _(rand_seq_run_time):
+    pretty_rand_seq_run_time = format_seconds(rand_seq_run_time)
+    pretty_rand_seq_run_time
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
     Last, we define a function that creates a table in Markdown syntax.
     We will use this later to create some pretty tables of our results.
     """)
@@ -426,17 +586,43 @@ def markdown_table(headers, rows):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    Let's create some fake data to test it out.
+    """)
+    return
+
+
+@app.cell
+def _(mo):
+    table_headers = ["Name", "Height (cm)"]
+    # Create a list of lists to be the table's rows
+    table_rows = [
+        ["Bob", 203],
+        ["Sam", 153],
+        ["Jane", 211],
+    ]
+
+    pretty_table = markdown_table(table_headers, table_rows)
+
+    # Print the table as plain text
+    print(pretty_table)
+
+    # Use marimo's `mo.md()` function to render the table as Markdown-formatted HTML
+    mo.md(pretty_table)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
     ## 2. Calibration: an $O(n)$ baseline
 
     Before measuring anything interesting, let's confirm our functions above work,
     using an algorithm whose complexity we already know.
 
-    `gc_content` looks at each base exactly once, so it is $O(n)$ in the length
-    of the sequence.
+    The `gc_content` function below looks at each base exactly once, so its
+    complexity is $O(n)$, where $n$ is the length of the sequence.
     We will define this function a little differently than in our last exercise to
     make the `for` loop over each base more explicit.
-
-    **Predict the ratio column before you run this.**
     """)
     return
 
@@ -453,19 +639,21 @@ def gc_content(seq):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    The code below will run `gc_content` several time, doubling the length of the
+    The code below will run `gc_content` several times, doubling the length of the
     sequence each time.
     The results will be presented in a Markdown-formatted table below the cell after
     you run it.
     The last column of the table will have the ratio of runtime of the current
     sequence length over the previous sequence length (which was half as long).
 
-    <font color=red> Before you run the cell below, predict what that ratio should
-    be for this algorithm. </font>
+    ### <font color=red> Challenge 2 </font>
+
+    Before you run the cell below, predict what that ratio should be for this
+    algorithm.
 
     Double-click this cell and type your prediction below.
 
-    **Your predicted ratio**: ?
+    **Your predicted ratio**: ???
     """)
     return
 
@@ -511,15 +699,20 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## 3. The $O(n^2)$ algorithm
+    ## 3. An $O(n^2)$ algorithm
 
     Now something with real teeth: **all pairwise distances** among a set of
     sequences. This is the first step of **many** genetic methods.
 
     With $n$ sequences there are $n(n-1)/2$ pairs, so the work grows like $n^2$.
+    Notice, that for this problem, $n$ is now the number of sequences (not the
+    sequence length).
 
-    Note that we are now varying the **number of sequences**, holding each
-    sequence at a fixed 50 bp.
+    Below, we define two functions:
+
+    1.  `hamming_distance`: Count the differences between two sequences
+    2.  `pairwise_distances`: Get the Hamming distance between every pair of
+        sequences; store as a dictionary
     """)
     return
 
@@ -552,17 +745,21 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    quad_run = mo.ui.run_button(label="Run the pairwise timing", kind="success")
-    mo.md(
-        "This one is slow enough that we don't want it re-running every time you "
-        "touch something else. Click to run:\n\n"
-    )
-    return (quad_run,)
+    mo.md(r"""
+    Below, we do our timing experiment of the `pairwise_distances` function.
 
+    We will hold the sequence length (50 bases) constant and **double the number of
+    sequences** between each test.
 
-@app.cell(hide_code=True)
-def _(quad_run):
-    quad_run
+    ### <font color=red> Challenge 3 </font>
+
+    Before running the experiment below, please predict the factor by which the
+    runtime will increase each time we double the number of sequences.
+
+    Double-click this cell and type your prediction below.
+
+    **Your predicted ratio**: ???
+    """)
     return
 
 
@@ -576,7 +773,7 @@ def _(
 ):
     mo.stop(
         not quad_run.value,
-        mo.md("*Waiting \u2014 click the button above.*"),
+        mo.md("***Waiting \u2014 This task is slow enough that we don't want it re-running every time you interact with the notebook. Please run the next cell and then click button to run the experiment.***"),
     )
 
     pw_dist_table_rows = []
@@ -609,6 +806,13 @@ def _(
 
 @app.cell(hide_code=True)
 def _(mo):
+    quad_run = mo.ui.run_button(label="Run the pairwise timing", kind="success")
+    quad_run
+    return (quad_run,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
     mo.md(r"""
     /// tip | What you should see
 
@@ -627,24 +831,16 @@ def _(mo):
 
     You now have a measured time at 800 sequences and a measured ratio of 4.
 
+    ### <font color=red> Challenge 4 </font>
+
     **Before running anything else**, work out on paper how long 1,600 sequences
-    should take, then type your prediction below.
+    should take.
+
+    The code below will perform the test with 1,600 sequences.
+    Run the next two cells, enter your prediction below, and then click the button
+    to run the test.
     """)
     return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    prediction = mo.ui.number(
-        start=0.0,
-        stop=100000.0,
-        step=0.1,
-        value=1.0,
-        label="**My prediction for n = 1,600 (seconds)**:",
-    )
-    predict_run = mo.ui.run_button(label="Now actually run it", kind="warn")
-    mo.vstack([prediction, predict_run])
-    return predict_run, prediction
 
 
 @app.cell
@@ -658,7 +854,7 @@ def _(
 ):
     mo.stop(
         not predict_run.value,
-        mo.md("*Make a prediction first, then click.*"),
+        mo.md("***Waiting \u2014 Run the cell below, make a prediction, then click the button to run the experiment.***"),
     )
 
     check_seqs = random_dna_sequences(1600, 50)
@@ -678,6 +874,20 @@ def _(
     """
     )
     return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    prediction = mo.ui.number(
+        start=0.0,
+        stop=100000.0,
+        step=0.1,
+        value=1.0,
+        label="**My prediction for n = 1,600 sequences (in seconds)**:",
+    )
+    predict_run = mo.ui.run_button(label="Now actually run it", kind="warn")
+    mo.vstack([prediction, predict_run])
+    return predict_run, prediction
 
 
 @app.cell(hide_code=True)
@@ -744,9 +954,15 @@ def _(mo):
     Naive recursive Fibonacci recomputes the same values an exponential number of
     times. But, we can turn $O(2^n)$ into $O(n)$ by spending a little memory on a
     list of previous answers.
+    The $n$ in calculating Fibonacci numbers is simply the number in the Fibonacci
+    sequence that we want, because we need to calculate $n$ sums to calculate it.
 
-    Move the slider and watch the two columns diverge. The slider is capped at
-    38 for a reason — try 45 at your own risk.
+    Let's define the two functions for calculating Fibonacci number that we saw in
+    lecture.
+    The first one uses recursion, and the second one builds a list storing the
+    results of previous calculations.
+
+    The second function is an example of ***dynamic programming***.
     """)
     return
 
@@ -773,17 +989,25 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    fib_n = mo.ui.slider(
-        start=20, stop=38, value=30, label="n =", show_value=True
-    )
-    fib_run = mo.ui.run_button(label="Time both versions", kind="success")
-    mo.vstack([fib_n, fib_run])
-    return fib_n, fib_run
+    mo.md(r"""
+    The code below compares the runtime of the two algorithms (`fib_slow` and
+    `fib_fast`) for a given value of $n$.
+
+    ### <font color=red> Challenge 5 </font>
+
+    Predict how many times faster the `fib_fast` algorithm will be compared to
+    `fib_slow`.
+
+    Double-click this cell and type your prediction below.
+
+    **`fib_fast` will be how many times faster**: ???
+    """)
+    return
 
 
 @app.cell
 def _(fib_fast, fib_n, fib_run, fib_slow, get_best_runtime, mo):
-    mo.stop(not fib_run.value, mo.md("*Pick an n, then click.*"))
+    mo.stop(not fib_run.value, mo.md("***Waiting \u2014 To run the Fibonacci experiment, run the cell below, pick an $n$ using the slider, and then click the button. Try a few different $n$ values and watch how the speed-up changes!***"))
 
     fib_t_slow = get_best_runtime(fib_slow, fib_n.value, trials=1)
     fib_t_fast = get_best_runtime(fib_fast, fib_n.value, trials=100)
@@ -797,8 +1021,9 @@ def _(fib_fast, fib_n, fib_run, fib_slow, get_best_runtime, mo):
 
     **Speedup: {fib_t_slow / fib_t_fast:,.0f}\u00d7**
 
-    Same recurrence, same answer, three extra lines. The dictionary is the
-    memory you spend to buy that speedup.
+    Same recurrence, same answer, a few extra lines of code. The `fib_nums` list is
+    the memory you spend to buy that speedup.
+    ***This is dynamic programming in action!***
     """
     )
     return
@@ -806,30 +1031,38 @@ def _(fib_fast, fib_n, fib_run, fib_slow, get_best_runtime, mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""
-    ## 7. Escape hatch two: spend memory deliberately
-
-    Membership testing in a `list` is $O(n)$ — Python scans until it finds a
-    match. In a `set` it is $O(1)$: hash the value, jump straight to the bucket.
-
-    The set is not free. It stores a hash table, so it costs more memory for
-    exactly the same contents.
-    """)
-    return
+    fib_n = mo.ui.slider(
+        start=20, stop=38, value=30, label="n =", show_value=True
+    )
+    fib_run = mo.ui.run_button(label="Time both versions", kind="success")
+    mo.vstack([fib_n, fib_run])
+    return fib_n, fib_run
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    lookup_run = mo.ui.run_button(
-        label="Build 200,000 gene IDs and compare", kind="success"
-    )
-    lookup_run
-    return (lookup_run,)
+    mo.md(r"""
+    ## 7. Escape hatch two: spend memory deliberately
+
+    Membership testing in a `list` is $O(n)$: Python scans the list until it finds a
+    match.
+
+    For a `set` in Python, membership testing is $O(1)$: Python hashes the value and
+    can jump straight to its location in memory.
+
+    The `set` is not free. It stores a hash table, so it costs more memory for
+    exactly the same contents.
+
+    The code in the next cell creates a `list` and a `set` of 200,000 fake Gene IDs,
+    and compares how much time it takes to lookup an ID in both.
+    It also compares how much memory is used by the `list` and `set`.
+    """)
+    return
 
 
 @app.cell
 def _(lookup_run, mo, sys, time):
-    mo.stop(not lookup_run.value, mo.md("*Click to run.*"))
+    mo.stop(not lookup_run.value, mo.md("***Waiting \u2014 To run the list vs set lookup experiment, please run the cell below and then click the button.***"))
 
     # Create a list of 200,000 fake Gene IDs
     lookup_ids = [f"GENE{i:07d}" for i in range(200_000)]
@@ -861,16 +1094,25 @@ def _(lookup_run, mo, sys, time):
 
     **{lookup_t_list / lookup_t_set:,.0f}\u00d7 faster for {lookup_mb_set / lookup_mb_list:.1f}\u00d7 the memory.**
 
-    (Only the container is measured here; the ID strings themselves are shared
-    between the two and counted in neither.)
+    (Only the memory of the container is measured here; the ID strings themselves
+    are shared between the two and counted in neither.)
 
-    The decision is not "sets are better." If you do one lookup, building the
-    set costs more than it saves. If you do a million, it pays for itself
-    immediately. **How many times you will do the thing is part of the
-    algorithm choice.**
+    The conclusion is ***NOT*** "sets are better." If you do one lookup, building
+    the set costs more than it saves. If you do a million, it pays for itself
+    immediately. **How many times you will do the thing is part of the algorithm
+    choice.**
     """
     )
     return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    lookup_run = mo.ui.run_button(
+        label="Build 200,000 gene IDs and compare", kind="success"
+    )
+    lookup_run
+    return (lookup_run,)
 
 
 @app.cell(hide_code=True)
