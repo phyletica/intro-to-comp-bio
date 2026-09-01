@@ -837,8 +837,8 @@ def _(mo):
     should take.
 
     The code below will perform the test with 1,600 sequences.
-    Run the next two cells, enter your prediction below, and then click the button
-    to run the test.
+    Run the next two cells, enter your prediction in the second cell below, and
+    then click the button to run the test.
     """)
     return
 
