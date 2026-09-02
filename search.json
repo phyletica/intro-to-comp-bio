@@ -602,11 +602,11 @@
     "text": "Trade-off in Python: lists vs sets\ngene_ids_list = [...]         # 1,000,000 IDs\ngene_ids_set  = set(gene_ids_list)\n\n\"BRCA1\" in gene_ids_list      # O(n) — scans until found\n\"BRCA1\" in gene_ids_set       # O(1) — hashes and jumps\n\nThe set is dramatically faster to search — and uses noticeably more memory, because it stores a hash table.\n\n\nIf you do one lookup, use the list\nIf you do a million lookups, building the set pays for itself"
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#trade-off-example",
-    "href": "slides/topic-04-algos-intro.html#trade-off-example",
+    "objectID": "slides/topic-04-algos-intro.html#trade-off-examples",
+    "href": "slides/topic-04-algos-intro.html#trade-off-examples",
     "title": "What Is an Algorithm?",
-    "section": "Trade-off example",
-    "text": "Trade-off example\n\nBLAST builds a k-mer index of the database in memory so it never has to scan the whole thing\n\nMemory buys speed\n\nHirschberg’s algorithm1 aligns sequences with \\(O(n)\\) memory instead of \\(O(n^2)\\), at roughly twice the runtime\n\nTime buys memory\n\n\nHirschberg (1975)"
+    "section": "Trade-off examples",
+    "text": "Trade-off examples\n\nBLAST builds a k-mer index of the database in memory so it never has to scan the whole thing\n\nMemory buys speed\n\nHirschberg’s algorithm1 aligns sequences with \\(O(n)\\) memory instead of \\(O(n^2)\\), at roughly twice the runtime\n\nTime buys memory\n\n\nHirschberg (1975)"
   },
   {
     "objectID": "slides/topic-04-algos-intro.html#choosing-an-algorithm",
