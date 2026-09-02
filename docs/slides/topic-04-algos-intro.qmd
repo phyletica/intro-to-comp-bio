@@ -645,16 +645,15 @@ If you do one lookup, use the list
 If you do a million lookups,
 building the set pays for itself
 
-## Trade-off example
+## Trade-off examples
 
 ::: {.incremental}
-- **BLAST** builds a *k*-mer index of the database in memory so it never has to
-  scan the whole thing
-  - Memory buys speed
-- **Hirschberg's algorithm**^[@Hirschberg1975] aligns sequences with $O(n)$
-  memory instead of
-  $O(n^2)$, at roughly twice the runtime
-  - Time buys memory
+1.  **BLAST** builds a *k*-mer index of the database in memory so it never has
+    to scan the whole thing
+    -   Memory buys speed
+2.  **Hirschberg's algorithm**^[@Hirschberg1975] aligns sequences with $O(n)$
+    memory instead of $O(n^2)$, at roughly twice the runtime
+    -   Time buys memory
 :::
 
 ## Choosing an algorithm
