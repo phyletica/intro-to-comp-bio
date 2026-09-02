@@ -620,7 +620,14 @@
     "href": "slides/topic-04-algos-intro.html#summary",
     "title": "What Is an Algorithm?",
     "section": "Summary",
-    "text": "Summary\n\nBiology’s data outgrew our ability to inspect it\n\nalgorithms are how we cope\n\nA handful of strategies (exhaustive, divide and conquer, DP, greedy, heuristic, stochastic) explain most of what tools actually do\nBig O describes how cost scales with input size, in time and memory\n\nConstant factors are a hardware problem; complexity class is a thinking problem\n\nChoosing an algorithm means choosing where to spend time and where to spend memory"
+    "text": "Summary\n\n\nBiology’s data outgrew our ability to inspect it\n\nalgorithms are how we cope\n\nA handful of strategies (exhaustive, divide and conquer, DP, greedy, heuristic, stochastic) explain most of what tools actually do\nBig O describes how cost scales with input size, in time and memory\n\nConstant factors are a hardware problem; complexity class is a thinking problem\n\nChoosing an algorithm means choosing where to spend time and where to spend memory"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#exercise",
+    "href": "slides/topic-04-algos-intro.html#exercise",
+    "title": "What Is an Algorithm?",
+    "section": "Exercise",
+    "text": "Exercise\n\nLog into molab\nOpen the exercise in molab\nClick “Fork” button"
   },
   {
     "objectID": "slides/topic-04-algos-intro.html#references",
