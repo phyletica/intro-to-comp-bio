@@ -780,20 +780,20 @@ def _(
     prev_runtime = None
     last_runtime = None
     last_num_sequences = None
-    for num_seqeunces in [50, 100, 200, 400, 800]:
-        rand_seqs = random_dna_sequences(num_seqeunces, 50)
+    for num_sequences in [50, 100, 200, 400, 800]:
+        rand_seqs = random_dna_sequences(num_sequences, 50)
         dist_run_time = get_best_runtime(pairwise_distances, rand_seqs, trials=2)
         pw_dist_table_rows.append(
             [
-                f"{num_seqeunces:,}",
-                f"{num_seqeunces * (num_seqeunces - 1) // 2:,}",
+                f"{num_sequences:,}",
+                f"{num_sequences * (num_sequences - 1) // 2:,}",
                 format_seconds(dist_run_time),
                 "\u2014" if prev_runtime is None else f"**{dist_run_time / prev_runtime:.2f}**",
             ]
         )
         prev_runtime = dist_run_time
         last_runtime = dist_run_time
-        last_num_sequences = num_seqeunces
+        last_num_sequences = num_sequences
 
     mo.md(
         "### `pairwise_distances` \u2014 doubling the number of sequences\n\n"
