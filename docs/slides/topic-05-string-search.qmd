@@ -1,0 +1,616 @@
+---
+title: "Finding sequences"
+subtitle: "Three ways to search a genome"
+# author: "Jamie Oaks"
+institute: "BIOL 5/6800 &mdash; Intro to Comp Bio"
+format:
+  revealjs:
+    slide-number: c/t
+    incremental: false
+    code-line-numbers: false
+    smaller: false
+    center-title-slide: true
+    history: false
+metadata-files:
+  - _metadata.yml
+bibliography: ../references.bib
+---
+
+## The question for today
+
+You have a **long** sequence and a **short** one.
+
+Where does the short one occur in the long one?
+
+
+::: {.incremental}
+- Where would *Eco*RI cut this plasmid?
+- Where does this 20-nucleotide sequencing read come from?
+- Does this promoter motif appear upstream of my gene?
+- Which of these 10 million reads contain the adapter?
+:::
+
+. . .
+
+All of these are the same computational question
+
+::: {.notes}
+0:00-1:00
+
+Open by asking the class for examples of times they have searched a sequence.
+The goal today is to see that the *right* answer depends entirely on how many
+times you plan to ask.
+:::
+
+## Why this is a computational problem
+
+. . .
+
+::: {.columns}
+::: {.column width="50%"}
+**Sequence lengths**
+
+| | |
+|---|---|
+| phiX174 | 5.4 kb |
+| *E. coli* | 4.6 Mb |
+| Human | 3.1 Gb |
+:::
+
+::: {.column width="50%"}
+**Query volumes**
+
+One Illumina run can produce
+**billions** of reads.
+
+Each one needs to be placed
+somewhere in the genome.
+:::
+:::
+
+. . .
+
+An approach that takes one second per query is fine for a few queries.
+
+. . .
+
+But, that is **32 years** for a billion queries.
+
+::: {.notes}
+1:00-2:30
+
+The point is only that constant factors stop mattering and asymptotic behavior
+takes over.
+:::
+
+## Stating the problem
+
+Given a **text** $T$ of length $n$ and a **pattern** $P$ of length $m$:
+
+> Report **every** position in $T$ where $P$ occurs.
+
+. . .
+
+Two things to notice:
+
+::: {.incremental}
+- We want **all** occurrences, not just the first one
+- $m$ is usually much smaller than $n$
+:::
+
+. . .
+
+In the exercise, you will
+build three solutions and time them against each other
+
+::: {.notes}
+2:30-3:30
+
+Flag "all occurrences" now. It looks like a detail and it turns out to be the
+thing that breaks the naive binary search later. If you want, plant the seed
+here: "remember that we want all of them."
+:::
+
+# Approach 1 {background-color="#2c3e50"}
+
+## Linear search
+
+Slide a window along the text. Compare. Step forward. Repeat.
+
+*E.g.*, find "`ATG`" in "`CGATGCATGC`"
+
+::: {style="font-size: 130%;"}
+```
+CGATGCATGC
+CGA
+ GAT
+  ATG  <- match at 2
+   TGC
+    GCA
+     CAT
+      ATG  <- match at 6
+       TGC
+```
+:::
+
+. . .
+
+It's simple. No setup and no data structures.
+
+::: {.notes}
+3:30-4:30
+
+Walk the window across out loud. Ask: how many comparisons is this? Let them
+get to n times m before you show the next slide.
+:::
+
+## What does a linear search cost?
+
+::: {.incremental}
+- **Setup**: none
+- **Memory**: essentially none
+- **Per search**: up to $n$ window positions, each costing up to $m$ character
+  comparisons, so the time complexity is $O(nm)$
+:::
+
+. . .
+
+For DNA the comparison usually does not match on the first or second character,
+so in practice it behaves like $O(n)$.
+
+
+## A disadvantage of linear search
+
+::: {.callout-important}
+## The catch
+It costs $O(n)$ **every time you search**.
+Nothing is remembered between queries.
+:::
+
+::: {.notes}
+4:30-6:00
+
+The mismatch-fails-fast point is worth making: with a 4-letter alphabet, 3/4
+of comparisons fail immediately, so the m factor rarely materializes. Then
+land hard on the callout, because it motivates everything that follows.
+:::
+
+## The central idea
+
+::: {.r-fit-text}
+Do the work **once**.
+:::
+
+. . .
+
+Instead of re-reading the genome for every query, read it **one time** and
+build a structure that makes future queries fast.
+
+. . .
+
+Buying time with memory!
+
+. . .
+
+This is called **indexing**, and it's analogous to the index at the
+back of a textbook.
+
+::: {.notes}
+6:00-7:00
+
+The textbook index analogy is worth spending a few seconds on. Emphasize the
+trade: indexing is never free, it's a loan you take out and repay with
+searches.
+:::
+
+# Approach 2 {background-color="#2c3e50"}
+
+## A $k$-mer dictionary
+
+A **$k$-mer** is any substring of length $k$.
+
+. . .
+
+Walk over the sequence once, and record where every $k$-mer starts.
+
+. . .
+
+::: {style="font-size: 150%;"}
+```
+Index:    0 1 2 3 4 5 6 7 8 9 10
+Sequence: A T C G T T C A T C G
+```
+:::
+
+. . .
+
+```python
+{
+  "ATC": [0, 7],   "TCG": [1, 8],   "CGT": [2],
+  "GTT": [3],      "TTC": [4],      "TCA": [5],
+  "CAT": [6],
+}
+```
+
+::: {.notes}
+7:00-8:30
+
+Build one or two entries live on the board before revealing the dictionary.
+Ask why ATC has two positions. Note that the key order does not matter --
+it's a dictionary, not a list.
+:::
+
+## Looking things up is *very* fast
+
+Searching for `"TCG"` is now a dictionary lookup, not a search!
+
+. . .
+
+```python
+kmer_dict["TCG"]   # -> [1, 8]
+```
+
+::: {style="font-size: 80%;"}
+::: {.incremental}
+- **Setup**: one pass over the sequence, time complexity $O(nk)$
+- **Per search**: $O(1)$ on average, regardless of how long the genome is
+- **Memory**: a key and a position for nearly every position in the sequence
+:::
+:::
+
+. . .
+
+The genome could be a thousand times longer and the lookup would take the
+same time.
+But, it will take up more memory!
+
+::: {.notes}
+8:30-10:00
+
+"Regardless of how long the genome is" is the sentence that should stick.
+This is the first time they see a search whose cost is decoupled from n.
+If anyone asks how a dictionary does this, hashing -- one sentence, move on.
+:::
+
+## Two catches
+
+::: {.incremental}
+1. **The length is fixed.** You can only search for 3-mers in a 3-mer dictionary.
+   Searching for `"ATCAG"` means finding every `"ATC"` and checking whether
+   `"AG"` follows. This is called ***$k$-mer expansion***.
+
+2. **It costs memory.** Some implementations reserve a slot for every possible
+   $k$-mer, and there are $4^k$ of those.
+   *E.g.*, about $1.1 \times 10^{12}$ for $k = 20$.
+
+   You can save memory by only storing the $k$-mers that actually occur in the
+   sequence, but this is still several times the size of the sequence.
+:::
+
+::: {.notes}
+10:00-11:00
+
+Catch 1 is the one that matters for the notebook -- it's the answer to
+Challenge 6. Don't give it away, but make sure they register it.
+:::
+
+# Approach 3 {background-color="#2c3e50"}
+
+## Suffixes
+
+A **suffix** is any substring that runs to the end of the sequence.
+
+`ATTCGTTCAG` has ten of them:
+
+::: {style="font-size: 160%;"}
+```
+ATTCGTTCAG  0     TTCAG  5
+ TTCGTTCAG  1      TCAG  6
+  TCGTTCAG  2       CAG  7
+   CGTTCAG  3        AG  8
+    GTTCAG  4         G  9
+```
+:::
+
+. . .
+
+**Note: Every substring of a sequence is the beginning of
+some suffix.**
+
+::: {.notes}
+11:00-12:15
+
+That last line is the conceptual key to the whole approach and it is easy to
+miss. Give an example: "TCG" starts at position 2, and sure enough the suffix
+at position 2 begins with TCG. So searching for substrings becomes searching
+for suffix *prefixes*.
+:::
+
+## Sort the suffixes
+
+::: {.columns}
+::: {.column width="55%"}
+::: {style="font-size: 0.7em;"}
+| row | pos | suffix |
+|----:|----:|:-------|
+| 0 | 8 | AG |
+| 1 | 0 | ATTCGTTCAG |
+| 2 | 7 | CAG |
+| 3 | 3 | CGTTCAG |
+| 4 | 9 | G |
+| 5 | 4 | GTTCAG |
+| 6 | 6 | **TC**AG |
+| 7 | 2 | **TC**GTTCAG |
+| 8 | 5 | TTCAG |
+| 9 | 1 | TTCGTTCAG |
+:::
+:::
+
+::: {.column width="45%"}
+Sorted alphabetically
+
+Look at the two suffixes starting with `TC`
+
+-   They are **adjacent**. Sorting guarantees this.
+-   Nothing that doesn't start with `TC` can sort in between them
+:::
+:::
+
+::: {.notes}
+12:15-13:30
+
+Spend real time here. Everything in stage 2 of the search depends on this
+adjacency property. Ask them to find all the suffixes starting with T and
+confirm they form one unbroken block too (rows 6-9).
+:::
+
+## Suffix array
+
+Storing all those suffix strings is costly (roughly $n^2/2$ characters)
+
+. . .
+
+But we don't need them. Given the sequence and a **position**, any suffix can
+be recovered with a slice.
+
+. . .
+
+So a ***suffix array*** is just the positions:
+
+```python
+[8, 0, 7, 3, 9, 4, 6, 2, 5, 1]
+```
+
+. . .
+
+$n$ integers instead of $n^2/2$ characters
+
+::: {.notes}
+13:30-14:30
+
+For the human genome: 3.1 billion positions is manageable; 3.1 billion
+squared over two characters is not a number that fits in any computer. This
+is why the distinction matters rather than being pedantry.
+:::
+
+## Searching a suffix array
+
+Because the suffixes are sorted, we can use ***binary search***
+
+::: {.incremental}
+- Compare the target to the middle entry
+- Throw away the half it cannot be in
+- Repeat
+:::
+
+. . .
+
+Each step halves what is left, so the cost (time complexity) grows as
+$\log_2 n$
+
+. . .
+
+For a 5,000-nucleotide sequence, that's **13 comparisons** instead of 5,000.
+
+::: {.notes}
+14:30-15:30
+
+They have seen binary search in the divide-and-conquer lecture, so this is a
+refresher. The 13-vs-5000 number is the one to say out loud.
+:::
+
+## Example: Finding `TC`
+
+::: {.columns}
+::: {.column width="35%"}
+::: {style="font-size: 50%;"}
+| row | pos | suffix |
+|----:|----:|:-------|
+| 0 | 8 | AG |
+| 1 | 0 | ATTCGTTCAG |
+| 2 | 7 | CAG |
+| 3 | 3 | CGTTCAG |
+| 4 | 9 | G |
+| 5 | 4 | GTTCAG |
+| 6 | 6 | **TC**AG |
+| 7 | 2 | **TC**GTTCAG |
+| 8 | 5 | TTCAG |
+| 9 | 1 | TTCGTTCAG |
+:::
+:::
+
+::: {.column width="65%"}
+::: {style="font-size: 65%;"}
+| step | window | middle row | suffix there | verdict |
+|:--|:--|:--|:--|:--|
+| 1 | rows 0&ndash;9 | 4 | `G` | `G` < `TC`, go down |
+| 2 | rows 5&ndash;9 | 7 | `TCGTTCAG` | **match** |
+:::
+:::
+:::
+
+
+. . .
+
+Only 2 comparisons. But we have only found **one** of the two matches.
+
+---
+
+::: {.callout-warning}
+## Binary search is only part of the solution
+It finds *a* match and stops. We threw away half the array at every step, so
+other matches can be discarded.
+:::
+
+::: {.notes}
+15:30-16:30
+
+Be honest that this is a real trap -- I wrote this bug into the first draft of
+the notebook and one test case passed anyway. Good moment to make the point
+that a single passing test proves very little.
+:::
+
+## Searching a suffix array in 2 stages
+
+Remember that matches are **adjacent**
+
+::: {.incremental}
+1. **Binary search** to land on any one matching row
+2. **Walk outward** &mdash; up, then down &mdash; until the neighbors stop matching
+:::
+
+. . .
+
+::: {style="font-size: 130%;"}
+```
+row 5   GTTCAG      no match  <- stop walking up
+row 6   TCAG        match     <- position 6
+row 7   TCGTTCAG    match     <- position 2  (found by binary search)
+row 8   TTCAG       no match  <- stop walking down
+```
+:::
+
+. . .
+
+Answer: positions **2 and 6**. Cost: about $O(m \log n)$.
+
+::: {.notes}
+16:30-17:30
+
+Stage 2 only visits the matches themselves plus one dead end at each side, so
+it costs essentially nothing beyond reporting the answers.
+:::
+
+# Putting it all together {background-color="#2c3e50"}
+
+## Three approaches
+
+::: {style="font-size: 0.72em;"}
+| | Setup | Per search | Memory | Any query length? |
+|:--|:--|:--|:--|:--|
+| **Linear search** | none | $O(nm)$ | none | yes |
+| **$k$-mer dictionary** | $O(nk)$ | $O(1)$ | large | **no** &mdash; fixed $k$ |
+| **Suffix array** | sorting | $O(m \log n)$ | $n$ integers | yes |
+:::
+
+. . .
+
+There is no "best algorithm" in this table.
+
+. . .
+
+There is only a "best algorithm" **for a given problem**.
+
+::: {.notes}
+17:30-18:30
+
+Resist the urge to declare a best method. The whole point of the notebook is
+that the answer flips depending on how many searches you run and whether the
+query length is fixed.
+:::
+
+## The indexing strategy
+
+::: {.r-fit-text}
+Build once. Search many.
+:::
+
+. . .
+
+For **one** search, linear search wins.
+Both the $k$-mer index and suffix array have to read the whole genome just to
+get started.
+
+. . .
+
+For **many** searches, the setup cost is recovered with every query.
+If doing many searches, the payoff can be huge.
+
+::: {.notes}
+18:30-19:15
+
+Tell them explicitly that the first timing result in the notebook will look
+like the "wrong" answer, and that this is deliberate. Otherwise a few will
+assume they broke something.
+:::
+
+## This is what real tools do
+
+::: {.incremental}
+- **BLAST** indexes short words, finds exact seed matches, then extends them
+- **Bowtie**, **BWA** build an FM-index (based on the Burrows-Wheeler
+  transform), a compressed cousin of the suffix array
+- **minimap2** indexes a cleverly chosen subset of $k$-mers called minimizers
+:::
+
+. . .
+
+They all use the same strategy: A genome gets searched far more often
+than it changes, so pay the indexing cost up front.
+
+::: {.notes}
+19:15-20:00
+
+Keep this brief -- it's context, not examinable. The takeaway is that today's
+toy implementations are the actual ideas inside tools they already use.
+:::
+
+## In the exercise
+
+You will build all three using Python functions
+
+::: {.incremental}
+1. `linear_search`
+2. `get_kmer_dict` and `kmer_dict_search`
+3. `get_suffix_array` and `suffix_binary_search`
+:::
+
+. . .
+
+Use all three to search the **phiX174 genome** for the recognition sites of
+restriction enzymes
+
+. . .
+
+::: {.callout-tip}
+## Watch for
+The timing result might surprise you.
+Try to work out *why* before you read the explanation.
+:::
+
+::: {.notes}
+20:00
+
+Hand off to the notebook here. Remind them the first cell needs their name.
+:::
+
+## Exercise
+
+1.  Log into [molab](https://molab.marimo.io/)
+2.  [Open the exercise in molab](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-03-string-search/string_search.py)
+3.  Click "Fork" button
+
+## Acknowledgements
+
+I used Anthropic's Claude (Opus 5 model) to generate a draft of
+these slides.
