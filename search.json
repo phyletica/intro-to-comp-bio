@@ -14,7 +14,7 @@
     "href": "index.html#lecture-presentations",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lecture Presentations",
-    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides\nView Lecture 4 Slides",
+    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides\nView Lecture 4 Slides\nView Lecture 5 Slides",
     "crumbs": [
       "Home"
     ]
@@ -383,6 +383,160 @@
     "title": "Intro to Comp Bio",
     "section": "Wednesday",
     "text": "Wednesday\n\nIntro to command-line shell environment\nAccess Linux Thinlinc environment\n\nCOSAM IT will be on-hand to help troubleshoot"
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#the-question-for-today",
+    "href": "slides/topic-05-string-search.html#the-question-for-today",
+    "title": "Finding sequences",
+    "section": "The question for today",
+    "text": "The question for today\nYou have a long sequence and a short one.\nWhere does the short one occur in the long one?\n\nWhere would EcoRI cut this plasmid?\nWhere does this 20-nucleotide sequencing read come from?\nDoes this promoter motif appear upstream of my gene?\nWhich of these 10 million reads contain the adapter?\n\n\nAll of these are the same computational question\n\n0:00-1:00\nOpen by asking the class for examples of times they have searched a sequence. The goal today is to see that the right answer depends entirely on how many times you plan to ask."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#why-this-is-a-computational-problem",
+    "href": "slides/topic-05-string-search.html#why-this-is-a-computational-problem",
+    "title": "Finding sequences",
+    "section": "Why this is a computational problem",
+    "text": "Why this is a computational problem\n\n\n\nSequence lengths\n\n\n\nphiX174\n5.4 kb\n\n\nE. coli\n4.6 Mb\n\n\nHuman\n3.1 Gb\n\n\n\n\nQuery volumes\nOne Illumina run can produce billions of reads.\nEach one needs to be placed somewhere in the genome.\n\n\n\nAn approach that takes one second per query is fine for a few queries.\n\n\nBut, that is 32 years for a billion queries.\n\n1:00-2:30\nThe point is only that constant factors stop mattering and asymptotic behavior takes over."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#stating-the-problem",
+    "href": "slides/topic-05-string-search.html#stating-the-problem",
+    "title": "Finding sequences",
+    "section": "Stating the problem",
+    "text": "Stating the problem\nGiven a text \\(T\\) of length \\(n\\) and a pattern \\(P\\) of length \\(m\\):\n\nReport every position in \\(T\\) where \\(P\\) occurs.\n\n\nTwo things to notice:\n\nWe want all occurrences, not just the first one\n\\(m\\) is usually much smaller than \\(n\\)\n\n\n\nIn the exercise, you will build three solutions and time them against each other\n\n2:30-3:30\nFlag “all occurrences” now. It looks like a detail and it turns out to be the thing that breaks the naive binary search later. If you want, plant the seed here: “remember that we want all of them.”"
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#linear-search",
+    "href": "slides/topic-05-string-search.html#linear-search",
+    "title": "Finding sequences",
+    "section": "Linear search",
+    "text": "Linear search\nSlide a window along the text. Compare. Step forward. Repeat.\nE.g., find “ATG” in “CGATGCATGC”\n\nCGATGCATGC\nCGA\n GAT\n  ATG  &lt;- match at 2\n   TGC\n    GCA\n     CAT\n      ATG  &lt;- match at 6\n       TGC\n\n\nIt’s simple. No setup and no data structures.\n\n3:30-4:30\nWalk the window across out loud. Ask: how many comparisons is this? Let them get to n times m before you show the next slide."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#what-does-a-linear-search-cost",
+    "href": "slides/topic-05-string-search.html#what-does-a-linear-search-cost",
+    "title": "Finding sequences",
+    "section": "What does a linear search cost?",
+    "text": "What does a linear search cost?\n\nSetup: none\nMemory: essentially none\nPer search: up to \\(n\\) window positions, each costing up to \\(m\\) character comparisons, so the time complexity is \\(O(nm)\\)\n\n\nFor DNA the comparison usually does not match on the first or second character, so in practice it behaves like \\(O(n)\\)."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#a-disadvantage-of-linear-search",
+    "href": "slides/topic-05-string-search.html#a-disadvantage-of-linear-search",
+    "title": "Finding sequences",
+    "section": "A disadvantage of linear search",
+    "text": "A disadvantage of linear search\n\n\n\n\n\n\nThe catch\n\n\nIt costs \\(O(n)\\) every time you search. Nothing is remembered between queries.\n\n\n\n\n4:30-6:00\nThe mismatch-fails-fast point is worth making: with a 4-letter alphabet, 3/4 of comparisons fail immediately, so the m factor rarely materializes. Then land hard on the callout, because it motivates everything that follows."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#the-central-idea",
+    "href": "slides/topic-05-string-search.html#the-central-idea",
+    "title": "Finding sequences",
+    "section": "The central idea",
+    "text": "The central idea\n\nDo the work once.\n\n\nInstead of re-reading the genome for every query, read it one time and build a structure that makes future queries fast.\n\n\nBuying time with memory!\n\n\nThis is called indexing, and it’s analogous to the index at the back of a textbook.\n\n6:00-7:00\nThe textbook index analogy is worth spending a few seconds on. Emphasize the trade: indexing is never free, it’s a loan you take out and repay with searches."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#a-k-mer-dictionary",
+    "href": "slides/topic-05-string-search.html#a-k-mer-dictionary",
+    "title": "Finding sequences",
+    "section": "A \\(k\\)-mer dictionary",
+    "text": "A \\(k\\)-mer dictionary\nA \\(k\\)-mer is any substring of length \\(k\\).\n\nWalk over the sequence once, and record where every \\(k\\)-mer starts.\n\n\n\nIndex:    0 1 2 3 4 5 6 7 8 9 10\nSequence: A T C G T T C A T C G\n\n\n\n{\n  \"ATC\": [0, 7],   \"TCG\": [1, 8],   \"CGT\": [2],\n  \"GTT\": [3],      \"TTC\": [4],      \"TCA\": [5],\n  \"CAT\": [6],\n}\n\n7:00-8:30\nBuild one or two entries live on the board before revealing the dictionary. Ask why ATC has two positions. Note that the key order does not matter – it’s a dictionary, not a list."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#looking-things-up-is-very-fast",
+    "href": "slides/topic-05-string-search.html#looking-things-up-is-very-fast",
+    "title": "Finding sequences",
+    "section": "Looking things up is very fast",
+    "text": "Looking things up is very fast\nSearching for \"TCG\" is now a dictionary lookup, not a search!\n\nkmer_dict[\"TCG\"]   # -&gt; [1, 8]\n\n\nSetup: one pass over the sequence, time complexity \\(O(nk)\\)\nPer search: \\(O(1)\\) on average, regardless of how long the genome is\nMemory: a key and a position for nearly every position in the sequence\n\n\n\n\nThe genome could be a thousand times longer and the lookup would take the same time. But, it will take up more memory!\n\n8:30-10:00\n“Regardless of how long the genome is” is the sentence that should stick. This is the first time they see a search whose cost is decoupled from n. If anyone asks how a dictionary does this, hashing – one sentence, move on."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#two-catches",
+    "href": "slides/topic-05-string-search.html#two-catches",
+    "title": "Finding sequences",
+    "section": "Two catches",
+    "text": "Two catches\n\nThe length is fixed. You can only search for 3-mers in a 3-mer dictionary. Searching for \"ATCAG\" means finding every \"ATC\" and checking whether \"AG\" follows. This is called \\(k\\)-mer expansion.\nIt costs memory. Some implementations reserve a slot for every possible \\(k\\)-mer, and there are \\(4^k\\) of those. E.g., about \\(1.1 \\times 10^{12}\\) for \\(k = 20\\).\nYou can save memory by only storing the \\(k\\)-mers that actually occur in the sequence, but this is still several times the size of the sequence.\n\n\n10:00-11:00\nCatch 1 is the one that matters for the notebook – it’s the answer to Challenge 6. Don’t give it away, but make sure they register it."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#suffixes",
+    "href": "slides/topic-05-string-search.html#suffixes",
+    "title": "Finding sequences",
+    "section": "Suffixes",
+    "text": "Suffixes\nA suffix is any substring that runs to the end of the sequence.\nATTCGTTCAG has ten of them:\n\nATTCGTTCAG  0     TTCAG  5\n TTCGTTCAG  1      TCAG  6\n  TCGTTCAG  2       CAG  7\n   CGTTCAG  3        AG  8\n    GTTCAG  4         G  9\n\n\nNote: Every substring of a sequence is the beginning of some suffix.\n\n11:00-12:15\nThat last line is the conceptual key to the whole approach and it is easy to miss. Give an example: “TCG” starts at position 2, and sure enough the suffix at position 2 begins with TCG. So searching for substrings becomes searching for suffix prefixes."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#sort-the-suffixes",
+    "href": "slides/topic-05-string-search.html#sort-the-suffixes",
+    "title": "Finding sequences",
+    "section": "Sort the suffixes",
+    "text": "Sort the suffixes\n\n\n\n\n\n\nrow\npos\nsuffix\n\n\n\n\n0\n8\nAG\n\n\n1\n0\nATTCGTTCAG\n\n\n2\n7\nCAG\n\n\n3\n3\nCGTTCAG\n\n\n4\n9\nG\n\n\n5\n4\nGTTCAG\n\n\n6\n6\nTCAG\n\n\n7\n2\nTCGTTCAG\n\n\n8\n5\nTTCAG\n\n\n9\n1\nTTCGTTCAG\n\n\n\n\n\nSorted alphabetically\nLook at the two suffixes starting with TC\n\nThey are adjacent. Sorting guarantees this.\nNothing that doesn’t start with TC can sort in between them\n\n\n\n12:15-13:30\nSpend real time here. Everything in stage 2 of the search depends on this adjacency property. Ask them to find all the suffixes starting with T and confirm they form one unbroken block too (rows 6-9)."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#suffix-array",
+    "href": "slides/topic-05-string-search.html#suffix-array",
+    "title": "Finding sequences",
+    "section": "Suffix array",
+    "text": "Suffix array\nStoring all those suffix strings is costly (roughly \\(n^2/2\\) characters)\n\nBut we don’t need them. Given the sequence and a position, any suffix can be recovered with a slice.\n\n\nSo a suffix array is just the positions:\n[8, 0, 7, 3, 9, 4, 6, 2, 5, 1]\n\n\n\\(n\\) integers instead of \\(n^2/2\\) characters\n\n13:30-14:30\nFor the human genome: 3.1 billion positions is manageable; 3.1 billion squared over two characters is not a number that fits in any computer. This is why the distinction matters rather than being pedantry."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#searching-a-suffix-array",
+    "href": "slides/topic-05-string-search.html#searching-a-suffix-array",
+    "title": "Finding sequences",
+    "section": "Searching a suffix array",
+    "text": "Searching a suffix array\nBecause the suffixes are sorted, we can use binary search\n\nCompare the target to the middle entry\nThrow away the half it cannot be in\nRepeat\n\n\nEach step halves what is left, so the cost (time complexity) grows as \\(\\log_2 n\\)\n\n\nFor a 5,000-nucleotide sequence, that’s 13 comparisons instead of 5,000.\n\n14:30-15:30\nThey have seen binary search in the divide-and-conquer lecture, so this is a refresher. The 13-vs-5000 number is the one to say out loud."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#example-finding-tc",
+    "href": "slides/topic-05-string-search.html#example-finding-tc",
+    "title": "Finding sequences",
+    "section": "Example: Finding TC",
+    "text": "Example: Finding TC\n\n\n\n\n\n\nrow\npos\nsuffix\n\n\n\n\n0\n8\nAG\n\n\n1\n0\nATTCGTTCAG\n\n\n2\n7\nCAG\n\n\n3\n3\nCGTTCAG\n\n\n4\n9\nG\n\n\n5\n4\nGTTCAG\n\n\n6\n6\nTCAG\n\n\n7\n2\nTCGTTCAG\n\n\n8\n5\nTTCAG\n\n\n9\n1\nTTCGTTCAG\n\n\n\n\n\n\n\n\n\nstep\nwindow\nmiddle row\nsuffix there\nverdict\n\n\n\n\n1\nrows 0–9\n4\nG\nG &lt; TC, go down\n\n\n2\nrows 5–9\n7\nTCGTTCAG\nmatch\n\n\n\n\n\n\nOnly 2 comparisons. But we have only found one of the two matches."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#searching-a-suffix-array-in-2-stages",
+    "href": "slides/topic-05-string-search.html#searching-a-suffix-array-in-2-stages",
+    "title": "Finding sequences",
+    "section": "Searching a suffix array in 2 stages",
+    "text": "Searching a suffix array in 2 stages\nRemember that matches are adjacent\n\nBinary search to land on any one matching row\nWalk outward — up, then down — until the neighbors stop matching\n\n\n\nrow 5   GTTCAG      no match  &lt;- stop walking up\nrow 6   TCAG        match     &lt;- position 6\nrow 7   TCGTTCAG    match     &lt;- position 2  (found by binary search)\nrow 8   TTCAG       no match  &lt;- stop walking down\n\n\n\nAnswer: positions 2 and 6. Cost: about \\(O(m \\log n)\\).\n\n16:30-17:30\nStage 2 only visits the matches themselves plus one dead end at each side, so it costs essentially nothing beyond reporting the answers."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#three-approaches",
+    "href": "slides/topic-05-string-search.html#three-approaches",
+    "title": "Finding sequences",
+    "section": "Three approaches",
+    "text": "Three approaches\n\n\n\n\n\n\n\n\n\n\n\n\nSetup\nPer search\nMemory\nAny query length?\n\n\n\n\nLinear search\nnone\n\\(O(nm)\\)\nnone\nyes\n\n\n\\(k\\)-mer dictionary\n\\(O(nk)\\)\n\\(O(1)\\)\nlarge\nno — fixed \\(k\\)\n\n\nSuffix array\nsorting\n\\(O(m \\log n)\\)\n\\(n\\) integers\nyes\n\n\n\n\n\nThere is no “best algorithm” in this table.\n\n\nThere is only a “best algorithm” for a given problem.\n\n17:30-18:30\nResist the urge to declare a best method. The whole point of the notebook is that the answer flips depending on how many searches you run and whether the query length is fixed."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#the-indexing-strategy",
+    "href": "slides/topic-05-string-search.html#the-indexing-strategy",
+    "title": "Finding sequences",
+    "section": "The indexing strategy",
+    "text": "The indexing strategy\n\nBuild once. Search many.\n\n\nFor one search, linear search wins. Both the \\(k\\)-mer index and suffix array have to read the whole genome just to get started.\n\n\nFor many searches, the setup cost is recovered with every query. If doing many searches, the payoff can be huge.\n\n18:30-19:15\nTell them explicitly that the first timing result in the notebook will look like the “wrong” answer, and that this is deliberate. Otherwise a few will assume they broke something."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#this-is-what-real-tools-do",
+    "href": "slides/topic-05-string-search.html#this-is-what-real-tools-do",
+    "title": "Finding sequences",
+    "section": "This is what real tools do",
+    "text": "This is what real tools do\n\nBLAST indexes short words, finds exact seed matches, then extends them\nBowtie, BWA build an FM-index (based on the Burrows-Wheeler transform), a compressed cousin of the suffix array\nminimap2 indexes a cleverly chosen subset of \\(k\\)-mers called minimizers\n\n\nThey all use the same strategy: A genome gets searched far more often than it changes, so pay the indexing cost up front.\n\n19:15-20:00\nKeep this brief – it’s context, not examinable. The takeaway is that today’s toy implementations are the actual ideas inside tools they already use."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#in-the-exercise",
+    "href": "slides/topic-05-string-search.html#in-the-exercise",
+    "title": "Finding sequences",
+    "section": "In the exercise",
+    "text": "In the exercise\nYou will build all three using Python functions\n\nlinear_search\nget_kmer_dict and kmer_dict_search\nget_suffix_array and suffix_binary_search\n\n\nUse all three to search the phiX174 genome for the recognition sites of restriction enzymes\n\n\n\n\n\n\n\n\nWatch for\n\n\nThe timing result might surprise you. Try to work out why before you read the explanation.\n\n\n\n\n20:00\nHand off to the notebook here. Remind them the first cell needs their name."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#exercise",
+    "href": "slides/topic-05-string-search.html#exercise",
+    "title": "Finding sequences",
+    "section": "Exercise",
+    "text": "Exercise\n\nLog into molab\nOpen the exercise in molab\nClick “Fork” button"
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#acknowledgements",
+    "href": "slides/topic-05-string-search.html#acknowledgements",
+    "title": "Finding sequences",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nI used Anthropic’s Claude (Opus 5 model) to generate a draft of these slides."
   },
   {
     "objectID": "slides/topic-02.html#todays-objectives",
