@@ -550,14 +550,14 @@ def _(mo):
 
 @app.cell
 def _():
-    seq = "ATCGTTCATCG"
+    sequence = "ATCGTTCATCG"
     # Create empty dictionary to store our 3-mer dictionary
     three_mer_positions = {}
     # A stop index of 9 ensures the last index we visit in our for loop below is 8,
     # corresponding with the last "T" in our sequence
     stop_index = 9
     for index in range(stop_index):
-        three_mer = seq[index : index + 3]
+        three_mer = sequence[index : index + 3]
         if three_mer in three_mer_positions:
             # This 3-mer is already in our dictionary, so we just need to add
             # (append) the current index to record another position of this 3-mer
@@ -631,16 +631,17 @@ def _(mo):
 
 @app.cell
 def _():
-    test_seq2 = "ATCGTTCATCG"
+    test_seq2 = "TGCATCAGGCAT"
     test_dict = get_kmer_dict(test_seq2, 3)
     expected_dict = {
-        "ATC": [0, 7],
-        "TCG": [1, 8],
-        "CGT": [2],
-        "GTT": [3],
-        "TTC": [4],
-        "TCA": [5],
-        "CAT": [6],
+        "TGC": [0],
+        "GCA": [1, 8],
+        "CAT": [2, 9],
+        "ATC": [3],
+        "TCA": [4],
+        "CAG": [5],
+        "AGG": [6],
+        "GGC": [7],
     }
     if test_dict == expected_dict:
         _message = "Yay, your function passed the test!"
