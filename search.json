@@ -34,7 +34,7 @@
     "href": "index.html#resources",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Resources",
-    "text": "Resources\n\nIntro to Linux ThinLinc",
+    "text": "Resources\n\nIntro to Linux ThinLinc\nLearn with marimo: A collection of marimo notebooks for learning Python\n\nThe Learn Python set of notebooks will be particularly useful for beginners. Click the “Open in molab” button next to each topic.",
     "crumbs": [
       "Home"
     ]
@@ -91,109 +91,438 @@
     ]
   },
   {
-    "objectID": "slides/topic-03.html#todays-objectives",
-    "href": "slides/topic-03.html#todays-objectives",
-    "title": "Why Computation?",
-    "section": "Today’s objectives",
-    "text": "Today’s objectives\n\nWhy computational biology?\nIntro to Python & marimo notebooks\nExercise 4\n\nLearning Python and notebooks"
+    "objectID": "slides/topic-06-alignment.html#last-time",
+    "href": "slides/topic-06-alignment.html#last-time",
+    "title": "Aligning sequences",
+    "section": "Last time",
+    "text": "Last time\nWe searched a genome for a sequence that was exactly there.\n\nCGATGCATGC\n  ATG  &lt;- match\n\n\nEvery method we built — linear search, \\(k\\)-mer dictionary, suffix array — depends on an exact character-for-character match.\n\n0:00-1:00\nAnchor them in last week before pulling the rug. Everything in the string search lecture assumed the pattern is present verbatim."
   },
   {
-    "objectID": "slides/topic-03.html#origins-of-comp-bio",
-    "href": "slides/topic-03.html#origins-of-comp-bio",
-    "title": "Why Computation?",
-    "section": "Origins of Comp Bio",
-    "text": "Origins of Comp Bio\n\n\n\n\n1952: Fred Sanger sequenced first protein (insulin)\nMargaret Dayhoff & colleagues stored protein sequences in the Protein Information Resource (1960s & 70s)\n1960s: Dayhoff & others use computers to infer phylogenies\n\n\n\n\n\n\n\nMargaret Dayhoff\n\n\n\n\n\n\n\nMcLaughlin & Dayhoff 19731\n\n\n\n\nMcLaughlin and Dayhoff (1973)"
+    "objectID": "slides/topic-06-alignment.html#but-sequences-change",
+    "href": "slides/topic-06-alignment.html#but-sequences-change",
+    "title": "Aligning sequences",
+    "section": "But sequences change",
+    "text": "But sequences change\nTwo copies of the same gene in two species are not identical.\n\n\nACGTCA\nACTGA\n\n\n\nAre these related? Which positions correspond to which?\n\n\n\n\n\nThe moment evolution edits a sequence, exact matching stops working.\n\n\n\n\n1:00-2:00\nLet them stare at the two short sequences for a few seconds. Someone will eyeball a correspondence. That eyeballing is the algorithm we are about to formalize."
   },
   {
-    "objectID": "slides/topic-03.html#biology-became-a-data-science",
-    "href": "slides/topic-03.html#biology-became-a-data-science",
-    "title": "Why Computation?",
-    "section": "Biology became a data science",
-    "text": "Biology became a data science\n\nOne human genome: ~3.1 billion base pairs\nOne NovaSeq run: tens of billions of reads\nGenBank, SRA, UniProt, PDB: petabytes, doubling every couple of years\nSequencing costs have fallen faster than computing has gotten cheaper\n\n\n\n\n\nThe bottleneck in modern biology is rarely generating data. It is deciding what to do with it.\n\n\n\n\nAsk: how long would it take to read 3 billion characters at 200 words/min? Roughly 100+ years without sleeping. This is not a “work harder” problem."
+    "objectID": "slides/topic-06-alignment.html#homology",
+    "href": "slides/topic-06-alignment.html#homology",
+    "title": "Aligning sequences",
+    "section": "Homology",
+    "text": "Homology\n\n\n\n\n\n\nTwo sequences are homologous if they are descended from a common ancestral sequence.\n\n\n\n\nThis is a statement about history, not about similarity.\n\n\n\nHomology is not a matter of degree\n\nThere is no such thing as “80% homologous”\n\nTwo sequences either share ancestry or they do not\nSimilarity is the evidence; homology is the hypothesis\n\n\n2:00-3:30\nThis is the slide I care most about. The “80% homologous” error is everywhere in the literature and in seminars. Say out loud: percent identity is a measurement, homology is a claim about history."
   },
   {
-    "objectID": "slides/topic-03.html#the-takeaway",
-    "href": "slides/topic-03.html#the-takeaway",
-    "title": "Why Computation?",
-    "section": "The takeaway",
-    "text": "The takeaway\n\nA biological question becomes a computational question when we have to specify exactly how to get from data to answer."
+    "objectID": "slides/topic-06-alignment.html#an-alignment-is-a-hypothesis",
+    "href": "slides/topic-06-alignment.html#an-alignment-is-a-hypothesis",
+    "title": "Aligning sequences",
+    "section": "An alignment is a hypothesis",
+    "text": "An alignment is a hypothesis\nAligning two sequences means proposing, for every column, which residues descend from the same ancestral residue.\n\n\nA C G T C A\nA C - T G A\n\n\n\n\nColumns 1, 2, 4, 6: homologous positions, unchanged\nColumn 5: homologous position, a substitution happened\nColumn 3: an insertion or deletion happened in one lineage\n\n\n\nEvery alignment is a hypothesis about a series of evolutionary events\n\n3:30-5:00\nThe gap is not “missing data” – it is an asserted indel event. Worth noting that from a pairwise alignment alone you cannot tell insertion from deletion; you need an outgroup. They will see this again in the phylogenetics weeks."
   },
   {
-    "objectID": "slides/topic-03.html#comp-bio-is-also-a-mindset",
-    "href": "slides/topic-03.html#comp-bio-is-also-a-mindset",
-    "title": "Why Computation?",
-    "section": "Comp Bio is also a mindset",
-    "text": "Comp Bio is also a mindset"
+    "objectID": "slides/topic-06-alignment.html#why-we-need-alignments",
+    "href": "slides/topic-06-alignment.html#why-we-need-alignments",
+    "title": "Aligning sequences",
+    "section": "Why we need alignments",
+    "text": "Why we need alignments\n\nEvolutionary inference. Counting substitutions between sequences is only meaningful once you know which positions correspond. Every tree you will ever estimate starts from an alignment.\nLocating a sequence. Where in the genome did this read come from? Exact search fails on sequencing error and real variation.\nTransferring knowledge. A new gene of unknown function is compared to genes of known function. The inference is: similar sequence, shared ancestry, probably shared function.\n\n\n5:00-6:30\nPoint 1 is the one to linger on: alignment is upstream of essentially all of comparative biology, and its errors propagate into everything downstream. Point 3 is what BLAST is for, and they have heard of BLAST."
   },
   {
-    "objectID": "slides/topic-03.html#what-is-python",
-    "href": "slides/topic-03.html#what-is-python",
-    "title": "Why Computation?",
-    "section": "What is Python?",
-    "text": "What is Python?\nIt’s a programming language that is\n\n\nInterpreted\n\n\nLargely procedural, but flexible\n\n\nTerse and clear\n\n\n\n“Pseudocode that works”\n\n\n\nComes with standard libraries for interacting with the OS\n\n\nDiverse, stable libraries for work across many domains\n\n\nIndustry standard in many fields: Machine learning, data science"
+    "objectID": "slides/topic-06-alignment.html#choice-1-how-many-sequences",
+    "href": "slides/topic-06-alignment.html#choice-1-how-many-sequences",
+    "title": "Aligning sequences",
+    "section": "Choice 1: How many sequences?",
+    "text": "Choice 1: How many sequences?\n\n\nPairwise\nTwo sequences at a time.\nACGTCA\nAC-TGA\nTractable and exactly solvable.\n\nMultiple\nMany sequences at once.\nACGTCA\nAC-TGA\nACGT-A\nAGGTCA\nWhat you actually need for a tree.\n\n\nExact multiple alignment of \\(N\\) sequences means filling an \\(N\\)-dimensional table. This is infeasible beyond a handful of sequences.\n\n6:30-8:00\nThe dimensionality point matters: pairwise is a 2D table, three sequences is a cube, N sequences is an N-dimensional hypercube. Nobody fills a 50-dimensional table. Hence every MSA tool you have used is a heuristic."
   },
   {
-    "objectID": "slides/topic-03.html#what-is-a-python-notebook",
-    "href": "slides/topic-03.html#what-is-a-python-notebook",
-    "title": "Why Computation?",
-    "section": "What is a Python notebook?",
-    "text": "What is a Python notebook?\n\nAn interactive web-based document that allows you to combine runnable Python code, formatted text, and visualizations in one place.\nComposed of modular building blocks called “cells”\n\nInstead of running a whole script of Python code, snippets of code in each cell run individually"
+    "objectID": "slides/topic-06-alignment.html#choice-2-how-much-of-each-sequence",
+    "href": "slides/topic-06-alignment.html#choice-2-how-much-of-each-sequence",
+    "title": "Aligning sequences",
+    "section": "Choice 2: How much of each sequence?",
+    "text": "Choice 2: How much of each sequence?\n\n\nGlobal\nAlign the sequences end to end.\nAssumes homology runs the full length of both.\n\nLocal\nFind the best-matching region and ignore the rest.\nAssumes homology is confined to a subsequence.\n\n\nThis is a biological assumption, not a technical preference.\n\n\nTwo orthologs of the same short gene? Global. A conserved domain buried in two otherwise unrelated proteins? Local.\n\n8:00-9:30\nFrame this as “what do you believe about these sequences before you start?” The algorithm cannot tell you; you tell the algorithm. This is the main axis for the rest of the lecture."
   },
   {
-    "objectID": "slides/topic-03.html#types-of-cells",
-    "href": "slides/topic-03.html#types-of-cells",
-    "title": "Why Computation?",
-    "section": "Types of cells",
-    "text": "Types of cells\n\nCode (Python) cells\n\nSnippets of Python code that run individually; output of code appears underneath the cell\n\nMarkdown cells:\n\nFormatted text and images created using Markdown syntax; used to explain/document the code"
+    "objectID": "slides/topic-06-alignment.html#choice-3-optimal-or-approximate",
+    "href": "slides/topic-06-alignment.html#choice-3-optimal-or-approximate",
+    "title": "Aligning sequences",
+    "section": "Choice 3: Optimal or approximate?",
+    "text": "Choice 3: Optimal or approximate?\n\nOptimal: guaranteed to find the highest-scoring alignment under your scoring scheme\nApproximate: fast, usually right, no guarantee\n\n\nRecall from our algorithms lecture: BLAST1 is a heuristic. It finds exact \\(k\\)-mer seeds, then extends only around those.\n\n\n\n\n\nBLAST can miss the optimal alignment. It is used billions of times a year because an approximate answer today beats an exact answer in nine years.\n\n\n\n\n9:30-10:30\nDirect callback to the algorithm-strategies lecture and to the k-mer indexing from last week – BLAST’s seeds are exactly the k-mer dictionary they built.\n\n\nAltschul et al. (1990)"
   },
   {
-    "objectID": "slides/topic-03.html#what-is-marimo",
-    "href": "slides/topic-03.html#what-is-marimo",
-    "title": "Why Computation?",
-    "section": "What is marimo?",
-    "text": "What is marimo?\n\nOne type of Python notebook\nJupyter is another type that is more popular\n\n\nSo, why marimo?"
+    "objectID": "slides/topic-06-alignment.html#today",
+    "href": "slides/topic-06-alignment.html#today",
+    "title": "Aligning sequences",
+    "section": "Today",
+    "text": "Today\n\nPairwise, not multiple\nOptimal, not approximate\nGlobal (Needleman–Wunsch) and local (Smith–Waterman)\n\n\nBoth are dynamic programming, the strategy we met when we computed Fibonacci numbers: solve each subproblem once, store the answer, reuse it.\n\n10:30-11:00\nQuick roadmap slide. Remind them fib_fast was DP and it turned a minute into an instant."
   },
   {
-    "objectID": "slides/topic-03.html#why-marimo",
-    "href": "slides/topic-03.html#why-marimo",
-    "title": "Why Computation?",
-    "section": "Why marimo?",
-    "text": "Why marimo?\nIMHO, marimo solved two big problems with other types of notebooks:\n\nResults can vary depending on the order cells are run\n\nmarimo solves this by being “reactive”\n\nThe plain text files of other notebooks are illegible (nested in JSON syntax)\n\nmarimo is pure Python"
+    "objectID": "slides/topic-06-alignment.html#which-alignment-is-better",
+    "href": "slides/topic-06-alignment.html#which-alignment-is-better",
+    "title": "Aligning sequences",
+    "section": "Which alignment is better?",
+    "text": "Which alignment is better?\n\n\n\nA C G T C A\nA C - T G A\n\n\n\nA C G T C A\nA C T G A -\n\n\n\nBoth are valid hypotheses. We need a number that says which one we prefer.\n\n\n\n\n\n\n\n\nAn objective function: a rule that assigns a score to any alignment, so “best” means something specific.\n\n\n\n\n11:00-12:00\nAsk the room which one looks better before revealing anything. Most will pick the left. Then the question becomes: on what basis? That is the scoring scheme."
   },
   {
-    "objectID": "slides/topic-03.html#what-is-molab",
-    "href": "slides/topic-03.html#what-is-molab",
-    "title": "Why Computation?",
-    "section": "What is molab?",
-    "text": "What is molab?\n\nA free, cloud-hosted workspace for running marimo Python notebooks\nThe name is a play on Google colab, a popular service for Jypyter notebooks\nIt will be our primary means of practicing comp bio"
+    "objectID": "slides/topic-06-alignment.html#a-simple-scoring-scheme",
+    "href": "slides/topic-06-alignment.html#a-simple-scoring-scheme",
+    "title": "Aligning sequences",
+    "section": "A simple scoring scheme",
+    "text": "A simple scoring scheme\nScore each column independently, then add them up:\n\n\n\n\nColumn\nScore\n\n\n\n\nMatch\n\\(+1\\)\n\n\nMismatch\n\\(-1\\)\n\n\nGap\n\\(-2\\)\n\n\n\n\n\n\n\nA C G T C A\nA C - T G A\n+1+1-2+1-1+1  =  1\n\nA C G T C A\nA C T G A -\n+1+1-1-1-1-2  = -3\n\n\n\nThe left alignment wins, under this scoring scheme.\n\n12:00-13:30\nDo the arithmetic out loud, column by column, for at least the first one. In the notebook their first job is to write exactly this function."
   },
   {
-    "objectID": "slides/topic-03.html#ten-simple-rules",
-    "href": "slides/topic-03.html#ten-simple-rules",
-    "title": "Why Computation?",
-    "section": "Ten simple rules",
-    "text": "Ten simple rules\nFor biologists learning to program1\n\nBegin with the end in mind\nBaby steps are steps\nImmersion is the best learning tool\nPhone a friend\nLearn how to ask questions\n\nCarey and Papin (2018)"
+    "objectID": "slides/topic-06-alignment.html#the-scoring-scheme-is-a-model",
+    "href": "slides/topic-06-alignment.html#the-scoring-scheme-is-a-model",
+    "title": "Aligning sequences",
+    "section": "The scoring scheme is a model",
+    "text": "The scoring scheme is a model\n\nGaps cost more than mismatches because indels are rarer than substitutions\nChange the numbers and you can change the answer\nThe “optimal” alignment is only optimal with respect to your scoring scheme\n\n\n\n\n\nThe algorithm is guaranteed to find the best-scoring alignment. It is not guaranteed to find the historically true one.\n\n\n\n\n13:30-14:30\nThis is the second point I really want them to keep. Optimality is relative to a model of evolution that you chose, usually by accepting a default. Tie back to “all models are wrong, some are useful” from day one if there is time."
   },
   {
-    "objectID": "slides/topic-03.html#ten-simple-rules-1",
-    "href": "slides/topic-03.html#ten-simple-rules-1",
-    "title": "Why Computation?",
-    "section": "Ten simple rules",
-    "text": "Ten simple rules\nFor biologists learning to program1\n\nDon’t reinvent the wheel\nDevelop good habits early on\nPractice makes perfect\nTeach yourself\nJust do it\n\nCarey and Papin (2018)"
+    "objectID": "slides/topic-06-alignment.html#why-not-just-try-them-all",
+    "href": "slides/topic-06-alignment.html#why-not-just-try-them-all",
+    "title": "Aligning sequences",
+    "section": "Why not just try them all?",
+    "text": "Why not just try them all?\nThe number of possible global alignments of two sequences of length \\(n\\):\n\n\n\n\n\\(n\\)\nAlignments\n\n\n\n\n5\n1,683\n\n\n10\n\\(\\approx 8 \\times 10^{6}\\)\n\n\n100\n\\(&gt; 10^{75}\\)\n\n\n\n\n\nExhaustive search is off the table before the sequences are even interesting.\n\n\nWe need to find the best alignment without looking at all of them\n\n14:30-15:30\nThese are Delannoy numbers; no need to say so. The point is the same one from the exhaustive-tree-search slide: the candidate space explodes and a smarter strategy is the only way out."
   },
   {
-    "objectID": "slides/topic-03.html#intro-to-python-marimo",
-    "href": "slides/topic-03.html#intro-to-python-marimo",
-    "title": "Why Computation?",
-    "section": "Intro to Python & marimo",
-    "text": "Intro to Python & marimo\nWe are transitioning to marimo Python notebooks in molab as our primary environment for learning comp bio\n\nThe class website (aub.ie/icb) has instructions for Python notebook exercises:\n\n\n\nGo to molab and make sure you’re logged in\nClick the notebook link on the class website\nClick the “Fork” button"
+    "objectID": "slides/topic-06-alignment.html#the-insight",
+    "href": "slides/topic-06-alignment.html#the-insight",
+    "title": "Aligning sequences",
+    "section": "The insight",
+    "text": "The insight\nThe best alignment of ACGTCA and ACTGA ends in exactly one of three ways:\n\nA aligned with A (match or mismatch)\nA aligned with a gap\na gap aligned with A\n\n\nWhichever it is, the rest of the alignment must itself be the best alignment of the two shorter sequences that remain.\n\n\nA big problem made of smaller versions of itself, solved once and reused\n\n15:30-16:30\nThis is the whole algorithm in one slide. If they get “the best alignment of the prefixes is part of the best alignment of the whole,” the table is just bookkeeping."
   },
   {
-    "objectID": "slides/topic-03.html#references",
-    "href": "slides/topic-03.html#references",
-    "title": "Why Computation?",
+    "objectID": "slides/topic-06-alignment.html#the-recurrence",
+    "href": "slides/topic-06-alignment.html#the-recurrence",
+    "title": "Aligning sequences",
+    "section": "The recurrence1",
+    "text": "The recurrence1\n\\[\nF(i,j) = \\max\n\\begin{cases}\nF(i-1,\\,j-1) + s(A_i, B_j) & \\text{(match/mismatch)}\\\\\nF(i-1,\\,j) + g & \\text{(gap in }B)\\\\\nF(i,\\,j-1) + g & \\text{(gap in }A)\n\\end{cases}\n\\]\n\n\\(F(i,j)\\) is the score of the best alignment of the first \\(i\\) residues of \\(A\\) with the first \\(j\\) residues of \\(B\\).\n\n\nEvery cell depends only on cells above and to the left, so we can fill the table in one pass.\n\n16:30-17:30\nThey have seen this exact equation in the algorithms lecture, so this is a reunion, not an introduction. Say what s() and g are: s is the scoring function they will write, g is the gap penalty.\n\n\nNeedleman and Wunsch (1970)"
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#setting-up-the-table",
+    "href": "slides/topic-06-alignment.html#setting-up-the-table",
+    "title": "Aligning sequences",
+    "section": "Setting up the table",
+    "text": "Setting up the table\n\\(A\\) = ACGTCA down the rows, \\(B\\) = ACTGA across the columns.\n\n\n\n\n\n–\nA\nC\nT\nG\nA\n\n\n\n\n–\n0\n-2\n-4\n-6\n-8\n-10\n\n\nA\n-2\n\n\n\n\n\n\n\nC\n-4\n\n\n\n\n\n\n\nG\n-6\n\n\n\n\n\n\n\nT\n-8\n\n\n\n\n\n\n\nC\n-10\n\n\n\n\n\n\n\nA\n-12\n\n\n\n\n\n\n\n\n\n\nRow 0 and column 0 are alignments against nothing but gaps, so they are just multiples of the gap penalty.\n\n17:30-18:30\nMake sure they see why F(0,3) = -6: aligning zero residues of A against three residues of B requires three gaps. The extra row and column are the base case, the equivalent of fib_nums[0] and fib_nums[1]."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#filling-the-first-cell",
+    "href": "slides/topic-06-alignment.html#filling-the-first-cell",
+    "title": "Aligning sequences",
+    "section": "Filling the first cell",
+    "text": "Filling the first cell\n\\(F(1,1)\\): best alignment of A with A\n\n\n\n\nFrom\nCalculation\nScore\n\n\n\n\nDiagonal (A with A, match)\n\\(0 + 1\\)\n1\n\n\nUp (gap in \\(B\\))\n\\(-2 + -2\\)\n\\(-4\\)\n\n\nLeft (gap in \\(A\\))\n\\(-2 + -2\\)\n\\(-4\\)\n\n\n\n\n\nTake the maximum: \\(F(1,1) = 1\\), and remember that it came from the diagonal.\n\n18:30-19:30\nEmphasize the remembering. The score alone does not give you an alignment; the direction does. In the notebook they can either store directions or recompute them, and we will recompute."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#filling-a-cell-where-a-gap-wins",
+    "href": "slides/topic-06-alignment.html#filling-a-cell-where-a-gap-wins",
+    "title": "Aligning sequences",
+    "section": "Filling a cell where a gap wins",
+    "text": "Filling a cell where a gap wins\n\\(F(3,2)\\): best alignment of ACG with AC\n\n\n\n\nFrom\nCalculation\nScore\n\n\n\n\nDiagonal (G with C, mismatch)\n\\(-1 + -1\\)\n\\(-2\\)\n\n\nUp (gap in \\(B\\))\n\\(2 + -2\\)\n0\n\n\nLeft (gap in \\(A\\))\n\\(-3 + -2\\)\n\\(-5\\)\n\n\n\n\n\n\\(F(3,2) = 0\\), from above: the G is aligned to a gap.\n\n\nThis one cell is where the indel in our final alignment gets decided.\n\n19:30-20:30\nWorth slowing down here. The algorithm is not “finding” a gap; it is comparing three numbers. The biology comes out of the arithmetic, which is exactly why the scoring scheme matters so much."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#the-completed-table",
+    "href": "slides/topic-06-alignment.html#the-completed-table",
+    "title": "Aligning sequences",
+    "section": "The completed table",
+    "text": "The completed table\n\n\n\n\n\n–\nA\nC\nT\nG\nA\n\n\n\n\n–\n0\n-2\n-4\n-6\n-8\n-10\n\n\nA\n-2\n1\n-1\n-3\n-5\n-7\n\n\nC\n-4\n-1\n2\n0\n-2\n-4\n\n\nG\n-6\n-3\n0\n1\n1\n-1\n\n\nT\n-8\n-5\n-2\n1\n0\n0\n\n\nC\n-10\n-7\n-4\n-1\n0\n-1\n\n\nA\n-12\n-9\n-6\n-3\n-2\n1\n\n\n\n\n\nThe bottom-right cell is the score of the best global alignment: 1.\n\n\nEvery cell was computed from cells already filled. No cell was computed twice.\n\n20:30-21:30\n30 cells, three comparisons each. Compare that to the 10^75 number from earlier. This is the payoff slide for dynamic programming."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#traceback",
+    "href": "slides/topic-06-alignment.html#traceback",
+    "title": "Aligning sequences",
+    "section": "Traceback",
+    "text": "Traceback\nStart at the bottom-right and walk backward, asking at each cell: which of the three did I come from?\n\n\n\n\n\n–\nA\nC\nT\nG\nA\n\n\n\n\n–\n0\n-2\n-4\n-6\n-8\n-10\n\n\nA\n-2\n1\n-1\n-3\n-5\n-7\n\n\nC\n-4\n-1\n2\n0\n-2\n-4\n\n\nG\n-6\n-3\n0\n1\n1\n-1\n\n\nT\n-8\n-5\n-2\n1\n0\n0\n\n\nC\n-10\n-7\n-4\n-1\n0\n-1\n\n\nA\n-12\n-9\n-6\n-3\n-2\n1\n\n\n\n\n\nA diagonal step consumes one residue from each sequence. A vertical step consumes one from \\(A\\) and adds a gap to \\(B\\).\n\n21:30-22:30\nWalk it backward on screen: (6,5) to (5,4) to (4,3) to (3,2) – that is the vertical step, the gap – then (2,2), (1,1), (0,0). The path they see is the alignment."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#the-answer",
+    "href": "slides/topic-06-alignment.html#the-answer",
+    "title": "Aligning sequences",
+    "section": "The answer",
+    "text": "The answer\n\nA C G T C A\nA C - T G A\n\n\nScore: \\(+1 +1 -2 +1 -1 +1 = 1\\)\n\n\n\nThe score in the corner and the score of the alignment agree\nTies are possible: several different alignments can share the best score\nThe algorithm returns one of them, and which one depends on how you break ties\n\n\n22:30-23:15\nThe tie point is honest and important – “the optimal alignment” is often “an optimal alignment.” Tools differ in tie-breaking, which is one reason two aligners give different answers on the same data."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#what-did-it-cost",
+    "href": "slides/topic-06-alignment.html#what-did-it-cost",
+    "title": "Aligning sequences",
+    "section": "What did it cost?",
+    "text": "What did it cost?\n\nTime: one pass over an \\((n{+}1) \\times (m{+}1)\\) table, so \\(O(nm)\\)\nMemory: the whole table, also \\(O(nm)\\)\n\n\nTwo 100,000-bp sequences: \\(10^{10}\\) cells, about 40 GB at 4 bytes each.\n\n\nOptimal alignment is affordable for genes and hopeless for genomes. This is why read mappers index instead of aligning everything to everything.\n\n23:15-24:00\nCallback to the space-complexity slide from the algorithms lecture, which used this same 40 GB number. Mention Hirschberg’s algorithm only if someone asks: O(n) memory for twice the time."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#two-sequences-sharing-one-region",
+    "href": "slides/topic-06-alignment.html#two-sequences-sharing-one-region",
+    "title": "Aligning sequences",
+    "section": "Two sequences sharing one region",
+    "text": "Two sequences sharing one region\n\nA = TTTTACGTCA\nB = ACGTCAGGGG\n\n\nThey share ACGTCA, but it sits at opposite ends.\n\n\nWhat does Needleman–Wunsch do?\n\n24:00-24:45\nHave them find the shared block by eye first. It takes about two seconds for a human, which makes the next slide land harder."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#needlemanwunsch-on-these-sequences",
+    "href": "slides/topic-06-alignment.html#needlemanwunsch-on-these-sequences",
+    "title": "Aligning sequences",
+    "section": "Needleman–Wunsch on these sequences",
+    "text": "Needleman–Wunsch on these sequences\n\nT T T T A C G T C A\nA C G T C A G G G G\n\n\nScore: \\(-6\\). Not a single gap, and the shared region is shredded.\n\n\n\nLining up the two copies of ACGTCA would require eight gaps: \\(-16\\), plus \\(+6\\) for the matches, so \\(-10\\)\nGarbage end-to-end at \\(-6\\) beats truth at \\(-10\\)\n\n\n\n\n\n\nThe algorithm did not fail. We asked the wrong question. We told it to assume homology runs the full length.\n\n\n\n\n24:45-26:00\nThis is the emotional center of the second half. The algorithm is behaving exactly as specified; the specification encoded a false biological assumption. Let them sit with the -6 versus -10 arithmetic."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#smithwaterman",
+    "href": "slides/topic-06-alignment.html#smithwaterman",
+    "title": "Aligning sequences",
+    "section": "Smith–Waterman1",
+    "text": "Smith–Waterman1\nThree changes to Needleman–Wunsch:\n\nAdd zero to the options. Any cell that would go negative becomes 0: a bad alignment is abandoned rather than carried forward.\nStart the traceback at the highest cell anywhere, not the bottom-right corner.\nStop the traceback at a zero, not at the top-left corner.\n\n\n\\[\nF(i,j) = \\max\n\\begin{cases}\n0 \\\\\nF(i-1,\\,j-1) + s(A_i, B_j)\\\\\nF(i-1,\\,j) + g\\\\\nF(i,\\,j-1) + g\n\\end{cases}\n\\]\n\n26:00-27:00\nSame table, same recurrence, one extra option and two different rules about where to start and stop. That is genuinely all it is.\n\n\nSmith and Waterman (1981)"
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#the-local-alignment-table",
+    "href": "slides/topic-06-alignment.html#the-local-alignment-table",
+    "title": "Aligning sequences",
+    "section": "The local alignment table",
+    "text": "The local alignment table\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n–\nA\nC\nG\nT\nC\nA\nG\nG\nG\nG\n\n\n\n\n–\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n\n\nT\n0\n0\n0\n0\n1\n0\n0\n0\n0\n0\n0\n\n\nT\n0\n0\n0\n0\n1\n0\n0\n0\n0\n0\n0\n\n\nT\n0\n0\n0\n0\n1\n0\n0\n0\n0\n0\n0\n\n\nT\n0\n0\n0\n0\n1\n0\n0\n0\n0\n0\n0\n\n\nA\n0\n1\n0\n0\n0\n0\n1\n0\n0\n0\n0\n\n\nC\n0\n0\n2\n0\n0\n1\n0\n0\n0\n0\n0\n\n\nG\n0\n0\n0\n3\n1\n0\n0\n1\n1\n1\n1\n\n\nT\n0\n0\n0\n1\n4\n2\n0\n0\n0\n0\n0\n\n\nC\n0\n0\n1\n0\n2\n5\n3\n1\n0\n0\n0\n\n\nA\n0\n1\n0\n0\n0\n3\n6\n4\n2\n0\n0\n\n\n\n\n\nMostly zeros, with one diagonal ridge climbing to 6.\n\n27:00-27:45\nPoint at the ridge. The zeros are the algorithm refusing to pay for the non-homologous flanks. Do not fill this table cell by cell – they have already seen the mechanics."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#the-local-answer",
+    "href": "slides/topic-06-alignment.html#the-local-answer",
+    "title": "Aligning sequences",
+    "section": "The local answer",
+    "text": "The local answer\n\nA C G T C A\nA C G T C A\n\n\nScore 6, positions 5–10 of \\(A\\) against positions 1–6 of \\(B\\).\n\n\n\n\nUse global when\nYou believe the sequences are homologous along their whole length\n\nUse local when\nYou believe homology is confined to a region, or the sequences differ wildly in length\n\n\n27:45-28:30\nRead placement, domain finding, and every BLAST search you have ever run are local problems. Whole-gene ortholog comparison is global."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#change-the-scoring-not-the-algorithm",
+    "href": "slides/topic-06-alignment.html#change-the-scoring-not-the-algorithm",
+    "title": "Aligning sequences",
+    "section": "Change the scoring, not the algorithm",
+    "text": "Change the scoring, not the algorithm\nNothing in either algorithm knows what a nucleotide is.\n\nThe only place the alphabet appears is \\(s(A_i, B_j)\\).\n\n\n\nProteins: replace \\(+1/-1\\) with a 20×20 matrix such as BLOSUM62, where a leucine/isoleucine swap costs far less than a leucine/aspartate swap\nDNA, more carefully: penalize transversions more than transitions\nSame table, same traceback, same code\n\n\n28:30-29:30\nThis is the payoff for writing the scoring as a separate function in the notebook. Swapping the matrix turns a DNA aligner into a protein aligner without touching the DP code. Substitution matrices themselves are estimated from observed alignments – one sentence, do not go down that road."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#two-more-refinements",
+    "href": "slides/topic-06-alignment.html#two-more-refinements",
+    "title": "Aligning sequences",
+    "section": "Two more refinements",
+    "text": "Two more refinements\n\nAffine gaps: charge a lot to open a gap and little to extend it, because one 10-base indel is far more likely than ten separate 1-base indels\nMultiple alignment: exact is infeasible, so tools align the most similar pair first and progressively add sequences — a greedy heuristic built on pairwise alignment\n\n\n\n\n\nEvery multiple sequence alignment you will ever use is an approximation built out of the algorithm we just walked through.\n\n\n\n\n29:30-30:15\nAffine gaps: mention “once and done” – they will meet them again if they ever read an aligner’s manual. Progressive alignment closes the loop with the greedy-strategy slide from the algorithms lecture."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#summary",
+    "href": "slides/topic-06-alignment.html#summary",
+    "title": "Aligning sequences",
+    "section": "Summary",
+    "text": "Summary\n\n\nAn alignment is a hypothesis of homology, column by column\nA scoring scheme turns “better alignment” into a number, and it is a model of evolution\nDynamic programming finds the optimal alignment without enumerating the \\(10^{75}\\) alternatives\nGlobal (Needleman–Wunsch) assumes end-to-end homology; local (Smith–Waterman) does not\nOptimal means optimal under your scoring scheme, not historically true\n\n\n\n30:15-31:00\nIf short on time, cut to the last two bullets."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#in-the-exercise",
+    "href": "slides/topic-06-alignment.html#in-the-exercise",
+    "title": "Aligning sequences",
+    "section": "In the exercise",
+    "text": "In the exercise\nYou will build a global aligner from scratch:\n\nscore_alignment — score a pair of aligned sequences\nget_dotplot — see the homology before any algorithm runs\nfill_scoring_matrix — the Needleman–Wunsch table\ntraceback — turn the table into an alignment\n\n\n\n\n\n\n\n\nWatch for\n\n\nThe dotplot of the two sequences from the “when global fails” slide. You will be able to see why the global algorithm made the choice it did.\n\n\n\n\n31:00-31:45\nHand off to the notebook here. Remind them the first cell needs their name."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#exercise",
+    "href": "slides/topic-06-alignment.html#exercise",
+    "title": "Aligning sequences",
+    "section": "Exercise",
+    "text": "Exercise\n\nLog into molab\nOpen the exercise in molab\nClick “Fork” button"
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#references",
+    "href": "slides/topic-06-alignment.html#references",
+    "title": "Aligning sequences",
     "section": "",
-    "text": "Carey, Maureen A., and Jason A. Papin. 2018. “Ten Simple Rules for Biologists Learning to Program.” PLOS Computational Biology 14 (1): 1–11. https://doi.org/10.1371/journal.pcbi.1005871.\n\n\nMcLaughlin, P. J., and M. O. Dayhoff. 1973. “Eukaryote Evolution: A View Based on Cytochrome c Sequence Data.” Journal of Molecular Evolution 2 (2): 99–116. https://doi.org/10.1007/BF01653990."
+    "text": "Altschul, Stephen F., Warren Gish, Webb Miller, Eugene W. Myers, and David J. Lipman. 1990. “Basic Local Alignment Search Tool.” Journal of Molecular Biology 215 (3): 403–10. https://doi.org/10.1016/S0022-2836(05)80360-2.\n\n\nNeedleman, Saul B., and Christian D. Wunsch. 1970. “A General Method Applicable to the Search for Similarities in the Amino Acid Sequence of Two Proteins.” Journal of Molecular Biology 48 (3): 443–53. https://doi.org/10.1016/0022-2836(70)90057-4.\n\n\nSmith, T. F., and M. S. Waterman. 1981. “Identification of Common Molecular Subsequences.” Journal of Molecular Biology 147 (1): 195–97. https://doi.org/10.1016/0022-2836(81)90087-5."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#acknowledgements",
+    "href": "slides/topic-06-alignment.html#acknowledgements",
+    "title": "Aligning sequences",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nI used Anthropic’s Claude (Opus 5 model) to generate a draft of these slides."
+  },
+  {
+    "objectID": "slides/topic-02.html#todays-objectives",
+    "href": "slides/topic-02.html#todays-objectives",
+    "title": "Intro to Comp Bio",
+    "section": "Today’s objectives",
+    "text": "Today’s objectives\n\nLinux ThinLinc: Log in and set up\nIntro to the command line shell (Bash)\nExercise 2"
+  },
+  {
+    "objectID": "slides/topic-02.html#about-these-slides",
+    "href": "slides/topic-02.html#about-these-slides",
+    "title": "Intro to Comp Bio",
+    "section": "About these slides",
+    "text": "About these slides\nI will use a “Bash command line” heading for lines we type at the command prompt\n\n\nBash command line\n\necho \"Hello World!\"\n\nI will use a “Bash script” heading for lines we type in a file\n\n\nBash script\n\necho \"Hello World!\""
+  },
+  {
+    "objectID": "slides/topic-02.html#getting-help-with-a-command",
+    "href": "slides/topic-02.html#getting-help-with-a-command",
+    "title": "Intro to Comp Bio",
+    "section": "Getting help with a command",
+    "text": "Getting help with a command\n\n\nBash command line\n\nman echo\n\n\n\nThis shows the manual for the echo command\n\n\n\nNavigate with arrow keys (or ‘j’/‘k’)\n\n\nPress ‘q’ to exit the manual\n\n\n\nNote, man is the command (program) and echo is an argument"
+  },
+  {
+    "objectID": "slides/topic-02.html#macos-users",
+    "href": "slides/topic-02.html#macos-users",
+    "title": "Intro to Comp Bio",
+    "section": "macOS users",
+    "text": "macOS users\nYou have a Terminal app already\n\nOpen Spotlight, type “Terminal”, and press Return\nThe default shell is Zsh (not Bash), but it is very similar\n\nI recommend installing Xcode command line tools\n\nOpen terminal and use this command:\n\n\nZsh command line\n\nxcode-select --install"
+  },
+  {
+    "objectID": "slides/topic-02.html#windows-users",
+    "href": "slides/topic-02.html#windows-users",
+    "title": "Intro to Comp Bio",
+    "section": "Windows users",
+    "text": "Windows users\nYou can install Linux via the Windows Subsystem for Linux (WSL)\nI recommend you use the default Linux distribution (Ubuntu)\nRunning WSL will be very similar to Red Hat (ThinLinc)"
+  },
+  {
+    "objectID": "slides/topic-02.html#support",
+    "href": "slides/topic-02.html#support",
+    "title": "Intro to Comp Bio",
+    "section": "Support",
+    "text": "Support\nThis work was made possible by funding provided to Jamie Oaks from the National Science Foundation (DEB 1656004)."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#the-question-for-today",
+    "href": "slides/topic-05-string-search.html#the-question-for-today",
+    "title": "Finding sequences",
+    "section": "The question for today",
+    "text": "The question for today\nYou have a long sequence and a short one.\nWhere does the short one occur in the long one?\n\nWhere would EcoRI cut this plasmid?\nWhere does this 20-nucleotide sequencing read come from?\nDoes this promoter motif appear upstream of my gene?\nWhich of these 10 million reads contain the adapter?\n\n\nAll of these are the same computational question\n\n0:00-1:00\nOpen by asking the class for examples of times they have searched a sequence. The goal today is to see that the right answer depends entirely on how many times you plan to ask."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#why-this-is-a-computational-problem",
+    "href": "slides/topic-05-string-search.html#why-this-is-a-computational-problem",
+    "title": "Finding sequences",
+    "section": "Why this is a computational problem",
+    "text": "Why this is a computational problem\n\n\n\nSequence lengths\n\n\n\nphiX174\n5.4 kb\n\n\nE. coli\n4.6 Mb\n\n\nHuman\n3.1 Gb\n\n\n\n\nQuery volumes\nOne Illumina run can produce billions of reads.\nEach one needs to be placed somewhere in the genome.\n\n\n\nAn approach that takes one second per query is fine for a few queries.\n\n\nBut, that is 32 years for a billion queries.\n\n1:00-2:30\nThe point is only that constant factors stop mattering and asymptotic behavior takes over."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#stating-the-problem",
+    "href": "slides/topic-05-string-search.html#stating-the-problem",
+    "title": "Finding sequences",
+    "section": "Stating the problem",
+    "text": "Stating the problem\nGiven a text \\(T\\) of length \\(n\\) and a pattern \\(P\\) of length \\(m\\):\n\nReport every position in \\(T\\) where \\(P\\) occurs.\n\n\nTwo things to notice:\n\nWe want all occurrences, not just the first one\n\\(m\\) is usually much smaller than \\(n\\)\n\n\n\nIn the exercise, you will build three solutions and time them against each other\n\n2:30-3:30\nFlag “all occurrences” now. It looks like a detail and it turns out to be the thing that breaks the naive binary search later. If you want, plant the seed here: “remember that we want all of them.”"
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#linear-search",
+    "href": "slides/topic-05-string-search.html#linear-search",
+    "title": "Finding sequences",
+    "section": "Linear search",
+    "text": "Linear search\nSlide a window along the text. Compare. Step forward. Repeat.\nE.g., find “ATG” in “CGATGCATGC”\n\nCGATGCATGC\nCGA\n GAT\n  ATG  &lt;- match at 2\n   TGC\n    GCA\n     CAT\n      ATG  &lt;- match at 6\n       TGC\n\n\nIt’s simple. No setup and no data structures.\n\n3:30-4:30\nWalk the window across out loud. Ask: how many comparisons is this? Let them get to n times m before you show the next slide."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#what-does-a-linear-search-cost",
+    "href": "slides/topic-05-string-search.html#what-does-a-linear-search-cost",
+    "title": "Finding sequences",
+    "section": "What does a linear search cost?",
+    "text": "What does a linear search cost?\n\nSetup: none\nMemory: essentially none\nPer search: up to \\(n\\) window positions, each costing up to \\(m\\) character comparisons, so the time complexity is \\(O(nm)\\)\n\n\nFor DNA the comparison usually does not match on the first or second character, so in practice it behaves like \\(O(n)\\)."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#a-disadvantage-of-linear-search",
+    "href": "slides/topic-05-string-search.html#a-disadvantage-of-linear-search",
+    "title": "Finding sequences",
+    "section": "A disadvantage of linear search",
+    "text": "A disadvantage of linear search\n\n\n\n\n\n\nThe catch\n\n\nIt costs \\(O(n)\\) every time you search. Nothing is remembered between queries.\n\n\n\n\n4:30-6:00\nThe mismatch-fails-fast point is worth making: with a 4-letter alphabet, 3/4 of comparisons fail immediately, so the m factor rarely materializes. Then land hard on the callout, because it motivates everything that follows."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#the-central-idea",
+    "href": "slides/topic-05-string-search.html#the-central-idea",
+    "title": "Finding sequences",
+    "section": "The central idea",
+    "text": "The central idea\n\nDo the work once.\n\n\nInstead of re-reading the genome for every query, read it one time and build a structure that makes future queries fast.\n\n\nBuying time with memory!\n\n\nThis is called indexing, and it’s analogous to the index at the back of a textbook.\n\n6:00-7:00\nThe textbook index analogy is worth spending a few seconds on. Emphasize the trade: indexing is never free, it’s a loan you take out and repay with searches."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#a-k-mer-dictionary",
+    "href": "slides/topic-05-string-search.html#a-k-mer-dictionary",
+    "title": "Finding sequences",
+    "section": "A \\(k\\)-mer dictionary",
+    "text": "A \\(k\\)-mer dictionary\nA \\(k\\)-mer is any substring of length \\(k\\).\n\nWalk over the sequence once, and record where every \\(k\\)-mer starts.\n\n\n\nIndex:    0 1 2 3 4 5 6 7 8 9 10\nSequence: A T C G T T C A T C G\n\n\n\n{\n  \"ATC\": [0, 7],   \"TCG\": [1, 8],   \"CGT\": [2],\n  \"GTT\": [3],      \"TTC\": [4],      \"TCA\": [5],\n  \"CAT\": [6],\n}\n\n7:00-8:30\nBuild one or two entries live on the board before revealing the dictionary. Ask why ATC has two positions. Note that the key order does not matter – it’s a dictionary, not a list."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#looking-things-up-is-very-fast",
+    "href": "slides/topic-05-string-search.html#looking-things-up-is-very-fast",
+    "title": "Finding sequences",
+    "section": "Looking things up is very fast",
+    "text": "Looking things up is very fast\nSearching for \"TCG\" is now a dictionary lookup, not a search!\n\nkmer_dict[\"TCG\"]   # -&gt; [1, 8]\n\n\nSetup: one pass over the sequence, time complexity \\(O(nk)\\)\nPer search: \\(O(1)\\) on average, regardless of how long the genome is\nMemory: a key and a position for nearly every position in the sequence\n\n\n\n\nThe genome could be a thousand times longer and the lookup would take the same time. But, it will take up more memory!\n\n8:30-10:00\n“Regardless of how long the genome is” is the sentence that should stick. This is the first time they see a search whose cost is decoupled from n. If anyone asks how a dictionary does this, hashing – one sentence, move on."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#two-catches",
+    "href": "slides/topic-05-string-search.html#two-catches",
+    "title": "Finding sequences",
+    "section": "Two catches",
+    "text": "Two catches\n\nThe length is fixed. You can only search for 3-mers in a 3-mer dictionary. Searching for \"ATCAG\" means finding every \"ATC\" and checking whether \"AG\" follows. This is called \\(k\\)-mer expansion.\nIt costs memory. Some implementations reserve a slot for every possible \\(k\\)-mer, and there are \\(4^k\\) of those. E.g., about \\(1.1 \\times 10^{12}\\) for \\(k = 20\\).\nYou can save memory by only storing the \\(k\\)-mers that actually occur in the sequence, but this is still several times the size of the sequence.\n\n\n10:00-11:00\nCatch 1 is the one that matters for the notebook – it’s the answer to Challenge 6. Don’t give it away, but make sure they register it."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#suffixes",
+    "href": "slides/topic-05-string-search.html#suffixes",
+    "title": "Finding sequences",
+    "section": "Suffixes",
+    "text": "Suffixes\nA suffix is any substring that runs to the end of the sequence.\nATTCGTTCAG has ten of them:\n\nATTCGTTCAG  0     TTCAG  5\n TTCGTTCAG  1      TCAG  6\n  TCGTTCAG  2       CAG  7\n   CGTTCAG  3        AG  8\n    GTTCAG  4         G  9\n\n\nNote: Every substring of a sequence is the beginning of some suffix.\n\n11:00-12:15\nThat last line is the conceptual key to the whole approach and it is easy to miss. Give an example: “TCG” starts at position 2, and sure enough the suffix at position 2 begins with TCG. So searching for substrings becomes searching for suffix prefixes."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#sort-the-suffixes",
+    "href": "slides/topic-05-string-search.html#sort-the-suffixes",
+    "title": "Finding sequences",
+    "section": "Sort the suffixes",
+    "text": "Sort the suffixes\n\n\n\n\n\n\nrow\npos\nsuffix\n\n\n\n\n0\n8\nAG\n\n\n1\n0\nATTCGTTCAG\n\n\n2\n7\nCAG\n\n\n3\n3\nCGTTCAG\n\n\n4\n9\nG\n\n\n5\n4\nGTTCAG\n\n\n6\n6\nTCAG\n\n\n7\n2\nTCGTTCAG\n\n\n8\n5\nTTCAG\n\n\n9\n1\nTTCGTTCAG\n\n\n\n\n\nSorted alphabetically\nLook at the two suffixes starting with TC\n\nThey are adjacent. Sorting guarantees this.\nNothing that doesn’t start with TC can sort in between them\n\n\n\n12:15-13:30\nSpend real time here. Everything in stage 2 of the search depends on this adjacency property. Ask them to find all the suffixes starting with T and confirm they form one unbroken block too (rows 6-9)."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#suffix-array",
+    "href": "slides/topic-05-string-search.html#suffix-array",
+    "title": "Finding sequences",
+    "section": "Suffix array",
+    "text": "Suffix array\nStoring all those suffix strings is costly (roughly \\(n^2/2\\) characters)\n\nBut we don’t need them. Given the sequence and a position, any suffix can be recovered with a slice.\n\n\nSo a suffix array is just the positions:\n[8, 0, 7, 3, 9, 4, 6, 2, 5, 1]\n\n\n\\(n\\) integers instead of \\(n^2/2\\) characters\n\n13:30-14:30\nFor the human genome: 3.1 billion positions is manageable; 3.1 billion squared over two characters is not a number that fits in any computer. This is why the distinction matters rather than being pedantry."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#searching-a-suffix-array",
+    "href": "slides/topic-05-string-search.html#searching-a-suffix-array",
+    "title": "Finding sequences",
+    "section": "Searching a suffix array",
+    "text": "Searching a suffix array\nBecause the suffixes are sorted, we can use binary search\n\nCompare the target to the middle entry\nThrow away the half it cannot be in\nRepeat\n\n\nEach step halves what is left, so the cost (time complexity) grows as \\(\\log_2 n\\)\n\n\nFor a 5,000-nucleotide sequence, that’s 13 comparisons instead of 5,000.\n\n14:30-15:30\nThey have seen binary search in the divide-and-conquer lecture, so this is a refresher. The 13-vs-5000 number is the one to say out loud."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#example-finding-tc",
+    "href": "slides/topic-05-string-search.html#example-finding-tc",
+    "title": "Finding sequences",
+    "section": "Example: Finding TC",
+    "text": "Example: Finding TC\n\n\n\n\n\n\nrow\npos\nsuffix\n\n\n\n\n0\n8\nAG\n\n\n1\n0\nATTCGTTCAG\n\n\n2\n7\nCAG\n\n\n3\n3\nCGTTCAG\n\n\n4\n9\nG\n\n\n5\n4\nGTTCAG\n\n\n6\n6\nTCAG\n\n\n7\n2\nTCGTTCAG\n\n\n8\n5\nTTCAG\n\n\n9\n1\nTTCGTTCAG\n\n\n\n\n\n\n\n\n\nstep\nwindow\nmiddle row\nsuffix there\nverdict\n\n\n\n\n1\nrows 0–9\n4\nG\nG &lt; TC, go down\n\n\n2\nrows 5–9\n7\nTCGTTCAG\nmatch\n\n\n\n\n\n\nOnly 2 comparisons. But we have only found one of the two matches."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#searching-a-suffix-array-in-2-stages",
+    "href": "slides/topic-05-string-search.html#searching-a-suffix-array-in-2-stages",
+    "title": "Finding sequences",
+    "section": "Searching a suffix array in 2 stages",
+    "text": "Searching a suffix array in 2 stages\nRemember that matches are adjacent\n\nBinary search to land on any one matching row\nWalk outward — up, then down — until the neighbors stop matching\n\n\n\nrow 5   GTTCAG      no match  &lt;- stop walking up\nrow 6   TCAG        match     &lt;- position 6\nrow 7   TCGTTCAG    match     &lt;- position 2  (found by binary search)\nrow 8   TTCAG       no match  &lt;- stop walking down\n\n\n\nAnswer: positions 2 and 6. Cost: about \\(O(m \\log n)\\).\n\n16:30-17:30\nStage 2 only visits the matches themselves plus one dead end at each side, so it costs essentially nothing beyond reporting the answers."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#three-approaches",
+    "href": "slides/topic-05-string-search.html#three-approaches",
+    "title": "Finding sequences",
+    "section": "Three approaches",
+    "text": "Three approaches\n\n\n\n\n\n\n\n\n\n\n\n\nSetup\nPer search\nMemory\nAny query length?\n\n\n\n\nLinear search\nnone\n\\(O(nm)\\)\nnone\nyes\n\n\n\\(k\\)-mer dictionary\n\\(O(nk)\\)\n\\(O(1)\\)\nlarge\nno — fixed \\(k\\)\n\n\nSuffix array\nsorting\n\\(O(m \\log n)\\)\n\\(n\\) integers\nyes\n\n\n\n\n\nThere is no “best algorithm” in this table.\n\n\nThere is only a “best algorithm” for a given problem.\n\n17:30-18:30\nResist the urge to declare a best method. The whole point of the notebook is that the answer flips depending on how many searches you run and whether the query length is fixed."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#the-indexing-strategy",
+    "href": "slides/topic-05-string-search.html#the-indexing-strategy",
+    "title": "Finding sequences",
+    "section": "The indexing strategy",
+    "text": "The indexing strategy\n\nBuild once. Search many.\n\n\nFor one search, linear search wins. Both the \\(k\\)-mer index and suffix array have to read the whole genome just to get started.\n\n\nFor many searches, the setup cost is recovered with every query. If doing many searches, the payoff can be huge.\n\n18:30-19:15\nTell them explicitly that the first timing result in the notebook will look like the “wrong” answer, and that this is deliberate. Otherwise a few will assume they broke something."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#this-is-what-real-tools-do",
+    "href": "slides/topic-05-string-search.html#this-is-what-real-tools-do",
+    "title": "Finding sequences",
+    "section": "This is what real tools do",
+    "text": "This is what real tools do\n\nBLAST indexes short words, finds exact seed matches, then extends them\nBowtie, BWA build an FM-index (based on the Burrows-Wheeler transform), a compressed cousin of the suffix array\nminimap2 indexes a cleverly chosen subset of \\(k\\)-mers called minimizers\n\n\nThey all use the same strategy: A genome gets searched far more often than it changes, so pay the indexing cost up front.\n\n19:15-20:00\nKeep this brief – it’s context, not examinable. The takeaway is that today’s toy implementations are the actual ideas inside tools they already use."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#in-the-exercise",
+    "href": "slides/topic-05-string-search.html#in-the-exercise",
+    "title": "Finding sequences",
+    "section": "In the exercise",
+    "text": "In the exercise\nYou will build all three using Python functions\n\nlinear_search\nget_kmer_dict and kmer_dict_search\nget_suffix_array and suffix_binary_search\n\n\nUse all three to search the phiX174 genome for the recognition sites of restriction enzymes\n\n\n\n\n\n\n\n\nWatch for\n\n\nThe timing result might surprise you. Try to work out why before you read the explanation.\n\n\n\n\n20:00\nHand off to the notebook here. Remind them the first cell needs their name."
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#exercise",
+    "href": "slides/topic-05-string-search.html#exercise",
+    "title": "Finding sequences",
+    "section": "Exercise",
+    "text": "Exercise\n\nLog into molab\nOpen the exercise in molab\nClick “Fork” button"
+  },
+  {
+    "objectID": "slides/topic-05-string-search.html#acknowledgements",
+    "href": "slides/topic-05-string-search.html#acknowledgements",
+    "title": "Finding sequences",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nI used Anthropic’s Claude (Opus 5 model) to generate a draft of these slides."
   },
   {
     "objectID": "slides/topic-01.html#todays-objectives",
@@ -385,200 +714,109 @@
     "text": "Wednesday\n\nIntro to command-line shell environment\nAccess Linux Thinlinc environment\n\nCOSAM IT will be on-hand to help troubleshoot"
   },
   {
-    "objectID": "slides/topic-05-string-search.html#the-question-for-today",
-    "href": "slides/topic-05-string-search.html#the-question-for-today",
-    "title": "Finding sequences",
-    "section": "The question for today",
-    "text": "The question for today\nYou have a long sequence and a short one.\nWhere does the short one occur in the long one?\n\nWhere would EcoRI cut this plasmid?\nWhere does this 20-nucleotide sequencing read come from?\nDoes this promoter motif appear upstream of my gene?\nWhich of these 10 million reads contain the adapter?\n\n\nAll of these are the same computational question\n\n0:00-1:00\nOpen by asking the class for examples of times they have searched a sequence. The goal today is to see that the right answer depends entirely on how many times you plan to ask."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#why-this-is-a-computational-problem",
-    "href": "slides/topic-05-string-search.html#why-this-is-a-computational-problem",
-    "title": "Finding sequences",
-    "section": "Why this is a computational problem",
-    "text": "Why this is a computational problem\n\n\n\nSequence lengths\n\n\n\nphiX174\n5.4 kb\n\n\nE. coli\n4.6 Mb\n\n\nHuman\n3.1 Gb\n\n\n\n\nQuery volumes\nOne Illumina run can produce billions of reads.\nEach one needs to be placed somewhere in the genome.\n\n\n\nAn approach that takes one second per query is fine for a few queries.\n\n\nBut, that is 32 years for a billion queries.\n\n1:00-2:30\nThe point is only that constant factors stop mattering and asymptotic behavior takes over."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#stating-the-problem",
-    "href": "slides/topic-05-string-search.html#stating-the-problem",
-    "title": "Finding sequences",
-    "section": "Stating the problem",
-    "text": "Stating the problem\nGiven a text \\(T\\) of length \\(n\\) and a pattern \\(P\\) of length \\(m\\):\n\nReport every position in \\(T\\) where \\(P\\) occurs.\n\n\nTwo things to notice:\n\nWe want all occurrences, not just the first one\n\\(m\\) is usually much smaller than \\(n\\)\n\n\n\nIn the exercise, you will build three solutions and time them against each other\n\n2:30-3:30\nFlag “all occurrences” now. It looks like a detail and it turns out to be the thing that breaks the naive binary search later. If you want, plant the seed here: “remember that we want all of them.”"
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#linear-search",
-    "href": "slides/topic-05-string-search.html#linear-search",
-    "title": "Finding sequences",
-    "section": "Linear search",
-    "text": "Linear search\nSlide a window along the text. Compare. Step forward. Repeat.\nE.g., find “ATG” in “CGATGCATGC”\n\nCGATGCATGC\nCGA\n GAT\n  ATG  &lt;- match at 2\n   TGC\n    GCA\n     CAT\n      ATG  &lt;- match at 6\n       TGC\n\n\nIt’s simple. No setup and no data structures.\n\n3:30-4:30\nWalk the window across out loud. Ask: how many comparisons is this? Let them get to n times m before you show the next slide."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#what-does-a-linear-search-cost",
-    "href": "slides/topic-05-string-search.html#what-does-a-linear-search-cost",
-    "title": "Finding sequences",
-    "section": "What does a linear search cost?",
-    "text": "What does a linear search cost?\n\nSetup: none\nMemory: essentially none\nPer search: up to \\(n\\) window positions, each costing up to \\(m\\) character comparisons, so the time complexity is \\(O(nm)\\)\n\n\nFor DNA the comparison usually does not match on the first or second character, so in practice it behaves like \\(O(n)\\)."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#a-disadvantage-of-linear-search",
-    "href": "slides/topic-05-string-search.html#a-disadvantage-of-linear-search",
-    "title": "Finding sequences",
-    "section": "A disadvantage of linear search",
-    "text": "A disadvantage of linear search\n\n\n\n\n\n\nThe catch\n\n\nIt costs \\(O(n)\\) every time you search. Nothing is remembered between queries.\n\n\n\n\n4:30-6:00\nThe mismatch-fails-fast point is worth making: with a 4-letter alphabet, 3/4 of comparisons fail immediately, so the m factor rarely materializes. Then land hard on the callout, because it motivates everything that follows."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#the-central-idea",
-    "href": "slides/topic-05-string-search.html#the-central-idea",
-    "title": "Finding sequences",
-    "section": "The central idea",
-    "text": "The central idea\n\nDo the work once.\n\n\nInstead of re-reading the genome for every query, read it one time and build a structure that makes future queries fast.\n\n\nBuying time with memory!\n\n\nThis is called indexing, and it’s analogous to the index at the back of a textbook.\n\n6:00-7:00\nThe textbook index analogy is worth spending a few seconds on. Emphasize the trade: indexing is never free, it’s a loan you take out and repay with searches."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#a-k-mer-dictionary",
-    "href": "slides/topic-05-string-search.html#a-k-mer-dictionary",
-    "title": "Finding sequences",
-    "section": "A \\(k\\)-mer dictionary",
-    "text": "A \\(k\\)-mer dictionary\nA \\(k\\)-mer is any substring of length \\(k\\).\n\nWalk over the sequence once, and record where every \\(k\\)-mer starts.\n\n\n\nIndex:    0 1 2 3 4 5 6 7 8 9 10\nSequence: A T C G T T C A T C G\n\n\n\n{\n  \"ATC\": [0, 7],   \"TCG\": [1, 8],   \"CGT\": [2],\n  \"GTT\": [3],      \"TTC\": [4],      \"TCA\": [5],\n  \"CAT\": [6],\n}\n\n7:00-8:30\nBuild one or two entries live on the board before revealing the dictionary. Ask why ATC has two positions. Note that the key order does not matter – it’s a dictionary, not a list."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#looking-things-up-is-very-fast",
-    "href": "slides/topic-05-string-search.html#looking-things-up-is-very-fast",
-    "title": "Finding sequences",
-    "section": "Looking things up is very fast",
-    "text": "Looking things up is very fast\nSearching for \"TCG\" is now a dictionary lookup, not a search!\n\nkmer_dict[\"TCG\"]   # -&gt; [1, 8]\n\n\nSetup: one pass over the sequence, time complexity \\(O(nk)\\)\nPer search: \\(O(1)\\) on average, regardless of how long the genome is\nMemory: a key and a position for nearly every position in the sequence\n\n\n\n\nThe genome could be a thousand times longer and the lookup would take the same time. But, it will take up more memory!\n\n8:30-10:00\n“Regardless of how long the genome is” is the sentence that should stick. This is the first time they see a search whose cost is decoupled from n. If anyone asks how a dictionary does this, hashing – one sentence, move on."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#two-catches",
-    "href": "slides/topic-05-string-search.html#two-catches",
-    "title": "Finding sequences",
-    "section": "Two catches",
-    "text": "Two catches\n\nThe length is fixed. You can only search for 3-mers in a 3-mer dictionary. Searching for \"ATCAG\" means finding every \"ATC\" and checking whether \"AG\" follows. This is called \\(k\\)-mer expansion.\nIt costs memory. Some implementations reserve a slot for every possible \\(k\\)-mer, and there are \\(4^k\\) of those. E.g., about \\(1.1 \\times 10^{12}\\) for \\(k = 20\\).\nYou can save memory by only storing the \\(k\\)-mers that actually occur in the sequence, but this is still several times the size of the sequence.\n\n\n10:00-11:00\nCatch 1 is the one that matters for the notebook – it’s the answer to Challenge 6. Don’t give it away, but make sure they register it."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#suffixes",
-    "href": "slides/topic-05-string-search.html#suffixes",
-    "title": "Finding sequences",
-    "section": "Suffixes",
-    "text": "Suffixes\nA suffix is any substring that runs to the end of the sequence.\nATTCGTTCAG has ten of them:\n\nATTCGTTCAG  0     TTCAG  5\n TTCGTTCAG  1      TCAG  6\n  TCGTTCAG  2       CAG  7\n   CGTTCAG  3        AG  8\n    GTTCAG  4         G  9\n\n\nNote: Every substring of a sequence is the beginning of some suffix.\n\n11:00-12:15\nThat last line is the conceptual key to the whole approach and it is easy to miss. Give an example: “TCG” starts at position 2, and sure enough the suffix at position 2 begins with TCG. So searching for substrings becomes searching for suffix prefixes."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#sort-the-suffixes",
-    "href": "slides/topic-05-string-search.html#sort-the-suffixes",
-    "title": "Finding sequences",
-    "section": "Sort the suffixes",
-    "text": "Sort the suffixes\n\n\n\n\n\n\nrow\npos\nsuffix\n\n\n\n\n0\n8\nAG\n\n\n1\n0\nATTCGTTCAG\n\n\n2\n7\nCAG\n\n\n3\n3\nCGTTCAG\n\n\n4\n9\nG\n\n\n5\n4\nGTTCAG\n\n\n6\n6\nTCAG\n\n\n7\n2\nTCGTTCAG\n\n\n8\n5\nTTCAG\n\n\n9\n1\nTTCGTTCAG\n\n\n\n\n\nSorted alphabetically\nLook at the two suffixes starting with TC\n\nThey are adjacent. Sorting guarantees this.\nNothing that doesn’t start with TC can sort in between them\n\n\n\n12:15-13:30\nSpend real time here. Everything in stage 2 of the search depends on this adjacency property. Ask them to find all the suffixes starting with T and confirm they form one unbroken block too (rows 6-9)."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#suffix-array",
-    "href": "slides/topic-05-string-search.html#suffix-array",
-    "title": "Finding sequences",
-    "section": "Suffix array",
-    "text": "Suffix array\nStoring all those suffix strings is costly (roughly \\(n^2/2\\) characters)\n\nBut we don’t need them. Given the sequence and a position, any suffix can be recovered with a slice.\n\n\nSo a suffix array is just the positions:\n[8, 0, 7, 3, 9, 4, 6, 2, 5, 1]\n\n\n\\(n\\) integers instead of \\(n^2/2\\) characters\n\n13:30-14:30\nFor the human genome: 3.1 billion positions is manageable; 3.1 billion squared over two characters is not a number that fits in any computer. This is why the distinction matters rather than being pedantry."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#searching-a-suffix-array",
-    "href": "slides/topic-05-string-search.html#searching-a-suffix-array",
-    "title": "Finding sequences",
-    "section": "Searching a suffix array",
-    "text": "Searching a suffix array\nBecause the suffixes are sorted, we can use binary search\n\nCompare the target to the middle entry\nThrow away the half it cannot be in\nRepeat\n\n\nEach step halves what is left, so the cost (time complexity) grows as \\(\\log_2 n\\)\n\n\nFor a 5,000-nucleotide sequence, that’s 13 comparisons instead of 5,000.\n\n14:30-15:30\nThey have seen binary search in the divide-and-conquer lecture, so this is a refresher. The 13-vs-5000 number is the one to say out loud."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#example-finding-tc",
-    "href": "slides/topic-05-string-search.html#example-finding-tc",
-    "title": "Finding sequences",
-    "section": "Example: Finding TC",
-    "text": "Example: Finding TC\n\n\n\n\n\n\nrow\npos\nsuffix\n\n\n\n\n0\n8\nAG\n\n\n1\n0\nATTCGTTCAG\n\n\n2\n7\nCAG\n\n\n3\n3\nCGTTCAG\n\n\n4\n9\nG\n\n\n5\n4\nGTTCAG\n\n\n6\n6\nTCAG\n\n\n7\n2\nTCGTTCAG\n\n\n8\n5\nTTCAG\n\n\n9\n1\nTTCGTTCAG\n\n\n\n\n\n\n\n\n\nstep\nwindow\nmiddle row\nsuffix there\nverdict\n\n\n\n\n1\nrows 0–9\n4\nG\nG &lt; TC, go down\n\n\n2\nrows 5–9\n7\nTCGTTCAG\nmatch\n\n\n\n\n\n\nOnly 2 comparisons. But we have only found one of the two matches."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#searching-a-suffix-array-in-2-stages",
-    "href": "slides/topic-05-string-search.html#searching-a-suffix-array-in-2-stages",
-    "title": "Finding sequences",
-    "section": "Searching a suffix array in 2 stages",
-    "text": "Searching a suffix array in 2 stages\nRemember that matches are adjacent\n\nBinary search to land on any one matching row\nWalk outward — up, then down — until the neighbors stop matching\n\n\n\nrow 5   GTTCAG      no match  &lt;- stop walking up\nrow 6   TCAG        match     &lt;- position 6\nrow 7   TCGTTCAG    match     &lt;- position 2  (found by binary search)\nrow 8   TTCAG       no match  &lt;- stop walking down\n\n\n\nAnswer: positions 2 and 6. Cost: about \\(O(m \\log n)\\).\n\n16:30-17:30\nStage 2 only visits the matches themselves plus one dead end at each side, so it costs essentially nothing beyond reporting the answers."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#three-approaches",
-    "href": "slides/topic-05-string-search.html#three-approaches",
-    "title": "Finding sequences",
-    "section": "Three approaches",
-    "text": "Three approaches\n\n\n\n\n\n\n\n\n\n\n\n\nSetup\nPer search\nMemory\nAny query length?\n\n\n\n\nLinear search\nnone\n\\(O(nm)\\)\nnone\nyes\n\n\n\\(k\\)-mer dictionary\n\\(O(nk)\\)\n\\(O(1)\\)\nlarge\nno — fixed \\(k\\)\n\n\nSuffix array\nsorting\n\\(O(m \\log n)\\)\n\\(n\\) integers\nyes\n\n\n\n\n\nThere is no “best algorithm” in this table.\n\n\nThere is only a “best algorithm” for a given problem.\n\n17:30-18:30\nResist the urge to declare a best method. The whole point of the notebook is that the answer flips depending on how many searches you run and whether the query length is fixed."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#the-indexing-strategy",
-    "href": "slides/topic-05-string-search.html#the-indexing-strategy",
-    "title": "Finding sequences",
-    "section": "The indexing strategy",
-    "text": "The indexing strategy\n\nBuild once. Search many.\n\n\nFor one search, linear search wins. Both the \\(k\\)-mer index and suffix array have to read the whole genome just to get started.\n\n\nFor many searches, the setup cost is recovered with every query. If doing many searches, the payoff can be huge.\n\n18:30-19:15\nTell them explicitly that the first timing result in the notebook will look like the “wrong” answer, and that this is deliberate. Otherwise a few will assume they broke something."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#this-is-what-real-tools-do",
-    "href": "slides/topic-05-string-search.html#this-is-what-real-tools-do",
-    "title": "Finding sequences",
-    "section": "This is what real tools do",
-    "text": "This is what real tools do\n\nBLAST indexes short words, finds exact seed matches, then extends them\nBowtie, BWA build an FM-index (based on the Burrows-Wheeler transform), a compressed cousin of the suffix array\nminimap2 indexes a cleverly chosen subset of \\(k\\)-mers called minimizers\n\n\nThey all use the same strategy: A genome gets searched far more often than it changes, so pay the indexing cost up front.\n\n19:15-20:00\nKeep this brief – it’s context, not examinable. The takeaway is that today’s toy implementations are the actual ideas inside tools they already use."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#in-the-exercise",
-    "href": "slides/topic-05-string-search.html#in-the-exercise",
-    "title": "Finding sequences",
-    "section": "In the exercise",
-    "text": "In the exercise\nYou will build all three using Python functions\n\nlinear_search\nget_kmer_dict and kmer_dict_search\nget_suffix_array and suffix_binary_search\n\n\nUse all three to search the phiX174 genome for the recognition sites of restriction enzymes\n\n\n\n\n\n\n\n\nWatch for\n\n\nThe timing result might surprise you. Try to work out why before you read the explanation.\n\n\n\n\n20:00\nHand off to the notebook here. Remind them the first cell needs their name."
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#exercise",
-    "href": "slides/topic-05-string-search.html#exercise",
-    "title": "Finding sequences",
-    "section": "Exercise",
-    "text": "Exercise\n\nLog into molab\nOpen the exercise in molab\nClick “Fork” button"
-  },
-  {
-    "objectID": "slides/topic-05-string-search.html#acknowledgements",
-    "href": "slides/topic-05-string-search.html#acknowledgements",
-    "title": "Finding sequences",
-    "section": "Acknowledgements",
-    "text": "Acknowledgements\nI used Anthropic’s Claude (Opus 5 model) to generate a draft of these slides."
-  },
-  {
-    "objectID": "slides/topic-02.html#todays-objectives",
-    "href": "slides/topic-02.html#todays-objectives",
-    "title": "Intro to Comp Bio",
+    "objectID": "slides/topic-03.html#todays-objectives",
+    "href": "slides/topic-03.html#todays-objectives",
+    "title": "Why Computation?",
     "section": "Today’s objectives",
-    "text": "Today’s objectives\n\nLinux ThinLinc: Log in and set up\nIntro to the command line shell (Bash)\nExercise 2"
+    "text": "Today’s objectives\n\nWhy computational biology?\nIntro to Python & marimo notebooks\nExercise 4\n\nLearning Python and notebooks"
   },
   {
-    "objectID": "slides/topic-02.html#about-these-slides",
-    "href": "slides/topic-02.html#about-these-slides",
-    "title": "Intro to Comp Bio",
-    "section": "About these slides",
-    "text": "About these slides\nI will use a “Bash command line” heading for lines we type at the command prompt\n\n\nBash command line\n\necho \"Hello World!\"\n\nI will use a “Bash script” heading for lines we type in a file\n\n\nBash script\n\necho \"Hello World!\""
+    "objectID": "slides/topic-03.html#origins-of-comp-bio",
+    "href": "slides/topic-03.html#origins-of-comp-bio",
+    "title": "Why Computation?",
+    "section": "Origins of Comp Bio",
+    "text": "Origins of Comp Bio\n\n\n\n\n1952: Fred Sanger sequenced first protein (insulin)\nMargaret Dayhoff & colleagues stored protein sequences in the Protein Information Resource (1960s & 70s)\n1960s: Dayhoff & others use computers to infer phylogenies\n\n\n\n\n\n\n\nMargaret Dayhoff\n\n\n\n\n\n\n\nMcLaughlin & Dayhoff 19731\n\n\n\n\nMcLaughlin and Dayhoff (1973)"
   },
   {
-    "objectID": "slides/topic-02.html#getting-help-with-a-command",
-    "href": "slides/topic-02.html#getting-help-with-a-command",
-    "title": "Intro to Comp Bio",
-    "section": "Getting help with a command",
-    "text": "Getting help with a command\n\n\nBash command line\n\nman echo\n\n\n\nThis shows the manual for the echo command\n\n\n\nNavigate with arrow keys (or ‘j’/‘k’)\n\n\nPress ‘q’ to exit the manual\n\n\n\nNote, man is the command (program) and echo is an argument"
+    "objectID": "slides/topic-03.html#biology-became-a-data-science",
+    "href": "slides/topic-03.html#biology-became-a-data-science",
+    "title": "Why Computation?",
+    "section": "Biology became a data science",
+    "text": "Biology became a data science\n\nOne human genome: ~3.1 billion base pairs\nOne NovaSeq run: tens of billions of reads\nGenBank, SRA, UniProt, PDB: petabytes, doubling every couple of years\nSequencing costs have fallen faster than computing has gotten cheaper\n\n\n\n\n\nThe bottleneck in modern biology is rarely generating data. It is deciding what to do with it.\n\n\n\n\nAsk: how long would it take to read 3 billion characters at 200 words/min? Roughly 100+ years without sleeping. This is not a “work harder” problem."
   },
   {
-    "objectID": "slides/topic-02.html#macos-users",
-    "href": "slides/topic-02.html#macos-users",
-    "title": "Intro to Comp Bio",
-    "section": "macOS users",
-    "text": "macOS users\nYou have a Terminal app already\n\nOpen Spotlight, type “Terminal”, and press Return\nThe default shell is Zsh (not Bash), but it is very similar\n\nI recommend installing Xcode command line tools\n\nOpen terminal and use this command:\n\n\nZsh command line\n\nxcode-select --install"
+    "objectID": "slides/topic-03.html#the-takeaway",
+    "href": "slides/topic-03.html#the-takeaway",
+    "title": "Why Computation?",
+    "section": "The takeaway",
+    "text": "The takeaway\n\nA biological question becomes a computational question when we have to specify exactly how to get from data to answer."
   },
   {
-    "objectID": "slides/topic-02.html#windows-users",
-    "href": "slides/topic-02.html#windows-users",
-    "title": "Intro to Comp Bio",
-    "section": "Windows users",
-    "text": "Windows users\nYou can install Linux via the Windows Subsystem for Linux (WSL)\nI recommend you use the default Linux distribution (Ubuntu)\nRunning WSL will be very similar to Red Hat (ThinLinc)"
+    "objectID": "slides/topic-03.html#comp-bio-is-also-a-mindset",
+    "href": "slides/topic-03.html#comp-bio-is-also-a-mindset",
+    "title": "Why Computation?",
+    "section": "Comp Bio is also a mindset",
+    "text": "Comp Bio is also a mindset"
   },
   {
-    "objectID": "slides/topic-02.html#support",
-    "href": "slides/topic-02.html#support",
-    "title": "Intro to Comp Bio",
-    "section": "Support",
-    "text": "Support\nThis work was made possible by funding provided to Jamie Oaks from the National Science Foundation (DEB 1656004)."
+    "objectID": "slides/topic-03.html#what-is-python",
+    "href": "slides/topic-03.html#what-is-python",
+    "title": "Why Computation?",
+    "section": "What is Python?",
+    "text": "What is Python?\nIt’s a programming language that is\n\n\nInterpreted\n\n\nLargely procedural, but flexible\n\n\nTerse and clear\n\n\n\n“Pseudocode that works”\n\n\n\nComes with standard libraries for interacting with the OS\n\n\nDiverse, stable libraries for work across many domains\n\n\nIndustry standard in many fields: Machine learning, data science"
+  },
+  {
+    "objectID": "slides/topic-03.html#what-is-a-python-notebook",
+    "href": "slides/topic-03.html#what-is-a-python-notebook",
+    "title": "Why Computation?",
+    "section": "What is a Python notebook?",
+    "text": "What is a Python notebook?\n\nAn interactive web-based document that allows you to combine runnable Python code, formatted text, and visualizations in one place.\nComposed of modular building blocks called “cells”\n\nInstead of running a whole script of Python code, snippets of code in each cell run individually"
+  },
+  {
+    "objectID": "slides/topic-03.html#types-of-cells",
+    "href": "slides/topic-03.html#types-of-cells",
+    "title": "Why Computation?",
+    "section": "Types of cells",
+    "text": "Types of cells\n\nCode (Python) cells\n\nSnippets of Python code that run individually; output of code appears underneath the cell\n\nMarkdown cells:\n\nFormatted text and images created using Markdown syntax; used to explain/document the code"
+  },
+  {
+    "objectID": "slides/topic-03.html#what-is-marimo",
+    "href": "slides/topic-03.html#what-is-marimo",
+    "title": "Why Computation?",
+    "section": "What is marimo?",
+    "text": "What is marimo?\n\nOne type of Python notebook\nJupyter is another type that is more popular\n\n\nSo, why marimo?"
+  },
+  {
+    "objectID": "slides/topic-03.html#why-marimo",
+    "href": "slides/topic-03.html#why-marimo",
+    "title": "Why Computation?",
+    "section": "Why marimo?",
+    "text": "Why marimo?\nIMHO, marimo solved two big problems with other types of notebooks:\n\nResults can vary depending on the order cells are run\n\nmarimo solves this by being “reactive”\n\nThe plain text files of other notebooks are illegible (nested in JSON syntax)\n\nmarimo is pure Python"
+  },
+  {
+    "objectID": "slides/topic-03.html#what-is-molab",
+    "href": "slides/topic-03.html#what-is-molab",
+    "title": "Why Computation?",
+    "section": "What is molab?",
+    "text": "What is molab?\n\nA free, cloud-hosted workspace for running marimo Python notebooks\nThe name is a play on Google colab, a popular service for Jypyter notebooks\nIt will be our primary means of practicing comp bio"
+  },
+  {
+    "objectID": "slides/topic-03.html#ten-simple-rules",
+    "href": "slides/topic-03.html#ten-simple-rules",
+    "title": "Why Computation?",
+    "section": "Ten simple rules",
+    "text": "Ten simple rules\nFor biologists learning to program1\n\nBegin with the end in mind\nBaby steps are steps\nImmersion is the best learning tool\nPhone a friend\nLearn how to ask questions\n\nCarey and Papin (2018)"
+  },
+  {
+    "objectID": "slides/topic-03.html#ten-simple-rules-1",
+    "href": "slides/topic-03.html#ten-simple-rules-1",
+    "title": "Why Computation?",
+    "section": "Ten simple rules",
+    "text": "Ten simple rules\nFor biologists learning to program1\n\nDon’t reinvent the wheel\nDevelop good habits early on\nPractice makes perfect\nTeach yourself\nJust do it\n\nCarey and Papin (2018)"
+  },
+  {
+    "objectID": "slides/topic-03.html#intro-to-python-marimo",
+    "href": "slides/topic-03.html#intro-to-python-marimo",
+    "title": "Why Computation?",
+    "section": "Intro to Python & marimo",
+    "text": "Intro to Python & marimo\nWe are transitioning to marimo Python notebooks in molab as our primary environment for learning comp bio\n\nThe class website (aub.ie/icb) has instructions for Python notebook exercises:\n\n\n\nGo to molab and make sure you’re logged in\nClick the notebook link on the class website\nClick the “Fork” button"
+  },
+  {
+    "objectID": "slides/topic-03.html#references",
+    "href": "slides/topic-03.html#references",
+    "title": "Why Computation?",
+    "section": "",
+    "text": "Carey, Maureen A., and Jason A. Papin. 2018. “Ten Simple Rules for Biologists Learning to Program.” PLOS Computational Biology 14 (1): 1–11. https://doi.org/10.1371/journal.pcbi.1005871.\n\n\nMcLaughlin, P. J., and M. O. Dayhoff. 1973. “Eukaryote Evolution: A View Based on Cytochrome c Sequence Data.” Journal of Molecular Evolution 2 (2): 99–116. https://doi.org/10.1007/BF01653990."
   },
   {
     "objectID": "slides/topic-04-algos-intro.html#todays-objectives",
