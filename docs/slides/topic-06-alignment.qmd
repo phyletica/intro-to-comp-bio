@@ -1,0 +1,1073 @@
+---
+title: "Aligning sequences"
+subtitle: "Finding homology when the sequence has changed"
+# author: "Jamie Oaks"
+institute: "BIOL 5/6800 &mdash; Intro to Comp Bio"
+format:
+  revealjs:
+    slide-number: c/t
+    incremental: false
+    code-line-numbers: false
+    smaller: false
+    center-title-slide: true
+    history: false
+metadata-files:
+  - _metadata.yml
+bibliography: ../references.bib
+---
+
+## Last time
+
+We searched a genome for a **exact** matches to sequences of interest.
+
+. . .
+
+::: {style="font-size: 220%;"}
+```{.my-blue-code}
+CGATGCATGC
+  ATG  <- match!
+```
+:::
+
+. . .
+
+Every method we built &mdash; linear search, $k$-mer dictionary, suffix array &mdash;
+depends on an **exact** character-for-character match.
+
+::: {.notes}
+0:00-1:00
+
+Anchor them in last week before pulling the rug. Everything in the string
+search lecture assumed the pattern is present verbatim.
+:::
+
+## But sequences evolve
+
+Two copies of the same gene in two individuals or species are often not identical
+
+. . .
+
+::: {style="font-size: 220%;"}
+```{.my-blue-code}
+ACGTCA
+ACTGA
+```
+:::
+
+. . .
+
+Are these related? Which positions correspond to which?
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+The moment evolution edits a sequence, exact matching stops working.
+:::
+
+::: {.notes}
+1:00-2:00
+
+Let them stare at the two short sequences for a few seconds. Someone will
+eyeball a correspondence. That eyeballing is the algorithm we are about to
+formalize.
+:::
+
+# Why align sequences? {background-color="#1b3a5c"}
+
+## Homology
+
+::: {.callout-tip appearance="simple"}
+Two sequences are **homologous** if they are descended from a common ancestral
+sequence.
+:::
+
+. . .
+
+This is a statement about **history**, not about similarity.
+
+
+::: {.incremental}
+-   Homology is not a matter of degree
+    -   There is no such thing as "80% homologous"
+-   Two sequences either share ancestry or not
+-   **Similarity** is the evidence. **Homology** is the hypothesis
+:::
+
+::: {.notes}
+2:00-3:30
+
+The "80% homologous" error is everywhere in the literature and in seminars.
+Emphasize: percent identity is a measurement, homology is a claim about
+history.
+:::
+
+## An alignment is a hypothesis
+
+Aligning two sequences means proposing, **for every column**, which nucleotide
+residues descend from the same ancestral residue.
+
+. . .
+
+::: {style="font-size: 220%;"}
+```{.my-blue-code}
+A C G T C A
+A C - T G A
+```
+:::
+
+::: {.incremental style="font-size: 80%;"}
+-   Columns 1, 2, 4, 6: Homologous positions, unchanged
+-   Column 5: Homologous position, a **substitution** happened
+-   Column 3: An **insertion** or **deletion** happened in one lineage
+:::
+
+. . .
+
+***An alignment is a hypothesis about a series of evolutionary events***
+
+::: {.notes}
+3:30-5:00
+
+The gap is not "missing data" -- it is an asserted indel event.
+:::
+
+## What is an "indel"?
+
+. . .
+
+::: {style="font-size: 220%;"}
+```{.my-blue-code}
+A C G T C A
+A C - T G A
+```
+:::
+
+-   Column 3: An **insertion** or **deletion** happened in one lineage
+
+. . .
+
+We don't know if `G` was inserted in the top sequence or deleted from the
+bottom sequence.
+
+. . .
+
+So, we call it an **indel**
+
+
+## Why we need alignments
+
+::: {.incremental}
+1.  **Evolutionary inference**. We cannot learn about evolutionary history
+    without assuming which positions correspond.
+    Every molecular evolutionary analysis starts from an alignment!
+
+2.  **Locating a sequence**. *E.g.*, where in the genome did this read come from?
+    Exact search fails on sequencing errors and biological variation.
+
+3. **Transferring knowledge**. A new gene of unknown function is compared to
+   genes of known function. The inference is, *similar sequence, shared
+   ancestry, probably shared function*.
+:::
+
+::: {.notes}
+5:00-6:30
+
+Point 1 is the one to linger on: alignment is upstream of essentially all of
+comparative biology, and its errors propagate into everything downstream.
+Point 3 is what BLAST is for, and they have heard of BLAST.
+:::
+
+# Three choices to make when aligning {background-color="#1b3a5c"}
+
+## Choice 1: How many sequences?
+
+::: {.columns}
+::: {.column width="50%"}
+### Pairwise
+
+Two sequences at a time.
+
+::: {style="font-size: 150%;"}
+```{.my-blue-code}
+ACGTCA
+AC-TGA
+```
+:::
+
+Tractable and exactly solvable.
+:::
+
+::: {.column width="50%"}
+### Multiple
+
+Many sequences at once.
+
+::: {style="font-size: 150%;"}
+```{.my-blue-code}
+ACGTCA
+AC-TGA
+ACGT-A
+AGGTCA
+```
+:::
+
+What we often want for analysis,
+but requires heuristics 
+:::
+:::
+
+. . .
+
+::: {style="font-size: 80%;"}
+Exact multiple alignment of $N$ sequences means filling an
+$N$-dimensional table.
+This is infeasible beyond a handful of sequences.
+:::
+
+::: {.notes}
+6:30-8:00
+
+The dimensionality point matters: pairwise is a 2D table, three sequences is a
+cube, N sequences is an N-dimensional hypercube. Nobody fills a 50-dimensional
+table. Hence every MSA tool you have used is a heuristic.
+:::
+
+## Choice 2: How much of each sequence?
+
+::: {.columns}
+::: {.column width="50%"}
+### Global
+
+Align the sequences **end to end**.
+
+Assumes homology runs the full length of both.
+:::
+
+::: {.column width="50%"}
+### Local
+
+Find the **best-matching region** and ignore the rest.
+
+Assumes homology is confined to a subsequence.
+:::
+:::
+
+. . .
+
+This is a **biological** assumption, not a technical preference.
+
+. . .
+
+*E.g.*, Aligning two homologs of the same short gene? Use global.
+
+. . .
+
+*E.g.*, Aligning a conserved domain in two otherwise unrelated proteins? Use local.
+
+::: {.notes}
+8:00-9:30
+
+Frame this as "what do you believe about these sequences before you start?"
+The algorithm cannot tell you; you tell the algorithm. This is the main axis
+for the rest of the lecture.
+:::
+
+## Choice 3: Optimal or approximate?
+
+::: {.incremental}
+-   **Optimal**: Guaranteed to find the highest-scoring alignment under your
+    scoring scheme
+-   **Approximate**: Fast, usually accurate, but no optimality guarantee
+:::
+
+. . .
+
+Recall from our algorithms lecture: BLAST^[@blast] is a **heuristic**.
+It finds exact $k$-mer seeds, then extends only around those.
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+BLAST can miss an optimal alignment. It is used billions of times a year
+because an approximate answer today is better than an exact answer in 9 years.
+:::
+
+::: {.notes}
+9:30-10:30
+
+Direct callback to the algorithm-strategies lecture and to the k-mer indexing
+from last week -- BLAST's seeds are exactly the k-mer dictionary they built.
+:::
+
+## Today, we will focus on
+
+::: {.incremental}
+- **Pairwise**, not multiple
+- **Optimal**, not approximate
+- **Global** (Needleman-Wunsch) and **local** (Smith-Waterman)
+:::
+
+. . .
+
+Both are **dynamic programming** algorithms, the strategy we used to compute
+Fibonacci numbers
+
+-   Solve each subproblem once, store the answer, and reuse it
+
+::: {.notes}
+10:30-11:00
+
+Quick roadmap slide. Remind them fib_fast was DP and it turned a minute into
+an instant.
+:::
+
+# Scoring alignments {background-color="#1b3a5c"}
+
+## Which alignment is better?
+
+::: {.columns}
+::: {.column width="50%"}
+::: {style="font-size: 150%;"}
+```{.my-blue-code}
+A C G T C A
+A C - T G A
+```
+:::
+:::
+
+::: {.column width="50%"}
+::: {style="font-size: 150%;"}
+```{.my-blue-code}
+A C G T C A
+A C T G A -
+```
+:::
+:::
+:::
+
+. . .
+
+Both are valid hypotheses. We need a way to choose.
+
+. . .
+
+::: {.callout-tip appearance="simple"}
+An **objective function**: a rule that assigns a score to any alignment, so
+"best" means something specific.
+:::
+
+::: {.notes}
+11:00-12:00
+
+Ask the room which one looks better before revealing anything. Most will pick
+the left. Then the question becomes: on what basis? That is the scoring scheme.
+:::
+
+## A simple scoring scheme
+
+Score each column independently, then add them up:
+
+::: {style="font-size: 90%;"}
+| Column | Score |
+|:--|--:|
+| Match | $+1$ |
+| Mismatch | $-1$ |
+| Gap | $-2$ |
+:::
+
+. . .
+
+::: {.columns}
+::: {.column width="49%"}
+::: {style="font-size: 150%;"}
+```{.my-blue-code}
+A  C  G  T  C  A
+A  C  -  T  G  A
++1 +1 -2 +1 -1 +1 = 1
+```
+:::
+:::
+
+::: {.column width="49%"}
+::: {style="font-size: 150%;"}
+```{.my-blue-code}
+A  C  G  T  C  A
+A  C  T  G  A  -
++1 +1 -1 -1 -1 -2 = -3
+```
+:::
+:::
+:::
+
+. . .
+
+The left alignment wins, **under this scoring scheme**.
+
+::: {.notes}
+12:00-13:30
+
+Do the arithmetic out loud, column by column, for at least the first one. In
+the notebook their first job is to write exactly this function.
+:::
+
+## The scoring scheme is a model
+
+::: {.incremental}
+-   Gaps cost more than mismatches because indels tend to be rarer than
+    substitutions
+-   Changing the numbers can change the answer
+-   The "optimal" alignment is only optimal **with respect to your scoring
+    scheme**
+:::
+
+. . .
+
+::: {.callout-warning appearance="minimal"}
+The algorithm is guaranteed to find a best-scoring alignment. It is not
+guaranteed to find the historically correct one.
+:::
+
+::: {.notes}
+13:30-14:30
+
+This is the second point I really want them to keep. Optimality is relative to
+a model of evolution that you chose, usually by accepting a default. Tie back
+to "all models are wrong, some are useful" from day one if there is time.
+:::
+
+## Can we try all alignments?
+
+The number of possible global alignments of two sequences of length $n$:
+
+::: {style="font-size: 90%;"}
+| $n$ | Alignments |
+|--:|--:|
+| 5 | 1,683 |
+| 10 | $\approx 8 \times 10^{6}$ |
+| 100 | $> 10^{75}$ |
+:::
+
+. . .
+
+Exhaustive search becomes impossible quickly!
+
+. . .
+
+***We need to find the best alignment without looking at all of them***
+
+::: {.notes}
+14:30-15:30
+
+These are Delannoy numbers; no need to say so. The point is the same one from
+the exhaustive-tree-search slide: the candidate space explodes and a smarter
+strategy is the only way out.
+:::
+
+# Needleman-Wunsch {background-color="#1b3a5c"}
+
+## Their insight
+
+The best alignment of `ACGTCA` and `ACTGA` **ends** in one of three
+ways:
+
+::: {.incremental}
+- `A` aligned with `A` (match or mismatch)
+- `A` aligned with a gap
+- a gap aligned with `A`
+:::
+
+. . .
+
+Whichever it is, the rest of the alignment must itself be the best alignment of
+the two **shorter** sequences that remain.
+
+. . .
+
+***A larger problem made of smaller versions of itself, solved once and reused***
+
+::: {.notes}
+15:30-16:30
+
+This is the whole algorithm in one slide. If they get "the best alignment of
+the prefixes is part of the best alignment of the whole," the table is just
+bookkeeping.
+:::
+
+## The recurrence^[@NeedlemanWunsch]
+
+::: {style="font-size: 80%;"}
+$$
+F(i,j) = \max
+\begin{cases}
+F(i-1,\,j-1) + s(A_i, B_j) & \text{(match/mismatch)}\\
+F(i-1,\,j) + g & \text{(gap in Seq }B)\\
+F(i,\,j-1) + g & \text{(gap in Seq }A)
+\end{cases}
+$$
+:::
+
+. . .
+
+$F(i,j)$ is the score of the best alignment of the **first $i$ residues of Sequence $A$**
+with the **first $j$ residues of Sequence $B$**.
+
+. . .
+
+Every cell depends only on cells above and to the left, so we can fill the
+table in one pass.
+
+::: {.notes}
+16:30-17:30
+
+They have seen this exact equation in the algorithms lecture, so this is a
+reunion, not an introduction. Say what s() and g are: s is the scoring
+function they will write, g is the gap penalty.
+:::
+
+## Setting up the table
+
+$A$ = `ACGTCA` down the rows, $B$ = `ACTGA` across the columns.
+
+::: {style="font-size: 0.6em;"}
+| | **&ndash;** | **A** | **C** | **T** | **G** | **A** |
+|:--|--:|--:|--:|--:|--:|--:|
+| **&ndash;** | 0 | -2 | -4 | -6 | -8 | -10 |
+| **A** | -2 | | | | | |
+| **C** | -4 | | | | | |
+| **G** | -6 | | | | | |
+| **T** | -8 | | | | | |
+| **C** | -10 | | | | | |
+| **A** | -12 | | | | | |
+:::
+
+. . .
+
+Row 0 and column 0 are alignments against **nothing but gaps**, so they are
+just multiples of the gap penalty.
+
+::: {.notes}
+17:30-18:30
+
+Make sure they see why F(0,3) = -6: aligning zero residues of A against three
+residues of B requires three gaps. The extra row and column are the base case,
+the equivalent of fib_nums[0] and fib_nums[1].
+:::
+
+## Filling the first cell
+
+$F(1,1)$: best alignment of `A` with `A`
+
+::: {.columns}
+::: {.column width="30%"}
+::: {style="font-size: 50%;"}
+| | **&ndash;** | **A** | **C** | **T** | **G** | **A** |
+|:--|--:|--:|--:|--:|--:|--:|
+| **&ndash;** | [**0**]{style="color: #8B0000;"} | [**-2**]{style="color: #0057B8;"} | -4 | -6 | -8 | -10 |
+| **A** | [**-2**]{style="color: #007A73;"} | **?** | | | | |
+| **C** | -4 | | | | | |
+| **G** | -6 | | | | | |
+| **T** | -8 | | | | | |
+| **C** | -10 | | | | | |
+| **A** | -12 | | | | | |
+:::
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="55%"}
+::: {style="font-size: 60%;"}
+| From | Calculation | Score |
+|:--|:--|:--|
+| [**Diagonal**]{style="color: #8B0000;"} (`A` with `A`, match) | [**0**]{style="color: #8B0000;"} + 1 | **1** |
+| [**Up**]{style="color: #0057B8;"} (gap in $B$) | [**-2**]{style="color: #0057B8;"} + -2 | -4 |
+| [**Left**]{style="color: #007A73;"} (gap in $A$) | [**-2**]{style="color: #007A73;"} + -2 | -4 |
+:::
+:::
+:::
+
+. . .
+
+Take the maximum: $F(1,1) = 1$
+
+::: {.notes}
+18:30-19:30
+
+Emphasize the remembering. The score alone does not give you an alignment; the
+direction does. In the notebook they can either store directions or recompute
+them, and we will recompute.
+:::
+
+## Filling a cell where a gap winds
+
+$F(3,2)$: best alignment of `ACG` with `AC`
+
+::: {.columns}
+::: {.column width="30%"}
+::: {style="font-size: 50%;"}
+| | **&ndash;** | **A** | **C** | **T** | **G** | **A** |
+|:--|--:|--:|--:|--:|--:|--:|
+| **&ndash;** | 0 | -2 | -4 | | |  |
+| **A** | -2 | 1 | -1 | | | |
+| **C** | -4 | [**-1**]{style="color: #8B0000;"} | [**2**]{style="color: #0057B8;"} | | | |
+| **G** | -6 | [**-3**]{style="color: #007A73;"} | **?** | | | |
+| **T** |  |  |  |  |  |  |
+| **C** |  |  |  |  |  |  |
+| **A** |  |  |  |  |  |  |
+:::
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="55%"}
+::: {style="font-size: 60%;"}
+| From | Calculation | Score |
+|:--|:--|:--|
+| [**Diagonal**]{style="color: #8B0000;"} (`G` with `C`, mismatch) | [**-1**]{style="color: #8B0000;"} + -1 | -2 |
+| [**Up**]{style="color: #0057B8;"} (gap in $B$) | [**2**]{style="color: #0057B8;"} + -2 | **0** |
+| [**Left**]{style="color: #007A73;"} (gap in $A$) | [**-3**]{style="color: #007A73;"} + -2 | -5 |
+:::
+:::
+:::
+
+. . .
+
+$F(3,2) = 0$, from **above**: the `G` is aligned to a gap.
+
+. . .
+
+This one cell is where the indel in our final alignment gets decided.
+
+::: {.notes}
+19:30-20:30
+
+Worth slowing down here. The algorithm is not "finding" a gap; it is comparing
+three numbers. The biology comes out of the arithmetic, which is exactly why
+the scoring scheme matters so much.
+:::
+
+## The completed table
+
+::: {style="font-size: 0.6em;"}
+| | **&ndash;** | **A** | **C** | **T** | **G** | **A** |
+|:--|--:|--:|--:|--:|--:|--:|
+| **&ndash;** | 0 | -2 | -4 | -6 | -8 | -10 |
+| **A** | -2 | 1 | -1 | -3 | -5 | -7 |
+| **C** | -4 | -1 | 2 | 0 | -2 | -4 |
+| **G** | -6 | -3 | 0 | 1 | 1 | -1 |
+| **T** | -8 | -5 | -2 | 1 | 0 | 0 |
+| **C** | -10 | -7 | -4 | -1 | 0 | -1 |
+| **A** | -12 | -9 | -6 | -3 | -2 | **1** |
+:::
+
+. . .
+
+The bottom-right cell is the score of the best **global** alignment: **1**.
+
+. . .
+
+Every cell was computed from cells already filled. No cell was computed twice.
+
+::: {.notes}
+20:30-21:30
+
+30 cells, three comparisons each. Compare that to the 10^75 number from
+earlier. This is the payoff slide for dynamic programming.
+:::
+
+## The table is NOT an alignment
+
+::: {style="font-size: 0.6em;"}
+| | **&ndash;** | **A** | **C** | **T** | **G** | **A** |
+|:--|--:|--:|--:|--:|--:|--:|
+| **&ndash;** | 0 | -2 | -4 | -6 | -8 | -10 |
+| **A** | -2 | 1 | -1 | -3 | -5 | -7 |
+| **C** | -4 | -1 | 2 | 0 | -2 | -4 |
+| **G** | -6 | -3 | 0 | 1 | 1 | -1 |
+| **T** | -8 | -5 | -2 | 1 | 0 | 0 |
+| **C** | -10 | -7 | -4 | -1 | 0 | -1 |
+| **A** | -12 | -9 | -6 | -3 | -2 | **1** |
+:::
+
+. . .
+
+We know the best score (1), but we do not know
+the alignment that achieves it.
+
+## Traceback to get the alignment
+
+::: {.columns}
+::: {.column width="25%"}
+:::
+
+::: {.column width="40%"}
+::: {style="font-size: 55%;"}
+| | **&ndash;** | **A** | **C** | **T** | **G** | **A** |
+|:--|--:|--:|--:|--:|--:|--:|
+| **&ndash;** | [**0**]{style="color: #0057B8;"} | -2 | -4 | -6 | -8 | -10 |
+| **A** | -2 | [**1**]{style="color: #0057B8;"} | -1 | -3 | -5 | -7 |
+| **C** | -4 | -1 | [**2**]{style="color: #0057B8;"} | 0 | -2 | -4 |
+| **G** | -6 | -3 | [**0**]{style="color: #0057B8;"} | 1 | 1 | -1 |
+| **T** | -8 | -5 | -2 | [**1**]{style="color: #0057B8;"} | 0 | 0 |
+| **C** | -10 | -7 | -4 | -1 | [**0**]{style="color: #0057B8;"} | -1 |
+| **A** | -12 | -9 | -6 | -3 | -2 | [**1**]{style="color: #0057B8;"} |
+:::
+:::
+
+::: {.column width="25%"}
+:::
+:::
+
+. . .
+
+::: {style="font-size: 80%;"}
+Start at the bottom-right and walk backward, asking at each cell:
+**which of the three directions did the score come from?**
+:::
+
+. . .
+
+::: {style="font-size: 80%;"}
+-   A **diagonal** step consumes one nucleotide from each sequence.
+-   A **vertical** step consumes one from $A$ and adds a gap to $B$.
+-   A **horizontal** step consumes one from $B$ and adds a gap to $A$.
+:::
+
+::: {.notes}
+21:30-22:30
+
+Walk it backward on screen: (6,5) to (5,4) to (4,3) to (3,2) -- that is the
+vertical step, the gap -- then (2,2), (1,1), (0,0). The path they see is the
+alignment.
+:::
+
+## The (an) optimal alignment
+
+::: {style="font-size: 150%;"}
+```{.my-blue-code}
+Seq A: A  C  G  T  C  A
+Seq B: A  C  -  T  G  A
+Score: +1 +1 -2 +1 -1 +1 = 1
+```
+:::
+
+::: {.incremental}
+-   The score in the bottom-right corner of the scoring matrix and the score of
+    the alignment agree
+-   Ties are possible: Several different alignments can share the best score
+-   The algorithm returns one of them, which one depends on how you break ties
+:::
+
+::: {.notes}
+22:30-23:15
+
+The tie point is honest and important -- "the optimal alignment" is often "an
+optimal alignment." Tools differ in tie-breaking, which is one reason two
+aligners give different answers on the same data.
+:::
+
+## What did it cost? (Complexity)
+
+::: {.incremental}
+- **Time**: one pass over an $(n{+}1) \times (m{+}1)$ table, so $O(nm)$
+- **Memory**: the whole table, also $O(nm)$
+:::
+
+. . .
+
+Two 100,000-bp sequences: $10^{10}$ cells, about 40 GB at 4 bytes each.
+
+. . .
+
+Optimal alignment is doable for genes, but not genomes.
+
+. . .
+
+This is why read mappers index instead of aligning each read to the genome.
+
+::: {.notes}
+23:15-24:00
+
+Callback to the space-complexity slide from the algorithms lecture, which used
+this same 40 GB number. Mention Hirschberg's algorithm only if someone asks:
+O(n) memory for twice the time.
+:::
+
+# When global fails {background-color="#1b3a5c"}
+
+## Two sequences sharing one region
+
+::: {style="font-size: 220%;"}
+```{.my-blue-code}
+A = TTTTACGTCA
+B = ACGTCAGGGG
+```
+:::
+
+. . .
+
+They share `ACGTCA`, but it sits at opposite ends.
+
+. . .
+
+What does the Needleman-Wunsch algo do?
+
+::: {.notes}
+24:00-24:45
+
+Have them find the shared block by eye first. It takes about two seconds for a
+human, which makes the next slide land harder.
+:::
+
+## Needleman-Wunsch on these sequences
+
+::: {style="font-size: 150%;"}
+```{.my-blue-code}
+T T T T A C G T C A
+A C G T C A G G G G
+```
+:::
+
+. . .
+
+Score: $-6$. No gaps, and the shared region is missed!
+
+::: {.incremental}
+-   Lining up the two copies of `ACGTCA` would require eight gaps: $-16$, plus
+    $+6$ for the matches, so $-10$
+-   A bad global alignment at $-6$ beats the truth at $-10$
+:::
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+The algorithm did not fail. **We asked the wrong question!** We
+assumed homology runs the full length.
+:::
+
+::: {.notes}
+24:45-26:00
+
+This is the emotional center of the second half. The algorithm is behaving
+exactly as specified; the specification encoded a false biological assumption.
+Let them sit with the -6 versus -10 arithmetic.
+:::
+
+## Smith-Waterman^[@SmithWaterman] algorithm
+
+Three changes to Needleman-Wunsch:
+
+::: {.incremental}
+1.  **Add zero to the options.** Any cell that would go negative becomes 0.
+    A bad alignment is abandoned rather than carried forward.
+2.  **Start the traceback at the highest cell anywhere**, not the bottom-right
+    corner.
+3.  **Stop the traceback at a zero**, not at the top-left corner.
+:::
+
+
+::: {.notes}
+26:00-27:00
+
+Same table, same recurrence, one extra option and different rules about
+where to start and stop.
+:::
+
+## The local alignment table
+
+::: {style="font-size: 0.45em;"}
+| | **&ndash;** | **A** | **C** | **G** | **T** | **C** | **A** | **G** | **G** | **G** | **G** |
+|:--|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|
+| **&ndash;** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **T** | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **T** | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **T** | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **T** | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **A** | 0 | **1** | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
+| **C** | 0 | 0 | **2** | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| **G** | 0 | 0 | 0 | **3** | 1 | 0 | 0 | 1 | 1 | 1 | 1 |
+| **T** | 0 | 0 | 0 | 1 | **4** | 2 | 0 | 0 | 0 | 0 | 0 |
+| **C** | 0 | 0 | 1 | 0 | 2 | **5** | 3 | 1 | 0 | 0 | 0 |
+| **A** | 0 | 1 | 0 | 0 | 0 | 3 | **6** | 4 | 2 | 0 | 0 |
+:::
+
+::: {style="font-size: 70%;"}
+$$
+F(i,j) = \max
+\begin{cases}
+0 \\
+F(i-1,\,j-1) + s(A_i, B_j)\\
+F(i-1,\,j) + g\\
+F(i,\,j-1) + g
+\end{cases}
+$$
+:::
+
+. . .
+
+::: {style="font-size: 80%;"}
+Mostly zeros, with one diagonal ridge climbing to **6**.
+:::
+
+::: {.notes}
+27:00-27:45
+
+Point at the ridge. The zeros are the algorithm refusing to pay for the
+non-homologous flanks. Do not fill this table cell by cell -- they have
+already seen the mechanics.
+:::
+
+## The local answer
+
+::: {style="font-size: 150%;"}
+```
+A C G T C A
+A C G T C A
+```
+:::
+
+. . .
+
+Score **6**, positions 5&ndash;10 of $A$ against positions 1&ndash;6 of $B$.
+
+. . .
+
+::: {.columns}
+::: {.column width="50%"}
+**Use global when**
+
+You believe the sequences are homologous along their whole length
+:::
+
+::: {.column width="50%"}
+**Use local when**
+
+You believe homology is confined to a region, or the sequences differ a lot in
+length
+:::
+:::
+
+::: {.notes}
+27:45-28:30
+
+Read placement, domain finding, and every BLAST search you have ever run are
+local problems. Whole-gene ortholog comparison is global.
+:::
+
+# Our examples were simple, but generalizing is easy {background-color="#1b3a5c"}
+
+## Change the scoring, not the algorithm
+
+Nothing in either algorithm "knows" what a nucleotide is.
+
+. . .
+
+The only place nucleotides appear is $s(A_i, B_j)$.
+
+::: {.incremental}
+-   **Proteins**: Replace $+1/-1$ with a 20&times;20 matrix such as
+    BLOSUM62^[@blosum62], where a leucine/isoleucine substitution costs far
+    less than a leucine/aspartate substitution 
+-   **DNA, more nuanced**: *E.g.*, penalize transversions more than transitions
+-   **Same table, same traceback**
+:::
+
+::: {.notes}
+28:30-29:30
+
+This is the payoff for writing the scoring as a separate function in the
+notebook. Swapping the matrix turns a DNA aligner into a protein aligner
+without touching the DP code. Substitution matrices themselves are estimated
+from observed alignments -- one sentence, do not go down that road.
+:::
+
+## Two more refinements
+
+::: {.incremental}
+-   **Affine gaps**: A large cost to open a gap and small cost to extend it,
+    because one 10-base indel is far more likely than ten 1-base indels
+-   **Multiple alignment**: Exact is infeasible, so tools align the most
+    similar pair first and progressively add sequences
+    -   A greedy heuristic built on pairwise alignment
+:::
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+Every multiple sequence alignment tool is an approximation built upon the
+algorithm we just walked through.
+:::
+
+::: {.notes}
+29:30-30:15
+
+Affine gaps: mention "once and done" -- they will meet them again if they ever
+read an aligner's manual. Progressive alignment closes the loop with the
+greedy-strategy slide from the algorithms lecture.
+:::
+
+## Summary
+
+::: {style="font-size: 85%;"}
+::: {.incremental}
+-   An alignment is a **hypothesis of homology**, column by column
+-   A **scoring scheme** is a model of evolution that gives us an **optimality
+    criterion**
+-   **Dynamic programming** finds the optimal alignment without enumerating the
+    $10^{75}$ alternatives
+-   **Global** (Needleman&ndash;Wunsch) assumes end-to-end homology;
+    **Local** (Smith&ndash;Waterman) does not
+-   Optimal means optimal **under your assumptions**, not evolutionarily correct 
+:::
+:::
+
+::: {.notes}
+30:15-31:00
+
+If short on time, cut to the last two bullets.
+:::
+
+## In the exercise
+
+You will build a global aligner from scratch:
+
+::: {.incremental}
+1.  `score_alignment`: Score a pair of aligned sequences
+2.  `get_dotplot`: Visualize the homology before any aligning
+3.  `fill_scoring_matrix`: The Needleman-Wunsch table
+4.  `traceback_alignment`: Turn the table into an alignment
+:::
+
+. . .
+
+::: {.callout-tip}
+## Watch for
+The dotplot of the two sequences from the "when global fails" slide. You will
+be able to see why the global algorithm made the choice it did.
+:::
+
+::: {.notes}
+31:00-31:45
+
+Hand off to the notebook here. Remind them the first cell needs their name.
+:::
+
+## Exercise
+
+1.  Log into [molab](https://molab.marimo.io/)
+2.  [Open the exercise in molab](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-04-alignment/sequence_alignment.py)
+3.  Click "Fork" button
+
+
+# References
+
+---
+
+::: {#refs}
+:::
+
+## Acknowledgements
+
+I used Anthropic's Claude (Opus 5 model) to generate a draft of
+these slides.

@@ -16,3 +16,10 @@
 .reveal .slide.center h3 {
   text-align: center;
 }
+
+/* Target the block container and every highlighted token inside it */
+.my-blue-code, 
+.my-blue-code code, 
+.my-blue-code code span {
+  color: #1b3a5c !important; /* Replace with your preferred hex color */
+}
