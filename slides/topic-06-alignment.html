@@ -521,6 +521,10 @@ border-width: 3px;
 .reveal .slide.center h3 {
 text-align: center;
 }
+
+.my-blue-code, .my-blue-code code, .my-blue-code code span {
+color: #1b3a5c !important; 
+}
 </style>
   <style type="text/css">.reveal
 div.sourceCode
@@ -1031,10 +1035,12 @@ margin-right: 0; }
 </section>
 <section id="last-time" class="slide level2">
 <h2>Last time</h2>
-<p>We searched a genome for a sequence that was <strong>exactly</strong> there.</p>
+<p>We searched a genome for a <strong>exact</strong> matches to sequences of interest.</p>
 <div class="fragment">
-<pre><code>CGATGCATGC
-  ATG  &lt;- match</code></pre>
+<div style="font-size: 220%;">
+<pre class="my-blue-code"><code>CGATGCATGC
+  ATG  &lt;- match!</code></pre>
+</div>
 </div>
 <div class="fragment">
 <p>Every method we built — linear search, <span class="math inline">\(k\)</span>-mer dictionary, suffix array — depends on an <strong>exact</strong> character-for-character match.</p>
@@ -1054,12 +1060,12 @@ display:block!important;
 }</style></aside>
 </div>
 </section>
-<section id="but-sequences-change" class="slide level2">
-<h2>But sequences change</h2>
-<p>Two copies of the same gene in two species are not identical.</p>
+<section id="but-sequences-evolve" class="slide level2">
+<h2>But sequences evolve</h2>
+<p>Two copies of the same gene in two individuals or species are often not identical</p>
 <div class="fragment">
-<div style="font-size: 130%;">
-<pre><code>ACGTCA
+<div style="font-size: 220%;">
+<pre class="my-blue-code"><code>ACGTCA
 ACTGA</code></pre>
 </div>
 </div>
@@ -1091,8 +1097,8 @@ display:block!important;
 </div>
 </section>
 <section>
-<section id="why-align" class="title-slide slide level1 center" data-background-color="#1b3a5c">
-<h1>Why align?</h1>
+<section id="why-align-sequences" class="title-slide slide level1 center" data-background-color="#1b3a5c">
+<h1>Why align sequences?</h1>
 
 </section>
 <section id="homology" class="slide level2">
@@ -1109,19 +1115,17 @@ display:block!important;
 </div>
 <div class="fragment">
 <p>This is a statement about <strong>history</strong>, not about similarity.</p>
-</div>
-<div class="fragment">
 <ul>
 <li class="fragment">Homology is not a matter of degree
 <ul>
 <li class="fragment">There is no such thing as “80% homologous”</li>
 </ul></li>
-<li class="fragment">Two sequences either share ancestry or they do not</li>
-<li class="fragment"><strong>Similarity</strong> is the evidence; <strong>homology</strong> is the hypothesis</li>
+<li class="fragment">Two sequences either share ancestry or not</li>
+<li class="fragment"><strong>Similarity</strong> is the evidence. <strong>Homology</strong> is the hypothesis</li>
 </ul>
 <aside class="notes">
 <p>2:00-3:30</p>
-<p>This is the slide I care most about. The “80% homologous” error is everywhere in the literature and in seminars. Say out loud: percent identity is a measurement, homology is a claim about history.</p>
+<p>The “80% homologous” error is everywhere in the literature and in seminars. Emphasize: percent identity is a measurement, homology is a claim about history.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -1137,25 +1141,25 @@ display:block!important;
 </section>
 <section id="an-alignment-is-a-hypothesis" class="slide level2">
 <h2>An alignment is a hypothesis</h2>
-<p>Aligning two sequences means proposing, <strong>for every column</strong>, which residues descend from the same ancestral residue.</p>
+<p>Aligning two sequences means proposing, <strong>for every column</strong>, which nucleotide residues descend from the same ancestral residue.</p>
 <div class="fragment">
-<div style="font-size: 130%;">
-<pre><code>A C G T C A
+<div style="font-size: 220%;">
+<pre class="my-blue-code"><code>A C G T C A
 A C - T G A</code></pre>
 </div>
-</div>
-<div class="fragment">
+<div style="font-size: 80%;">
 <ul>
-<li class="fragment">Columns 1, 2, 4, 6: homologous positions, unchanged</li>
-<li class="fragment">Column 5: homologous position, a <strong>substitution</strong> happened</li>
-<li class="fragment">Column 3: an <strong>insertion</strong> or <strong>deletion</strong> happened in one lineage</li>
+<li class="fragment">Columns 1, 2, 4, 6: Homologous positions, unchanged</li>
+<li class="fragment">Column 5: Homologous position, a <strong>substitution</strong> happened</li>
+<li class="fragment">Column 3: An <strong>insertion</strong> or <strong>deletion</strong> happened in one lineage</li>
 </ul>
 </div>
+</div>
 <div class="fragment">
-<p><strong><em>Every alignment is a hypothesis about a series of evolutionary events</em></strong></p>
+<p><strong><em>An alignment is a hypothesis about a series of evolutionary events</em></strong></p>
 <aside class="notes">
 <p>3:30-5:00</p>
-<p>The gap is not “missing data” – it is an asserted indel event. Worth noting that from a pairwise alignment alone you cannot tell insertion from deletion; you need an outgroup. They will see this again in the phylogenetics weeks.</p>
+<p>The gap is not “missing data” – it is an asserted indel event.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -1169,12 +1173,30 @@ display:block!important;
 }</style></aside>
 </div>
 </section>
+<section id="what-is-an-indel" class="slide level2">
+<h2>What is an “indel”?</h2>
+<div class="fragment">
+<div style="font-size: 220%;">
+<pre class="my-blue-code"><code>A C G T C A
+A C - T G A</code></pre>
+</div>
+<ul>
+<li>Column 3: An <strong>insertion</strong> or <strong>deletion</strong> happened in one lineage</li>
+</ul>
+</div>
+<div class="fragment">
+<p>We don’t know if <code>G</code> was inserted in the top sequence or deleted from the bottom sequence.</p>
+</div>
+<div class="fragment">
+<p>So, we call it an <strong>indel</strong></p>
+</div>
+</section>
 <section id="why-we-need-alignments" class="slide level2 scrollable">
 <h2>Why we need alignments</h2>
 <ol type="1">
-<li class="fragment"><p><strong>Evolutionary inference.</strong> Counting substitutions between sequences is only meaningful once you know which positions correspond. Every tree you will ever estimate starts from an alignment.</p></li>
-<li class="fragment"><p><strong>Locating a sequence.</strong> Where in the genome did this read come from? Exact search fails on sequencing error and real variation.</p></li>
-<li class="fragment"><p><strong>Transferring knowledge.</strong> A new gene of unknown function is compared to genes of known function. The inference is: <em>similar sequence, shared ancestry, probably shared function</em>.</p></li>
+<li class="fragment"><p><strong>Evolutionary inference</strong>. We cannot learn about evolutionary history without assuming which positions correspond. Every molecular evolutionary analysis starts from an alignment!</p></li>
+<li class="fragment"><p><strong>Locating a sequence</strong>. <em>E.g.</em>, where in the genome did this read come from? Exact search fails on sequencing errors and biological variation.</p></li>
+<li class="fragment"><p><strong>Transferring knowledge</strong>. A new gene of unknown function is compared to genes of known function. The inference is, <em>similar sequence, shared ancestry, probably shared function</em>.</p></li>
 </ol>
 <aside class="notes">
 <p>5:00-6:30</p>
@@ -1192,8 +1214,8 @@ display:block!important;
 }</style></aside>
 </section></section>
 <section>
-<section id="three-choices" class="title-slide slide level1 center" data-background-color="#1b3a5c">
-<h1>Three choices</h1>
+<section id="three-choices-to-make-when-aligning" class="title-slide slide level1 center" data-background-color="#1b3a5c">
+<h1>Three choices to make when aligning</h1>
 
 </section>
 <section id="choice-1-how-many-sequences" class="slide level2">
@@ -1202,20 +1224,26 @@ display:block!important;
 <div class="column" style="width:50%;">
 <h3 id="pairwise">Pairwise</h3>
 <p>Two sequences at a time.</p>
-<pre><code>ACGTCA
+<div style="font-size: 150%;">
+<pre class="my-blue-code"><code>ACGTCA
 AC-TGA</code></pre>
+</div>
 <p>Tractable and exactly solvable.</p>
 </div><div class="column" style="width:50%;">
 <h3 id="multiple">Multiple</h3>
 <p>Many sequences at once.</p>
-<pre><code>ACGTCA
+<div style="font-size: 150%;">
+<pre class="my-blue-code"><code>ACGTCA
 AC-TGA
 ACGT-A
 AGGTCA</code></pre>
-<p>What you actually need for a tree.</p>
+</div>
+<p>What we often want for analysis, but requires heuristics</p>
 </div></div>
 <div class="fragment">
+<div style="font-size: 80%;">
 <p>Exact multiple alignment of <span class="math inline">\(N\)</span> sequences means filling an <span class="math inline">\(N\)</span>-dimensional table. This is infeasible beyond a handful of sequences.</p>
+</div>
 <aside class="notes">
 <p>6:30-8:00</p>
 <p>The dimensionality point matters: pairwise is a 2D table, three sequences is a cube, N sequences is an N-dimensional hypercube. Nobody fills a 50-dimensional table. Hence every MSA tool you have used is a heuristic.</p>
@@ -1248,7 +1276,10 @@ display:block!important;
 <p>This is a <strong>biological</strong> assumption, not a technical preference.</p>
 </div>
 <div class="fragment">
-<p>Two orthologs of the same short gene? Global. A conserved domain buried in two otherwise unrelated proteins? Local.</p>
+<p><em>E.g.</em>, Aligning two homologs of the same short gene? Use global.</p>
+</div>
+<div class="fragment">
+<p><em>E.g.</em>, Aligning a conserved domain in two otherwise unrelated proteins? Use local.</p>
 <aside class="notes">
 <p>8:00-9:30</p>
 <p>Frame this as “what do you believe about these sequences before you start?” The algorithm cannot tell you; you tell the algorithm. This is the main axis for the rest of the lecture.</p>
@@ -1268,8 +1299,8 @@ display:block!important;
 <section id="choice-3-optimal-or-approximate" class="slide level2 scrollable">
 <h2>Choice 3: Optimal or approximate?</h2>
 <ul>
-<li class="fragment"><strong>Optimal</strong>: guaranteed to find the highest-scoring alignment under your scoring scheme</li>
-<li class="fragment"><strong>Approximate</strong>: fast, usually right, no guarantee</li>
+<li class="fragment"><strong>Optimal</strong>: Guaranteed to find the highest-scoring alignment under your scoring scheme</li>
+<li class="fragment"><strong>Approximate</strong>: Fast, usually accurate, but no optimality guarantee</li>
 </ul>
 <div class="fragment">
 <p>Recall from our algorithms lecture: BLAST<sup>1</sup> is a <strong>heuristic</strong>. It finds exact <span class="math inline">\(k\)</span>-mer seeds, then extends only around those.</p>
@@ -1278,7 +1309,7 @@ display:block!important;
 <div class="callout callout-note no-icon callout-style-simple">
 <div class="callout-body">
 <div class="callout-content">
-<p>BLAST can miss the optimal alignment. It is used billions of times a year because an approximate answer today beats an exact answer in nine years.</p>
+<p>BLAST can miss an optimal alignment. It is used billions of times a year because an approximate answer today is better than an exact answer in 9 years.</p>
 </div>
 </div>
 </div>
@@ -1298,15 +1329,18 @@ display:block!important;
 }</style></aside>
 </div>
 <aside><ol class="aside-footnotes"><li id="fn1"><p><span class="citation" data-cites="blast">Altschul et al. (<a href="#/references" role="doc-biblioref" onclick>1990</a>)</span></p></li></ol></aside></section>
-<section id="today" class="slide level2">
-<h2>Today</h2>
+<section id="today-we-will-focus-on" class="slide level2">
+<h2>Today, we will focus on</h2>
 <ul>
 <li class="fragment"><strong>Pairwise</strong>, not multiple</li>
 <li class="fragment"><strong>Optimal</strong>, not approximate</li>
-<li class="fragment"><strong>Global</strong> (Needleman–Wunsch) and <strong>local</strong> (Smith–Waterman)</li>
+<li class="fragment"><strong>Global</strong> (Needleman-Wunsch) and <strong>local</strong> (Smith-Waterman)</li>
 </ul>
 <div class="fragment">
-<p>Both are <strong>dynamic programming</strong>, the strategy we met when we computed Fibonacci numbers: solve each subproblem once, store the answer, reuse it.</p>
+<p>Both are <strong>dynamic programming</strong> algorithms, the strategy we used to compute Fibonacci numbers</p>
+<ul>
+<li>Solve each subproblem once, store the answer, and reuse it</li>
+</ul>
 <aside class="notes">
 <p>10:30-11:00</p>
 <p>Quick roadmap slide. Remind them fib_fast was DP and it turned a minute into an instant.</p>
@@ -1332,18 +1366,18 @@ display:block!important;
 <h2>Which alignment is better?</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div style="font-size: 120%;">
-<pre><code>A C G T C A
+<div style="font-size: 150%;">
+<pre class="my-blue-code"><code>A C G T C A
 A C - T G A</code></pre>
 </div>
 </div><div class="column" style="width:50%;">
-<div style="font-size: 120%;">
-<pre><code>A C G T C A
+<div style="font-size: 150%;">
+<pre class="my-blue-code"><code>A C G T C A
 A C T G A -</code></pre>
 </div>
 </div></div>
 <div class="fragment">
-<p>Both are valid hypotheses. We need a number that says which one we prefer.</p>
+<p>Both are valid hypotheses. We need a way to choose.</p>
 </div>
 <div class="fragment">
 <div class="callout callout-tip callout-style-simple">
@@ -1401,14 +1435,18 @@ display:block!important;
 </div>
 <div class="fragment">
 <div class="columns">
-<div class="column" style="width:50%;">
-<pre><code>A C G T C A
-A C - T G A
-+1+1-2+1-1+1  =  1</code></pre>
-</div><div class="column" style="width:50%;">
-<pre><code>A C G T C A
-A C T G A -
-+1+1-1-1-1-2  = -3</code></pre>
+<div class="column" style="width:49%;">
+<div style="font-size: 150%;">
+<pre class="my-blue-code"><code>A  C  G  T  C  A
+A  C  -  T  G  A
++1 +1 -2 +1 -1 +1 = 1</code></pre>
+</div>
+</div><div class="column" style="width:49%;">
+<div style="font-size: 150%;">
+<pre class="my-blue-code"><code>A  C  G  T  C  A
+A  C  T  G  A  -
++1 +1 -1 -1 -1 -2 = -3</code></pre>
+</div>
 </div></div>
 </div>
 <div class="fragment">
@@ -1432,15 +1470,15 @@ display:block!important;
 <section id="the-scoring-scheme-is-a-model" class="slide level2">
 <h2>The scoring scheme is a model</h2>
 <ul>
-<li class="fragment">Gaps cost more than mismatches because indels are rarer than substitutions</li>
-<li class="fragment">Change the numbers and you can change the answer</li>
+<li class="fragment">Gaps cost more than mismatches because indels tend to be rarer than substitutions</li>
+<li class="fragment">Changing the numbers can change the answer</li>
 <li class="fragment">The “optimal” alignment is only optimal <strong>with respect to your scoring scheme</strong></li>
 </ul>
 <div class="fragment">
 <div class="callout callout-warning no-icon callout-style-simple">
 <div class="callout-body">
 <div class="callout-content">
-<p>The algorithm is guaranteed to find the best-scoring alignment. It is not guaranteed to find the historically true one.</p>
+<p>The algorithm is guaranteed to find a best-scoring alignment. It is not guaranteed to find the historically correct one.</p>
 </div>
 </div>
 </div>
@@ -1460,8 +1498,8 @@ display:block!important;
 }</style></aside>
 </div>
 </section>
-<section id="why-not-just-try-them-all" class="slide level2">
-<h2>Why not just try them all?</h2>
+<section id="can-we-try-all-alignments" class="slide level2">
+<h2>Can we try all alignments?</h2>
 <p>The number of possible global alignments of two sequences of length <span class="math inline">\(n\)</span>:</p>
 <div style="font-size: 90%;">
 <table class="caption-top">
@@ -1488,7 +1526,7 @@ display:block!important;
 </table>
 </div>
 <div class="fragment">
-<p>Exhaustive search is off the table before the sequences are even interesting.</p>
+<p>Exhaustive search becomes impossible quickly!</p>
 </div>
 <div class="fragment">
 <p><strong><em>We need to find the best alignment without looking at all of them</em></strong></p>
@@ -1509,13 +1547,13 @@ display:block!important;
 </div>
 </section></section>
 <section>
-<section id="needlemanwunsch" class="title-slide slide level1 center" data-background-color="#1b3a5c">
-<h1>Needleman–Wunsch</h1>
+<section id="needleman-wunsch" class="title-slide slide level1 center" data-background-color="#1b3a5c">
+<h1>Needleman-Wunsch</h1>
 
 </section>
-<section id="the-insight" class="slide level2">
-<h2>The insight</h2>
-<p>The best alignment of <code>ACGTCA</code> and <code>ACTGA</code> <strong>ends</strong> in exactly one of three ways:</p>
+<section id="their-insight" class="slide level2">
+<h2>Their insight</h2>
+<p>The best alignment of <code>ACGTCA</code> and <code>ACTGA</code> <strong>ends</strong> in one of three ways:</p>
 <ul>
 <li class="fragment"><code>A</code> aligned with <code>A</code> (match or mismatch)</li>
 <li class="fragment"><code>A</code> aligned with a gap</li>
@@ -1525,7 +1563,7 @@ display:block!important;
 <p>Whichever it is, the rest of the alignment must itself be the best alignment of the two <strong>shorter</strong> sequences that remain.</p>
 </div>
 <div class="fragment">
-<p><strong><em>A big problem made of smaller versions of itself, solved once and reused</em></strong></p>
+<p><strong><em>A larger problem made of smaller versions of itself, solved once and reused</em></strong></p>
 <aside class="notes">
 <p>15:30-16:30</p>
 <p>This is the whole algorithm in one slide. If they get “the best alignment of the prefixes is part of the best alignment of the whole,” the table is just bookkeeping.</p>
@@ -1544,16 +1582,18 @@ display:block!important;
 </section>
 <section id="the-recurrence" class="slide level2 scrollable">
 <h2>The recurrence<sup>1</sup></h2>
+<div style="font-size: 80%;">
 <p><span class="math display">\[
 F(i,j) = \max
 \begin{cases}
 F(i-1,\,j-1) + s(A_i, B_j) &amp; \text{(match/mismatch)}\\
-F(i-1,\,j) + g &amp; \text{(gap in }B)\\
-F(i,\,j-1) + g &amp; \text{(gap in }A)
+F(i-1,\,j) + g &amp; \text{(gap in Seq }B)\\
+F(i,\,j-1) + g &amp; \text{(gap in Seq }A)
 \end{cases}
 \]</span></p>
+</div>
 <div class="fragment">
-<p><span class="math inline">\(F(i,j)\)</span> is the score of the best alignment of the <strong>first <span class="math inline">\(i\)</span> residues of <span class="math inline">\(A\)</span></strong> with the <strong>first <span class="math inline">\(j\)</span> residues of <span class="math inline">\(B\)</span></strong>.</p>
+<p><span class="math inline">\(F(i,j)\)</span> is the score of the best alignment of the <strong>first <span class="math inline">\(i\)</span> residues of Sequence <span class="math inline">\(A\)</span></strong> with the <strong>first <span class="math inline">\(j\)</span> residues of Sequence <span class="math inline">\(B\)</span></strong>.</p>
 </div>
 <div class="fragment">
 <p>Every cell depends only on cells above and to the left, so we can fill the table in one pass.</p>
@@ -1677,36 +1717,136 @@ display:block!important;
 <section id="filling-the-first-cell" class="slide level2">
 <h2>Filling the first cell</h2>
 <p><span class="math inline">\(F(1,1)\)</span>: best alignment of <code>A</code> with <code>A</code></p>
-<div style="font-size: 90%;">
-<table class="caption-top">
+<div class="columns">
+<div class="column" style="width:30%;">
+<div style="font-size: 50%;">
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">From</th>
-<th style="text-align: left;">Calculation</th>
-<th style="text-align: right;">Score</th>
+<th style="text-align: left;"></th>
+<th style="text-align: right;"><strong>–</strong></th>
+<th style="text-align: right;"><strong>A</strong></th>
+<th style="text-align: right;"><strong>C</strong></th>
+<th style="text-align: right;"><strong>T</strong></th>
+<th style="text-align: right;"><strong>G</strong></th>
+<th style="text-align: right;"><strong>A</strong></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Diagonal (<code>A</code> with <code>A</code>, match)</td>
-<td style="text-align: left;"><span class="math inline">\(0 + 1\)</span></td>
-<td style="text-align: right;"><strong>1</strong></td>
+<td style="text-align: left;"><strong>–</strong></td>
+<td style="text-align: right;"><span style="color: #8B0000;"><strong>0</strong></span></td>
+<td style="text-align: right;"><span style="color: #0057B8;"><strong>-2</strong></span></td>
+<td style="text-align: right;">-4</td>
+<td style="text-align: right;">-6</td>
+<td style="text-align: right;">-8</td>
+<td style="text-align: right;">-10</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Up (gap in <span class="math inline">\(B\)</span>)</td>
-<td style="text-align: left;"><span class="math inline">\(-2 + -2\)</span></td>
-<td style="text-align: right;"><span class="math inline">\(-4\)</span></td>
+<td style="text-align: left;"><strong>A</strong></td>
+<td style="text-align: right;"><span style="color: #007A73;"><strong>-2</strong></span></td>
+<td style="text-align: right;"><strong>?</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Left (gap in <span class="math inline">\(A\)</span>)</td>
-<td style="text-align: left;"><span class="math inline">\(-2 + -2\)</span></td>
-<td style="text-align: right;"><span class="math inline">\(-4\)</span></td>
+<td style="text-align: left;"><strong>C</strong></td>
+<td style="text-align: right;">-4</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>G</strong></td>
+<td style="text-align: right;">-6</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>T</strong></td>
+<td style="text-align: right;">-8</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>C</strong></td>
+<td style="text-align: right;">-10</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>A</strong></td>
+<td style="text-align: right;">-12</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
 </tr>
 </tbody>
 </table>
 </div>
+</div><div class="column" style="width:5%;">
+
+</div><div class="column" style="width:55%;">
+<div style="font-size: 60%;">
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">From</th>
+<th style="text-align: left;">Calculation</th>
+<th style="text-align: left;">Score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span style="color: #8B0000;"><strong>Diagonal</strong></span> (<code>A</code> with <code>A</code>, match)</td>
+<td style="text-align: left;"><span style="color: #8B0000;"><strong>0</strong></span> + 1</td>
+<td style="text-align: left;"><strong>1</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span style="color: #0057B8;"><strong>Up</strong></span> (gap in <span class="math inline">\(B\)</span>)</td>
+<td style="text-align: left;"><span style="color: #0057B8;"><strong>-2</strong></span> + -2</td>
+<td style="text-align: left;">-4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span style="color: #007A73;"><strong>Left</strong></span> (gap in <span class="math inline">\(A\)</span>)</td>
+<td style="text-align: left;"><span style="color: #007A73;"><strong>-2</strong></span> + -2</td>
+<td style="text-align: left;">-4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
 <div class="fragment">
-<p>Take the maximum: <span class="math inline">\(F(1,1) = 1\)</span>, and <strong>remember that it came from the diagonal</strong>.</p>
+<p>Take the maximum: <span class="math inline">\(F(1,1) = 1\)</span></p>
 <aside class="notes">
 <p>18:30-19:30</p>
 <p>Emphasize the remembering. The score alone does not give you an alignment; the direction does. In the notebook they can either store directions or recompute them, and we will recompute.</p>
@@ -1723,37 +1863,137 @@ display:block!important;
 }</style></aside>
 </div>
 </section>
-<section id="filling-a-cell-where-a-gap-wins" class="slide level2">
-<h2>Filling a cell where a gap wins</h2>
+<section id="filling-a-cell-where-a-gap-winds" class="slide level2">
+<h2>Filling a cell where a gap winds</h2>
 <p><span class="math inline">\(F(3,2)\)</span>: best alignment of <code>ACG</code> with <code>AC</code></p>
-<div style="font-size: 90%;">
-<table class="caption-top">
+<div class="columns">
+<div class="column" style="width:30%;">
+<div style="font-size: 50%;">
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">From</th>
-<th style="text-align: left;">Calculation</th>
-<th style="text-align: right;">Score</th>
+<th style="text-align: left;"></th>
+<th style="text-align: right;"><strong>–</strong></th>
+<th style="text-align: right;"><strong>A</strong></th>
+<th style="text-align: right;"><strong>C</strong></th>
+<th style="text-align: right;"><strong>T</strong></th>
+<th style="text-align: right;"><strong>G</strong></th>
+<th style="text-align: right;"><strong>A</strong></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Diagonal (<code>G</code> with <code>C</code>, mismatch)</td>
-<td style="text-align: left;"><span class="math inline">\(-1 + -1\)</span></td>
-<td style="text-align: right;"><span class="math inline">\(-2\)</span></td>
+<td style="text-align: left;"><strong>–</strong></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">-2</td>
+<td style="text-align: right;">-4</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Up (gap in <span class="math inline">\(B\)</span>)</td>
-<td style="text-align: left;"><span class="math inline">\(2 + -2\)</span></td>
-<td style="text-align: right;"><strong>0</strong></td>
+<td style="text-align: left;"><strong>A</strong></td>
+<td style="text-align: right;">-2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Left (gap in <span class="math inline">\(A\)</span>)</td>
-<td style="text-align: left;"><span class="math inline">\(-3 + -2\)</span></td>
-<td style="text-align: right;"><span class="math inline">\(-5\)</span></td>
+<td style="text-align: left;"><strong>C</strong></td>
+<td style="text-align: right;">-4</td>
+<td style="text-align: right;"><span style="color: #8B0000;"><strong>-1</strong></span></td>
+<td style="text-align: right;"><span style="color: #0057B8;"><strong>2</strong></span></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>G</strong></td>
+<td style="text-align: right;">-6</td>
+<td style="text-align: right;"><span style="color: #007A73;"><strong>-3</strong></span></td>
+<td style="text-align: right;"><strong>?</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>T</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>C</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>A</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
 </tr>
 </tbody>
 </table>
 </div>
+</div><div class="column" style="width:5%;">
+
+</div><div class="column" style="width:55%;">
+<div style="font-size: 60%;">
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">From</th>
+<th style="text-align: left;">Calculation</th>
+<th style="text-align: left;">Score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span style="color: #8B0000;"><strong>Diagonal</strong></span> (<code>G</code> with <code>C</code>, mismatch)</td>
+<td style="text-align: left;"><span style="color: #8B0000;"><strong>-1</strong></span> + -1</td>
+<td style="text-align: left;">-2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span style="color: #0057B8;"><strong>Up</strong></span> (gap in <span class="math inline">\(B\)</span>)</td>
+<td style="text-align: left;"><span style="color: #0057B8;"><strong>2</strong></span> + -2</td>
+<td style="text-align: left;"><strong>0</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span style="color: #007A73;"><strong>Left</strong></span> (gap in <span class="math inline">\(A\)</span>)</td>
+<td style="text-align: left;"><span style="color: #007A73;"><strong>-3</strong></span> + -2</td>
+<td style="text-align: left;">-5</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
 <div class="fragment">
 <p><span class="math inline">\(F(3,2) = 0\)</span>, from <strong>above</strong>: the <code>G</code> is aligned to a gap.</p>
 </div>
@@ -1878,9 +2118,8 @@ display:block!important;
 }</style></aside>
 </div>
 </section>
-<section id="traceback" class="slide level2">
-<h2>Traceback</h2>
-<p>Start at the bottom-right and walk backward, asking at each cell: <strong>which of the three did I come from?</strong></p>
+<section id="the-table-is-not-an-alignment" class="slide level2">
+<h2>The table is NOT an alignment</h2>
 <div style="font-size: 0.6em;">
 <table class="caption-top">
 <thead>
@@ -1897,7 +2136,7 @@ display:block!important;
 <tbody>
 <tr class="odd">
 <td style="text-align: left;"><strong>–</strong></td>
-<td style="text-align: right;"><strong>0</strong></td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">-2</td>
 <td style="text-align: right;">-4</td>
 <td style="text-align: right;">-6</td>
@@ -1907,7 +2146,7 @@ display:block!important;
 <tr class="even">
 <td style="text-align: left;"><strong>A</strong></td>
 <td style="text-align: right;">-2</td>
-<td style="text-align: right;"><strong>1</strong></td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">-1</td>
 <td style="text-align: right;">-3</td>
 <td style="text-align: right;">-5</td>
@@ -1917,7 +2156,7 @@ display:block!important;
 <td style="text-align: left;"><strong>C</strong></td>
 <td style="text-align: right;">-4</td>
 <td style="text-align: right;">-1</td>
-<td style="text-align: right;"><strong>2</strong></td>
+<td style="text-align: right;">2</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">-2</td>
 <td style="text-align: right;">-4</td>
@@ -1926,7 +2165,7 @@ display:block!important;
 <td style="text-align: left;"><strong>G</strong></td>
 <td style="text-align: right;">-6</td>
 <td style="text-align: right;">-3</td>
-<td style="text-align: right;"><strong>0</strong></td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">-1</td>
@@ -1936,7 +2175,7 @@ display:block!important;
 <td style="text-align: right;">-8</td>
 <td style="text-align: right;">-5</td>
 <td style="text-align: right;">-2</td>
-<td style="text-align: right;"><strong>1</strong></td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 </tr>
@@ -1946,7 +2185,7 @@ display:block!important;
 <td style="text-align: right;">-7</td>
 <td style="text-align: right;">-4</td>
 <td style="text-align: right;">-1</td>
-<td style="text-align: right;"><strong>0</strong></td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">-1</td>
 </tr>
 <tr class="odd">
@@ -1962,7 +2201,120 @@ display:block!important;
 </table>
 </div>
 <div class="fragment">
-<p>A <strong>diagonal</strong> step consumes one residue from each sequence. A <strong>vertical</strong> step consumes one from <span class="math inline">\(A\)</span> and adds a gap to <span class="math inline">\(B\)</span>.</p>
+<p>We know the best score (1), but we do not know the alignment that achieves it.</p>
+</div>
+</section>
+<section id="traceback-to-get-the-alignment" class="slide level2">
+<h2>Traceback to get the alignment</h2>
+<div class="columns">
+<div class="column" style="width:25%;">
+
+</div><div class="column" style="width:40%;">
+<div style="font-size: 55%;">
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;"><strong>–</strong></th>
+<th style="text-align: right;"><strong>A</strong></th>
+<th style="text-align: right;"><strong>C</strong></th>
+<th style="text-align: right;"><strong>T</strong></th>
+<th style="text-align: right;"><strong>G</strong></th>
+<th style="text-align: right;"><strong>A</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>–</strong></td>
+<td style="text-align: right;"><span style="color: #0057B8;"><strong>0</strong></span></td>
+<td style="text-align: right;">-2</td>
+<td style="text-align: right;">-4</td>
+<td style="text-align: right;">-6</td>
+<td style="text-align: right;">-8</td>
+<td style="text-align: right;">-10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>A</strong></td>
+<td style="text-align: right;">-2</td>
+<td style="text-align: right;"><span style="color: #0057B8;"><strong>1</strong></span></td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-3</td>
+<td style="text-align: right;">-5</td>
+<td style="text-align: right;">-7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>C</strong></td>
+<td style="text-align: right;">-4</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;"><span style="color: #0057B8;"><strong>2</strong></span></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">-2</td>
+<td style="text-align: right;">-4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>G</strong></td>
+<td style="text-align: right;">-6</td>
+<td style="text-align: right;">-3</td>
+<td style="text-align: right;"><span style="color: #0057B8;"><strong>0</strong></span></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>T</strong></td>
+<td style="text-align: right;">-8</td>
+<td style="text-align: right;">-5</td>
+<td style="text-align: right;">-2</td>
+<td style="text-align: right;"><span style="color: #0057B8;"><strong>1</strong></span></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>C</strong></td>
+<td style="text-align: right;">-10</td>
+<td style="text-align: right;">-7</td>
+<td style="text-align: right;">-4</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;"><span style="color: #0057B8;"><strong>0</strong></span></td>
+<td style="text-align: right;">-1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>A</strong></td>
+<td style="text-align: right;">-12</td>
+<td style="text-align: right;">-9</td>
+<td style="text-align: right;">-6</td>
+<td style="text-align: right;">-3</td>
+<td style="text-align: right;">-2</td>
+<td style="text-align: right;"><span style="color: #0057B8;"><strong>1</strong></span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><div class="column" style="width:25%;">
+
+</div></div>
+<div class="fragment">
+<div style="font-size: 80%;">
+<p>Start at the bottom-right and walk backward, asking at each cell: <strong>which of the three directions did the score come from?</strong></p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 80%;">
+<ul>
+<li>A <strong>diagonal</strong> step consumes one nucleotide from each sequence.</li>
+<li>A <strong>vertical</strong> step consumes one from <span class="math inline">\(A\)</span> and adds a gap to <span class="math inline">\(B\)</span>.</li>
+<li>A <strong>horizontal</strong> step consumes one from <span class="math inline">\(B\)</span> and adds a gap to <span class="math inline">\(A\)</span>.</li>
+</ul>
+</div>
 <aside class="notes">
 <p>21:30-22:30</p>
 <p>Walk it backward on screen: (6,5) to (5,4) to (4,3) to (3,2) – that is the vertical step, the gap – then (2,2), (1,1), (0,0). The path they see is the alignment.</p>
@@ -1979,20 +2331,17 @@ display:block!important;
 }</style></aside>
 </div>
 </section>
-<section id="the-answer" class="slide level2">
-<h2>The answer</h2>
+<section id="the-an-optimal-alignment" class="slide level2">
+<h2>The (an) optimal alignment</h2>
 <div style="font-size: 150%;">
-<pre><code>A C G T C A
-A C - T G A</code></pre>
+<pre class="my-blue-code"><code>Seq A: A  C  G  T  C  A
+Seq B: A  C  -  T  G  A
+Score: +1 +1 -2 +1 -1 +1 = 1</code></pre>
 </div>
-<div class="fragment">
-<p>Score: <span class="math inline">\(+1 +1 -2 +1 -1 +1 = 1\)</span></p>
-</div>
-<div class="fragment">
 <ul>
-<li class="fragment">The score in the corner and the score of the alignment agree</li>
-<li class="fragment">Ties are possible: several different alignments can share the best score</li>
-<li class="fragment">The algorithm returns one of them, and which one depends on how you break ties</li>
+<li class="fragment">The score in the bottom-right corner of the scoring matrix and the score of the alignment agree</li>
+<li class="fragment">Ties are possible: Several different alignments can share the best score</li>
+<li class="fragment">The algorithm returns one of them, which one depends on how you break ties</li>
 </ul>
 <aside class="notes">
 <p>22:30-23:15</p>
@@ -2008,10 +2357,9 @@ width: 1px!important;
 overflow: hidden!important;
 display:block!important;
 }</style></aside>
-</div>
 </section>
-<section id="what-did-it-cost" class="slide level2">
-<h2>What did it cost?</h2>
+<section id="what-did-it-cost-complexity" class="slide level2">
+<h2>What did it cost? (Complexity)</h2>
 <ul>
 <li class="fragment"><strong>Time</strong>: one pass over an <span class="math inline">\((n{+}1) \times (m{+}1)\)</span> table, so <span class="math inline">\(O(nm)\)</span></li>
 <li class="fragment"><strong>Memory</strong>: the whole table, also <span class="math inline">\(O(nm)\)</span></li>
@@ -2020,7 +2368,10 @@ display:block!important;
 <p>Two 100,000-bp sequences: <span class="math inline">\(10^{10}\)</span> cells, about 40 GB at 4 bytes each.</p>
 </div>
 <div class="fragment">
-<p>Optimal alignment is affordable for genes and hopeless for genomes. This is why read mappers index instead of aligning everything to everything.</p>
+<p>Optimal alignment is doable for genes, but not genomes.</p>
+</div>
+<div class="fragment">
+<p>This is why read mappers index instead of aligning each read to the genome.</p>
 <aside class="notes">
 <p>23:15-24:00</p>
 <p>Callback to the space-complexity slide from the algorithms lecture, which used this same 40 GB number. Mention Hirschberg’s algorithm only if someone asks: O(n) memory for twice the time.</p>
@@ -2044,15 +2395,15 @@ display:block!important;
 </section>
 <section id="two-sequences-sharing-one-region" class="slide level2">
 <h2>Two sequences sharing one region</h2>
-<div style="font-size: 120%;">
-<pre><code>A = TTTTACGTCA
+<div style="font-size: 220%;">
+<pre class="my-blue-code"><code>A = TTTTACGTCA
 B = ACGTCAGGGG</code></pre>
 </div>
 <div class="fragment">
 <p>They share <code>ACGTCA</code>, but it sits at opposite ends.</p>
 </div>
 <div class="fragment">
-<p>What does Needleman–Wunsch do?</p>
+<p>What does the Needleman-Wunsch algo do?</p>
 <aside class="notes">
 <p>24:00-24:45</p>
 <p>Have them find the shared block by eye first. It takes about two seconds for a human, which makes the next slide land harder.</p>
@@ -2069,26 +2420,24 @@ display:block!important;
 }</style></aside>
 </div>
 </section>
-<section id="needlemanwunsch-on-these-sequences" class="slide level2">
-<h2>Needleman–Wunsch on these sequences</h2>
-<div style="font-size: 130%;">
-<pre><code>T T T T A C G T C A
+<section id="needleman-wunsch-on-these-sequences" class="slide level2">
+<h2>Needleman-Wunsch on these sequences</h2>
+<div style="font-size: 150%;">
+<pre class="my-blue-code"><code>T T T T A C G T C A
 A C G T C A G G G G</code></pre>
 </div>
 <div class="fragment">
-<p>Score: <span class="math inline">\(-6\)</span>. Not a single gap, and the shared region is shredded.</p>
-</div>
-<div class="fragment">
+<p>Score: <span class="math inline">\(-6\)</span>. No gaps, and the shared region is missed!</p>
 <ul>
 <li class="fragment">Lining up the two copies of <code>ACGTCA</code> would require eight gaps: <span class="math inline">\(-16\)</span>, plus <span class="math inline">\(+6\)</span> for the matches, so <span class="math inline">\(-10\)</span></li>
-<li class="fragment">Garbage end-to-end at <span class="math inline">\(-6\)</span> beats truth at <span class="math inline">\(-10\)</span></li>
+<li class="fragment">A bad global alignment at <span class="math inline">\(-6\)</span> beats the truth at <span class="math inline">\(-10\)</span></li>
 </ul>
 </div>
 <div class="fragment">
 <div class="callout callout-important no-icon callout-style-simple">
 <div class="callout-body">
 <div class="callout-content">
-<p>The algorithm did not fail. <strong>We asked the wrong question.</strong> We told it to assume homology runs the full length.</p>
+<p>The algorithm did not fail. <strong>We asked the wrong question!</strong> We assumed homology runs the full length.</p>
 </div>
 </div>
 </div>
@@ -2108,27 +2457,17 @@ display:block!important;
 }</style></aside>
 </div>
 </section>
-<section id="smithwaterman" class="slide level2 scrollable">
-<h2>Smith–Waterman<sup>1</sup></h2>
-<p>Three changes to Needleman–Wunsch:</p>
+<section id="smith-waterman-algorithm" class="slide level2 scrollable">
+<h2>Smith-Waterman<sup>1</sup> algorithm</h2>
+<p>Three changes to Needleman-Wunsch:</p>
 <ol type="1">
-<li class="fragment"><strong>Add zero to the options.</strong> Any cell that would go negative becomes 0: a bad alignment is abandoned rather than carried forward.</li>
+<li class="fragment"><strong>Add zero to the options.</strong> Any cell that would go negative becomes 0. A bad alignment is abandoned rather than carried forward.</li>
 <li class="fragment"><strong>Start the traceback at the highest cell anywhere</strong>, not the bottom-right corner.</li>
 <li class="fragment"><strong>Stop the traceback at a zero</strong>, not at the top-left corner.</li>
 </ol>
-<div class="fragment">
-<p><span class="math display">\[
-F(i,j) = \max
-\begin{cases}
-0 \\
-F(i-1,\,j-1) + s(A_i, B_j)\\
-F(i-1,\,j) + g\\
-F(i,\,j-1) + g
-\end{cases}
-\]</span></p>
 <aside class="notes">
 <p>26:00-27:00</p>
-<p>Same table, same recurrence, one extra option and two different rules about where to start and stop. That is genuinely all it is.</p>
+<p>Same table, same recurrence, one extra option and different rules about where to start and stop.</p>
 <style type="text/css">
 span.MJX_Assistive_MathML {
 position:absolute!important;
@@ -2140,7 +2479,6 @@ width: 1px!important;
 overflow: hidden!important;
 display:block!important;
 }</style></aside>
-</div>
 <aside><ol class="aside-footnotes"><li id="fn3"><p><span class="citation" data-cites="SmithWaterman">Smith and Waterman (<a href="#/references" role="doc-biblioref" onclick>1981</a>)</span></p></li></ol></aside></section>
 <section id="the-local-alignment-table" class="slide level2">
 <h2>The local alignment table</h2>
@@ -2334,8 +2672,21 @@ display:block!important;
 </tbody>
 </table>
 </div>
+<div style="font-size: 70%;">
+<p><span class="math display">\[
+F(i,j) = \max
+\begin{cases}
+0 \\
+F(i-1,\,j-1) + s(A_i, B_j)\\
+F(i-1,\,j) + g\\
+F(i,\,j-1) + g
+\end{cases}
+\]</span></p>
+</div>
 <div class="fragment">
+<div style="font-size: 80%;">
 <p>Mostly zeros, with one diagonal ridge climbing to <strong>6</strong>.</p>
+</div>
 <aside class="notes">
 <p>27:00-27:45</p>
 <p>Point at the ridge. The zeros are the algorithm refusing to pay for the non-homologous flanks. Do not fill this table cell by cell – they have already seen the mechanics.</p>
@@ -2368,7 +2719,7 @@ A C G T C A</code></pre>
 <p>You believe the sequences are homologous along their whole length</p>
 </div><div class="column" style="width:50%;">
 <p><strong>Use local when</strong></p>
-<p>You believe homology is confined to a region, or the sequences differ wildly in length</p>
+<p>You believe homology is confined to a region, or the sequences differ a lot in length</p>
 </div></div>
 <aside class="notes">
 <p>27:45-28:30</p>
@@ -2387,21 +2738,19 @@ display:block!important;
 </div>
 </section></section>
 <section>
-<section id="generalizing" class="title-slide slide level1 center" data-background-color="#1b3a5c">
-<h1>Generalizing</h1>
+<section id="our-examples-were-simple-but-generalizing-is-easy" class="title-slide slide level1 center" data-background-color="#1b3a5c">
+<h1>Our examples were simple, but generalizing is easy</h1>
 
 </section>
-<section id="change-the-scoring-not-the-algorithm" class="slide level2">
+<section id="change-the-scoring-not-the-algorithm" class="slide level2 scrollable">
 <h2>Change the scoring, not the algorithm</h2>
-<p>Nothing in either algorithm knows what a nucleotide is.</p>
+<p>Nothing in either algorithm “knows” what a nucleotide is.</p>
 <div class="fragment">
-<p>The only place the alphabet appears is <span class="math inline">\(s(A_i, B_j)\)</span>.</p>
-</div>
-<div class="fragment">
+<p>The only place nucleotides appear is <span class="math inline">\(s(A_i, B_j)\)</span>.</p>
 <ul>
-<li class="fragment"><strong>Proteins</strong>: replace <span class="math inline">\(+1/-1\)</span> with a 20×20 matrix such as BLOSUM62, where a leucine/isoleucine swap costs far less than a leucine/aspartate swap</li>
-<li class="fragment"><strong>DNA, more carefully</strong>: penalize transversions more than transitions</li>
-<li class="fragment"><strong>Same table, same traceback, same code</strong></li>
+<li class="fragment"><strong>Proteins</strong>: Replace <span class="math inline">\(+1/-1\)</span> with a 20×20 matrix such as BLOSUM62<sup>1</sup>, where a leucine/isoleucine substitution costs far less than a leucine/aspartate substitution</li>
+<li class="fragment"><strong>DNA, more nuanced</strong>: <em>E.g.</em>, penalize transversions more than transitions</li>
+<li class="fragment"><strong>Same table, same traceback</strong></li>
 </ul>
 <aside class="notes">
 <p>28:30-29:30</p>
@@ -2418,18 +2767,21 @@ overflow: hidden!important;
 display:block!important;
 }</style></aside>
 </div>
-</section>
+<aside><ol class="aside-footnotes"><li id="fn4"><p><span class="citation" data-cites="blosum62">Henikoff and Henikoff (<a href="#/references" role="doc-biblioref" onclick>1992</a>)</span></p></li></ol></aside></section>
 <section id="two-more-refinements" class="slide level2">
 <h2>Two more refinements</h2>
 <ul>
-<li class="fragment"><strong>Affine gaps</strong>: charge a lot to open a gap and little to extend it, because one 10-base indel is far more likely than ten separate 1-base indels</li>
-<li class="fragment"><strong>Multiple alignment</strong>: exact is infeasible, so tools align the most similar pair first and progressively add sequences — a greedy heuristic built on pairwise alignment</li>
+<li class="fragment"><strong>Affine gaps</strong>: A large cost to open a gap and small cost to extend it, because one 10-base indel is far more likely than ten 1-base indels</li>
+<li class="fragment"><strong>Multiple alignment</strong>: Exact is infeasible, so tools align the most similar pair first and progressively add sequences
+<ul>
+<li class="fragment">A greedy heuristic built on pairwise alignment</li>
+</ul></li>
 </ul>
 <div class="fragment">
 <div class="callout callout-note no-icon callout-style-simple">
 <div class="callout-body">
 <div class="callout-content">
-<p>Every multiple sequence alignment you will ever use is an approximation built out of the algorithm we just walked through.</p>
+<p>Every multiple sequence alignment tool is an approximation built upon the algorithm we just walked through.</p>
 </div>
 </div>
 </div>
@@ -2454,10 +2806,10 @@ display:block!important;
 <div style="font-size: 85%;">
 <ul>
 <li class="fragment">An alignment is a <strong>hypothesis of homology</strong>, column by column</li>
-<li class="fragment">A <strong>scoring scheme</strong> turns “better alignment” into a number, and it is a model of evolution</li>
+<li class="fragment">A <strong>scoring scheme</strong> is a model of evolution that gives us an <strong>optimality criterion</strong></li>
 <li class="fragment"><strong>Dynamic programming</strong> finds the optimal alignment without enumerating the <span class="math inline">\(10^{75}\)</span> alternatives</li>
-<li class="fragment"><strong>Global</strong> (Needleman–Wunsch) assumes end-to-end homology; <strong>local</strong> (Smith–Waterman) does not</li>
-<li class="fragment">Optimal means optimal <strong>under your scoring scheme</strong>, not historically true</li>
+<li class="fragment"><strong>Global</strong> (Needleman–Wunsch) assumes end-to-end homology; <strong>Local</strong> (Smith–Waterman) does not</li>
+<li class="fragment">Optimal means optimal <strong>under your assumptions</strong>, not evolutionarily correct</li>
 </ul>
 </div>
 <aside class="notes">
@@ -2479,10 +2831,10 @@ display:block!important;
 <h2>In the exercise</h2>
 <p>You will build a global aligner from scratch:</p>
 <ol type="1">
-<li class="fragment"><code>score_alignment</code> — score a pair of aligned sequences</li>
-<li class="fragment"><code>get_dotplot</code> — see the homology before any algorithm runs</li>
-<li class="fragment"><code>fill_scoring_matrix</code> — the Needleman–Wunsch table</li>
-<li class="fragment"><code>traceback</code> — turn the table into an alignment</li>
+<li class="fragment"><code>score_alignment</code>: Score a pair of aligned sequences</li>
+<li class="fragment"><code>get_dotplot</code>: Visualize the homology before any aligning</li>
+<li class="fragment"><code>fill_scoring_matrix</code>: The Needleman-Wunsch table</li>
+<li class="fragment"><code>traceback_alignment</code>: Turn the table into an alignment</li>
 </ol>
 <div class="fragment">
 <div class="callout callout-tip callout-titled callout-style-default">
@@ -2532,6 +2884,9 @@ display:block!important;
 <div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-blast" class="csl-entry" role="listitem">
 Altschul, Stephen F., Warren Gish, Webb Miller, Eugene W. Myers, and David J. Lipman. 1990. <span>“Basic Local Alignment Search Tool.”</span> <em>Journal of Molecular Biology</em> 215 (3): 403–10. <a href="https://doi.org/10.1016/S0022-2836(05)80360-2">https://doi.org/10.1016/S0022-2836(05)80360-2</a>.
+</div>
+<div id="ref-blosum62" class="csl-entry" role="listitem">
+Henikoff, Steven, and Jorja G Henikoff. 1992. <span>“Amino Acid Substitution Matrices from Protein Blocks.”</span> <em>Proceedings of the National Academy of Sciences</em> 89 (22): 10915–19. <a href="https://doi.org/10.1073/pnas.89.22.10915">https://doi.org/10.1073/pnas.89.22.10915</a>.
 </div>
 <div id="ref-NeedlemanWunsch" class="csl-entry" role="listitem">
 Needleman, Saul B., and Christian D. Wunsch. 1970. <span>“A General Method Applicable to the Search for Similarities in the Amino Acid Sequence of Two Proteins.”</span> <em>Journal of Molecular Biology</em> 48 (3): 443–53. <a href="https://doi.org/10.1016/0022-2836(70)90057-4">https://doi.org/10.1016/0022-2836(70)90057-4</a>.

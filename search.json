@@ -14,7 +14,7 @@
     "href": "index.html#lecture-presentations",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lecture Presentations",
-    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides\nView Lecture 4 Slides\nView Lecture 5 Slides",
+    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides\nView Lecture 4 Slides\nView Lecture 5 Slides\nView Lecture 6 Slides",
     "crumbs": [
       "Home"
     ]
@@ -24,7 +24,7 @@
     "href": "index.html#lab-exercises",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lab exercises",
-    "text": "Lab exercises\n\nIntro to Bash\nSetting up a molab account\n\n\nPython notebook exercises\nTo work on one of the marimo Python notebooks below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button.\n\n\nExercise 4: Intro to Python & marimo notebooks \nExercise 5: Complexity Lab \nExercise 6: String Search Lab",
+    "text": "Lab exercises\n\nIntro to Bash\nSetting up a molab account\n\n\nPython notebook exercises\nTo work on one of the marimo Python notebooks below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button.\n\n\nExercise 4: Intro to Python & marimo notebooks \nExercise 5: Complexity Lab \nExercise 6: String Search Lab \nExercise 7: Sequence Alignment Lab",
     "crumbs": [
       "Home"
     ]
@@ -95,105 +95,112 @@
     "href": "slides/topic-06-alignment.html#last-time",
     "title": "Aligning sequences",
     "section": "Last time",
-    "text": "Last time\nWe searched a genome for a sequence that was exactly there.\n\nCGATGCATGC\n  ATG  &lt;- match\n\n\nEvery method we built — linear search, \\(k\\)-mer dictionary, suffix array — depends on an exact character-for-character match.\n\n0:00-1:00\nAnchor them in last week before pulling the rug. Everything in the string search lecture assumed the pattern is present verbatim."
+    "text": "Last time\nWe searched a genome for a exact matches to sequences of interest.\n\n\nCGATGCATGC\n  ATG  &lt;- match!\n\n\n\nEvery method we built — linear search, \\(k\\)-mer dictionary, suffix array — depends on an exact character-for-character match.\n\n0:00-1:00\nAnchor them in last week before pulling the rug. Everything in the string search lecture assumed the pattern is present verbatim."
   },
   {
-    "objectID": "slides/topic-06-alignment.html#but-sequences-change",
-    "href": "slides/topic-06-alignment.html#but-sequences-change",
+    "objectID": "slides/topic-06-alignment.html#but-sequences-evolve",
+    "href": "slides/topic-06-alignment.html#but-sequences-evolve",
     "title": "Aligning sequences",
-    "section": "But sequences change",
-    "text": "But sequences change\nTwo copies of the same gene in two species are not identical.\n\n\nACGTCA\nACTGA\n\n\n\nAre these related? Which positions correspond to which?\n\n\n\n\n\nThe moment evolution edits a sequence, exact matching stops working.\n\n\n\n\n1:00-2:00\nLet them stare at the two short sequences for a few seconds. Someone will eyeball a correspondence. That eyeballing is the algorithm we are about to formalize."
+    "section": "But sequences evolve",
+    "text": "But sequences evolve\nTwo copies of the same gene in two individuals or species are often not identical\n\n\nACGTCA\nACTGA\n\n\n\nAre these related? Which positions correspond to which?\n\n\n\n\n\nThe moment evolution edits a sequence, exact matching stops working.\n\n\n\n\n1:00-2:00\nLet them stare at the two short sequences for a few seconds. Someone will eyeball a correspondence. That eyeballing is the algorithm we are about to formalize."
   },
   {
     "objectID": "slides/topic-06-alignment.html#homology",
     "href": "slides/topic-06-alignment.html#homology",
     "title": "Aligning sequences",
     "section": "Homology",
-    "text": "Homology\n\n\n\n\n\n\nTwo sequences are homologous if they are descended from a common ancestral sequence.\n\n\n\n\nThis is a statement about history, not about similarity.\n\n\n\nHomology is not a matter of degree\n\nThere is no such thing as “80% homologous”\n\nTwo sequences either share ancestry or they do not\nSimilarity is the evidence; homology is the hypothesis\n\n\n2:00-3:30\nThis is the slide I care most about. The “80% homologous” error is everywhere in the literature and in seminars. Say out loud: percent identity is a measurement, homology is a claim about history."
+    "text": "Homology\n\n\n\n\n\n\nTwo sequences are homologous if they are descended from a common ancestral sequence.\n\n\n\n\nThis is a statement about history, not about similarity.\n\nHomology is not a matter of degree\n\nThere is no such thing as “80% homologous”\n\nTwo sequences either share ancestry or not\nSimilarity is the evidence. Homology is the hypothesis\n\n\n2:00-3:30\nThe “80% homologous” error is everywhere in the literature and in seminars. Emphasize: percent identity is a measurement, homology is a claim about history."
   },
   {
     "objectID": "slides/topic-06-alignment.html#an-alignment-is-a-hypothesis",
     "href": "slides/topic-06-alignment.html#an-alignment-is-a-hypothesis",
     "title": "Aligning sequences",
     "section": "An alignment is a hypothesis",
-    "text": "An alignment is a hypothesis\nAligning two sequences means proposing, for every column, which residues descend from the same ancestral residue.\n\n\nA C G T C A\nA C - T G A\n\n\n\n\nColumns 1, 2, 4, 6: homologous positions, unchanged\nColumn 5: homologous position, a substitution happened\nColumn 3: an insertion or deletion happened in one lineage\n\n\n\nEvery alignment is a hypothesis about a series of evolutionary events\n\n3:30-5:00\nThe gap is not “missing data” – it is an asserted indel event. Worth noting that from a pairwise alignment alone you cannot tell insertion from deletion; you need an outgroup. They will see this again in the phylogenetics weeks."
+    "text": "An alignment is a hypothesis\nAligning two sequences means proposing, for every column, which nucleotide residues descend from the same ancestral residue.\n\n\nA C G T C A\nA C - T G A\n\n\n\nColumns 1, 2, 4, 6: Homologous positions, unchanged\nColumn 5: Homologous position, a substitution happened\nColumn 3: An insertion or deletion happened in one lineage\n\n\n\n\nAn alignment is a hypothesis about a series of evolutionary events\n\n3:30-5:00\nThe gap is not “missing data” – it is an asserted indel event."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#what-is-an-indel",
+    "href": "slides/topic-06-alignment.html#what-is-an-indel",
+    "title": "Aligning sequences",
+    "section": "What is an “indel”?",
+    "text": "What is an “indel”?\n\n\nA C G T C A\nA C - T G A\n\n\nColumn 3: An insertion or deletion happened in one lineage\n\n\n\nWe don’t know if G was inserted in the top sequence or deleted from the bottom sequence.\n\n\nSo, we call it an indel"
   },
   {
     "objectID": "slides/topic-06-alignment.html#why-we-need-alignments",
     "href": "slides/topic-06-alignment.html#why-we-need-alignments",
     "title": "Aligning sequences",
     "section": "Why we need alignments",
-    "text": "Why we need alignments\n\nEvolutionary inference. Counting substitutions between sequences is only meaningful once you know which positions correspond. Every tree you will ever estimate starts from an alignment.\nLocating a sequence. Where in the genome did this read come from? Exact search fails on sequencing error and real variation.\nTransferring knowledge. A new gene of unknown function is compared to genes of known function. The inference is: similar sequence, shared ancestry, probably shared function.\n\n\n5:00-6:30\nPoint 1 is the one to linger on: alignment is upstream of essentially all of comparative biology, and its errors propagate into everything downstream. Point 3 is what BLAST is for, and they have heard of BLAST."
+    "text": "Why we need alignments\n\nEvolutionary inference. We cannot learn about evolutionary history without assuming which positions correspond. Every molecular evolutionary analysis starts from an alignment!\nLocating a sequence. E.g., where in the genome did this read come from? Exact search fails on sequencing errors and biological variation.\nTransferring knowledge. A new gene of unknown function is compared to genes of known function. The inference is, similar sequence, shared ancestry, probably shared function.\n\n\n5:00-6:30\nPoint 1 is the one to linger on: alignment is upstream of essentially all of comparative biology, and its errors propagate into everything downstream. Point 3 is what BLAST is for, and they have heard of BLAST."
   },
   {
     "objectID": "slides/topic-06-alignment.html#choice-1-how-many-sequences",
     "href": "slides/topic-06-alignment.html#choice-1-how-many-sequences",
     "title": "Aligning sequences",
     "section": "Choice 1: How many sequences?",
-    "text": "Choice 1: How many sequences?\n\n\nPairwise\nTwo sequences at a time.\nACGTCA\nAC-TGA\nTractable and exactly solvable.\n\nMultiple\nMany sequences at once.\nACGTCA\nAC-TGA\nACGT-A\nAGGTCA\nWhat you actually need for a tree.\n\n\nExact multiple alignment of \\(N\\) sequences means filling an \\(N\\)-dimensional table. This is infeasible beyond a handful of sequences.\n\n6:30-8:00\nThe dimensionality point matters: pairwise is a 2D table, three sequences is a cube, N sequences is an N-dimensional hypercube. Nobody fills a 50-dimensional table. Hence every MSA tool you have used is a heuristic."
+    "text": "Choice 1: How many sequences?\n\n\nPairwise\nTwo sequences at a time.\n\nACGTCA\nAC-TGA\n\nTractable and exactly solvable.\n\nMultiple\nMany sequences at once.\n\nACGTCA\nAC-TGA\nACGT-A\nAGGTCA\n\nWhat we often want for analysis, but requires heuristics\n\n\n\nExact multiple alignment of \\(N\\) sequences means filling an \\(N\\)-dimensional table. This is infeasible beyond a handful of sequences.\n\n\n6:30-8:00\nThe dimensionality point matters: pairwise is a 2D table, three sequences is a cube, N sequences is an N-dimensional hypercube. Nobody fills a 50-dimensional table. Hence every MSA tool you have used is a heuristic."
   },
   {
     "objectID": "slides/topic-06-alignment.html#choice-2-how-much-of-each-sequence",
     "href": "slides/topic-06-alignment.html#choice-2-how-much-of-each-sequence",
     "title": "Aligning sequences",
     "section": "Choice 2: How much of each sequence?",
-    "text": "Choice 2: How much of each sequence?\n\n\nGlobal\nAlign the sequences end to end.\nAssumes homology runs the full length of both.\n\nLocal\nFind the best-matching region and ignore the rest.\nAssumes homology is confined to a subsequence.\n\n\nThis is a biological assumption, not a technical preference.\n\n\nTwo orthologs of the same short gene? Global. A conserved domain buried in two otherwise unrelated proteins? Local.\n\n8:00-9:30\nFrame this as “what do you believe about these sequences before you start?” The algorithm cannot tell you; you tell the algorithm. This is the main axis for the rest of the lecture."
+    "text": "Choice 2: How much of each sequence?\n\n\nGlobal\nAlign the sequences end to end.\nAssumes homology runs the full length of both.\n\nLocal\nFind the best-matching region and ignore the rest.\nAssumes homology is confined to a subsequence.\n\n\nThis is a biological assumption, not a technical preference.\n\n\nE.g., Aligning two homologs of the same short gene? Use global.\n\n\nE.g., Aligning a conserved domain in two otherwise unrelated proteins? Use local.\n\n8:00-9:30\nFrame this as “what do you believe about these sequences before you start?” The algorithm cannot tell you; you tell the algorithm. This is the main axis for the rest of the lecture."
   },
   {
     "objectID": "slides/topic-06-alignment.html#choice-3-optimal-or-approximate",
     "href": "slides/topic-06-alignment.html#choice-3-optimal-or-approximate",
     "title": "Aligning sequences",
     "section": "Choice 3: Optimal or approximate?",
-    "text": "Choice 3: Optimal or approximate?\n\nOptimal: guaranteed to find the highest-scoring alignment under your scoring scheme\nApproximate: fast, usually right, no guarantee\n\n\nRecall from our algorithms lecture: BLAST1 is a heuristic. It finds exact \\(k\\)-mer seeds, then extends only around those.\n\n\n\n\n\nBLAST can miss the optimal alignment. It is used billions of times a year because an approximate answer today beats an exact answer in nine years.\n\n\n\n\n9:30-10:30\nDirect callback to the algorithm-strategies lecture and to the k-mer indexing from last week – BLAST’s seeds are exactly the k-mer dictionary they built.\n\n\nAltschul et al. (1990)"
+    "text": "Choice 3: Optimal or approximate?\n\nOptimal: Guaranteed to find the highest-scoring alignment under your scoring scheme\nApproximate: Fast, usually accurate, but no optimality guarantee\n\n\nRecall from our algorithms lecture: BLAST1 is a heuristic. It finds exact \\(k\\)-mer seeds, then extends only around those.\n\n\n\n\n\nBLAST can miss an optimal alignment. It is used billions of times a year because an approximate answer today is better than an exact answer in 9 years.\n\n\n\n\n9:30-10:30\nDirect callback to the algorithm-strategies lecture and to the k-mer indexing from last week – BLAST’s seeds are exactly the k-mer dictionary they built.\n\n\nAltschul et al. (1990)"
   },
   {
-    "objectID": "slides/topic-06-alignment.html#today",
-    "href": "slides/topic-06-alignment.html#today",
+    "objectID": "slides/topic-06-alignment.html#today-we-will-focus-on",
+    "href": "slides/topic-06-alignment.html#today-we-will-focus-on",
     "title": "Aligning sequences",
-    "section": "Today",
-    "text": "Today\n\nPairwise, not multiple\nOptimal, not approximate\nGlobal (Needleman–Wunsch) and local (Smith–Waterman)\n\n\nBoth are dynamic programming, the strategy we met when we computed Fibonacci numbers: solve each subproblem once, store the answer, reuse it.\n\n10:30-11:00\nQuick roadmap slide. Remind them fib_fast was DP and it turned a minute into an instant."
+    "section": "Today, we will focus on",
+    "text": "Today, we will focus on\n\nPairwise, not multiple\nOptimal, not approximate\nGlobal (Needleman-Wunsch) and local (Smith-Waterman)\n\n\nBoth are dynamic programming algorithms, the strategy we used to compute Fibonacci numbers\n\nSolve each subproblem once, store the answer, and reuse it\n\n\n10:30-11:00\nQuick roadmap slide. Remind them fib_fast was DP and it turned a minute into an instant."
   },
   {
     "objectID": "slides/topic-06-alignment.html#which-alignment-is-better",
     "href": "slides/topic-06-alignment.html#which-alignment-is-better",
     "title": "Aligning sequences",
     "section": "Which alignment is better?",
-    "text": "Which alignment is better?\n\n\n\nA C G T C A\nA C - T G A\n\n\n\nA C G T C A\nA C T G A -\n\n\n\nBoth are valid hypotheses. We need a number that says which one we prefer.\n\n\n\n\n\n\n\n\nAn objective function: a rule that assigns a score to any alignment, so “best” means something specific.\n\n\n\n\n11:00-12:00\nAsk the room which one looks better before revealing anything. Most will pick the left. Then the question becomes: on what basis? That is the scoring scheme."
+    "text": "Which alignment is better?\n\n\n\nA C G T C A\nA C - T G A\n\n\n\nA C G T C A\nA C T G A -\n\n\n\nBoth are valid hypotheses. We need a way to choose.\n\n\n\n\n\n\n\n\nAn objective function: a rule that assigns a score to any alignment, so “best” means something specific.\n\n\n\n\n11:00-12:00\nAsk the room which one looks better before revealing anything. Most will pick the left. Then the question becomes: on what basis? That is the scoring scheme."
   },
   {
     "objectID": "slides/topic-06-alignment.html#a-simple-scoring-scheme",
     "href": "slides/topic-06-alignment.html#a-simple-scoring-scheme",
     "title": "Aligning sequences",
     "section": "A simple scoring scheme",
-    "text": "A simple scoring scheme\nScore each column independently, then add them up:\n\n\n\n\nColumn\nScore\n\n\n\n\nMatch\n\\(+1\\)\n\n\nMismatch\n\\(-1\\)\n\n\nGap\n\\(-2\\)\n\n\n\n\n\n\n\nA C G T C A\nA C - T G A\n+1+1-2+1-1+1  =  1\n\nA C G T C A\nA C T G A -\n+1+1-1-1-1-2  = -3\n\n\n\nThe left alignment wins, under this scoring scheme.\n\n12:00-13:30\nDo the arithmetic out loud, column by column, for at least the first one. In the notebook their first job is to write exactly this function."
+    "text": "A simple scoring scheme\nScore each column independently, then add them up:\n\n\n\n\nColumn\nScore\n\n\n\n\nMatch\n\\(+1\\)\n\n\nMismatch\n\\(-1\\)\n\n\nGap\n\\(-2\\)\n\n\n\n\n\n\n\n\nA  C  G  T  C  A\nA  C  -  T  G  A\n+1 +1 -2 +1 -1 +1 = 1\n\n\n\nA  C  G  T  C  A\nA  C  T  G  A  -\n+1 +1 -1 -1 -1 -2 = -3\n\n\n\n\nThe left alignment wins, under this scoring scheme.\n\n12:00-13:30\nDo the arithmetic out loud, column by column, for at least the first one. In the notebook their first job is to write exactly this function."
   },
   {
     "objectID": "slides/topic-06-alignment.html#the-scoring-scheme-is-a-model",
     "href": "slides/topic-06-alignment.html#the-scoring-scheme-is-a-model",
     "title": "Aligning sequences",
     "section": "The scoring scheme is a model",
-    "text": "The scoring scheme is a model\n\nGaps cost more than mismatches because indels are rarer than substitutions\nChange the numbers and you can change the answer\nThe “optimal” alignment is only optimal with respect to your scoring scheme\n\n\n\n\n\nThe algorithm is guaranteed to find the best-scoring alignment. It is not guaranteed to find the historically true one.\n\n\n\n\n13:30-14:30\nThis is the second point I really want them to keep. Optimality is relative to a model of evolution that you chose, usually by accepting a default. Tie back to “all models are wrong, some are useful” from day one if there is time."
+    "text": "The scoring scheme is a model\n\nGaps cost more than mismatches because indels tend to be rarer than substitutions\nChanging the numbers can change the answer\nThe “optimal” alignment is only optimal with respect to your scoring scheme\n\n\n\n\n\nThe algorithm is guaranteed to find a best-scoring alignment. It is not guaranteed to find the historically correct one.\n\n\n\n\n13:30-14:30\nThis is the second point I really want them to keep. Optimality is relative to a model of evolution that you chose, usually by accepting a default. Tie back to “all models are wrong, some are useful” from day one if there is time."
   },
   {
-    "objectID": "slides/topic-06-alignment.html#why-not-just-try-them-all",
-    "href": "slides/topic-06-alignment.html#why-not-just-try-them-all",
+    "objectID": "slides/topic-06-alignment.html#can-we-try-all-alignments",
+    "href": "slides/topic-06-alignment.html#can-we-try-all-alignments",
     "title": "Aligning sequences",
-    "section": "Why not just try them all?",
-    "text": "Why not just try them all?\nThe number of possible global alignments of two sequences of length \\(n\\):\n\n\n\n\n\\(n\\)\nAlignments\n\n\n\n\n5\n1,683\n\n\n10\n\\(\\approx 8 \\times 10^{6}\\)\n\n\n100\n\\(&gt; 10^{75}\\)\n\n\n\n\n\nExhaustive search is off the table before the sequences are even interesting.\n\n\nWe need to find the best alignment without looking at all of them\n\n14:30-15:30\nThese are Delannoy numbers; no need to say so. The point is the same one from the exhaustive-tree-search slide: the candidate space explodes and a smarter strategy is the only way out."
+    "section": "Can we try all alignments?",
+    "text": "Can we try all alignments?\nThe number of possible global alignments of two sequences of length \\(n\\):\n\n\n\n\n\\(n\\)\nAlignments\n\n\n\n\n5\n1,683\n\n\n10\n\\(\\approx 8 \\times 10^{6}\\)\n\n\n100\n\\(&gt; 10^{75}\\)\n\n\n\n\n\nExhaustive search becomes impossible quickly!\n\n\nWe need to find the best alignment without looking at all of them\n\n14:30-15:30\nThese are Delannoy numbers; no need to say so. The point is the same one from the exhaustive-tree-search slide: the candidate space explodes and a smarter strategy is the only way out."
   },
   {
-    "objectID": "slides/topic-06-alignment.html#the-insight",
-    "href": "slides/topic-06-alignment.html#the-insight",
+    "objectID": "slides/topic-06-alignment.html#their-insight",
+    "href": "slides/topic-06-alignment.html#their-insight",
     "title": "Aligning sequences",
-    "section": "The insight",
-    "text": "The insight\nThe best alignment of ACGTCA and ACTGA ends in exactly one of three ways:\n\nA aligned with A (match or mismatch)\nA aligned with a gap\na gap aligned with A\n\n\nWhichever it is, the rest of the alignment must itself be the best alignment of the two shorter sequences that remain.\n\n\nA big problem made of smaller versions of itself, solved once and reused\n\n15:30-16:30\nThis is the whole algorithm in one slide. If they get “the best alignment of the prefixes is part of the best alignment of the whole,” the table is just bookkeeping."
+    "section": "Their insight",
+    "text": "Their insight\nThe best alignment of ACGTCA and ACTGA ends in one of three ways:\n\nA aligned with A (match or mismatch)\nA aligned with a gap\na gap aligned with A\n\n\nWhichever it is, the rest of the alignment must itself be the best alignment of the two shorter sequences that remain.\n\n\nA larger problem made of smaller versions of itself, solved once and reused\n\n15:30-16:30\nThis is the whole algorithm in one slide. If they get “the best alignment of the prefixes is part of the best alignment of the whole,” the table is just bookkeeping."
   },
   {
     "objectID": "slides/topic-06-alignment.html#the-recurrence",
     "href": "slides/topic-06-alignment.html#the-recurrence",
     "title": "Aligning sequences",
     "section": "The recurrence1",
-    "text": "The recurrence1\n\\[\nF(i,j) = \\max\n\\begin{cases}\nF(i-1,\\,j-1) + s(A_i, B_j) & \\text{(match/mismatch)}\\\\\nF(i-1,\\,j) + g & \\text{(gap in }B)\\\\\nF(i,\\,j-1) + g & \\text{(gap in }A)\n\\end{cases}\n\\]\n\n\\(F(i,j)\\) is the score of the best alignment of the first \\(i\\) residues of \\(A\\) with the first \\(j\\) residues of \\(B\\).\n\n\nEvery cell depends only on cells above and to the left, so we can fill the table in one pass.\n\n16:30-17:30\nThey have seen this exact equation in the algorithms lecture, so this is a reunion, not an introduction. Say what s() and g are: s is the scoring function they will write, g is the gap penalty.\n\n\nNeedleman and Wunsch (1970)"
+    "text": "The recurrence1\n\n\\[\nF(i,j) = \\max\n\\begin{cases}\nF(i-1,\\,j-1) + s(A_i, B_j) & \\text{(match/mismatch)}\\\\\nF(i-1,\\,j) + g & \\text{(gap in Seq }B)\\\\\nF(i,\\,j-1) + g & \\text{(gap in Seq }A)\n\\end{cases}\n\\]\n\n\n\\(F(i,j)\\) is the score of the best alignment of the first \\(i\\) residues of Sequence \\(A\\) with the first \\(j\\) residues of Sequence \\(B\\).\n\n\nEvery cell depends only on cells above and to the left, so we can fill the table in one pass.\n\n16:30-17:30\nThey have seen this exact equation in the algorithms lecture, so this is a reunion, not an introduction. Say what s() and g are: s is the scoring function they will write, g is the gap penalty.\n\n\nNeedleman and Wunsch (1970)"
   },
   {
     "objectID": "slides/topic-06-alignment.html#setting-up-the-table",
@@ -207,14 +214,14 @@
     "href": "slides/topic-06-alignment.html#filling-the-first-cell",
     "title": "Aligning sequences",
     "section": "Filling the first cell",
-    "text": "Filling the first cell\n\\(F(1,1)\\): best alignment of A with A\n\n\n\n\nFrom\nCalculation\nScore\n\n\n\n\nDiagonal (A with A, match)\n\\(0 + 1\\)\n1\n\n\nUp (gap in \\(B\\))\n\\(-2 + -2\\)\n\\(-4\\)\n\n\nLeft (gap in \\(A\\))\n\\(-2 + -2\\)\n\\(-4\\)\n\n\n\n\n\nTake the maximum: \\(F(1,1) = 1\\), and remember that it came from the diagonal.\n\n18:30-19:30\nEmphasize the remembering. The score alone does not give you an alignment; the direction does. In the notebook they can either store directions or recompute them, and we will recompute."
+    "text": "Filling the first cell\n\\(F(1,1)\\): best alignment of A with A\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n–\nA\nC\nT\nG\nA\n\n\n\n\n–\n0\n-2\n-4\n-6\n-8\n-10\n\n\nA\n-2\n?\n\n\n\n\n\n\nC\n-4\n\n\n\n\n\n\n\nG\n-6\n\n\n\n\n\n\n\nT\n-8\n\n\n\n\n\n\n\nC\n-10\n\n\n\n\n\n\n\nA\n-12\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFrom\nCalculation\nScore\n\n\n\n\nDiagonal (A with A, match)\n0 + 1\n1\n\n\nUp (gap in \\(B\\))\n-2 + -2\n-4\n\n\nLeft (gap in \\(A\\))\n-2 + -2\n-4\n\n\n\n\n\n\nTake the maximum: \\(F(1,1) = 1\\)\n\n18:30-19:30\nEmphasize the remembering. The score alone does not give you an alignment; the direction does. In the notebook they can either store directions or recompute them, and we will recompute."
   },
   {
-    "objectID": "slides/topic-06-alignment.html#filling-a-cell-where-a-gap-wins",
-    "href": "slides/topic-06-alignment.html#filling-a-cell-where-a-gap-wins",
+    "objectID": "slides/topic-06-alignment.html#filling-a-cell-where-a-gap-winds",
+    "href": "slides/topic-06-alignment.html#filling-a-cell-where-a-gap-winds",
     "title": "Aligning sequences",
-    "section": "Filling a cell where a gap wins",
-    "text": "Filling a cell where a gap wins\n\\(F(3,2)\\): best alignment of ACG with AC\n\n\n\n\nFrom\nCalculation\nScore\n\n\n\n\nDiagonal (G with C, mismatch)\n\\(-1 + -1\\)\n\\(-2\\)\n\n\nUp (gap in \\(B\\))\n\\(2 + -2\\)\n0\n\n\nLeft (gap in \\(A\\))\n\\(-3 + -2\\)\n\\(-5\\)\n\n\n\n\n\n\\(F(3,2) = 0\\), from above: the G is aligned to a gap.\n\n\nThis one cell is where the indel in our final alignment gets decided.\n\n19:30-20:30\nWorth slowing down here. The algorithm is not “finding” a gap; it is comparing three numbers. The biology comes out of the arithmetic, which is exactly why the scoring scheme matters so much."
+    "section": "Filling a cell where a gap winds",
+    "text": "Filling a cell where a gap winds\n\\(F(3,2)\\): best alignment of ACG with AC\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n–\nA\nC\nT\nG\nA\n\n\n\n\n–\n0\n-2\n-4\n\n\n\n\n\nA\n-2\n1\n-1\n\n\n\n\n\nC\n-4\n-1\n2\n\n\n\n\n\nG\n-6\n-3\n?\n\n\n\n\n\nT\n\n\n\n\n\n\n\n\nC\n\n\n\n\n\n\n\n\nA\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFrom\nCalculation\nScore\n\n\n\n\nDiagonal (G with C, mismatch)\n-1 + -1\n-2\n\n\nUp (gap in \\(B\\))\n2 + -2\n0\n\n\nLeft (gap in \\(A\\))\n-3 + -2\n-5\n\n\n\n\n\n\n\\(F(3,2) = 0\\), from above: the G is aligned to a gap.\n\n\nThis one cell is where the indel in our final alignment gets decided.\n\n19:30-20:30\nWorth slowing down here. The algorithm is not “finding” a gap; it is comparing three numbers. The biology comes out of the arithmetic, which is exactly why the scoring scheme matters so much."
   },
   {
     "objectID": "slides/topic-06-alignment.html#the-completed-table",
@@ -224,88 +231,95 @@
     "text": "The completed table\n\n\n\n\n\n–\nA\nC\nT\nG\nA\n\n\n\n\n–\n0\n-2\n-4\n-6\n-8\n-10\n\n\nA\n-2\n1\n-1\n-3\n-5\n-7\n\n\nC\n-4\n-1\n2\n0\n-2\n-4\n\n\nG\n-6\n-3\n0\n1\n1\n-1\n\n\nT\n-8\n-5\n-2\n1\n0\n0\n\n\nC\n-10\n-7\n-4\n-1\n0\n-1\n\n\nA\n-12\n-9\n-6\n-3\n-2\n1\n\n\n\n\n\nThe bottom-right cell is the score of the best global alignment: 1.\n\n\nEvery cell was computed from cells already filled. No cell was computed twice.\n\n20:30-21:30\n30 cells, three comparisons each. Compare that to the 10^75 number from earlier. This is the payoff slide for dynamic programming."
   },
   {
-    "objectID": "slides/topic-06-alignment.html#traceback",
-    "href": "slides/topic-06-alignment.html#traceback",
+    "objectID": "slides/topic-06-alignment.html#the-table-is-not-an-alignment",
+    "href": "slides/topic-06-alignment.html#the-table-is-not-an-alignment",
     "title": "Aligning sequences",
-    "section": "Traceback",
-    "text": "Traceback\nStart at the bottom-right and walk backward, asking at each cell: which of the three did I come from?\n\n\n\n\n\n–\nA\nC\nT\nG\nA\n\n\n\n\n–\n0\n-2\n-4\n-6\n-8\n-10\n\n\nA\n-2\n1\n-1\n-3\n-5\n-7\n\n\nC\n-4\n-1\n2\n0\n-2\n-4\n\n\nG\n-6\n-3\n0\n1\n1\n-1\n\n\nT\n-8\n-5\n-2\n1\n0\n0\n\n\nC\n-10\n-7\n-4\n-1\n0\n-1\n\n\nA\n-12\n-9\n-6\n-3\n-2\n1\n\n\n\n\n\nA diagonal step consumes one residue from each sequence. A vertical step consumes one from \\(A\\) and adds a gap to \\(B\\).\n\n21:30-22:30\nWalk it backward on screen: (6,5) to (5,4) to (4,3) to (3,2) – that is the vertical step, the gap – then (2,2), (1,1), (0,0). The path they see is the alignment."
+    "section": "The table is NOT an alignment",
+    "text": "The table is NOT an alignment\n\n\n\n\n\n–\nA\nC\nT\nG\nA\n\n\n\n\n–\n0\n-2\n-4\n-6\n-8\n-10\n\n\nA\n-2\n1\n-1\n-3\n-5\n-7\n\n\nC\n-4\n-1\n2\n0\n-2\n-4\n\n\nG\n-6\n-3\n0\n1\n1\n-1\n\n\nT\n-8\n-5\n-2\n1\n0\n0\n\n\nC\n-10\n-7\n-4\n-1\n0\n-1\n\n\nA\n-12\n-9\n-6\n-3\n-2\n1\n\n\n\n\n\nWe know the best score (1), but we do not know the alignment that achieves it."
   },
   {
-    "objectID": "slides/topic-06-alignment.html#the-answer",
-    "href": "slides/topic-06-alignment.html#the-answer",
+    "objectID": "slides/topic-06-alignment.html#traceback-to-get-the-alignment",
+    "href": "slides/topic-06-alignment.html#traceback-to-get-the-alignment",
     "title": "Aligning sequences",
-    "section": "The answer",
-    "text": "The answer\n\nA C G T C A\nA C - T G A\n\n\nScore: \\(+1 +1 -2 +1 -1 +1 = 1\\)\n\n\n\nThe score in the corner and the score of the alignment agree\nTies are possible: several different alignments can share the best score\nThe algorithm returns one of them, and which one depends on how you break ties\n\n\n22:30-23:15\nThe tie point is honest and important – “the optimal alignment” is often “an optimal alignment.” Tools differ in tie-breaking, which is one reason two aligners give different answers on the same data."
+    "section": "Traceback to get the alignment",
+    "text": "Traceback to get the alignment\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n–\nA\nC\nT\nG\nA\n\n\n\n\n–\n0\n-2\n-4\n-6\n-8\n-10\n\n\nA\n-2\n1\n-1\n-3\n-5\n-7\n\n\nC\n-4\n-1\n2\n0\n-2\n-4\n\n\nG\n-6\n-3\n0\n1\n1\n-1\n\n\nT\n-8\n-5\n-2\n1\n0\n0\n\n\nC\n-10\n-7\n-4\n-1\n0\n-1\n\n\nA\n-12\n-9\n-6\n-3\n-2\n1\n\n\n\n\n\n\n\n\n\nStart at the bottom-right and walk backward, asking at each cell: which of the three directions did the score come from?\n\n\n\n\n\nA diagonal step consumes one nucleotide from each sequence.\nA vertical step consumes one from \\(A\\) and adds a gap to \\(B\\).\nA horizontal step consumes one from \\(B\\) and adds a gap to \\(A\\).\n\n\n\n21:30-22:30\nWalk it backward on screen: (6,5) to (5,4) to (4,3) to (3,2) – that is the vertical step, the gap – then (2,2), (1,1), (0,0). The path they see is the alignment."
   },
   {
-    "objectID": "slides/topic-06-alignment.html#what-did-it-cost",
-    "href": "slides/topic-06-alignment.html#what-did-it-cost",
+    "objectID": "slides/topic-06-alignment.html#the-an-optimal-alignment",
+    "href": "slides/topic-06-alignment.html#the-an-optimal-alignment",
     "title": "Aligning sequences",
-    "section": "What did it cost?",
-    "text": "What did it cost?\n\nTime: one pass over an \\((n{+}1) \\times (m{+}1)\\) table, so \\(O(nm)\\)\nMemory: the whole table, also \\(O(nm)\\)\n\n\nTwo 100,000-bp sequences: \\(10^{10}\\) cells, about 40 GB at 4 bytes each.\n\n\nOptimal alignment is affordable for genes and hopeless for genomes. This is why read mappers index instead of aligning everything to everything.\n\n23:15-24:00\nCallback to the space-complexity slide from the algorithms lecture, which used this same 40 GB number. Mention Hirschberg’s algorithm only if someone asks: O(n) memory for twice the time."
+    "section": "The (an) optimal alignment",
+    "text": "The (an) optimal alignment\n\nSeq A: A  C  G  T  C  A\nSeq B: A  C  -  T  G  A\nScore: +1 +1 -2 +1 -1 +1 = 1\n\n\nThe score in the bottom-right corner of the scoring matrix and the score of the alignment agree\nTies are possible: Several different alignments can share the best score\nThe algorithm returns one of them, which one depends on how you break ties\n\n\n22:30-23:15\nThe tie point is honest and important – “the optimal alignment” is often “an optimal alignment.” Tools differ in tie-breaking, which is one reason two aligners give different answers on the same data."
+  },
+  {
+    "objectID": "slides/topic-06-alignment.html#what-did-it-cost-complexity",
+    "href": "slides/topic-06-alignment.html#what-did-it-cost-complexity",
+    "title": "Aligning sequences",
+    "section": "What did it cost? (Complexity)",
+    "text": "What did it cost? (Complexity)\n\nTime: one pass over an \\((n{+}1) \\times (m{+}1)\\) table, so \\(O(nm)\\)\nMemory: the whole table, also \\(O(nm)\\)\n\n\nTwo 100,000-bp sequences: \\(10^{10}\\) cells, about 40 GB at 4 bytes each.\n\n\nOptimal alignment is doable for genes, but not genomes.\n\n\nThis is why read mappers index instead of aligning each read to the genome.\n\n23:15-24:00\nCallback to the space-complexity slide from the algorithms lecture, which used this same 40 GB number. Mention Hirschberg’s algorithm only if someone asks: O(n) memory for twice the time."
   },
   {
     "objectID": "slides/topic-06-alignment.html#two-sequences-sharing-one-region",
     "href": "slides/topic-06-alignment.html#two-sequences-sharing-one-region",
     "title": "Aligning sequences",
     "section": "Two sequences sharing one region",
-    "text": "Two sequences sharing one region\n\nA = TTTTACGTCA\nB = ACGTCAGGGG\n\n\nThey share ACGTCA, but it sits at opposite ends.\n\n\nWhat does Needleman–Wunsch do?\n\n24:00-24:45\nHave them find the shared block by eye first. It takes about two seconds for a human, which makes the next slide land harder."
+    "text": "Two sequences sharing one region\n\nA = TTTTACGTCA\nB = ACGTCAGGGG\n\n\nThey share ACGTCA, but it sits at opposite ends.\n\n\nWhat does the Needleman-Wunsch algo do?\n\n24:00-24:45\nHave them find the shared block by eye first. It takes about two seconds for a human, which makes the next slide land harder."
   },
   {
-    "objectID": "slides/topic-06-alignment.html#needlemanwunsch-on-these-sequences",
-    "href": "slides/topic-06-alignment.html#needlemanwunsch-on-these-sequences",
+    "objectID": "slides/topic-06-alignment.html#needleman-wunsch-on-these-sequences",
+    "href": "slides/topic-06-alignment.html#needleman-wunsch-on-these-sequences",
     "title": "Aligning sequences",
-    "section": "Needleman–Wunsch on these sequences",
-    "text": "Needleman–Wunsch on these sequences\n\nT T T T A C G T C A\nA C G T C A G G G G\n\n\nScore: \\(-6\\). Not a single gap, and the shared region is shredded.\n\n\n\nLining up the two copies of ACGTCA would require eight gaps: \\(-16\\), plus \\(+6\\) for the matches, so \\(-10\\)\nGarbage end-to-end at \\(-6\\) beats truth at \\(-10\\)\n\n\n\n\n\n\nThe algorithm did not fail. We asked the wrong question. We told it to assume homology runs the full length.\n\n\n\n\n24:45-26:00\nThis is the emotional center of the second half. The algorithm is behaving exactly as specified; the specification encoded a false biological assumption. Let them sit with the -6 versus -10 arithmetic."
+    "section": "Needleman-Wunsch on these sequences",
+    "text": "Needleman-Wunsch on these sequences\n\nT T T T A C G T C A\nA C G T C A G G G G\n\n\nScore: \\(-6\\). No gaps, and the shared region is missed!\n\nLining up the two copies of ACGTCA would require eight gaps: \\(-16\\), plus \\(+6\\) for the matches, so \\(-10\\)\nA bad global alignment at \\(-6\\) beats the truth at \\(-10\\)\n\n\n\n\n\n\nThe algorithm did not fail. We asked the wrong question! We assumed homology runs the full length.\n\n\n\n\n24:45-26:00\nThis is the emotional center of the second half. The algorithm is behaving exactly as specified; the specification encoded a false biological assumption. Let them sit with the -6 versus -10 arithmetic."
   },
   {
-    "objectID": "slides/topic-06-alignment.html#smithwaterman",
-    "href": "slides/topic-06-alignment.html#smithwaterman",
+    "objectID": "slides/topic-06-alignment.html#smith-waterman-algorithm",
+    "href": "slides/topic-06-alignment.html#smith-waterman-algorithm",
     "title": "Aligning sequences",
-    "section": "Smith–Waterman1",
-    "text": "Smith–Waterman1\nThree changes to Needleman–Wunsch:\n\nAdd zero to the options. Any cell that would go negative becomes 0: a bad alignment is abandoned rather than carried forward.\nStart the traceback at the highest cell anywhere, not the bottom-right corner.\nStop the traceback at a zero, not at the top-left corner.\n\n\n\\[\nF(i,j) = \\max\n\\begin{cases}\n0 \\\\\nF(i-1,\\,j-1) + s(A_i, B_j)\\\\\nF(i-1,\\,j) + g\\\\\nF(i,\\,j-1) + g\n\\end{cases}\n\\]\n\n26:00-27:00\nSame table, same recurrence, one extra option and two different rules about where to start and stop. That is genuinely all it is.\n\n\nSmith and Waterman (1981)"
+    "section": "Smith-Waterman1 algorithm",
+    "text": "Smith-Waterman1 algorithm\nThree changes to Needleman-Wunsch:\n\nAdd zero to the options. Any cell that would go negative becomes 0. A bad alignment is abandoned rather than carried forward.\nStart the traceback at the highest cell anywhere, not the bottom-right corner.\nStop the traceback at a zero, not at the top-left corner.\n\n\n26:00-27:00\nSame table, same recurrence, one extra option and different rules about where to start and stop.\n\nSmith and Waterman (1981)"
   },
   {
     "objectID": "slides/topic-06-alignment.html#the-local-alignment-table",
     "href": "slides/topic-06-alignment.html#the-local-alignment-table",
     "title": "Aligning sequences",
     "section": "The local alignment table",
-    "text": "The local alignment table\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n–\nA\nC\nG\nT\nC\nA\nG\nG\nG\nG\n\n\n\n\n–\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n\n\nT\n0\n0\n0\n0\n1\n0\n0\n0\n0\n0\n0\n\n\nT\n0\n0\n0\n0\n1\n0\n0\n0\n0\n0\n0\n\n\nT\n0\n0\n0\n0\n1\n0\n0\n0\n0\n0\n0\n\n\nT\n0\n0\n0\n0\n1\n0\n0\n0\n0\n0\n0\n\n\nA\n0\n1\n0\n0\n0\n0\n1\n0\n0\n0\n0\n\n\nC\n0\n0\n2\n0\n0\n1\n0\n0\n0\n0\n0\n\n\nG\n0\n0\n0\n3\n1\n0\n0\n1\n1\n1\n1\n\n\nT\n0\n0\n0\n1\n4\n2\n0\n0\n0\n0\n0\n\n\nC\n0\n0\n1\n0\n2\n5\n3\n1\n0\n0\n0\n\n\nA\n0\n1\n0\n0\n0\n3\n6\n4\n2\n0\n0\n\n\n\n\n\nMostly zeros, with one diagonal ridge climbing to 6.\n\n27:00-27:45\nPoint at the ridge. The zeros are the algorithm refusing to pay for the non-homologous flanks. Do not fill this table cell by cell – they have already seen the mechanics."
+    "text": "The local alignment table\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n–\nA\nC\nG\nT\nC\nA\nG\nG\nG\nG\n\n\n\n\n–\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n\n\nT\n0\n0\n0\n0\n1\n0\n0\n0\n0\n0\n0\n\n\nT\n0\n0\n0\n0\n1\n0\n0\n0\n0\n0\n0\n\n\nT\n0\n0\n0\n0\n1\n0\n0\n0\n0\n0\n0\n\n\nT\n0\n0\n0\n0\n1\n0\n0\n0\n0\n0\n0\n\n\nA\n0\n1\n0\n0\n0\n0\n1\n0\n0\n0\n0\n\n\nC\n0\n0\n2\n0\n0\n1\n0\n0\n0\n0\n0\n\n\nG\n0\n0\n0\n3\n1\n0\n0\n1\n1\n1\n1\n\n\nT\n0\n0\n0\n1\n4\n2\n0\n0\n0\n0\n0\n\n\nC\n0\n0\n1\n0\n2\n5\n3\n1\n0\n0\n0\n\n\nA\n0\n1\n0\n0\n0\n3\n6\n4\n2\n0\n0\n\n\n\n\n\n\\[\nF(i,j) = \\max\n\\begin{cases}\n0 \\\\\nF(i-1,\\,j-1) + s(A_i, B_j)\\\\\nF(i-1,\\,j) + g\\\\\nF(i,\\,j-1) + g\n\\end{cases}\n\\]\n\n\n\nMostly zeros, with one diagonal ridge climbing to 6.\n\n\n27:00-27:45\nPoint at the ridge. The zeros are the algorithm refusing to pay for the non-homologous flanks. Do not fill this table cell by cell – they have already seen the mechanics."
   },
   {
     "objectID": "slides/topic-06-alignment.html#the-local-answer",
     "href": "slides/topic-06-alignment.html#the-local-answer",
     "title": "Aligning sequences",
     "section": "The local answer",
-    "text": "The local answer\n\nA C G T C A\nA C G T C A\n\n\nScore 6, positions 5–10 of \\(A\\) against positions 1–6 of \\(B\\).\n\n\n\n\nUse global when\nYou believe the sequences are homologous along their whole length\n\nUse local when\nYou believe homology is confined to a region, or the sequences differ wildly in length\n\n\n27:45-28:30\nRead placement, domain finding, and every BLAST search you have ever run are local problems. Whole-gene ortholog comparison is global."
+    "text": "The local answer\n\nA C G T C A\nA C G T C A\n\n\nScore 6, positions 5–10 of \\(A\\) against positions 1–6 of \\(B\\).\n\n\n\n\nUse global when\nYou believe the sequences are homologous along their whole length\n\nUse local when\nYou believe homology is confined to a region, or the sequences differ a lot in length\n\n\n27:45-28:30\nRead placement, domain finding, and every BLAST search you have ever run are local problems. Whole-gene ortholog comparison is global."
   },
   {
     "objectID": "slides/topic-06-alignment.html#change-the-scoring-not-the-algorithm",
     "href": "slides/topic-06-alignment.html#change-the-scoring-not-the-algorithm",
     "title": "Aligning sequences",
     "section": "Change the scoring, not the algorithm",
-    "text": "Change the scoring, not the algorithm\nNothing in either algorithm knows what a nucleotide is.\n\nThe only place the alphabet appears is \\(s(A_i, B_j)\\).\n\n\n\nProteins: replace \\(+1/-1\\) with a 20×20 matrix such as BLOSUM62, where a leucine/isoleucine swap costs far less than a leucine/aspartate swap\nDNA, more carefully: penalize transversions more than transitions\nSame table, same traceback, same code\n\n\n28:30-29:30\nThis is the payoff for writing the scoring as a separate function in the notebook. Swapping the matrix turns a DNA aligner into a protein aligner without touching the DP code. Substitution matrices themselves are estimated from observed alignments – one sentence, do not go down that road."
+    "text": "Change the scoring, not the algorithm\nNothing in either algorithm “knows” what a nucleotide is.\n\nThe only place nucleotides appear is \\(s(A_i, B_j)\\).\n\nProteins: Replace \\(+1/-1\\) with a 20×20 matrix such as BLOSUM621, where a leucine/isoleucine substitution costs far less than a leucine/aspartate substitution\nDNA, more nuanced: E.g., penalize transversions more than transitions\nSame table, same traceback\n\n\n28:30-29:30\nThis is the payoff for writing the scoring as a separate function in the notebook. Swapping the matrix turns a DNA aligner into a protein aligner without touching the DP code. Substitution matrices themselves are estimated from observed alignments – one sentence, do not go down that road.\n\n\nHenikoff and Henikoff (1992)"
   },
   {
     "objectID": "slides/topic-06-alignment.html#two-more-refinements",
     "href": "slides/topic-06-alignment.html#two-more-refinements",
     "title": "Aligning sequences",
     "section": "Two more refinements",
-    "text": "Two more refinements\n\nAffine gaps: charge a lot to open a gap and little to extend it, because one 10-base indel is far more likely than ten separate 1-base indels\nMultiple alignment: exact is infeasible, so tools align the most similar pair first and progressively add sequences — a greedy heuristic built on pairwise alignment\n\n\n\n\n\nEvery multiple sequence alignment you will ever use is an approximation built out of the algorithm we just walked through.\n\n\n\n\n29:30-30:15\nAffine gaps: mention “once and done” – they will meet them again if they ever read an aligner’s manual. Progressive alignment closes the loop with the greedy-strategy slide from the algorithms lecture."
+    "text": "Two more refinements\n\nAffine gaps: A large cost to open a gap and small cost to extend it, because one 10-base indel is far more likely than ten 1-base indels\nMultiple alignment: Exact is infeasible, so tools align the most similar pair first and progressively add sequences\n\nA greedy heuristic built on pairwise alignment\n\n\n\n\n\n\nEvery multiple sequence alignment tool is an approximation built upon the algorithm we just walked through.\n\n\n\n\n29:30-30:15\nAffine gaps: mention “once and done” – they will meet them again if they ever read an aligner’s manual. Progressive alignment closes the loop with the greedy-strategy slide from the algorithms lecture."
   },
   {
     "objectID": "slides/topic-06-alignment.html#summary",
     "href": "slides/topic-06-alignment.html#summary",
     "title": "Aligning sequences",
     "section": "Summary",
-    "text": "Summary\n\n\nAn alignment is a hypothesis of homology, column by column\nA scoring scheme turns “better alignment” into a number, and it is a model of evolution\nDynamic programming finds the optimal alignment without enumerating the \\(10^{75}\\) alternatives\nGlobal (Needleman–Wunsch) assumes end-to-end homology; local (Smith–Waterman) does not\nOptimal means optimal under your scoring scheme, not historically true\n\n\n\n30:15-31:00\nIf short on time, cut to the last two bullets."
+    "text": "Summary\n\n\nAn alignment is a hypothesis of homology, column by column\nA scoring scheme is a model of evolution that gives us an optimality criterion\nDynamic programming finds the optimal alignment without enumerating the \\(10^{75}\\) alternatives\nGlobal (Needleman–Wunsch) assumes end-to-end homology; Local (Smith–Waterman) does not\nOptimal means optimal under your assumptions, not evolutionarily correct\n\n\n\n30:15-31:00\nIf short on time, cut to the last two bullets."
   },
   {
     "objectID": "slides/topic-06-alignment.html#in-the-exercise",
     "href": "slides/topic-06-alignment.html#in-the-exercise",
     "title": "Aligning sequences",
     "section": "In the exercise",
-    "text": "In the exercise\nYou will build a global aligner from scratch:\n\nscore_alignment — score a pair of aligned sequences\nget_dotplot — see the homology before any algorithm runs\nfill_scoring_matrix — the Needleman–Wunsch table\ntraceback — turn the table into an alignment\n\n\n\n\n\n\n\n\nWatch for\n\n\nThe dotplot of the two sequences from the “when global fails” slide. You will be able to see why the global algorithm made the choice it did.\n\n\n\n\n31:00-31:45\nHand off to the notebook here. Remind them the first cell needs their name."
+    "text": "In the exercise\nYou will build a global aligner from scratch:\n\nscore_alignment: Score a pair of aligned sequences\nget_dotplot: Visualize the homology before any aligning\nfill_scoring_matrix: The Needleman-Wunsch table\ntraceback_alignment: Turn the table into an alignment\n\n\n\n\n\n\n\n\nWatch for\n\n\nThe dotplot of the two sequences from the “when global fails” slide. You will be able to see why the global algorithm made the choice it did.\n\n\n\n\n31:00-31:45\nHand off to the notebook here. Remind them the first cell needs their name."
   },
   {
     "objectID": "slides/topic-06-alignment.html#exercise",
@@ -319,7 +333,7 @@
     "href": "slides/topic-06-alignment.html#references",
     "title": "Aligning sequences",
     "section": "",
-    "text": "Altschul, Stephen F., Warren Gish, Webb Miller, Eugene W. Myers, and David J. Lipman. 1990. “Basic Local Alignment Search Tool.” Journal of Molecular Biology 215 (3): 403–10. https://doi.org/10.1016/S0022-2836(05)80360-2.\n\n\nNeedleman, Saul B., and Christian D. Wunsch. 1970. “A General Method Applicable to the Search for Similarities in the Amino Acid Sequence of Two Proteins.” Journal of Molecular Biology 48 (3): 443–53. https://doi.org/10.1016/0022-2836(70)90057-4.\n\n\nSmith, T. F., and M. S. Waterman. 1981. “Identification of Common Molecular Subsequences.” Journal of Molecular Biology 147 (1): 195–97. https://doi.org/10.1016/0022-2836(81)90087-5."
+    "text": "Altschul, Stephen F., Warren Gish, Webb Miller, Eugene W. Myers, and David J. Lipman. 1990. “Basic Local Alignment Search Tool.” Journal of Molecular Biology 215 (3): 403–10. https://doi.org/10.1016/S0022-2836(05)80360-2.\n\n\nHenikoff, Steven, and Jorja G Henikoff. 1992. “Amino Acid Substitution Matrices from Protein Blocks.” Proceedings of the National Academy of Sciences 89 (22): 10915–19. https://doi.org/10.1073/pnas.89.22.10915.\n\n\nNeedleman, Saul B., and Christian D. Wunsch. 1970. “A General Method Applicable to the Search for Similarities in the Amino Acid Sequence of Two Proteins.” Journal of Molecular Biology 48 (3): 443–53. https://doi.org/10.1016/0022-2836(70)90057-4.\n\n\nSmith, T. F., and M. S. Waterman. 1981. “Identification of Common Molecular Subsequences.” Journal of Molecular Biology 147 (1): 195–97. https://doi.org/10.1016/0022-2836(81)90087-5."
   },
   {
     "objectID": "slides/topic-06-alignment.html#acknowledgements",
