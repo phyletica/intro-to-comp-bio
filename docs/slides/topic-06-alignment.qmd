@@ -18,7 +18,7 @@ bibliography: ../references.bib
 
 ## Last time
 
-We searched a genome for a **exact** matches to sequences of interest.
+We searched a genome for **exact** matches to sequences of interest.
 
 . . .
 
@@ -542,7 +542,7 @@ $A$ = `ACGTCA` down the rows, $B$ = `ACTGA` across the columns.
 
 . . .
 
-Row 0 and column 0 are alignments against **nothing but gaps**, so they are
+Row 0 and Column 0 are alignments against **nothing but gaps**, so they are
 just multiples of the gap penalty.
 
 ::: {.notes}
@@ -884,12 +884,12 @@ where to start and stop.
 | **T** | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
 | **T** | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
 | **T** | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **A** | 0 | **1** | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
-| **C** | 0 | 0 | **2** | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
-| **G** | 0 | 0 | 0 | **3** | 1 | 0 | 0 | 1 | 1 | 1 | 1 |
-| **T** | 0 | 0 | 0 | 1 | **4** | 2 | 0 | 0 | 0 | 0 | 0 |
-| **C** | 0 | 0 | 1 | 0 | 2 | **5** | 3 | 1 | 0 | 0 | 0 |
-| **A** | 0 | 1 | 0 | 0 | 0 | 3 | **6** | 4 | 2 | 0 | 0 |
+| **A** | 0 | [**1**]{style="color: #0057B8;"} | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
+| **C** | 0 | 0 | [**2**]{style="color: #0057B8;"} | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| **G** | 0 | 0 | 0 | [**3**]{style="color: #0057B8;"} | 1 | 0 | 0 | 1 | 1 | 1 | 1 |
+| **T** | 0 | 0 | 0 | 1 | [**4**]{style="color: #0057B8;"} | 2 | 0 | 0 | 0 | 0 | 0 |
+| **C** | 0 | 0 | 1 | 0 | 2 | [**5**]{style="color: #0057B8;"} | 3 | 1 | 0 | 0 | 0 |
+| **A** | 0 | 1 | 0 | 0 | 0 | 3 | [**6**]{style="color: #0057B8;"} | 4 | 2 | 0 | 0 |
 :::
 
 ::: {style="font-size: 70%;"}
