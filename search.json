@@ -95,7 +95,7 @@
     "href": "slides/topic-06-alignment.html#last-time",
     "title": "Aligning sequences",
     "section": "Last time",
-    "text": "Last time\nWe searched a genome for a exact matches to sequences of interest.\n\n\nCGATGCATGC\n  ATG  &lt;- match!\n\n\n\nEvery method we built — linear search, \\(k\\)-mer dictionary, suffix array — depends on an exact character-for-character match.\n\n0:00-1:00\nAnchor them in last week before pulling the rug. Everything in the string search lecture assumed the pattern is present verbatim."
+    "text": "Last time\nWe searched a genome for exact matches to sequences of interest.\n\n\nCGATGCATGC\n  ATG  &lt;- match!\n\n\n\nEvery method we built — linear search, \\(k\\)-mer dictionary, suffix array — depends on an exact character-for-character match.\n\n0:00-1:00\nAnchor them in last week before pulling the rug. Everything in the string search lecture assumed the pattern is present verbatim."
   },
   {
     "objectID": "slides/topic-06-alignment.html#but-sequences-evolve",
@@ -207,7 +207,7 @@
     "href": "slides/topic-06-alignment.html#setting-up-the-table",
     "title": "Aligning sequences",
     "section": "Setting up the table",
-    "text": "Setting up the table\n\\(A\\) = ACGTCA down the rows, \\(B\\) = ACTGA across the columns.\n\n\n\n\n\n–\nA\nC\nT\nG\nA\n\n\n\n\n–\n0\n-2\n-4\n-6\n-8\n-10\n\n\nA\n-2\n\n\n\n\n\n\n\nC\n-4\n\n\n\n\n\n\n\nG\n-6\n\n\n\n\n\n\n\nT\n-8\n\n\n\n\n\n\n\nC\n-10\n\n\n\n\n\n\n\nA\n-12\n\n\n\n\n\n\n\n\n\n\nRow 0 and column 0 are alignments against nothing but gaps, so they are just multiples of the gap penalty.\n\n17:30-18:30\nMake sure they see why F(0,3) = -6: aligning zero residues of A against three residues of B requires three gaps. The extra row and column are the base case, the equivalent of fib_nums[0] and fib_nums[1]."
+    "text": "Setting up the table\n\\(A\\) = ACGTCA down the rows, \\(B\\) = ACTGA across the columns.\n\n\n\n\n\n–\nA\nC\nT\nG\nA\n\n\n\n\n–\n0\n-2\n-4\n-6\n-8\n-10\n\n\nA\n-2\n\n\n\n\n\n\n\nC\n-4\n\n\n\n\n\n\n\nG\n-6\n\n\n\n\n\n\n\nT\n-8\n\n\n\n\n\n\n\nC\n-10\n\n\n\n\n\n\n\nA\n-12\n\n\n\n\n\n\n\n\n\n\nRow 0 and Column 0 are alignments against nothing but gaps, so they are just multiples of the gap penalty.\n\n17:30-18:30\nMake sure they see why F(0,3) = -6: aligning zero residues of A against three residues of B requires three gaps. The extra row and column are the base case, the equivalent of fib_nums[0] and fib_nums[1]."
   },
   {
     "objectID": "slides/topic-06-alignment.html#filling-the-first-cell",
