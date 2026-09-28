@@ -1,0 +1,548 @@
+---
+title: "Searching databases with BLAST"
+subtitle: "Seeding, extending, and the price of speed"
+# author: "Jamie Oaks"
+institute: "BIOL 5/6800 &mdash; Intro to Comp Bio"
+format:
+  revealjs:
+    slide-number: c/t
+    incremental: false
+    code-line-numbers: false
+    smaller: false
+    center-title-slide: true
+    history: false
+metadata-files:
+  - _metadata.yml
+bibliography: ../references.bib
+---
+
+## From last time
+
+**Smith-Waterman** finds the best **local** alignment:
+The best match between *part* of one sequence and *part* of another.
+
+. . .
+
+::: {style="font-size: 180%;"}
+```{.my-blue-code}
+TTTTACGTCA
+    ||||||
+    ACGTCAGGGG
+```
+:::
+
+. . .
+
+"Is some region of this database sequence similar to some region of my
+sequence?" is a **local** alignment question.
+
+That is the question you ask every time you run BLAST.
+
+::: {.notes}
+0:00-1:00
+
+Anchor in the end of last lecture. The point to land: BLAST is a local
+alignment search, so everything today builds on Smith-Waterman.
+:::
+
+## When you use BLAST
+
+::: {.incremental}
+-   Paste in a sequence and click a button
+-   A few seconds later: A ranked list of similar sequences
+-   Searched against GenBank; about **60 trillion** bases^[GenBank release 273.0,
+    August 2026: $6 \times 10^{13}$ bases]
+:::
+
+. . .
+
+***How is that possible?!***
+
+::: {.notes}
+1:00-1:45
+
+Ask for a show of hands: who has used BLAST? Most will have. Ask them to
+guess how it works before moving on.
+:::
+
+## Can we just use Smith-Waterman?
+
+The scoring table has $m \times n$ cells ($O(mn)$).
+
+. . .
+
+One 150-base read against GenBank:
+
+$$
+150 \times (5 \times 10^{13}) \approx 8 \times 10^{15} \text{ cells}
+$$
+
+::: {.incremental style="font-size: 80%;"}
+-   Optimized code, a billion cells per second: **~3 months**
+-   Our Python code: **decades** (you will measure this today)
+-   One sequencing run has **billions** of reads
+    -   Click, go on summer vacation, repeat
+:::
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+A faster computer does not fix this. We need to avoid doing most of the work.
+:::
+
+::: {.notes}
+1:45-3:30
+
+7.7e15 cells at 1e9 cells/s is ~89 days. Our pure-Python aligner runs at
+roughly 3 million cells/s, which works out to ~75-80 years; they will get their
+own number in Part 2 of the notebook.
+
+Callback to the complexity lecture: this is the "buying a cluster does not
+fix it" point.
+:::
+
+## Heuristic algorithms
+
+From our algorithms lecture:
+
+::: {style="font-size: 80%;"}
+-   Smith-Waterman is optimal but far too slow to scan all of GenBank
+-   BLAST first finds short exact seed matches, then only extends around those
+:::
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+"Approximate answer today" beats "exact answer in nine years."
+:::
+
+. . .
+
+Today we unpack that second bullet: **BLAST**^[@blast], the
+**B**asic **L**ocal **A**lignment **S**earch **T**ool.
+
+::: {.notes}
+3:30-4:15
+
+This is verbatim from the Topic 4 heuristics slide. The 1990 BLAST paper is
+among the most cited papers in all of science.
+:::
+
+# Seed and extend {background-color="#1b3a5c"}
+
+## The key insight
+
+Two homologous sequences almost always share at least one **short, exact**
+match.
+
+. . .
+
+::: {style="font-size: 180%;"}
+```{.my-blue-code}
+TGCTTACCAGTCAGGT
+TGCTTACGAGTCATTG
+```
+:::
+
+. . .
+
+So:
+
+::: {.incremental}
+1.  Find short exact matches (**seeds**) &mdash; fast!
+2.  Do alignment work **only** near the seeds
+3.  Ignore the rest of the database
+:::
+
+::: {.notes}
+4:15-5:15
+
+Let them spot the shared runs: TGCTTAC at the start and AGTCA in the middle.
+Finding exact matches is a problem we already know how to solve very fast.
+:::
+
+## Step 0: Index the database, once
+
+Finding exact matches of length $k$ fast?
+
+-   We have done this!
+
+. . .
+
+The **$k$-mer dictionary** from our string search lecture:
+
+```python
+{"TGCT": [0], "GCTT": [1], "CTTA": [2], ...}
+```
+
+::: {.incremental}
+-   Build it **once** for the whole database
+-   Every lookup after that is $O(1)$
+-   NCBI builds its BLAST databases long before you submit a query
+:::
+
+::: {.notes}
+5:15-6:15
+
+Direct callback to the string search timing result: the setup cost gets
+spread over an enormous number of searches. Real BLAST builds a lookup table
+of query words and scans the database, but the idea (index so that exact
+matches are instant) is the same. Don't go into that distinction.
+:::
+
+## Step 1: Seeds
+
+Look up every $k$-mer of the query ($k = 4$ below):
+
+::: {style="font-size: 110%;"}
+```
+query:   TGCTTACCAGTCAGGT
+subject: GGATCCATGCTTACGAGTCATTGCAACGT
+```
+:::
+
+::: {style="font-size: 75%;"}
+| Query $k$-mer | Query position | Subject position(s) |
+|:-:|--:|--:|
+| `TGCT` | 0 | 7 |
+| `GCTT` | 1 | 8 |
+| `CTTA` | 2 | 9 |
+| `TTAC` | 3 | 10 |
+| `TACC` | 4 | &mdash; |
+| &hellip; | | |
+| `AGTC` | 8 | 15 |
+| `GTCA` | 9 | 16 |
+:::
+
+::: {.notes}
+6:15-7:15
+
+Each hit is a seed: a (query position, subject position) pair. This is
+exactly the find_seeds function they will write (Challenge 4). The same
+example is in the notebook.
+:::
+
+## Homologous seeds often line up on diagonals
+
+::: {style="font-size: 70%;"}
+| Seed | Query pos | Subject pos | Subject $-$ query |
+|:-:|--:|--:|--:|
+| `TGCT` | 0 | 7 | **7** |
+| `GCTT` | 1 | 8 | **7** |
+| `CTTA` | 2 | 9 | **7** |
+| `TTAC` | 3 | 10 | **7** |
+| `AGTC` | 8 | 15 | **7** |
+| `GTCA` | 9 | 16 | **7** |
+:::
+
+. . .
+
+All six are on the same **diagonal** of a dotplot: Pieces of the same
+alignment!
+
+. . .
+
+A seed alone on its own diagonal is usually just **chance**.
+
+::: {.notes}
+7:15-8:15
+
+Tie to the dotplots from the alignment exercise: homology shows up as
+diagonal runs, and isolated dots are noise. In the notebook, they will see
+seeds from a real read pile up on two diagonals separated by a 6-base
+deletion.
+:::
+
+## Step 2: Extend without gaps
+
+Grow the seed one base at a time, keeping a **running score**
+(match $+1$, mismatch $-1$):
+
+::: {style="font-size: 55%;"}
+| | seed | | | | | | | | | | | | |
+|:--|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| **query**   | TGCT | T | A | C | C | A | G | T | C | A | G | G | T |
+| **subject** | TGCT | T | A | C | G | A | G | T | C | A | T | T | G |
+| **score** | 4 | 5 | 6 | 7 | 6 | 7 | 8 | 9 | 10 | [**11**]{style="color: #0057B8;"} | 10 | 9 | 8 |
+:::
+
+. . .
+
+**X-drop rule**: stop once the score falls more than $X$ below the best score
+seen (here $X = 2$), then trim back to the best.
+
+. . .
+
+The result is a **high-scoring segment pair** (HSP) with a score of 11.
+
+::: {.notes}
+8:15-10:00
+
+Walk through the running score. The mismatch at the 8th column costs a point,
+but the matches after it recover. Once we run off the end of the homologous
+region, the score falls steadily, and X-drop stops us from wasting time.
+Real BLAST also extends to the left; same idea.
+:::
+
+## Indels break ungapped extension
+
+::: {style="font-size: 170%;"}
+```{.my-blue-code}
+Alpha: CCATGCTAT------CTCTGGGA
+Wuhan: CCATGCTATACATGTCTCTGGGA
+```
+:::
+
+
+::: {.incremental}
+-   Seeds on both sides of the indel, but on **two different diagonals**
+-   Ungapped extension gives two separate HSPs
+:::
+
+. . .
+
+**Gapped BLAST**^[@gappedblast]: Run a gapped alignment, but only in the short
+region around a good HSP.
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+Run Smith-Waterman aligner on ~200 bases, ***NOT*** 60 trillion.
+:::
+
+::: {.notes}
+10:00-11:15
+
+This is the spike 69-70 deletion they aligned last time (Alpha vs. Wuhan). In
+the notebook, simple_blast runs their own align_local on a small window around
+the best HSP. Real gapped BLAST uses an X-drop version of dynamic
+programming rather than a fixed window; our window is a simplification.
+:::
+
+## Step 3: Is the hit meaningful?
+
+In a database of 60 trillion bases, many matches happen **by chance**.
+
+. . .
+
+BLAST reports an **E-value**^[@Altschul1990]: The number of hits with a score
+this good you would *expect* by chance in a database this big.
+
+$$
+E = K\,m\,n\,e^{-\lambda S}
+$$
+
+::: {.incremental style="font-size: 85%;"}
+-   Bigger query ($m$) or database ($n$): More chance hits
+-   Higher score ($S$): **Exponentially** fewer chance hits
+-   $E = 10^{-50}$: Essentially impossible by chance. $E = 5$: Chance match. 
+:::
+
+::: {.notes}
+11:15-12:45
+
+Keep this light. K and lambda depend on the scoring scheme; no need to say
+more. This is a preview of the probability models coming in the next unit.
+The notebook reports raw scores only.
+:::
+
+# The price of speed {background-color="#1b3a5c"}
+
+## Missing homologous sequences
+
+BLAST only looks where it finds a seed.
+
+. . .
+
+A homolog with **no exact match of $k$ bases** is invisible to BLAST, no matter
+how good the full alignment would be.
+
+. . .
+
+::: {style="font-size: 180%;"}
+```{.my-blue-code}
+TGCTTACCAGTCAGGT
+| || ||| || || |
+TCCTAACCTGTAAGCT
+```
+:::
+
+. . .
+
+11 of 16 bases identical, but never more than 3 in a row
+
+-   With $k = 4$, we miss it!
+
+::: {.notes}
+12:45-13:45
+
+The two sequences are 69% identical (11 of 16 positions), which is clearly
+similar, but the longest identical run is 3 bases. Point: sensitivity depends
+on the word size, not just on how similar the sequences are.
+:::
+
+## The word size ($k$) trade-off
+
+Number of chance seeds for a 150-base query against GenBank
+($\approx m\,n / 4^k$):
+
+::: {style="font-size: 90%;"}
+| Word size $k$ | Chance seeds | Needs an exact run of |
+|--:|--:|--:|
+| 7 | $\sim 5 \times 10^{11}$ | 7 bases |
+| 11 | $\sim 2 \times 10^{9}$ | 11 bases |
+| 28 | $\sim 0.1$ | 28 bases |
+:::
+
+. . .
+
+::: {.columns}
+::: {.column width="50%"}
+**Small $k$**
+
+More sensitive, much slower
+:::
+
+::: {.column width="50%"}
+**Large $k$**
+
+Much faster, misses divergent homologs
+:::
+:::
+
+::: {.notes}
+13:45-15:15
+
+Each base shorter makes a chance match 4 times more likely. Every chance seed
+has to be extended and thrown away. In the notebook, they will see k = 7
+produce over a thousand chance seeds against a single 30 kb genome, and a
+~100x slowdown relative to k = 11.
+:::
+
+## NCBI's tool choices
+
+::: {style="font-size: 90%;"}
+| Program (task) | Word size | Designed for |
+|:--|--:|:--|
+| `megablast` (default) | 28 | Highly similar sequences |
+| `blastn` | 11 | Somewhat similar sequences |
+| `blastn-short` | 7 | Short queries (*e.g.*, primers) |
+| Protein BLAST | 3 | Proteins (20-letter alphabet) |
+:::
+
+. . .
+
+When you pick an option on the BLAST web page, you are choosing a point along
+the speed/sensitivity trade-off continuum!
+
+::: {.notes}
+15:15-16:15
+
+Protein words can be short because the alphabet is 20 letters (8,000 possible
+3-mers), and protein BLAST also accepts similar, not just identical, words.
+One sentence on that at most.
+:::
+
+## Applying what we learned
+
+Which BLAST program would you use?
+
+::: {.incremental}
+-   Which species did this 16S sequence from a soil sample come from?
+-   Does a frog genome contain a homolog of this fly gene?
+-   Where does this 20-base PCR primer bind in the human genome?
+:::
+
+::: {.notes}
+16:15-17:30
+
+- 16S species ID: megablast (looking for a near-identical match)
+- Frog homolog of a lizard gene: blastn, or better yet protein BLAST, since
+  protein sequences change more slowly than DNA
+- 20-base primer: blastn-short (a word of 28 cannot fit in the query!)
+:::
+
+## BLAST does a bit more
+
+::: {.incremental}
+-   Searches **both strands** of DNA
+-   Masks **low-complexity** sequences (*e.g.*, `ATATATATAT`) that would seed
+    everywhere
+-   Protein BLAST requires **two seeds** near each other before extending
+-   Reports multiple HSPs per database sequence
+:::
+
+. . .
+
+But the core is exactly what you will build today: **Seed, extend, evaluate**
+
+::: {.notes}
+17:30-18:15
+
+Low-complexity masking and the two-hit method are both ways of cutting down
+on chance seeds, which ties back to the previous slide. The stretch goal in
+the notebook is about searching both strands.
+:::
+
+## Summary
+
+::: {style="font-size: 85%;"}
+::: {.incremental}
+-   Optimal local alignment is $O(mn)$, but $n$ is **tens of trillions**!
+-   **Seed**: Find short exact matches with an index built once
+-   **Extend**: Ungapped with the X-drop rule, then gapped only near good HSPs
+-   **Evaluate**: E-values suggest whether a hit is better than chance
+-   **Word size** sets the speed/sensitivity trade-off
+-   BLAST gives up the guarantee of optimality to get an answer fast
+:::
+:::
+
+::: {.notes}
+18:15-19:00
+
+If short on time, cut to the last two bullets.
+:::
+
+## In the exercise
+
+You will build BLAST from pieces you mostly already have:
+
+::: {.incremental style="font-size: 85%;"}
+1.  Turn your Needleman-Wunsch code into **Smith-Waterman** (three
+    small changes)
+2.  Time an optimal search of five SARS-CoV-2 genomes
+3.  `find_seeds`: Find seeds with your $k$-mer dictionary
+4.  Use seed-and-extend to identify a **mystery read**
+5.  Explore the word size trade-off
+:::
+
+. . .
+
+::: {.callout-tip}
+## Watch for
+Which variant the mystery read came from, and which variant is its runner-up.
+Last week's exercise holds the clue.
+:::
+
+::: {.notes}
+19:00-20:00
+
+The runner-up is Alpha, because it shares the spike 69-70 deletion with
+Omicron. Hand off to the notebook here. Remind them the first cell needs their
+name.
+:::
+
+## Exercise
+
+1.  Log into [molab](https://molab.marimo.io/)
+2.  [Open the exercise in molab](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-05-blast/toy_blast.py)
+3.  Click "Fork" button
+
+# References
+
+::: {#refs}
+:::
+
+## Acknowledgements
+
+I used Anthropic's Claude (Opus 5 model) to generate a draft of these slides.
