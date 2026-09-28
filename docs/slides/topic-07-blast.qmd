@@ -50,7 +50,7 @@ alignment search, so everything today builds on Smith-Waterman.
 ::: {.incremental}
 -   Paste in a sequence and click a button
 -   A few seconds later: A ranked list of similar sequences
--   Searched against GenBank; about **60 trillion** bases^[GenBank release 273.0,
+-   Searched against GenBank: About **60 trillion** bases^[GenBank release 273.0,
     August 2026: $6 \times 10^{13}$ bases]
 :::
 
@@ -74,12 +74,12 @@ The scoring table has $m \times n$ cells ($O(mn)$).
 One 150-base read against GenBank:
 
 $$
-150 \times (5 \times 10^{13}) \approx 8 \times 10^{15} \text{ cells}
+150 \times (6 \times 10^{13}) \approx 9 \times 10^{15} \text{ cells}
 $$
 
 ::: {.incremental style="font-size: 80%;"}
--   Optimized code, a billion cells per second: **~3 months**
--   Our Python code: **decades** (you will measure this today)
+-   Optimized code, a billion cells per second: **Over 3 months**
+-   Our Python code: **A century or more** (you will measure this today)
 -   One sequencing run has **billions** of reads
     -   Click, go on summer vacation, repeat
 :::
@@ -93,9 +93,9 @@ A faster computer does not fix this. We need to avoid doing most of the work.
 ::: {.notes}
 1:45-3:30
 
-7.7e15 cells at 1e9 cells/s is ~89 days. Our pure-Python aligner runs at
-roughly 3 million cells/s, which works out to ~75-80 years; they will get their
-own number in Part 2 of the notebook.
+9e15 cells at 1e9 cells/s is ~104 days. Our pure-Python aligner runs at
+roughly 2-3 million cells/s, which works out to ~100-150 years; they will get
+their own number in Part 2 of the notebook.
 
 Callback to the complexity lecture: this is the "buying a cluster does not
 fix it" point.
@@ -172,7 +172,7 @@ Finding exact matches of length $k$ fast?
 The **$k$-mer dictionary** from our string search lecture:
 
 ```python
-{"TGCT": [0], "GCTT": [1], "CTTA": [2], ...}
+{"TGCT": [7], "GCTT": [8], "CTTA": [9], ...}
 ```
 
 ::: {.incremental}
@@ -281,7 +281,7 @@ The result is a **high-scoring segment pair** (HSP) with a score of 11.
 Walk through the running score. The mismatch at the 8th column costs a point,
 but the matches after it recover. Once we run off the end of the homologous
 region, the score falls steadily, and X-drop stops us from wasting time.
-Real BLAST also extends to the left; same idea.
+BLAST (and extend_seed in the notebook) also extends to the left; same idea.
 :::
 
 ## Indels break ungapped extension
@@ -307,7 +307,7 @@ region around a good HSP.
 . . .
 
 ::: {.callout-note appearance="minimal"}
-Run Smith-Waterman aligner on ~200 bases, ***NOT*** 60 trillion.
+Run the Smith-Waterman aligner on ~200 bases, ***NOT*** 60 trillion.
 :::
 
 ::: {.notes}
@@ -321,21 +321,25 @@ programming rather than a fixed window; our window is a simplification.
 
 ## Step 3: Is the hit meaningful?
 
+::: {style="font-size: 85%;"}
 In a database of 60 trillion bases, many matches happen **by chance**.
+:::
 
 . . .
 
-BLAST reports an **E-value**^[@Altschul1990]: The number of hits with a score
-this good you would *expect* by chance in a database this big.
+::: {style="font-size: 85%;"}
+BLAST reports an **E-value**^[@Altschul1990]: The number of hits scoring at
+least this well that you would *expect* by chance in a database this big.
 
 $$
 E = K\,m\,n\,e^{-\lambda S}
 $$
+:::
 
 ::: {.incremental style="font-size: 85%;"}
 -   Bigger query ($m$) or database ($n$): More chance hits
 -   Higher score ($S$): **Exponentially** fewer chance hits
--   $E = 10^{-50}$: Essentially impossible by chance. $E = 5$: Chance match. 
+-   $E = 10^{-50}$: Essentially impossible by chance; $E = 5$: Probably just chance
 :::
 
 ::: {.notes}
@@ -354,7 +358,7 @@ BLAST only looks where it finds a seed.
 
 . . .
 
-A homolog with **no exact match of $k$ bases** is invisible to BLAST, no matter
+A homolog with **no exact match of $k$ consecutive bases** is invisible to BLAST, no matter
 how good the full alignment would be.
 
 . . .
@@ -416,7 +420,7 @@ Much faster, misses divergent homologs
 Each base shorter makes a chance match 4 times more likely. Every chance seed
 has to be extended and thrown away. In the notebook, they will see k = 7
 produce over a thousand chance seeds against a single 30 kb genome, and a
-~100x slowdown relative to k = 11.
+~100-200x slowdown relative to k = 11.
 :::
 
 ## NCBI's tool choices
@@ -449,7 +453,7 @@ Which BLAST program would you use?
 
 ::: {.incremental}
 -   Which species did this 16S sequence from a soil sample come from?
--   Does a frog genome contain a homolog of this fly gene?
+-   Does a human genome contain a homolog of this frog gene?
 -   Where does this 20-base PCR primer bind in the human genome?
 :::
 
@@ -457,7 +461,7 @@ Which BLAST program would you use?
 16:15-17:30
 
 - 16S species ID: megablast (looking for a near-identical match)
-- Frog homolog of a lizard gene: blastn, or better yet protein BLAST, since
+- Human homolog of a frog gene: blastn, or better yet protein BLAST, since
   protein sequences change more slowly than DNA
 - 20-base primer: blastn-short (a word of 28 cannot fit in the query!)
 :::
@@ -474,13 +478,14 @@ Which BLAST program would you use?
 
 . . .
 
-But the core is exactly what you will build today: **Seed, extend, evaluate**
+But the core is what you will build today: **Seed, extend, evaluate**
 
 ::: {.notes}
 17:30-18:15
 
 Low-complexity masking and the two-hit method are both ways of cutting down
-on chance seeds, which ties back to the previous slide. The stretch goal in
+on chance seeds, which ties back to the word size slide. In the notebook,
+"evaluate" is just a raw-score cutoff (min_score), not an E-value. The stretch goal in
 the notebook is about searching both strands.
 :::
 
@@ -521,7 +526,7 @@ You will build BLAST from pieces you mostly already have:
 ::: {.callout-tip}
 ## Watch for
 Which variant the mystery read came from, and which variant is its runner-up.
-Last week's exercise holds the clue.
+The sequence alignment exercise holds the clue.
 :::
 
 ::: {.notes}
