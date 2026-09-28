@@ -8,7 +8,7 @@
 
 import marimo
 
-__generated_with = "0.24.2"
+__generated_with = "0.25.0"
 app = marimo.App(width="medium")
 
 
@@ -289,7 +289,7 @@ def _(mo):
     biological claim are we making when we make gaps more expensive than
     mismatches?**
 
-    **Answer**: 
+    **Answer**:
     """)
     return
 
@@ -1210,7 +1210,7 @@ def _(mo):
 
 
 @app.cell
-def _(alpha_fragment, wuhan_fragment):
+def _():
     # Add your code below to align and visualize the wuhan and alpha fragments
     # First, replace `"", "", 0` with the a call to `align_sequences(...)`.
     # Second, use the `print_alignment(...)` function to view the results.
@@ -1296,7 +1296,7 @@ def _(mo):
 
 
 @app.cell
-def _(local_seq_1, local_seq_2):
+def _():
     # Write your stretch goal code here
     return
 
