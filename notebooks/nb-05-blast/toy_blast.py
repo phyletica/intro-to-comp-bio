@@ -742,7 +742,7 @@ def _(mo):
 
     Double-click this cell and answer the questions below.
 
-    GenBank currently holds about **50 trillion** ($5 \times 10^{13}$) bases of
+    GenBank currently holds about **60 trillion** ($6 \times 10^{13}$) bases of
     sequence.
     There are about 31.5 million ($3.15 \times 10^{7}$) seconds in a year.
 
