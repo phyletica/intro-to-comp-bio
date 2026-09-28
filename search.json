@@ -14,7 +14,7 @@
     "href": "index.html#lecture-presentations",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lecture Presentations",
-    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides\nView Lecture 4 Slides\nView Lecture 5 Slides\nView Lecture 6 Slides",
+    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides\nView Lecture 4 Slides\nView Lecture 5 Slides\nView Lecture 6 Slides\nView Lecture 7 Slides",
     "crumbs": [
       "Home"
     ]
@@ -24,7 +24,17 @@
     "href": "index.html#lab-exercises",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lab exercises",
-    "text": "Lab exercises\n\nIntro to Bash\nSetting up a molab account\n\n\nPython notebook exercises\nTo work on one of the marimo Python notebooks below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button.\n\n\nExercise 4: Intro to Python & marimo notebooks \nExercise 5: Complexity Lab \nExercise 6: String Search Lab \nExercise 7: Sequence Alignment Lab",
+    "text": "Lab exercises\n\nIntro to Bash\nSetting up a molab account\n\n\nPython notebook exercises\nTo work on one of the marimo Python notebooks below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button.\n\n\nExercise 4: Intro to Python & marimo notebooks \nExercise 5: Complexity Lab \nExercise 6: String Search Lab \nExercise 7: Sequence Alignment Lab \nExercise 8: BLAST Lab",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "index.html#capstone-projects",
+    "href": "index.html#capstone-projects",
+    "title": "Welcome to Intro to Comp Bio",
+    "section": "Capstone projects",
+    "text": "Capstone projects\n\nCapstone 1: Tracing SARS-CoV-2 variants",
     "crumbs": [
       "Home"
     ]
@@ -40,55 +50,277 @@
     ]
   },
   {
-    "objectID": "bash-exercise.html",
-    "href": "bash-exercise.html",
-    "title": "Bash exercise",
+    "objectID": "molab-sign-up.html",
+    "href": "molab-sign-up.html",
+    "title": "Signing up for free GitHub and molab accounts",
     "section": "",
-    "text": "For this exercise, please log in to the Linux ThinLinc environment. You can find instructions to log in and setup ThinLinc here.\nFollow the instructions below to complete this exercise, and put your answers to the questions into the Exercise 2 quiz on Canvas."
+    "text": "For learning core concepts of computational biology, we will be using marimo python notebooks via marimo’s molab service. To access these notebooks, you will need to sign up for a free account on GitHub and molab."
   },
   {
-    "objectID": "bash-exercise.html#creating-a-new-directory-and-copying-files-into-it",
-    "href": "bash-exercise.html#creating-a-new-directory-and-copying-files-into-it",
-    "title": "Bash exercise",
-    "section": "Creating a new directory and copying files into it",
-    "text": "Creating a new directory and copying files into it\n\nOpen the “Terminal” app and navigate to your home directory:\n\n\nBash command line\n\ncd ~\n\nCreate a new directory called “exercise2”\n\n\nBash command line\n\nmkdir exercise2\n\nOpen the “Files” app (filing cabinet icon in the dock)\nAlong the left, click on the “Biol5800-6800” folder\nRight-click on the “answer1.txt” file, and click on “Copy to…”\n\n\n\n\n\n\nFigure 1: Copying shared file in Files app.\n\n\n\nIn the “Select Copy Destination” window:\n\nClick “Home” along the left and then select the “exercise2” folder\nClick “Select” in the upper right of the window\n\n\n\n\n\n\n\nFigure 2: Selecting “exercise2 folder as copy destination.\n\n\n\nRepeat the 2 previous steps for the “SARS-CoV-2.fasta” file to copy it to the “exercise2” folder\nNow, go back to your Terminal window and move into the “exercise2” directory and confirm the files you copied are there:\n\n\nBash command line\n\ncd exercise2\nls\n\n\n\nQuestion 1\nUse the command line to see what is in the answer1.txt file. Enter what you find in the file into Question 1 of the Exercise 2 quiz on Canvas.\n\nHint: The commands cat or less would be useful. You can use man to learn more about both of them.\nHint: If you log in to Canvas within ThinLinc, you can copy and paste the answer!"
+    "objectID": "molab-sign-up.html#signing-up-for-a-free-github-account",
+    "href": "molab-sign-up.html#signing-up-for-a-free-github-account",
+    "title": "Signing up for free GitHub and molab accounts",
+    "section": "Signing up for a free GitHub account",
+    "text": "Signing up for a free GitHub account\nIf you already have a GitHub account, you are welcome to use it for our class and can skip this section.\nPlease go to GitHub’s website and click “Sign up” in the upper right of the screen (Figure 1).\n\n\n\n\n\n\nFigure 1: GitHub sign up.\n\n\n\nCreate a username and enter your information. I recommend creating a username you will want to continue using for many years. Also, please feel free to use a personal email address for your GitHub account (i.e., you are not required to use your AU account)."
   },
   {
-    "objectID": "bash-exercise.html#manipulating-sequence-data",
-    "href": "bash-exercise.html#manipulating-sequence-data",
-    "title": "Bash exercise",
-    "section": "Manipulating sequence data",
-    "text": "Manipulating sequence data\nThe “SARS-CoV-2.fasta” file contains nucleotide sequence data from different strains of the SARS-CoV-2 virus. The sequences are in a format called FASTA. The FASTA format looks like:\n&gt;Name1\nAATCGGCTA\n&gt;Name2\nATTCGCCTA\n\nQuestion 2\nUse the command line to determine the number of sequences in the “SARS-CoV-2.fasta” file.\n\nNotice all sequences start with a “&gt;” character to specify the seqence’s name. We can use that to count the sequences efficiently. Try:\n\n\nBash command line\n\ngrep \"&gt;\" SARS-CoV-2.fasta\n\nNOTE: Putting quotes around the &gt; character is important, because in the Bash language, this character is normally used to redirect output!\ngrep is a very useful command for finding string patterns. You can learn more about it with man grep.\ngrep works okay for this small FASTA file, but what if there were 1000s of sequences in the file? You wouldn’t want to count them “by hand!”\nWe can use the wc command (word count) for counting the sequences. Try:\n\n\nBash command line\n\ngrep \"&gt;\" SARS-CoV-2.fasta | wc -l\n\nThe pipe (|) character converts, or “pipes”, the output of one command to input to another command. wc -l will count the number of lines output by grep\n\nPut the number of sequences into Question 2 of the Exercise 2 quiz on Canvas.\n\n\nQuestion 3\nWhat does the -l flag in the wc -l do? Hint: use the man command to find out!\n\n\nQuestion 4\nWhat is your output for the following command?\n\n\nBash command line\n\nwhoami\n\n\n\nQuestion 5\nWhat is your output for the following command?\n\n\nBash command line\n\necho $MACHTYPE\n\n\n\nQuestion 6\nWhat is your output for the following command?\n\n\nBash command line\n\nuname -a\n\n\n\nQuestion 7\nWhat does the -a flag do in the uname -a command (use man to find out!)?"
+    "objectID": "molab-sign-up.html#signing-up-for-a-free-molab-account",
+    "href": "molab-sign-up.html#signing-up-for-a-free-molab-account",
+    "title": "Signing up for free GitHub and molab accounts",
+    "section": "Signing up for a free molab account",
+    "text": "Signing up for a free molab account\nIf you already have a molab account, you are welcome to use it for out class and can skip this section.\n\nPlease go to marimo’s molab website\nClick the “Sign in” button near the top right of the screen, and in the “Create your account” window that pops up, click “GitHub” (Figure 2).\n\n\n\n\n\n\nFigure 2: Create molab account.\n\n\n\nA “Sign in to GitHub to continue to marimo” window should pop open. Enter the username/email and password for your GitHub account and click “Sign in” (Figure 3).\n\n\n\n\n\n\nFigure 3: Sign in using your GitHub credentials.\n\n\n\nAn “Authorize marimo” window should pop up. Click “Authorize marimo-team” (Figure 4).\n\n\n\n\n\n\nFigure 4: Authorize marimo to access info from GitHub.\n\n\n\nYou should now be logged in to your new molab account (Figure 5)!\n\n\n\n\n\n\nFigure 5: Succesfully logged in to molab."
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "What is Intro to Comp Bio?",
+    "objectID": "molab-sign-up.html#molab-account-info",
+    "href": "molab-sign-up.html#molab-account-info",
+    "title": "Signing up for free GitHub and molab accounts",
+    "section": "molab account info",
+    "text": "molab account info\nWhile logged in to your marimo molab account, click on the icon near the upper right corner of the browser window, and, from the drop-down, click “Manage account” (Figure 6). This should open a “Profile details” window.\n\n\n\n\n\n\nFigure 6: Accessing molab account details.\n\n\n\nPlease open the Exercise 3 quiz on Canvas and use the information in your molab “Profile details” window to answer the questions below.\n\nQuestion 1\nWhat is the primary email address listed in your molab profile details?\n\n\nQuestion 2\nYou should see your GitHub account listed for “Connected accounts.” Please enter your GitHub username that is displayed."
+  },
+  {
+    "objectID": "thinlinc-intro.html",
+    "href": "thinlinc-intro.html",
+    "title": "AU COSAM Linux ThinLinc",
     "section": "",
-    "text": "Computational Biology is a very broad field that entails the use of computational techniques to study biology.",
-    "crumbs": [
-      "About"
-    ]
+    "text": "The IT group of the Collage of Sciences & Mathematics (COSAM IT) hosts a Linux desktop environment that can be run in a web browser using the software called ThinLinc. COSAM IT was kind enough to provide access to this Linux ThinLinc environment to all the students in our class.\nImportant! Please read the next 2 sections and don’t skip to logging in!"
   },
   {
-    "objectID": "about.html#acknowledgements",
-    "href": "about.html#acknowledgements",
-    "title": "What is Intro to Comp Bio?",
-    "section": "Acknowledgements",
-    "text": "Acknowledgements\nThis class borrows from Dr. Laurie Stevison’s class of the same name, and the Computational Biology class developed by Justin Fay.",
-    "crumbs": [
-      "About"
-    ]
+    "objectID": "thinlinc-intro.html#logging-out-of-a-thinlinc-session",
+    "href": "thinlinc-intro.html#logging-out-of-a-thinlinc-session",
+    "title": "AU COSAM Linux ThinLinc",
+    "section": "Logging out of a ThinLinc session",
+    "text": "Logging out of a ThinLinc session\nBefore we learn how to log in to a ThinLinc session, you need to know how to log out.\nYou cannot log out by closing your browser window!\nInstead you need to:\n\nClick the power icon a the top right of the Linux desktop in your browser window\nClick “Power Off/Log Out”\nClick “Log Out”\n\n\n\n\n\n\n\nFigure 1: How to log out of a Linux ThinLinc session.\n\n\n\nIf you do close your brower by mistake, it’s OK! Just go back to https://csm-earth.auburn.edu. The screen might look black, but that is just the Linux desktop’s lock screen. Click the black screen and you will be prompted to enter your password to unlock the screen. Use the same AU password as when you logged in (see below).\nIf you close your browser without logging out, your ThinLinc session remains active and uses resources on COSAM’s servers. So, please remember to log out when you’re done."
   },
   {
-    "objectID": "about.html#license",
-    "href": "about.html#license",
-    "title": "What is Intro to Comp Bio?",
-    "section": "License",
-    "text": "License\nThis work is marked CC0 1.0",
-    "crumbs": [
-      "About"
-    ]
+    "objectID": "thinlinc-intro.html#i-was-using-thinlinc-but-now-have-a-black-screen",
+    "href": "thinlinc-intro.html#i-was-using-thinlinc-but-now-have-a-black-screen",
+    "title": "AU COSAM Linux ThinLinc",
+    "section": "I was using ThinLinc but now have a black screen!",
+    "text": "I was using ThinLinc but now have a black screen!\nNo worries, the black screen is the Linux desktop’s lock screen. Click on it and you will be asked to enter your password to unlock the screen. Use the same AU password as when you logged in."
+  },
+  {
+    "objectID": "thinlinc-intro.html#logging-in-to-a-thinlinc-session",
+    "href": "thinlinc-intro.html#logging-in-to-a-thinlinc-session",
+    "title": "AU COSAM Linux ThinLinc",
+    "section": "Logging in to a ThinLinc session",
+    "text": "Logging in to a ThinLinc session\n\nMake sure you are connected to AU’s VPN.\nOpen your web browser and go to https://csm-earth.auburn.edu. You should see a login screen that looks like the screenshot below.\n\n\n\n\n\n\nFigure 2: Linux ThinLinc log in page.\n\n\n\nIn the “Username” field, enter your AU username (the first part of your AU email before the “@” symbol). For the password, enter the password for you AU account. Then, click “Log in”\nYou will see a prompt for 2-factor authentication like the one below. Enter the number associated with your preferred mode of authentication. In the example below, to use DUO, type “1” and click “Next.”\n\n\n\n\n\n\nFigure 3: Linux ThinLinc prompt for 2-factor authentication.\n\n\n\nAfter authenticating, the Linux Desktop will begin to load in your browser. This can take 30 seconds or so. Once the Linux Desktop has loaded, you can click “Activities” in the upper left of the desktop to reveal a dock along the bottom of the desktop. You can use the dock to launch applications (Figure 4).\n\n\n\n\n\n\nFigure 4: How to view the dock and launch apps."
+  },
+  {
+    "objectID": "thinlinc-intro.html#setting-up-our-shared-folder-in-thinlinc",
+    "href": "thinlinc-intro.html#setting-up-our-shared-folder-in-thinlinc",
+    "title": "AU COSAM Linux ThinLinc",
+    "section": "Setting up our shared folder in ThinLinc",
+    "text": "Setting up our shared folder in ThinLinc\nCOSAM IT has created a shared folder we can all access within our ThinLinc environment. To set up the shared folder, follow these steps. You only need to do this once!\n\nClick “Activities” in the upper left of the desktop.\nFrom the dock along the bottom, open the “Files” application (its icon is a filing cabinet; see Figure 4)\nAlong the left of the Files window, click “+ Other Locations”\nAlong the bottom of the window you will see “Connect to Server” and “Enter server address…” In the “Enter server address…” field type (or copy and paste):\nsmb://auo11.auburn.edu/csm\nand then click “Connect”\nAlong the left of the you shoud now see “csm on auo11.auburn.edu”. Click on that and then the “Academic - Class Resources” folder\nWithin the “Academic - Class Resources” folder, you should now see the “Biol5800-6800” folder. Click and drag the “Biol5800-6800” folder to the left of the window, and drop it where you see “New bookmark”.\n\nYou can now access the “Biol5800-6800” folder via the “Files” app whenever you are logged into ThinLinc. The whole class has access to this folder, and this is where I will put any files you need to use within the ThinLinc Linux environment."
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#todays-objectives",
+    "href": "slides/topic-04-algos-intro.html#todays-objectives",
+    "title": "What Is an Algorithm?",
+    "section": "Today’s objectives",
+    "text": "Today’s objectives\n\nWhat is an algorithm?\n\nBasic types\n\nHow do we compare/choose algorithms?\n\nTime/space complexity: “Big O” notation\n\nTime-memory trade-off\nExercise 5 (next time)"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#another-example",
+    "href": "slides/topic-04-algos-intro.html#another-example",
+    "title": "What Is an Algorithm?",
+    "section": "Another example",
+    "text": "Another example\nHow many possible trees relate \\(n\\) species?\n\\[(2n - 3)!!\\]\n\n\n\n\nTaxa\nPossible trees\n\n\n\n\n5\n105\n\n\n10\n~\\(3.4 \\times 10^{7}\\)\n\n\n20\n~\\(8.2 \\times 10^{21}\\)\n\n\n52\n~\\(2.8 \\times 10^{80}\\)\n\n\n\n\n\nThere are roughly \\(10^{80}\\) atoms in the observable universe.\n\nThis is the transition slide into Part 2. The number is absurd on purpose. “We cannot check them all” is exactly the situation that forces us to think about how we search, not just what we are searching for."
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#the-takeaway",
+    "href": "slides/topic-04-algos-intro.html#the-takeaway",
+    "title": "What Is an Algorithm?",
+    "section": "The takeaway",
+    "text": "The takeaway\n\nA biological question becomes a computational question when we have to specify exactly how to get from data to answer."
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#what-is-an-algorithm",
+    "href": "slides/topic-04-algos-intro.html#what-is-an-algorithm",
+    "title": "What Is an Algorithm?",
+    "section": "What is an algorithm?",
+    "text": "What is an algorithm?\n\n\n\n\n\n\nA finite, unambiguous sequence of steps that transforms an input into an output.\n\n\n\n\nA recipe is an algorithm. So is long division. So is:\n\n\ndef gc_content(seq):\n    gc = 0\n    for base in seq:\n        if base in \"GCgc\":\n            gc += 1\n    return gc / len(seq)\n\n\nAn algorithm is the idea; code is one expression of it"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#two-questions-about-any-algorithm",
+    "href": "slides/topic-04-algos-intro.html#two-questions-about-any-algorithm",
+    "title": "What Is an Algorithm?",
+    "section": "Two questions about any algorithm",
+    "text": "Two questions about any algorithm\n\n\nIs it correct?\nDoes it give the right answer for every valid input, not just the one you tested?\n\nIs it feasible?\nWill it finish before your grant does? Will it fit in memory?\n\n\nFor most of biology, correctness is necessary but feasibility decides what you can actually ask"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#families-of-algorithmic-strategies",
+    "href": "slides/topic-04-algos-intro.html#families-of-algorithmic-strategies",
+    "title": "What Is an Algorithm?",
+    "section": "Families of algorithmic strategies",
+    "text": "Families of algorithmic strategies\nRather than memorize algorithms, learn to recognize strategies:\n\n\nExhaustive / brute force: try everything\nDivide and conquer: split, solve, recombine\nDynamic programming: solve subproblems once and reuse\nGreedy: take the locally best step, never look back\nHeuristic: trade guarantees for speed\nStochastic: use randomness deliberately\n\n\n\nThese are not mutually exclusive; real tools mix them"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#exhaustive-search",
+    "href": "slides/topic-04-algos-intro.html#exhaustive-search",
+    "title": "What Is an Algorithm?",
+    "section": "1. Exhaustive search",
+    "text": "1. Exhaustive search\nIdea: enumerate every candidate solution, score each, keep the best\n\n\n\nPros\n\nGuaranteed optimal\nEasy to reason about\nGreat for small problems\n\n\nCons\n\nCost (time and/or memory) explodes with input size\nUsually impossible in practice\n\n\n\n\nBiology: finding the optimal tree for 7 taxa (10,395 trees — fine). For 30 taxa — not fine, ever."
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#divide-and-conquer",
+    "href": "slides/topic-04-algos-intro.html#divide-and-conquer",
+    "title": "What Is an Algorithm?",
+    "section": "2. Divide and conquer",
+    "text": "2. Divide and conquer\nIdea: break the problem into smaller versions of itself, solve those, combine the results.\ndef binary_search(sorted_values, target):\n    lo = 0\n    hi = len(sorted_values) - 1\n    while lo &lt;= hi:\n        mid = (lo + hi) // 2\n        if sorted_values[mid] == target:\n            return mid\n        elif sorted_values[mid] &lt; target:\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return None\n\nEach step throws away half the remaining data; searching 1 billion sorted values takes ~30 comparisons"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#dynamic-programming",
+    "href": "slides/topic-04-algos-intro.html#dynamic-programming",
+    "title": "What Is an Algorithm?",
+    "section": "3. Dynamic programming",
+    "text": "3. Dynamic programming\nIdea: the problem has overlapping subproblems. Solve each one once, store the answer, look it up later.\n\nA canonical example in biology is the Needleman–Wunsch algorithm for aligning sequences"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#needleman-wunsch-alignment",
+    "href": "slides/topic-04-algos-intro.html#needleman-wunsch-alignment",
+    "title": "What Is an Algorithm?",
+    "section": "Needleman-Wunsch alignment1",
+    "text": "Needleman-Wunsch alignment1\n\\[\nF(i,j) = \\max\n\\begin{cases}\nF(i-1,\\,j-1) + s(A_i, B_j) & \\text{(match/mismatch)}\\\\\nF(i-1,\\,j) + g & \\text{(gap in }B)\\\\\nF(i,\\,j-1) + g & \\text{(gap in }A)\n\\end{cases}\n\\]\n\nEvery cell is computed from cells we already filled in; fill a  table, then trace back.\n\n\n\n\n\n\n\nGuaranteed optimal and way faster than enumerating alignments.\n\na smart strategy can turn an impossible problem (exponentially many alignments) into a tractable one (fill a table).\n\n\nNeedleman and Wunsch (1970)"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#dynamic-programming-why-it-wins",
+    "href": "slides/topic-04-algos-intro.html#dynamic-programming-why-it-wins",
+    "title": "What Is an Algorithm?",
+    "section": "Dynamic programming: why it wins",
+    "text": "Dynamic programming: why it wins\nExample: Calculating Fibonacci numbers (\\(F_{n}\\))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\\(n\\)\n0\n1\n2\n3\n4\n5\n6\n7\n8\n\\(\\ldots\\)\n\n\n\\(F_{n}\\)\n0\n1\n1\n2\n3\n5\n8\n13\n21\n\\(\\ldots\\)\n\n\n\n\n\\(F_{0} = 0, F_{1} = 1, F_{n} = F_{n-1} + F_{n-2}\\)"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#greedy-algorithms",
+    "href": "slides/topic-04-algos-intro.html#greedy-algorithms",
+    "title": "What Is an Algorithm?",
+    "section": "4. Greedy algorithms",
+    "text": "4. Greedy algorithms\nIdea: at each step, take whatever looks best right now. Commit. Move on.\n\n\n\nPros\n\nFast and simple\nOften very good in practice\n\n\nCons\n\nNo guarantee of the global optimum\nOne early bad call propagates"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#greedy-algorithms-1",
+    "href": "slides/topic-04-algos-intro.html#greedy-algorithms-1",
+    "title": "What Is an Algorithm?",
+    "section": "4. Greedy algorithms",
+    "text": "4. Greedy algorithms\nBiology example: UPGMA and neighbor-joining methods for estimating trees\n\n\nBoth methods repeatedly join the closest pair of clusters and never revisit that decision.\n\n\n\nAnalogy: Hiking to the highest peak by always walking uphill. You will reach a summit. Not necessarily the tallest one."
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#heuristics",
+    "href": "slides/topic-04-algos-intro.html#heuristics",
+    "title": "What Is an Algorithm?",
+    "section": "5. Heuristics",
+    "text": "5. Heuristics\nIdea: deliberately give up the guarantee of optimality in exchange for an answer you can actually get (greedy is one type)\n\n\nBiology example: Searching databases for similar sequences with BLAST1\n\nSmith–Waterman algorithm2 is optimal but far too slow to scan all of GenBank\nBLAST first finds short exact seed matches, then only extends around those\n\n\n\n\nBLAST can miss things, but it is used billions of times a year\n\n\n\n\n\n“Approximate answer today” beats “exact answer in nine years.”\n\n\n\n\nAltschul et al. (1990)Smith and Waterman (1981)"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#stochastic-randomized",
+    "href": "slides/topic-04-algos-intro.html#stochastic-randomized",
+    "title": "What Is an Algorithm?",
+    "section": "6. Stochastic / randomized",
+    "text": "6. Stochastic / randomized\nIdea: use randomness as part of the procedure.\n\nBootstrapping: resample data to assess variance\nMCMC: random walk through model space, guided by the likelihood\nRandomized starts: restart a heuristic search from many points; keep the best\n\n\nSlightly different answers from each run; this is a feature"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#checkpoint",
+    "href": "slides/topic-04-algos-intro.html#checkpoint",
+    "title": "What Is an Algorithm?",
+    "section": "Checkpoint",
+    "text": "Checkpoint\nWhich strategy would you reach for?\n\nFind the optimal alignment of two 500-bp sequences\nFind homologs of one protein across all of UniProt (a huge database)\nFind the best phylogenetic tree for 5 species\nFind the best phylogenetic tree for 500 species\n\n\n\nFind the optimal alignment of two 500-bp sequences: dynamic programming\nFind homologs of one protein across all of UniProt: heuristic\nFind the best tree for 5 taxa: exhaustive\nFind the best tree for 500 taxa: heuristic + greedy + stochastic"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#the-problem-with-it-took-12-seconds",
+    "href": "slides/topic-04-algos-intro.html#the-problem-with-it-took-12-seconds",
+    "title": "What Is an Algorithm?",
+    "section": "The problem with “it took 12 seconds”",
+    "text": "The problem with “it took 12 seconds”\n\nOn which machine?\nWith which input?\nIn Python or C?\nHow many other things were running?\n\n\nWe want something that describes the algorithm, not the afternoon"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#big-o-notation",
+    "href": "slides/topic-04-algos-intro.html#big-o-notation",
+    "title": "What Is an Algorithm?",
+    "section": "Big O notation",
+    "text": "Big O notation\nIdea: count how the number of operations grows as the input (\\(n\\)) grows, and ignore everything else.\n\nSpecifically, we throw away:\n\nconstant factors — \\(3n\\) and \\(n\\) are both \\(O(n)\\)\nlower-order terms — \\(n^2 + 500n + 900\\) is \\(O(n^2)\\)\n\n\n\nWe keep only the term that dominates as \\(n\\) gets large.\n\nEmphasize: big O is about scaling behavior, not about predicting seconds. It answers “what happens when my dataset gets 10x bigger?”"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#reading-big-o-from-code",
+    "href": "slides/topic-04-algos-intro.html#reading-big-o-from-code",
+    "title": "What Is an Algorithm?",
+    "section": "Reading big O from code",
+    "text": "Reading big O from code\ndef count_bases(sequence):\n    counts = {}\n    for base in sequence:  # O(n) — one pass over n bases\n        counts[base] = counts.get(base, 0) + 1\n    return counts\n\\(O(n)\\): Loop over \\(n\\) bases\n\ndef pairwise_distances(sequences):\n    d = {}\n    for i, seq_a in enumerate(sequences):  # O(n^2) — every pair of n sequences\n        for j, seq_b in enumerate(sequences):\n            if i &lt; j:\n                d[(i, j)] = hamming(seq_a, seq_b)\n    return d\n\\(O(n^2)\\): Nested for loops for all pairs of \\(n\\) sequences\n\n\nRough rule of thumb: each nested loop over the input multiplies by another factor of \\(n\\)."
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#common-complexity-classes",
+    "href": "slides/topic-04-algos-intro.html#common-complexity-classes",
+    "title": "What Is an Algorithm?",
+    "section": "Common complexity classes",
+    "text": "Common complexity classes\n\n\n\nNotation\nName\nExample\n\n\n\n\n\\(O(1)\\)\nconstant\ndict lookup\n\n\n\\(O(\\log n)\\)\nlogarithmic\nbinary search\n\n\n\\(O(n)\\)\nlinear\nscanning a sequence\n\n\n\\(O(n \\log n)\\)\nlinearithmic\nsorting\n\n\n\\(O(n^2)\\)\nquadratic\nall pairwise comparisons\n\n\n\\(O(n^3)\\)\ncubic\nsome matrix operations\n\n\n\\(O(2^n)\\)\nexponential\nall subsets\n\n\n\\(O(n!)\\)\nfactorial\nall orderings"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#why-the-complexity-class-matters",
+    "href": "slides/topic-04-algos-intro.html#why-the-complexity-class-matters",
+    "title": "What Is an Algorithm?",
+    "section": "Why the complexity class matters",
+    "text": "Why the complexity class matters\nAssume ~10 million simple Python operations per second:\n\n\n\n\\(n\\)\n\\(O(n)\\)\n\\(O(n \\log n)\\)\n\\(O(n^2)\\)\n\\(O(n^3)\\)\n\n\n\n\n10\n1 µs\n3 µs\n10 µs\n100 µs\n\n\n100\n10 µs\n66 µs\n1 ms\n100 ms\n\n\n1,000\n100 µs\n1 ms\n100 ms\n1.7 min\n\n\n1,000,000\n100 ms\n2 s\n1.2 days\n3,000 yr\n\n\n\n\n\n\n\nA better algorithm can scale to lots of data"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#exponential-is-a-different-universe",
+    "href": "slides/topic-04-algos-intro.html#exponential-is-a-different-universe",
+    "title": "What Is an Algorithm?",
+    "section": "Exponential is a different universe",
+    "text": "Exponential is a different universe\n\n\n\n\\(n\\)\n\\(O(2^n)\\)\n\\(O(n!)\\)\n\n\n\n\n10\n100 µs\n0.4 s\n\n\n20\n100 ms\n7,700 yr\n\n\n30\n1.8 min\n\\(8 \\times 10^{17}\\) yr\n\n\n50\n3.6 yr\n—\n\n\n\n\nExample: the exhaustive tree search from earlier\nIt is not a hardware problem, and buying a cluster does not fix it"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#space-complexity",
+    "href": "slides/topic-04-algos-intro.html#space-complexity",
+    "title": "What Is an Algorithm?",
+    "section": "Space complexity",
+    "text": "Space complexity\nThe same notation describes memory.\n\nStoring a sequence of length \\(n\\): \\(O(n)\\)\nStoring all pairwise distances among \\(n\\) sequences: \\(O(n^2)\\)\nThe Needleman–Wunsch table for two length-\\(n\\) sequences: \\(O(n^2)\\)\n\n\nTwo 100,000-bp sequences:\n\nA table with \\(10^{10}\\) cells\nAt 4 bytes per cell that is ~40 GB."
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#time-and-memory-pull-against-each-other",
+    "href": "slides/topic-04-algos-intro.html#time-and-memory-pull-against-each-other",
+    "title": "What Is an Algorithm?",
+    "section": "Time and memory pull against each other",
+    "text": "Time and memory pull against each other\n\n\nSpend memory, save time\n\nPrecompute and store results so you never recompute them\n\n\nSpend time, save memory\n\nRecompute on-demand and store as little as possible\n\n\n\nAlmost every real bioinformatics tool sits somewhere on this spectrum, and the position is a design choice."
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#trade-off-in-python-lists-vs-sets",
+    "href": "slides/topic-04-algos-intro.html#trade-off-in-python-lists-vs-sets",
+    "title": "What Is an Algorithm?",
+    "section": "Trade-off in Python: lists vs sets",
+    "text": "Trade-off in Python: lists vs sets\ngene_ids_list = [...]         # 1,000,000 IDs\ngene_ids_set  = set(gene_ids_list)\n\n\"BRCA1\" in gene_ids_list      # O(n) — scans until found\n\"BRCA1\" in gene_ids_set       # O(1) — hashes and jumps\n\nThe set is dramatically faster to search — and uses noticeably more memory, because it stores a hash table.\n\n\nIf you do one lookup, use the list\nIf you do a million lookups, building the set pays for itself"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#trade-off-examples",
+    "href": "slides/topic-04-algos-intro.html#trade-off-examples",
+    "title": "What Is an Algorithm?",
+    "section": "Trade-off examples",
+    "text": "Trade-off examples\n\nBLAST builds a k-mer index of the database in memory so it never has to scan the whole thing\n\nMemory buys speed\n\nHirschberg’s algorithm1 aligns sequences with \\(O(n)\\) memory instead of \\(O(n^2)\\), at roughly twice the runtime\n\nTime buys memory\n\n\nHirschberg (1975)"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#choosing-an-algorithm",
+    "href": "slides/topic-04-algos-intro.html#choosing-an-algorithm",
+    "title": "What Is an Algorithm?",
+    "section": "Choosing an algorithm",
+    "text": "Choosing an algorithm\n\nHow big is \\(n\\), and how big will it be next year?\nDo I need the guaranteed optimum, or a good answer?\nAm I running this once, or a million times?\nWhat resource am I actually short of: hours or RAM?\n\n\n\n\n\nThere is no “best” algorithm. There is a best algorithm for your problem, at your scale, under your constraints."
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#summary",
+    "href": "slides/topic-04-algos-intro.html#summary",
+    "title": "What Is an Algorithm?",
+    "section": "Summary",
+    "text": "Summary\n\n\nBiology’s data outgrew our ability to inspect it\n\nalgorithms are how we cope\n\nA handful of strategies (exhaustive, divide and conquer, DP, greedy, heuristic, stochastic) explain most of what tools actually do\nBig O describes how cost scales with input size, in time and memory\n\nConstant factors are a hardware problem; complexity class is a thinking problem\n\nChoosing an algorithm means choosing where to spend time and where to spend memory"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#exercise",
+    "href": "slides/topic-04-algos-intro.html#exercise",
+    "title": "What Is an Algorithm?",
+    "section": "Exercise",
+    "text": "Exercise\n\nLog into molab\nOpen the exercise in molab\nClick “Fork” button"
+  },
+  {
+    "objectID": "slides/topic-04-algos-intro.html#references",
+    "href": "slides/topic-04-algos-intro.html#references",
+    "title": "What Is an Algorithm?",
+    "section": "",
+    "text": "Altschul, Stephen F., Warren Gish, Webb Miller, Eugene W. Myers, and David J. Lipman. 1990. “Basic Local Alignment Search Tool.” Journal of Molecular Biology 215 (3): 403–10. https://doi.org/10.1016/S0022-2836(05)80360-2.\n\n\nHirschberg, D. S. 1975. “A Linear Space Algorithm for Computing Maximal Common Subsequences.” Communications of the ACM (New York, NY, USA) 18 (6): 341–43. https://doi.org/10.1145/360825.360861.\n\n\nNeedleman, Saul B., and Christian D. Wunsch. 1970. “A General Method Applicable to the Search for Similarities in the Amino Acid Sequence of Two Proteins.” Journal of Molecular Biology 48 (3): 443–53. https://doi.org/10.1016/0022-2836(70)90057-4.\n\n\nSmith, T. F., and M. S. Waterman. 1981. “Identification of Common Molecular Subsequences.” Journal of Molecular Biology 147 (1): 195–97. https://doi.org/10.1016/0022-2836(81)90087-5."
   },
   {
     "objectID": "slides/topic-06-alignment.html#last-time",
@@ -833,276 +1065,201 @@
     "text": "Carey, Maureen A., and Jason A. Papin. 2018. “Ten Simple Rules for Biologists Learning to Program.” PLOS Computational Biology 14 (1): 1–11. https://doi.org/10.1371/journal.pcbi.1005871.\n\n\nMcLaughlin, P. J., and M. O. Dayhoff. 1973. “Eukaryote Evolution: A View Based on Cytochrome c Sequence Data.” Journal of Molecular Evolution 2 (2): 99–116. https://doi.org/10.1007/BF01653990."
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#todays-objectives",
-    "href": "slides/topic-04-algos-intro.html#todays-objectives",
-    "title": "What Is an Algorithm?",
-    "section": "Today’s objectives",
-    "text": "Today’s objectives\n\nWhat is an algorithm?\n\nBasic types\n\nHow do we compare/choose algorithms?\n\nTime/space complexity: “Big O” notation\n\nTime-memory trade-off\nExercise 5 (next time)"
+    "objectID": "slides/topic-07-blast.html#from-last-time",
+    "href": "slides/topic-07-blast.html#from-last-time",
+    "title": "Searching databases with BLAST",
+    "section": "From last time",
+    "text": "From last time\nSmith-Waterman finds the best local alignment: The best match between part of one sequence and part of another.\n\n\nTTTTACGTCA\n    ||||||\n    ACGTCAGGGG\n\n\n\n“Is some region of this database sequence similar to some region of my sequence?” is a local alignment question.\nThat is the question you ask every time you run BLAST.\n\n0:00-1:00\nAnchor in the end of last lecture. The point to land: BLAST is a local alignment search, so everything today builds on Smith-Waterman."
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#another-example",
-    "href": "slides/topic-04-algos-intro.html#another-example",
-    "title": "What Is an Algorithm?",
-    "section": "Another example",
-    "text": "Another example\nHow many possible trees relate \\(n\\) species?\n\\[(2n - 3)!!\\]\n\n\n\n\nTaxa\nPossible trees\n\n\n\n\n5\n105\n\n\n10\n~\\(3.4 \\times 10^{7}\\)\n\n\n20\n~\\(8.2 \\times 10^{21}\\)\n\n\n52\n~\\(2.8 \\times 10^{80}\\)\n\n\n\n\n\nThere are roughly \\(10^{80}\\) atoms in the observable universe.\n\nThis is the transition slide into Part 2. The number is absurd on purpose. “We cannot check them all” is exactly the situation that forces us to think about how we search, not just what we are searching for."
+    "objectID": "slides/topic-07-blast.html#when-you-use-blast",
+    "href": "slides/topic-07-blast.html#when-you-use-blast",
+    "title": "Searching databases with BLAST",
+    "section": "When you use BLAST",
+    "text": "When you use BLAST\n\nPaste in a sequence and click a button\nA few seconds later: A ranked list of similar sequences\nSearched against GenBank: About 60 trillion bases1\n\n\nHow is that possible?!\n\n1:00-1:45\nAsk for a show of hands: who has used BLAST? Most will have. Ask them to guess how it works before moving on.\n\n\nGenBank release 273.0, August 2026: \\(6 \\times 10^{13}\\) bases"
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#the-takeaway",
-    "href": "slides/topic-04-algos-intro.html#the-takeaway",
-    "title": "What Is an Algorithm?",
-    "section": "The takeaway",
-    "text": "The takeaway\n\nA biological question becomes a computational question when we have to specify exactly how to get from data to answer."
+    "objectID": "slides/topic-07-blast.html#can-we-just-use-smith-waterman",
+    "href": "slides/topic-07-blast.html#can-we-just-use-smith-waterman",
+    "title": "Searching databases with BLAST",
+    "section": "Can we just use Smith-Waterman?",
+    "text": "Can we just use Smith-Waterman?\nThe scoring table has \\(m \\times n\\) cells (\\(O(mn)\\)).\n\nOne 150-base read against GenBank:\n\\[\n150 \\times (6 \\times 10^{13}) \\approx 9 \\times 10^{15} \\text{ cells}\n\\]\n\n\nOptimized code, a billion cells per second: Over 3 months\nOur Python code: A century or more (you will measure this today)\nOne sequencing run has billions of reads\n\nClick, go on summer vacation, repeat\n\n\n\n\n\n\n\n\nA faster computer does not fix this. We need to avoid doing most of the work.\n\n\n\n\n1:45-3:30\n9e15 cells at 1e9 cells/s is ~104 days. Our pure-Python aligner runs at roughly 2-3 million cells/s, which works out to ~100-150 years; they will get their own number in Part 2 of the notebook.\nCallback to the complexity lecture: this is the “buying a cluster does not fix it” point."
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#what-is-an-algorithm",
-    "href": "slides/topic-04-algos-intro.html#what-is-an-algorithm",
-    "title": "What Is an Algorithm?",
-    "section": "What is an algorithm?",
-    "text": "What is an algorithm?\n\n\n\n\n\n\nA finite, unambiguous sequence of steps that transforms an input into an output.\n\n\n\n\nA recipe is an algorithm. So is long division. So is:\n\n\ndef gc_content(seq):\n    gc = 0\n    for base in seq:\n        if base in \"GCgc\":\n            gc += 1\n    return gc / len(seq)\n\n\nAn algorithm is the idea; code is one expression of it"
+    "objectID": "slides/topic-07-blast.html#heuristic-algorithms",
+    "href": "slides/topic-07-blast.html#heuristic-algorithms",
+    "title": "Searching databases with BLAST",
+    "section": "Heuristic algorithms",
+    "text": "Heuristic algorithms\nFrom our algorithms lecture:\n\n\nSmith-Waterman is optimal but far too slow to scan all of GenBank\nBLAST first finds short exact seed matches, then only extends around those\n\n\n\n\n\n\n“Approximate answer today” beats “exact answer in nine years.”\n\n\n\n\n\nToday we unpack that second bullet: BLAST1, the Basic Local Alignment Search Tool.\n\n3:30-4:15\nThis is verbatim from the Topic 4 heuristics slide. The 1990 BLAST paper is among the most cited papers in all of science.\n\n\nAltschul et al. (1990)"
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#two-questions-about-any-algorithm",
-    "href": "slides/topic-04-algos-intro.html#two-questions-about-any-algorithm",
-    "title": "What Is an Algorithm?",
-    "section": "Two questions about any algorithm",
-    "text": "Two questions about any algorithm\n\n\nIs it correct?\nDoes it give the right answer for every valid input, not just the one you tested?\n\nIs it feasible?\nWill it finish before your grant does? Will it fit in memory?\n\n\nFor most of biology, correctness is necessary but feasibility decides what you can actually ask"
+    "objectID": "slides/topic-07-blast.html#the-key-insight",
+    "href": "slides/topic-07-blast.html#the-key-insight",
+    "title": "Searching databases with BLAST",
+    "section": "The key insight",
+    "text": "The key insight\nTwo homologous sequences almost always share at least one short, exact match.\n\n\nTGCTTACCAGTCAGGT\nTGCTTACGAGTCATTG\n\n\n\nSo:\n\nFind short exact matches (seeds) — fast!\nDo alignment work only near the seeds\nIgnore the rest of the database\n\n\n4:15-5:15\nLet them spot the shared runs: TGCTTAC at the start and AGTCA in the middle. Finding exact matches is a problem we already know how to solve very fast."
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#families-of-algorithmic-strategies",
-    "href": "slides/topic-04-algos-intro.html#families-of-algorithmic-strategies",
-    "title": "What Is an Algorithm?",
-    "section": "Families of algorithmic strategies",
-    "text": "Families of algorithmic strategies\nRather than memorize algorithms, learn to recognize strategies:\n\n\nExhaustive / brute force: try everything\nDivide and conquer: split, solve, recombine\nDynamic programming: solve subproblems once and reuse\nGreedy: take the locally best step, never look back\nHeuristic: trade guarantees for speed\nStochastic: use randomness deliberately\n\n\n\nThese are not mutually exclusive; real tools mix them"
+    "objectID": "slides/topic-07-blast.html#step-0-index-the-database-once",
+    "href": "slides/topic-07-blast.html#step-0-index-the-database-once",
+    "title": "Searching databases with BLAST",
+    "section": "Step 0: Index the database, once",
+    "text": "Step 0: Index the database, once\nFinding exact matches of length \\(k\\) fast?\n\nWe have done this!\n\n\nThe \\(k\\)-mer dictionary from our string search lecture:\n{\"TGCT\": [7], \"GCTT\": [8], \"CTTA\": [9], ...}\n\nBuild it once for the whole database\nEvery lookup after that is \\(O(1)\\)\nNCBI builds its BLAST databases long before you submit a query\n\n\n5:15-6:15\nDirect callback to the string search timing result: the setup cost gets spread over an enormous number of searches. Real BLAST builds a lookup table of query words and scans the database, but the idea (index so that exact matches are instant) is the same. Don’t go into that distinction."
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#exhaustive-search",
-    "href": "slides/topic-04-algos-intro.html#exhaustive-search",
-    "title": "What Is an Algorithm?",
-    "section": "1. Exhaustive search",
-    "text": "1. Exhaustive search\nIdea: enumerate every candidate solution, score each, keep the best\n\n\n\nPros\n\nGuaranteed optimal\nEasy to reason about\nGreat for small problems\n\n\nCons\n\nCost (time and/or memory) explodes with input size\nUsually impossible in practice\n\n\n\n\nBiology: finding the optimal tree for 7 taxa (10,395 trees — fine). For 30 taxa — not fine, ever."
+    "objectID": "slides/topic-07-blast.html#step-1-seeds",
+    "href": "slides/topic-07-blast.html#step-1-seeds",
+    "title": "Searching databases with BLAST",
+    "section": "Step 1: Seeds",
+    "text": "Step 1: Seeds\nLook up every \\(k\\)-mer of the query (\\(k = 4\\) below):\n\nquery:   TGCTTACCAGTCAGGT\nsubject: GGATCCATGCTTACGAGTCATTGCAACGT\n\n\n\n\n\nQuery \\(k\\)-mer\nQuery position\nSubject position(s)\n\n\n\n\nTGCT\n0\n7\n\n\nGCTT\n1\n8\n\n\nCTTA\n2\n9\n\n\nTTAC\n3\n10\n\n\nTACC\n4\n—\n\n\n…\n\n\n\n\nAGTC\n8\n15\n\n\nGTCA\n9\n16\n\n\n\n\n\n6:15-7:15\nEach hit is a seed: a (query position, subject position) pair. This is exactly the find_seeds function they will write (Challenge 4). The same example is in the notebook."
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#divide-and-conquer",
-    "href": "slides/topic-04-algos-intro.html#divide-and-conquer",
-    "title": "What Is an Algorithm?",
-    "section": "2. Divide and conquer",
-    "text": "2. Divide and conquer\nIdea: break the problem into smaller versions of itself, solve those, combine the results.\ndef binary_search(sorted_values, target):\n    lo = 0\n    hi = len(sorted_values) - 1\n    while lo &lt;= hi:\n        mid = (lo + hi) // 2\n        if sorted_values[mid] == target:\n            return mid\n        elif sorted_values[mid] &lt; target:\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return None\n\nEach step throws away half the remaining data; searching 1 billion sorted values takes ~30 comparisons"
+    "objectID": "slides/topic-07-blast.html#homologous-seeds-often-line-up-on-diagonals",
+    "href": "slides/topic-07-blast.html#homologous-seeds-often-line-up-on-diagonals",
+    "title": "Searching databases with BLAST",
+    "section": "Homologous seeds often line up on diagonals",
+    "text": "Homologous seeds often line up on diagonals\n\n\n\n\nSeed\nQuery pos\nSubject pos\nSubject \\(-\\) query\n\n\n\n\nTGCT\n0\n7\n7\n\n\nGCTT\n1\n8\n7\n\n\nCTTA\n2\n9\n7\n\n\nTTAC\n3\n10\n7\n\n\nAGTC\n8\n15\n7\n\n\nGTCA\n9\n16\n7\n\n\n\n\n\nAll six are on the same diagonal of a dotplot: Pieces of the same alignment!\n\n\nA seed alone on its own diagonal is usually just chance.\n\n7:15-8:15\nTie to the dotplots from the alignment exercise: homology shows up as diagonal runs, and isolated dots are noise. In the notebook, they will see seeds from a real read pile up on two diagonals separated by a 6-base deletion."
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#dynamic-programming",
-    "href": "slides/topic-04-algos-intro.html#dynamic-programming",
-    "title": "What Is an Algorithm?",
-    "section": "3. Dynamic programming",
-    "text": "3. Dynamic programming\nIdea: the problem has overlapping subproblems. Solve each one once, store the answer, look it up later.\n\nA canonical example in biology is the Needleman–Wunsch algorithm for aligning sequences"
+    "objectID": "slides/topic-07-blast.html#step-2-extend-without-gaps",
+    "href": "slides/topic-07-blast.html#step-2-extend-without-gaps",
+    "title": "Searching databases with BLAST",
+    "section": "Step 2: Extend without gaps",
+    "text": "Step 2: Extend without gaps\nGrow the seed one base at a time, keeping a running score (match \\(+1\\), mismatch \\(-1\\)):\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nseed\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nquery\nTGCT\nT\nA\nC\nC\nA\nG\nT\nC\nA\nG\nG\nT\n\n\nsubject\nTGCT\nT\nA\nC\nG\nA\nG\nT\nC\nA\nT\nT\nG\n\n\nscore\n4\n5\n6\n7\n6\n7\n8\n9\n10\n11\n10\n9\n8\n\n\n\n\n\nX-drop rule: stop once the score falls more than \\(X\\) below the best score seen (here \\(X = 2\\)), then trim back to the best.\n\n\nThe result is a high-scoring segment pair (HSP) with a score of 11.\n\n8:15-10:00\nWalk through the running score. The mismatch at the 8th column costs a point, but the matches after it recover. Once we run off the end of the homologous region, the score falls steadily, and X-drop stops us from wasting time. BLAST (and extend_seed in the notebook) also extends to the left; same idea."
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#needleman-wunsch-alignment",
-    "href": "slides/topic-04-algos-intro.html#needleman-wunsch-alignment",
-    "title": "What Is an Algorithm?",
-    "section": "Needleman-Wunsch alignment1",
-    "text": "Needleman-Wunsch alignment1\n\\[\nF(i,j) = \\max\n\\begin{cases}\nF(i-1,\\,j-1) + s(A_i, B_j) & \\text{(match/mismatch)}\\\\\nF(i-1,\\,j) + g & \\text{(gap in }B)\\\\\nF(i,\\,j-1) + g & \\text{(gap in }A)\n\\end{cases}\n\\]\n\nEvery cell is computed from cells we already filled in; fill a  table, then trace back.\n\n\n\n\n\n\n\nGuaranteed optimal and way faster than enumerating alignments.\n\na smart strategy can turn an impossible problem (exponentially many alignments) into a tractable one (fill a table).\n\n\nNeedleman and Wunsch (1970)"
+    "objectID": "slides/topic-07-blast.html#indels-break-ungapped-extension",
+    "href": "slides/topic-07-blast.html#indels-break-ungapped-extension",
+    "title": "Searching databases with BLAST",
+    "section": "Indels break ungapped extension",
+    "text": "Indels break ungapped extension\n\nAlpha: CCATGCTAT------CTCTGGGA\nWuhan: CCATGCTATACATGTCTCTGGGA\n\n\nSeeds on both sides of the indel, but on two different diagonals\nUngapped extension gives two separate HSPs\n\n\nGapped BLAST1: Run a gapped alignment, but only in the short region around a good HSP.\n\n\n\n\n\nRun the Smith-Waterman aligner on ~200 bases, NOT 60 trillion.\n\n\n\n\n10:00-11:15\nThis is the spike 69-70 deletion they aligned last time (Alpha vs. Wuhan). In the notebook, simple_blast runs their own align_local on a small window around the best HSP. Real gapped BLAST uses an X-drop version of dynamic programming rather than a fixed window; our window is a simplification.\n\n\nAltschul et al. (1997)"
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#dynamic-programming-why-it-wins",
-    "href": "slides/topic-04-algos-intro.html#dynamic-programming-why-it-wins",
-    "title": "What Is an Algorithm?",
-    "section": "Dynamic programming: why it wins",
-    "text": "Dynamic programming: why it wins\nExample: Calculating Fibonacci numbers (\\(F_{n}\\))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\\(n\\)\n0\n1\n2\n3\n4\n5\n6\n7\n8\n\\(\\ldots\\)\n\n\n\\(F_{n}\\)\n0\n1\n1\n2\n3\n5\n8\n13\n21\n\\(\\ldots\\)\n\n\n\n\n\\(F_{0} = 0, F_{1} = 1, F_{n} = F_{n-1} + F_{n-2}\\)"
+    "objectID": "slides/topic-07-blast.html#step-3-is-the-hit-meaningful",
+    "href": "slides/topic-07-blast.html#step-3-is-the-hit-meaningful",
+    "title": "Searching databases with BLAST",
+    "section": "Step 3: Is the hit meaningful?",
+    "text": "Step 3: Is the hit meaningful?\n\nIn a database of 60 trillion bases, many matches happen by chance.\n\n\n\nBLAST reports an E-value1: The number of hits scoring at least this well that you would expect by chance in a database this big.\n\\[\nE = K\\,m\\,n\\,e^{-\\lambda S}\n\\]\n\n\n\nBigger query (\\(m\\)) or database (\\(n\\)): More chance hits\nHigher score (\\(S\\)): Exponentially fewer chance hits\n\\(E = 10^{-50}\\): Essentially impossible by chance; \\(E = 5\\): Probably just chance\n\n\n\n11:15-12:45\nKeep this light. K and lambda depend on the scoring scheme; no need to say more. This is a preview of the probability models coming in the next unit. The notebook reports raw scores only.\n\n\nKarlin and Altschul (1990)"
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#greedy-algorithms",
-    "href": "slides/topic-04-algos-intro.html#greedy-algorithms",
-    "title": "What Is an Algorithm?",
-    "section": "4. Greedy algorithms",
-    "text": "4. Greedy algorithms\nIdea: at each step, take whatever looks best right now. Commit. Move on.\n\n\n\nPros\n\nFast and simple\nOften very good in practice\n\n\nCons\n\nNo guarantee of the global optimum\nOne early bad call propagates"
+    "objectID": "slides/topic-07-blast.html#missing-homologous-sequences",
+    "href": "slides/topic-07-blast.html#missing-homologous-sequences",
+    "title": "Searching databases with BLAST",
+    "section": "Missing homologous sequences",
+    "text": "Missing homologous sequences\nBLAST only looks where it finds a seed.\n\nA homolog with no exact match of \\(k\\) consecutive bases is invisible to BLAST, no matter how good the full alignment would be.\n\n\n\nTGCTTACCAGTCAGGT\n| || ||| || || |\nTCCTAACCTGTAAGCT\n\n\n\n11 of 16 bases identical, but never more than 3 in a row\n\nWith \\(k = 4\\), we miss it!\n\n\n12:45-13:45\nThe two sequences are 69% identical (11 of 16 positions), which is clearly similar, but the longest identical run is 3 bases. Point: sensitivity depends on the word size, not just on how similar the sequences are."
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#greedy-algorithms-1",
-    "href": "slides/topic-04-algos-intro.html#greedy-algorithms-1",
-    "title": "What Is an Algorithm?",
-    "section": "4. Greedy algorithms",
-    "text": "4. Greedy algorithms\nBiology example: UPGMA and neighbor-joining methods for estimating trees\n\n\nBoth methods repeatedly join the closest pair of clusters and never revisit that decision.\n\n\n\nAnalogy: Hiking to the highest peak by always walking uphill. You will reach a summit. Not necessarily the tallest one."
+    "objectID": "slides/topic-07-blast.html#the-word-size-k-trade-off",
+    "href": "slides/topic-07-blast.html#the-word-size-k-trade-off",
+    "title": "Searching databases with BLAST",
+    "section": "The word size (\\(k\\)) trade-off",
+    "text": "The word size (\\(k\\)) trade-off\nNumber of chance seeds for a 150-base query against GenBank (\\(\\approx m\\,n / 4^k\\)):\n\n\n\n\nWord size \\(k\\)\nChance seeds\nNeeds an exact run of\n\n\n\n\n7\n\\(\\sim 5 \\times 10^{11}\\)\n7 bases\n\n\n11\n\\(\\sim 2 \\times 10^{9}\\)\n11 bases\n\n\n28\n\\(\\sim 0.1\\)\n28 bases\n\n\n\n\n\n\n\nSmall \\(k\\)\nMore sensitive, much slower\n\nLarge \\(k\\)\nMuch faster, misses divergent homologs\n\n\n13:45-15:15\nEach base shorter makes a chance match 4 times more likely. Every chance seed has to be extended and thrown away. In the notebook, they will see k = 7 produce over a thousand chance seeds against a single 30 kb genome, and a ~100-200x slowdown relative to k = 11."
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#heuristics",
-    "href": "slides/topic-04-algos-intro.html#heuristics",
-    "title": "What Is an Algorithm?",
-    "section": "5. Heuristics",
-    "text": "5. Heuristics\nIdea: deliberately give up the guarantee of optimality in exchange for an answer you can actually get (greedy is one type)\n\n\nBiology example: Searching databases for similar sequences with BLAST1\n\nSmith–Waterman algorithm2 is optimal but far too slow to scan all of GenBank\nBLAST first finds short exact seed matches, then only extends around those\n\n\n\n\nBLAST can miss things, but it is used billions of times a year\n\n\n\n\n\n“Approximate answer today” beats “exact answer in nine years.”\n\n\n\n\nAltschul et al. (1990)Smith and Waterman (1981)"
+    "objectID": "slides/topic-07-blast.html#ncbis-tool-choices",
+    "href": "slides/topic-07-blast.html#ncbis-tool-choices",
+    "title": "Searching databases with BLAST",
+    "section": "NCBI’s tool choices",
+    "text": "NCBI’s tool choices\n\n\n\n\nProgram (task)\nWord size\nDesigned for\n\n\n\n\nmegablast (default)\n28\nHighly similar sequences\n\n\nblastn\n11\nSomewhat similar sequences\n\n\nblastn-short\n7\nShort queries (e.g., primers)\n\n\nProtein BLAST\n3\nProteins (20-letter alphabet)\n\n\n\n\n\nWhen you pick an option on the BLAST web page, you are choosing a point along the speed/sensitivity trade-off continuum!\n\n15:15-16:15\nProtein words can be short because the alphabet is 20 letters (8,000 possible 3-mers), and protein BLAST also accepts similar, not just identical, words. One sentence on that at most."
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#stochastic-randomized",
-    "href": "slides/topic-04-algos-intro.html#stochastic-randomized",
-    "title": "What Is an Algorithm?",
-    "section": "6. Stochastic / randomized",
-    "text": "6. Stochastic / randomized\nIdea: use randomness as part of the procedure.\n\nBootstrapping: resample data to assess variance\nMCMC: random walk through model space, guided by the likelihood\nRandomized starts: restart a heuristic search from many points; keep the best\n\n\nSlightly different answers from each run; this is a feature"
+    "objectID": "slides/topic-07-blast.html#applying-what-we-learned",
+    "href": "slides/topic-07-blast.html#applying-what-we-learned",
+    "title": "Searching databases with BLAST",
+    "section": "Applying what we learned",
+    "text": "Applying what we learned\nWhich BLAST program would you use?\n\nWhich species did this 16S sequence from a soil sample come from?\nDoes a human genome contain a homolog of this frog gene?\nWhere does this 20-base PCR primer bind in the human genome?\n\n\n16:15-17:30\n\n16S species ID: megablast (looking for a near-identical match)\nHuman homolog of a frog gene: blastn, or better yet protein BLAST, since protein sequences change more slowly than DNA\n20-base primer: blastn-short (a word of 28 cannot fit in the query!)"
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#checkpoint",
-    "href": "slides/topic-04-algos-intro.html#checkpoint",
-    "title": "What Is an Algorithm?",
-    "section": "Checkpoint",
-    "text": "Checkpoint\nWhich strategy would you reach for?\n\nFind the optimal alignment of two 500-bp sequences\nFind homologs of one protein across all of UniProt (a huge database)\nFind the best phylogenetic tree for 5 species\nFind the best phylogenetic tree for 500 species\n\n\n\nFind the optimal alignment of two 500-bp sequences: dynamic programming\nFind homologs of one protein across all of UniProt: heuristic\nFind the best tree for 5 taxa: exhaustive\nFind the best tree for 500 taxa: heuristic + greedy + stochastic"
+    "objectID": "slides/topic-07-blast.html#blast-does-a-bit-more",
+    "href": "slides/topic-07-blast.html#blast-does-a-bit-more",
+    "title": "Searching databases with BLAST",
+    "section": "BLAST does a bit more",
+    "text": "BLAST does a bit more\n\nSearches both strands of DNA\nMasks low-complexity sequences (e.g., ATATATATAT) that would seed everywhere\nProtein BLAST requires two seeds near each other before extending\nReports multiple HSPs per database sequence\n\n\nBut the core is what you will build today: Seed, extend, evaluate\n\n17:30-18:15\nLow-complexity masking and the two-hit method are both ways of cutting down on chance seeds, which ties back to the word size slide. In the notebook, “evaluate” is just a raw-score cutoff (min_score), not an E-value. The stretch goal in the notebook is about searching both strands."
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#the-problem-with-it-took-12-seconds",
-    "href": "slides/topic-04-algos-intro.html#the-problem-with-it-took-12-seconds",
-    "title": "What Is an Algorithm?",
-    "section": "The problem with “it took 12 seconds”",
-    "text": "The problem with “it took 12 seconds”\n\nOn which machine?\nWith which input?\nIn Python or C?\nHow many other things were running?\n\n\nWe want something that describes the algorithm, not the afternoon"
-  },
-  {
-    "objectID": "slides/topic-04-algos-intro.html#big-o-notation",
-    "href": "slides/topic-04-algos-intro.html#big-o-notation",
-    "title": "What Is an Algorithm?",
-    "section": "Big O notation",
-    "text": "Big O notation\nIdea: count how the number of operations grows as the input (\\(n\\)) grows, and ignore everything else.\n\nSpecifically, we throw away:\n\nconstant factors — \\(3n\\) and \\(n\\) are both \\(O(n)\\)\nlower-order terms — \\(n^2 + 500n + 900\\) is \\(O(n^2)\\)\n\n\n\nWe keep only the term that dominates as \\(n\\) gets large.\n\nEmphasize: big O is about scaling behavior, not about predicting seconds. It answers “what happens when my dataset gets 10x bigger?”"
-  },
-  {
-    "objectID": "slides/topic-04-algos-intro.html#reading-big-o-from-code",
-    "href": "slides/topic-04-algos-intro.html#reading-big-o-from-code",
-    "title": "What Is an Algorithm?",
-    "section": "Reading big O from code",
-    "text": "Reading big O from code\ndef count_bases(sequence):\n    counts = {}\n    for base in sequence:  # O(n) — one pass over n bases\n        counts[base] = counts.get(base, 0) + 1\n    return counts\n\\(O(n)\\): Loop over \\(n\\) bases\n\ndef pairwise_distances(sequences):\n    d = {}\n    for i, seq_a in enumerate(sequences):  # O(n^2) — every pair of n sequences\n        for j, seq_b in enumerate(sequences):\n            if i &lt; j:\n                d[(i, j)] = hamming(seq_a, seq_b)\n    return d\n\\(O(n^2)\\): Nested for loops for all pairs of \\(n\\) sequences\n\n\nRough rule of thumb: each nested loop over the input multiplies by another factor of \\(n\\)."
-  },
-  {
-    "objectID": "slides/topic-04-algos-intro.html#common-complexity-classes",
-    "href": "slides/topic-04-algos-intro.html#common-complexity-classes",
-    "title": "What Is an Algorithm?",
-    "section": "Common complexity classes",
-    "text": "Common complexity classes\n\n\n\nNotation\nName\nExample\n\n\n\n\n\\(O(1)\\)\nconstant\ndict lookup\n\n\n\\(O(\\log n)\\)\nlogarithmic\nbinary search\n\n\n\\(O(n)\\)\nlinear\nscanning a sequence\n\n\n\\(O(n \\log n)\\)\nlinearithmic\nsorting\n\n\n\\(O(n^2)\\)\nquadratic\nall pairwise comparisons\n\n\n\\(O(n^3)\\)\ncubic\nsome matrix operations\n\n\n\\(O(2^n)\\)\nexponential\nall subsets\n\n\n\\(O(n!)\\)\nfactorial\nall orderings"
-  },
-  {
-    "objectID": "slides/topic-04-algos-intro.html#why-the-complexity-class-matters",
-    "href": "slides/topic-04-algos-intro.html#why-the-complexity-class-matters",
-    "title": "What Is an Algorithm?",
-    "section": "Why the complexity class matters",
-    "text": "Why the complexity class matters\nAssume ~10 million simple Python operations per second:\n\n\n\n\\(n\\)\n\\(O(n)\\)\n\\(O(n \\log n)\\)\n\\(O(n^2)\\)\n\\(O(n^3)\\)\n\n\n\n\n10\n1 µs\n3 µs\n10 µs\n100 µs\n\n\n100\n10 µs\n66 µs\n1 ms\n100 ms\n\n\n1,000\n100 µs\n1 ms\n100 ms\n1.7 min\n\n\n1,000,000\n100 ms\n2 s\n1.2 days\n3,000 yr\n\n\n\n\n\n\n\nA better algorithm can scale to lots of data"
-  },
-  {
-    "objectID": "slides/topic-04-algos-intro.html#exponential-is-a-different-universe",
-    "href": "slides/topic-04-algos-intro.html#exponential-is-a-different-universe",
-    "title": "What Is an Algorithm?",
-    "section": "Exponential is a different universe",
-    "text": "Exponential is a different universe\n\n\n\n\\(n\\)\n\\(O(2^n)\\)\n\\(O(n!)\\)\n\n\n\n\n10\n100 µs\n0.4 s\n\n\n20\n100 ms\n7,700 yr\n\n\n30\n1.8 min\n\\(8 \\times 10^{17}\\) yr\n\n\n50\n3.6 yr\n—\n\n\n\n\nExample: the exhaustive tree search from earlier\nIt is not a hardware problem, and buying a cluster does not fix it"
-  },
-  {
-    "objectID": "slides/topic-04-algos-intro.html#space-complexity",
-    "href": "slides/topic-04-algos-intro.html#space-complexity",
-    "title": "What Is an Algorithm?",
-    "section": "Space complexity",
-    "text": "Space complexity\nThe same notation describes memory.\n\nStoring a sequence of length \\(n\\): \\(O(n)\\)\nStoring all pairwise distances among \\(n\\) sequences: \\(O(n^2)\\)\nThe Needleman–Wunsch table for two length-\\(n\\) sequences: \\(O(n^2)\\)\n\n\nTwo 100,000-bp sequences:\n\nA table with \\(10^{10}\\) cells\nAt 4 bytes per cell that is ~40 GB."
-  },
-  {
-    "objectID": "slides/topic-04-algos-intro.html#time-and-memory-pull-against-each-other",
-    "href": "slides/topic-04-algos-intro.html#time-and-memory-pull-against-each-other",
-    "title": "What Is an Algorithm?",
-    "section": "Time and memory pull against each other",
-    "text": "Time and memory pull against each other\n\n\nSpend memory, save time\n\nPrecompute and store results so you never recompute them\n\n\nSpend time, save memory\n\nRecompute on-demand and store as little as possible\n\n\n\nAlmost every real bioinformatics tool sits somewhere on this spectrum, and the position is a design choice."
-  },
-  {
-    "objectID": "slides/topic-04-algos-intro.html#trade-off-in-python-lists-vs-sets",
-    "href": "slides/topic-04-algos-intro.html#trade-off-in-python-lists-vs-sets",
-    "title": "What Is an Algorithm?",
-    "section": "Trade-off in Python: lists vs sets",
-    "text": "Trade-off in Python: lists vs sets\ngene_ids_list = [...]         # 1,000,000 IDs\ngene_ids_set  = set(gene_ids_list)\n\n\"BRCA1\" in gene_ids_list      # O(n) — scans until found\n\"BRCA1\" in gene_ids_set       # O(1) — hashes and jumps\n\nThe set is dramatically faster to search — and uses noticeably more memory, because it stores a hash table.\n\n\nIf you do one lookup, use the list\nIf you do a million lookups, building the set pays for itself"
-  },
-  {
-    "objectID": "slides/topic-04-algos-intro.html#trade-off-examples",
-    "href": "slides/topic-04-algos-intro.html#trade-off-examples",
-    "title": "What Is an Algorithm?",
-    "section": "Trade-off examples",
-    "text": "Trade-off examples\n\nBLAST builds a k-mer index of the database in memory so it never has to scan the whole thing\n\nMemory buys speed\n\nHirschberg’s algorithm1 aligns sequences with \\(O(n)\\) memory instead of \\(O(n^2)\\), at roughly twice the runtime\n\nTime buys memory\n\n\nHirschberg (1975)"
-  },
-  {
-    "objectID": "slides/topic-04-algos-intro.html#choosing-an-algorithm",
-    "href": "slides/topic-04-algos-intro.html#choosing-an-algorithm",
-    "title": "What Is an Algorithm?",
-    "section": "Choosing an algorithm",
-    "text": "Choosing an algorithm\n\nHow big is \\(n\\), and how big will it be next year?\nDo I need the guaranteed optimum, or a good answer?\nAm I running this once, or a million times?\nWhat resource am I actually short of: hours or RAM?\n\n\n\n\n\nThere is no “best” algorithm. There is a best algorithm for your problem, at your scale, under your constraints."
-  },
-  {
-    "objectID": "slides/topic-04-algos-intro.html#summary",
-    "href": "slides/topic-04-algos-intro.html#summary",
-    "title": "What Is an Algorithm?",
+    "objectID": "slides/topic-07-blast.html#summary",
+    "href": "slides/topic-07-blast.html#summary",
+    "title": "Searching databases with BLAST",
     "section": "Summary",
-    "text": "Summary\n\n\nBiology’s data outgrew our ability to inspect it\n\nalgorithms are how we cope\n\nA handful of strategies (exhaustive, divide and conquer, DP, greedy, heuristic, stochastic) explain most of what tools actually do\nBig O describes how cost scales with input size, in time and memory\n\nConstant factors are a hardware problem; complexity class is a thinking problem\n\nChoosing an algorithm means choosing where to spend time and where to spend memory"
+    "text": "Summary\n\n\nOptimal local alignment is \\(O(mn)\\), but \\(n\\) is tens of trillions!\nSeed: Find short exact matches with an index built once\nExtend: Ungapped with the X-drop rule, then gapped only near good HSPs\nEvaluate: E-values suggest whether a hit is better than chance\nWord size sets the speed/sensitivity trade-off\nBLAST gives up the guarantee of optimality to get an answer fast\n\n\n\n18:15-19:00\nIf short on time, cut to the last two bullets."
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#exercise",
-    "href": "slides/topic-04-algos-intro.html#exercise",
-    "title": "What Is an Algorithm?",
+    "objectID": "slides/topic-07-blast.html#in-the-exercise",
+    "href": "slides/topic-07-blast.html#in-the-exercise",
+    "title": "Searching databases with BLAST",
+    "section": "In the exercise",
+    "text": "In the exercise\nYou will build BLAST from pieces you mostly already have:\n\n\nTurn your Needleman-Wunsch code into Smith-Waterman (three small changes)\nTime an optimal search of five SARS-CoV-2 genomes\nfind_seeds: Find seeds with your \\(k\\)-mer dictionary\nUse seed-and-extend to identify a mystery read\nExplore the word size trade-off\n\n\n\n\n\n\n\n\n\nWatch for\n\n\nWhich variant the mystery read came from, and which variant is its runner-up. The sequence alignment exercise holds the clue.\n\n\n\n\n19:00-20:00\nThe runner-up is Alpha, because it shares the spike 69-70 deletion with Omicron. Hand off to the notebook here. Remind them the first cell needs their name."
+  },
+  {
+    "objectID": "slides/topic-07-blast.html#exercise",
+    "href": "slides/topic-07-blast.html#exercise",
+    "title": "Searching databases with BLAST",
     "section": "Exercise",
     "text": "Exercise\n\nLog into molab\nOpen the exercise in molab\nClick “Fork” button"
   },
   {
-    "objectID": "slides/topic-04-algos-intro.html#references",
-    "href": "slides/topic-04-algos-intro.html#references",
-    "title": "What Is an Algorithm?",
+    "objectID": "slides/topic-07-blast.html#acknowledgements",
+    "href": "slides/topic-07-blast.html#acknowledgements",
+    "title": "Searching databases with BLAST",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nI used Anthropic’s Claude (Opus 5 model) to generate a draft of these slides."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "What is Intro to Comp Bio?",
     "section": "",
-    "text": "Altschul, Stephen F., Warren Gish, Webb Miller, Eugene W. Myers, and David J. Lipman. 1990. “Basic Local Alignment Search Tool.” Journal of Molecular Biology 215 (3): 403–10. https://doi.org/10.1016/S0022-2836(05)80360-2.\n\n\nHirschberg, D. S. 1975. “A Linear Space Algorithm for Computing Maximal Common Subsequences.” Communications of the ACM (New York, NY, USA) 18 (6): 341–43. https://doi.org/10.1145/360825.360861.\n\n\nNeedleman, Saul B., and Christian D. Wunsch. 1970. “A General Method Applicable to the Search for Similarities in the Amino Acid Sequence of Two Proteins.” Journal of Molecular Biology 48 (3): 443–53. https://doi.org/10.1016/0022-2836(70)90057-4.\n\n\nSmith, T. F., and M. S. Waterman. 1981. “Identification of Common Molecular Subsequences.” Journal of Molecular Biology 147 (1): 195–97. https://doi.org/10.1016/0022-2836(81)90087-5."
+    "text": "Computational Biology is a very broad field that entails the use of computational techniques to study biology.",
+    "crumbs": [
+      "About"
+    ]
   },
   {
-    "objectID": "thinlinc-intro.html",
-    "href": "thinlinc-intro.html",
-    "title": "AU COSAM Linux ThinLinc",
+    "objectID": "about.html#acknowledgements",
+    "href": "about.html#acknowledgements",
+    "title": "What is Intro to Comp Bio?",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nThis class borrows from Dr. Laurie Stevison’s class of the same name, and the Computational Biology class developed by Justin Fay.",
+    "crumbs": [
+      "About"
+    ]
+  },
+  {
+    "objectID": "about.html#license",
+    "href": "about.html#license",
+    "title": "What is Intro to Comp Bio?",
+    "section": "License",
+    "text": "License\nThis work is marked CC0 1.0",
+    "crumbs": [
+      "About"
+    ]
+  },
+  {
+    "objectID": "bash-exercise.html",
+    "href": "bash-exercise.html",
+    "title": "Bash exercise",
     "section": "",
-    "text": "The IT group of the Collage of Sciences & Mathematics (COSAM IT) hosts a Linux desktop environment that can be run in a web browser using the software called ThinLinc. COSAM IT was kind enough to provide access to this Linux ThinLinc environment to all the students in our class.\nImportant! Please read the next 2 sections and don’t skip to logging in!"
+    "text": "For this exercise, please log in to the Linux ThinLinc environment. You can find instructions to log in and setup ThinLinc here.\nFollow the instructions below to complete this exercise, and put your answers to the questions into the Exercise 2 quiz on Canvas."
   },
   {
-    "objectID": "thinlinc-intro.html#logging-out-of-a-thinlinc-session",
-    "href": "thinlinc-intro.html#logging-out-of-a-thinlinc-session",
-    "title": "AU COSAM Linux ThinLinc",
-    "section": "Logging out of a ThinLinc session",
-    "text": "Logging out of a ThinLinc session\nBefore we learn how to log in to a ThinLinc session, you need to know how to log out.\nYou cannot log out by closing your browser window!\nInstead you need to:\n\nClick the power icon a the top right of the Linux desktop in your browser window\nClick “Power Off/Log Out”\nClick “Log Out”\n\n\n\n\n\n\n\nFigure 1: How to log out of a Linux ThinLinc session.\n\n\n\nIf you do close your brower by mistake, it’s OK! Just go back to https://csm-earth.auburn.edu. The screen might look black, but that is just the Linux desktop’s lock screen. Click the black screen and you will be prompted to enter your password to unlock the screen. Use the same AU password as when you logged in (see below).\nIf you close your browser without logging out, your ThinLinc session remains active and uses resources on COSAM’s servers. So, please remember to log out when you’re done."
+    "objectID": "bash-exercise.html#creating-a-new-directory-and-copying-files-into-it",
+    "href": "bash-exercise.html#creating-a-new-directory-and-copying-files-into-it",
+    "title": "Bash exercise",
+    "section": "Creating a new directory and copying files into it",
+    "text": "Creating a new directory and copying files into it\n\nOpen the “Terminal” app and navigate to your home directory:\n\n\nBash command line\n\ncd ~\n\nCreate a new directory called “exercise2”\n\n\nBash command line\n\nmkdir exercise2\n\nOpen the “Files” app (filing cabinet icon in the dock)\nAlong the left, click on the “Biol5800-6800” folder\nRight-click on the “answer1.txt” file, and click on “Copy to…”\n\n\n\n\n\n\nFigure 1: Copying shared file in Files app.\n\n\n\nIn the “Select Copy Destination” window:\n\nClick “Home” along the left and then select the “exercise2” folder\nClick “Select” in the upper right of the window\n\n\n\n\n\n\n\nFigure 2: Selecting “exercise2 folder as copy destination.\n\n\n\nRepeat the 2 previous steps for the “SARS-CoV-2.fasta” file to copy it to the “exercise2” folder\nNow, go back to your Terminal window and move into the “exercise2” directory and confirm the files you copied are there:\n\n\nBash command line\n\ncd exercise2\nls\n\n\n\nQuestion 1\nUse the command line to see what is in the answer1.txt file. Enter what you find in the file into Question 1 of the Exercise 2 quiz on Canvas.\n\nHint: The commands cat or less would be useful. You can use man to learn more about both of them.\nHint: If you log in to Canvas within ThinLinc, you can copy and paste the answer!"
   },
   {
-    "objectID": "thinlinc-intro.html#i-was-using-thinlinc-but-now-have-a-black-screen",
-    "href": "thinlinc-intro.html#i-was-using-thinlinc-but-now-have-a-black-screen",
-    "title": "AU COSAM Linux ThinLinc",
-    "section": "I was using ThinLinc but now have a black screen!",
-    "text": "I was using ThinLinc but now have a black screen!\nNo worries, the black screen is the Linux desktop’s lock screen. Click on it and you will be asked to enter your password to unlock the screen. Use the same AU password as when you logged in."
+    "objectID": "bash-exercise.html#manipulating-sequence-data",
+    "href": "bash-exercise.html#manipulating-sequence-data",
+    "title": "Bash exercise",
+    "section": "Manipulating sequence data",
+    "text": "Manipulating sequence data\nThe “SARS-CoV-2.fasta” file contains nucleotide sequence data from different strains of the SARS-CoV-2 virus. The sequences are in a format called FASTA. The FASTA format looks like:\n&gt;Name1\nAATCGGCTA\n&gt;Name2\nATTCGCCTA\n\nQuestion 2\nUse the command line to determine the number of sequences in the “SARS-CoV-2.fasta” file.\n\nNotice all sequences start with a “&gt;” character to specify the seqence’s name. We can use that to count the sequences efficiently. Try:\n\n\nBash command line\n\ngrep \"&gt;\" SARS-CoV-2.fasta\n\nNOTE: Putting quotes around the &gt; character is important, because in the Bash language, this character is normally used to redirect output!\ngrep is a very useful command for finding string patterns. You can learn more about it with man grep.\ngrep works okay for this small FASTA file, but what if there were 1000s of sequences in the file? You wouldn’t want to count them “by hand!”\nWe can use the wc command (word count) for counting the sequences. Try:\n\n\nBash command line\n\ngrep \"&gt;\" SARS-CoV-2.fasta | wc -l\n\nThe pipe (|) character converts, or “pipes”, the output of one command to input to another command. wc -l will count the number of lines output by grep\n\nPut the number of sequences into Question 2 of the Exercise 2 quiz on Canvas.\n\n\nQuestion 3\nWhat does the -l flag in the wc -l do? Hint: use the man command to find out!\n\n\nQuestion 4\nWhat is your output for the following command?\n\n\nBash command line\n\nwhoami\n\n\n\nQuestion 5\nWhat is your output for the following command?\n\n\nBash command line\n\necho $MACHTYPE\n\n\n\nQuestion 6\nWhat is your output for the following command?\n\n\nBash command line\n\nuname -a\n\n\n\nQuestion 7\nWhat does the -a flag do in the uname -a command (use man to find out!)?"
   },
   {
-    "objectID": "thinlinc-intro.html#logging-in-to-a-thinlinc-session",
-    "href": "thinlinc-intro.html#logging-in-to-a-thinlinc-session",
-    "title": "AU COSAM Linux ThinLinc",
-    "section": "Logging in to a ThinLinc session",
-    "text": "Logging in to a ThinLinc session\n\nMake sure you are connected to AU’s VPN.\nOpen your web browser and go to https://csm-earth.auburn.edu. You should see a login screen that looks like the screenshot below.\n\n\n\n\n\n\nFigure 2: Linux ThinLinc log in page.\n\n\n\nIn the “Username” field, enter your AU username (the first part of your AU email before the “@” symbol). For the password, enter the password for you AU account. Then, click “Log in”\nYou will see a prompt for 2-factor authentication like the one below. Enter the number associated with your preferred mode of authentication. In the example below, to use DUO, type “1” and click “Next.”\n\n\n\n\n\n\nFigure 3: Linux ThinLinc prompt for 2-factor authentication.\n\n\n\nAfter authenticating, the Linux Desktop will begin to load in your browser. This can take 30 seconds or so. Once the Linux Desktop has loaded, you can click “Activities” in the upper left of the desktop to reveal a dock along the bottom of the desktop. You can use the dock to launch applications (Figure 4).\n\n\n\n\n\n\nFigure 4: How to view the dock and launch apps."
-  },
-  {
-    "objectID": "thinlinc-intro.html#setting-up-our-shared-folder-in-thinlinc",
-    "href": "thinlinc-intro.html#setting-up-our-shared-folder-in-thinlinc",
-    "title": "AU COSAM Linux ThinLinc",
-    "section": "Setting up our shared folder in ThinLinc",
-    "text": "Setting up our shared folder in ThinLinc\nCOSAM IT has created a shared folder we can all access within our ThinLinc environment. To set up the shared folder, follow these steps. You only need to do this once!\n\nClick “Activities” in the upper left of the desktop.\nFrom the dock along the bottom, open the “Files” application (its icon is a filing cabinet; see Figure 4)\nAlong the left of the Files window, click “+ Other Locations”\nAlong the bottom of the window you will see “Connect to Server” and “Enter server address…” In the “Enter server address…” field type (or copy and paste):\nsmb://auo11.auburn.edu/csm\nand then click “Connect”\nAlong the left of the you shoud now see “csm on auo11.auburn.edu”. Click on that and then the “Academic - Class Resources” folder\nWithin the “Academic - Class Resources” folder, you should now see the “Biol5800-6800” folder. Click and drag the “Biol5800-6800” folder to the left of the window, and drop it where you see “New bookmark”.\n\nYou can now access the “Biol5800-6800” folder via the “Files” app whenever you are logged into ThinLinc. The whole class has access to this folder, and this is where I will put any files you need to use within the ThinLinc Linux environment."
-  },
-  {
-    "objectID": "molab-sign-up.html",
-    "href": "molab-sign-up.html",
-    "title": "Signing up for free GitHub and molab accounts",
+    "objectID": "markov-models-prompt.html",
+    "href": "markov-models-prompt.html",
+    "title": "Intro to Comp Bio",
     "section": "",
-    "text": "For learning core concepts of computational biology, we will be using marimo python notebooks via marimo’s molab service. To access these notebooks, you will need to sign up for a free account on GitHub and molab."
-  },
-  {
-    "objectID": "molab-sign-up.html#signing-up-for-a-free-github-account",
-    "href": "molab-sign-up.html#signing-up-for-a-free-github-account",
-    "title": "Signing up for free GitHub and molab accounts",
-    "section": "Signing up for a free GitHub account",
-    "text": "Signing up for a free GitHub account\nIf you already have a GitHub account, you are welcome to use it for our class and can skip this section.\nPlease go to GitHub’s website and click “Sign up” in the upper right of the screen (Figure 1).\n\n\n\n\n\n\nFigure 1: GitHub sign up.\n\n\n\nCreate a username and enter your information. I recommend creating a username you will want to continue using for many years. Also, please feel free to use a personal email address for your GitHub account (i.e., you are not required to use your AU account)."
-  },
-  {
-    "objectID": "molab-sign-up.html#signing-up-for-a-free-molab-account",
-    "href": "molab-sign-up.html#signing-up-for-a-free-molab-account",
-    "title": "Signing up for free GitHub and molab accounts",
-    "section": "Signing up for a free molab account",
-    "text": "Signing up for a free molab account\nIf you already have a molab account, you are welcome to use it for out class and can skip this section.\n\nPlease go to marimo’s molab website\nClick the “Sign in” button near the top right of the screen, and in the “Create your account” window that pops up, click “GitHub” (Figure 2).\n\n\n\n\n\n\nFigure 2: Create molab account.\n\n\n\nA “Sign in to GitHub to continue to marimo” window should pop open. Enter the username/email and password for your GitHub account and click “Sign in” (Figure 3).\n\n\n\n\n\n\nFigure 3: Sign in using your GitHub credentials.\n\n\n\nAn “Authorize marimo” window should pop up. Click “Authorize marimo-team” (Figure 4).\n\n\n\n\n\n\nFigure 4: Authorize marimo to access info from GitHub.\n\n\n\nYou should now be logged in to your new molab account (Figure 5)!\n\n\n\n\n\n\nFigure 5: Succesfully logged in to molab."
-  },
-  {
-    "objectID": "molab-sign-up.html#molab-account-info",
-    "href": "molab-sign-up.html#molab-account-info",
-    "title": "Signing up for free GitHub and molab accounts",
-    "section": "molab account info",
-    "text": "molab account info\nWhile logged in to your marimo molab account, click on the icon near the upper right corner of the browser window, and, from the drop-down, click “Manage account” (Figure 6). This should open a “Profile details” window.\n\n\n\n\n\n\nFigure 6: Accessing molab account details.\n\n\n\nPlease open the Exercise 3 quiz on Canvas and use the information in your molab “Profile details” window to answer the questions below.\n\nQuestion 1\nWhat is the primary email address listed in your molab profile details?\n\n\nQuestion 2\nYou should see your GitHub account listed for “Connected accounts.” Please enter your GitHub username that is displayed."
+    "text": "Thank you for the draft for the first capstone project for my Intro to Computational Biology class. You generated a very good starting point that I will work with to produce the final version. Now, I would like to work on drafting the next pair of revealjs slide deck and marimo Python notebook to cover the next topic for the class. To recap, we just covered complexity, string searches, and sequence alignment. You should be be able to see the slides and notebooks for all the previous topics in the git repo, but please let me know if you can’t. I have some ideas for the next topic, but I wanted to get your thoughts about what the next topic should be for the class.\nOne thing I don’t like about Jay’s materials is his use of “substitution rate.” I prefer to think of this as the length of the branch connecting two sequences, or the divergence or expected changes between the sequences. “Substition rate” has a different meaning in population genetics, which I think could create confusion. However, if you disagree, please let me know."
   }
 ]
