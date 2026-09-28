@@ -1359,7 +1359,7 @@ def _(database, mo, mystery_read, time, word_size):
         + f"\n\nBuilding the index (once): **{index_seconds:.3f} seconds**  \n"
         + f"Searching with seed-and-extend: **{blast_seconds:.3f} seconds**"
     )
-    return blast_hits, database_index
+    return (blast_hits,)
 
 
 @app.cell(hide_code=True)
@@ -1637,7 +1637,7 @@ def _(mo):
 
 
 @app.cell
-def _(database, database_index, mo, mystery_read, word_size):
+def _():
     # Write your stretch goal code here
     return
 
