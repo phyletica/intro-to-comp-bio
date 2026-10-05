@@ -1,6 +1,6 @@
 ---
 title: "Modeling sequence evolution"
-subtitle: "Markov chains, the Jukes-Cantor model, and the changes we cannot see"
+subtitle: "Revealing hidden evolution with Markov chains"
 # author: "Jamie Oaks"
 institute: "BIOL 5/6800 &mdash; Intro to Comp Bio"
 format:
@@ -15,6 +15,45 @@ metadata-files:
   - _metadata.yml
 bibliography: ../references.bib
 ---
+
+## An aside about terms
+
+::: {style="font-size: 55%;"}
+| Term | Refers to | Example |
+|:--|:--|:--|
+| **Site** | A **position**; in an alignment, a column of homologous positions | "3rd codon positions evolve faster than other sites" |
+| **Nucleotide** | The building block of DNA: sugar + phosphate + base | "nucleotide substitution" |
+| **Base** | The part of a nucleotide that makes it `A`, `C`, `G`, or `T` (the letter we write) | "base frequencies", "base pair" |
+| **Residue** | A building block linked into a chain: Nucleotides **or** amino acids | "amino acid residues" |
+:::
+
+. . .
+
+::: {style="font-size: 105%;"}
+```{.my-blue-code}
+            Site 3
+              ↓
+Species 1:  A C G T
+Species 2:  A C A T
+```
+:::
+
+. . .
+
+::: {style="font-size: 80%;"}
+The **site** persists; a mutation changes the **nucleotide**/**base** that
+occupies it
+:::
+
+::: {.notes}
+The distinction that matters most is position vs. occupant. "Substitutions
+per site" counts how many times the occupant of a position was replaced.
+In casual use, "base" and "nucleotide" are interchangeable for the letter at
+a site, and that's fine. "Residue" is the generic term that covers both DNA
+and protein; it's what a monomer is called once it's part of a polymer.
+"Base pair" (bp) is a length unit for double-stranded DNA; "nucleotides" (nt)
+or "bases" for single strands.
+:::
 
 ## So far
 
@@ -42,7 +81,7 @@ pairwise distances in Capstone 1. The question for today: do those counts
 measure evolution?
 :::
 
-## What we see vs. what happened
+## Hidden substitutions
 
 Three sites in an ancestor and a descendant:
 
@@ -117,10 +156,10 @@ The dotted line is 0.75. Ask: why does it level off at 0.75 and not 1? After
 enough time, the descendant's base is random, and it matches the ancestor by
 chance 1/4 of the time. Past this point, the differences carry almost no
 information about how much time has passed. They will make this plot from
-their own simulation in the exercise.
+their own simulation in the exercise.site
 :::
 
-## To see the hidden changes, we need a model
+## To account for hidden changes, we need a model
 
 A ***model of sequence evolution*** describes the **probabilities** of
 substitution over time
@@ -138,7 +177,7 @@ With a model, we can ask:
 . . .
 
 ::: {.callout-note appearance="minimal"}
-This is our first real **probabilistic model** of the semester
+This is our first **probabilistic model** of the semester
 :::
 
 ::: {.notes}
@@ -153,7 +192,7 @@ probabilistically using models.
 ## The simplest possible model
 
 Chop time into many tiny steps.
-In every step, every base follows the same rule^[@JC1969]:
+In each step, every base follows the same rule^[@JC1969]:
 
 ::: {.incremental}
 1.  With a small probability (the ***rate***), the base is **substituted**
@@ -167,7 +206,7 @@ That's the entire model!
 
 . . .
 
-You will write a Python function to do this today
+You will write a Python function to do this in the exercise
 
 ::: {.notes}
 4:45-5:45
@@ -182,7 +221,7 @@ random.choice() in the notebook.
 
 ::: {.incremental}
 -   If each base has a 1% chance of changing per step, then after 100 steps, we
-    *expect* 1 substitution per site
+    ***expect*** 1 substitution per site (on average)
 -   We measure time ($t$) in ***expected substitutions per site***
 -   This is how branch lengths are measured on most phylogenetic trees
 :::
@@ -190,8 +229,10 @@ random.choice() in the notebook.
 . . .
 
 ::: {.callout-note appearance="minimal"}
+::: {style="font-size: 110%;"}
 $t = 1$ does not mean every site changed once. Some changed zero times, some
 twice, some more.
+:::
 :::
 
 ::: {.notes}
@@ -202,9 +243,9 @@ number. If they have looked at a tree with a scale bar of "0.05," this is what
 that means.
 :::
 
-## A picture of the model
+## The model as a table of rates
 
-Rows: the base now. Columns: the base it changes to.
+Rows: The base now. Columns: The base it changes to.
 
 ::: {style="font-size: 130%;"}
 | | **A** | **C** | **G** | **T** |
@@ -252,7 +293,7 @@ In the notebook (Challenge 3), they will be asked what information their
 evolve_one_step function uses and what it ignores. The answer is this slide.
 :::
 
-## The chain forgets where it started
+## The model forgets where it started
 
 Start 1,000 sites as `A` and let them evolve:
 
@@ -301,9 +342,11 @@ substitutions per site.
 
 ## Turning it around
 
-We observe $p$, the proportion of sites that differ. Solve for $t$:
+::: {style="font-size: 85%;"}
+We observe $p$, the proportion of sites that differ. Solve for $t$ (and replace with $d$ for distance):
+:::
 
-::: {style="font-size: 80%;"}
+::: {style="font-size: 75%;"}
 $$
 d = -\frac{3}{4}\ln\left(1 - \frac{4}{3}p\right)
 $$
@@ -311,16 +354,18 @@ $$
 
 . . .
 
-::: {style="font-size: 75%;"}
+::: {style="font-size: 70%;"}
 | $p$ (what we see) | 0.01 | 0.10 | 0.30 | 0.50 | 0.70 | $\geq 0.75$ |
-|:--|--:|--:|--:|--:|--:|--:|
+|---|---|---|---|---|---|---|
 | $d$ (Jukes-Cantor distance) | 0.010 | 0.107 | 0.383 | 0.824 | 2.031 | $\infty$ |
 :::
 
+::: {style="font-size: 80%;"}
 ::: {.incremental}
 -   Small $p$: Barely any correction needed
--   Large $p$: The correction is huge, and very sensitive to noise
+-   Large $p$: The correction is large, and very sensitive to noise
 -   $p \geq 0.75$: Differences are saturated; no estimate is possible
+:::
 :::
 
 ::: {.notes}
@@ -359,7 +404,8 @@ Callback to the alignment lecture: the scoring scheme was a model, and
 ## Two violations of the assumptions
 
 ::: {.columns}
-::: {.column width="50%" style="font-size: 75%;"}
+::: {.column width="50%"}
+::: {style="font-size: 75%;"}
 **Transitions are more common**
 
 -   Purines: `A` ↔ `G`
@@ -367,13 +413,16 @@ Callback to the alignment lecture: the scoring scheme was a model, and
 -   Transitions (within a type) usually outnumber transversions (between
     types), even though there are **twice** as many possible transversions
 :::
+:::
 
-::: {.column width="50%" style="font-size: 75%;"}
+::: {.column width="50%"}
+::: {style="font-size: 75%;"}
 **Sites differ in rate**
 
 -   In protein-coding genes, many **3rd codon position** changes are
     synonymous
 -   So 3rd positions usually evolve much faster than 1st and 2nd positions
+:::
 :::
 :::
 
@@ -419,7 +468,7 @@ rates plus 3 frequencies. If students have ever seen "GTR+G" in a methods
 section, this is what it means. We may do a separate exercise on these later.
 :::
 
-# Where does the correction come from? {background-color="#1b3a5c"}
+# Where does the Jukes-Cantor corrected distance come from? {background-color="#1b3a5c"}
 
 ## Likelihood: A coin-flipping example
 
@@ -442,7 +491,7 @@ $$
 ::: {.incremental}
 -   The probability of the data, as a function of the parameter, is the
     ***likelihood***
--   The best value ($\theta = 0.7$) is the ***maximum likelihood estimate***
+-   The best value ($\theta = 0.7$) is the ***maximum-likelihood estimate***
 :::
 
 ::: {.notes}
@@ -484,9 +533,9 @@ which bases are at each site, but those terms do not depend on t, so the best
 t is the same.)
 :::
 
-## Multiplying tiny numbers
+## Multiplying many probabilities
 
-Thousands of sites means multiplying thousands of probabilities
+Thousands of sites means multiplying thousands of probabilities (numbers less than 1)
 
 . . .
 
@@ -540,8 +589,8 @@ programming again.
 ::: {.incremental}
 -   Counting differences **underestimates** evolution: Multiple hits, and
     differences **saturate** at 0.75
--   The **Jukes-Cantor model** is a **Markov chain**: All changes equally
-    likely, and each step depends only on the current base
+-   The **Jukes-Cantor model** is a **Markov chain**: Each step depends only on
+    the current base
 -   The **Jukes-Cantor distance** corrects for hidden changes, but gets noisy near
     saturation
 -   Real genes break the model's assumptions, so there is a **family** of richer
@@ -564,7 +613,7 @@ If short on time, cut to the first and last bullets.
 3.  Watch the differences between an ancestor and its descendant saturate
 4.  `jc_distance`: Correct for the changes you cannot see
 5.  Compare two species of yeast, codon position by codon position
-6.  `log_likelihood`: Find where the correction comes from
+6.  `log_likelihood`: Find where the corrected distance comes from
 :::
 
 . . .
