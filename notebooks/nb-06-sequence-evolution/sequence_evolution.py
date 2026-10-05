@@ -82,6 +82,44 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ### A note on terms: Site, nucleotide, base, and residue
+
+    We will use several words for the parts of a DNA sequence.
+    They overlap a lot, but they are not quite the same:
+
+    | Term | What it refers to | Example |
+    |:--|:--|:--|
+    | ***Site*** | A **position** in a sequence; in an alignment, a column of homologous positions | "3rd codon positions evolve faster than other sites" |
+    | ***Nucleotide*** | The chemical building block of DNA: A sugar, a phosphate, and a base | "a nucleotide substitution" |
+    | ***Base*** | The part of a nucleotide that makes it `A`, `C`, `G`, or `T`, and so the letter we write in a sequence | "base frequencies" "a 60-base sequence" |
+    | ***Residue*** | A building block once it is linked into a chain; used for **both** nucleotides and amino acids | "the residues of a protein" |
+
+    The most important distinction is between the **site** and **what is at the
+    site**.
+    In the alignment below, both sequences have the same **Site 3**, but one has a
+    `G` there and the other has an `A`:
+
+                      Site 3
+                        ↓
+        Species 1:  A C G T
+        Species 2:  A C A T
+
+    The site is the part that persists over time.
+    Mutations change which nucleotide (or base) occupies the site.
+    That is why we measure evolution in **substitutions per site**: The number of
+    times the nucleotide at a position has been replaced.
+
+    In everyday use (including in this notebook), "base" and "nucleotide" are both
+    used for the letter at a site.
+    "Residue" is commonly used for proteins ("amino acid residues"), or when a
+    statement should apply to both DNA and protein sequences.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
     # Part 1: Mutation as a random process
 
     We cannot predict exactly which nucleotide bases will change in a lineage, or
