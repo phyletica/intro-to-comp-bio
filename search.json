@@ -14,7 +14,7 @@
     "href": "index.html#lecture-presentations",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lecture Presentations",
-    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides\nView Lecture 4 Slides\nView Lecture 5 Slides\nView Lecture 6 Slides\nView Lecture 7 Slides",
+    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides\nView Lecture 4 Slides\nView Lecture 5 Slides\nView Lecture 6 Slides\nView Lecture 7 Slides\nView Lecture 8 Slides",
     "crumbs": [
       "Home"
     ]
@@ -24,7 +24,7 @@
     "href": "index.html#lab-exercises",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lab exercises",
-    "text": "Lab exercises\n\nIntro to Bash\nSetting up a molab account\n\n\nPython notebook exercises\nTo work on one of the marimo Python notebooks below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button.\n\n\nExercise 4: Intro to Python & marimo notebooks \nExercise 5: Complexity Lab \nExercise 6: String Search Lab \nExercise 7: Sequence Alignment Lab \nExercise 8: BLAST Lab",
+    "text": "Lab exercises\n\nIntro to Bash\nSetting up a molab account\n\n\nPython notebook exercises\nTo work on one of the marimo Python notebooks below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button.\n\n\nExercise 4: Intro to Python & marimo notebooks \nExercise 5: Complexity Lab \nExercise 6: String Search Lab \nExercise 7: Sequence Alignment Lab \nExercise 8: BLAST Lab \nExercise 9: Sequence Evolution Lab",
     "crumbs": [
       "Home"
     ]
@@ -615,6 +615,167 @@
     "title": "Intro to Comp Bio",
     "section": "Support",
     "text": "Support\nThis work was made possible by funding provided to Jamie Oaks from the National Science Foundation (DEB 1656004)."
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#an-aside-about-terms",
+    "href": "slides/topic-08-sequence-evolution.html#an-aside-about-terms",
+    "title": "Modeling sequence evolution",
+    "section": "An aside about terms",
+    "text": "An aside about terms\n\n\n\n\n\n\n\n\n\nTerm\nRefers to\nExample\n\n\n\n\nSite\nA position; in an alignment, a column of homologous positions\n“3rd codon positions evolve faster than other sites”\n\n\nNucleotide\nThe building block of DNA: sugar + phosphate + base\n“nucleotide substitution”\n\n\nBase\nThe part of a nucleotide that makes it A, C, G, or T (the letter we write)\n“base frequencies”, “base pair”\n\n\nResidue\nA building block linked into a chain: Nucleotides or amino acids\n“amino acid residues”\n\n\n\n\n\n\n            Site 3\n              ↓\nSpecies 1:  A C G T\nSpecies 2:  A C A T\n\n\n\n\nThe site persists; a mutation changes the nucleotide/base that occupies it\n\n\nThe distinction that matters most is position vs. occupant. “Substitutions per site” counts how many times the occupant of a position was replaced. In casual use, “base” and “nucleotide” are interchangeable for the letter at a site, and that’s fine. “Residue” is the generic term that covers both DNA and protein; it’s what a monomer is called once it’s part of a polymer. “Base pair” (bp) is a length unit for double-stranded DNA; “nucleotides” (nt) or “bases” for single strands."
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#so-far",
+    "href": "slides/topic-08-sequence-evolution.html#so-far",
+    "title": "Modeling sequence evolution",
+    "section": "So far",
+    "text": "So far\nWe have measured how different two sequences are by counting differences\n\nHamming distance in the complexity exercise\nPairwise distances to build a tree of SARS-CoV-2 variants\n\n\nBut are we measuring the thing we care about?\n\n\n\nThe number of differences between two sequences is not the same as the amount of evolution that separates them.\n\n\n\n\n0:00-1:00\nAnchor in things they have done: Hamming distance (complexity lab) and the pairwise distances in Capstone 1. The question for today: do those counts measure evolution?"
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#hidden-substitutions",
+    "href": "slides/topic-08-sequence-evolution.html#hidden-substitutions",
+    "title": "Modeling sequence evolution",
+    "section": "Hidden substitutions",
+    "text": "Hidden substitutions\nThree sites in an ancestor and a descendant:\n\n\n\n\nSite\nHistory\nSubstitutions\nDifferences we see\n\n\n\n\n1\nA → G\n1\n1\n\n\n2\nA → G → T\n2\n1\n\n\n3\nA → G → A\n2\n0\n\n\n\n\n\n5 substitutions happened, but we only observe 2 differences\n\n\nMultiple hits: A later change can hide an earlier one\n\n1:00-2:30\nWalk through each row. Site 2 is a second hit on an already-different site; site 3 is a back-substitution that erases a difference entirely. We only ever see the tips of the history, never the path."
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#differences-saturate",
+    "href": "slides/topic-08-sequence-evolution.html#differences-saturate",
+    "title": "Modeling sequence evolution",
+    "section": "Differences saturate",
+    "text": "Differences saturate\n\n\n\n\n                            \n                                            \n\n\nFigure 1\n\n\n\n\n\n2:30-4:00\nThe dotted line is 0.75. Ask: why does it level off at 0.75 and not 1? After enough time, the descendant’s base is random, and it matches the ancestor by chance 1/4 of the time. Past this point, the differences carry almost no information about how much time has passed. They will make this plot from their own simulation in the exercise.site"
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#to-account-for-hidden-changes-we-need-a-model",
+    "href": "slides/topic-08-sequence-evolution.html#to-account-for-hidden-changes-we-need-a-model",
+    "title": "Modeling sequence evolution",
+    "section": "To account for hidden changes, we need a model",
+    "text": "To account for hidden changes, we need a model\nA model of sequence evolution describes the probabilities of substitution over time\n\nWith a model, we can ask:\n\nHow many differences should we expect after time \\(t\\)?\nGiven the differences we see, how much time most likely passed (or evolution happened)?\n\n\n\n\n\n\nThis is our first probabilistic model of the semester\n\n\n\n\n4:00-4:45\nCallback to the first lecture: biology is not black and white; think probabilistically using models."
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#the-simplest-possible-model",
+    "href": "slides/topic-08-sequence-evolution.html#the-simplest-possible-model",
+    "title": "Modeling sequence evolution",
+    "section": "The simplest possible model",
+    "text": "The simplest possible model\nChop time into many tiny steps. In each step, every base follows the same rule1:\n\nWith a small probability (the rate), the base is substituted\nIf it is substituted, it becomes one of the other three bases, each equally likely\n\n\nThat’s the entire model!\n\n\nYou will write a Python function to do this in the exercise\n\n4:45-5:45\nJukes and Cantor published this in 1969, in a chapter on protein evolution, before anyone could sequence DNA quickly. The model has one idea: every change is equally likely. They implement it with random.random() and random.choice() in the notebook.\n\n\nJukes and Cantor (1969)"
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#measuring-time",
+    "href": "slides/topic-08-sequence-evolution.html#measuring-time",
+    "title": "Modeling sequence evolution",
+    "section": "Measuring time",
+    "text": "Measuring time\n\nIf each base has a 1% chance of changing per step, then after 100 steps, we expect 1 substitution per site (on average)\nWe measure time (\\(t\\)) in expected substitutions per site\nThis is how branch lengths are measured on most phylogenetic trees\n\n\n\n\n\n\n\\(t = 1\\) does not mean every site changed once. Some changed zero times, some twice, some more.\n\n\n\n\n\n5:45-6:45\nThis unit is worth being explicit about: it combines rate and time into one number. If they have looked at a tree with a scale bar of “0.05,” this is what that means."
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#the-model-as-a-table-of-rates",
+    "href": "slides/topic-08-sequence-evolution.html#the-model-as-a-table-of-rates",
+    "title": "Modeling sequence evolution",
+    "section": "The model as a table of rates",
+    "text": "The model as a table of rates\nRows: The base now. Columns: The base it changes to.\n\n\n\n\n\nA\nC\nG\nT\n\n\n\n\nA\n—\n\\(\\mu\\)\n\\(\\mu\\)\n\\(\\mu\\)\n\n\nC\n\\(\\mu\\)\n—\n\\(\\mu\\)\n\\(\\mu\\)\n\n\nG\n\\(\\mu\\)\n\\(\\mu\\)\n—\n\\(\\mu\\)\n\n\nT\n\\(\\mu\\)\n\\(\\mu\\)\n\\(\\mu\\)\n—\n\n\n\n\n\nEvery possible change happens at the same rate (\\(\\mu\\))\n\n6:45-7:45\nThis is the rate matrix (Q) with the diagonal left out. Do not go into the diagonal or matrix exponentials. The point is visual: the model is a table of rates, and in JC every entry is the same. Richer models, later in the lecture, are just this table with different entries."
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#a-markov-chain",
+    "href": "slides/topic-08-sequence-evolution.html#a-markov-chain",
+    "title": "Modeling sequence evolution",
+    "section": "A Markov chain",
+    "text": "A Markov chain\n\nWhat happens to a base next depends only on what it is now\nNot on what it used to be\nNot on how long it has been this base\n\n\nA random process with this memoryless property is a Markov chain\n\n\nNearly every model of sequence evolution used in biology is a Markov chain\n\n7:45-8:45\nIn the notebook (Challenge 3), they will be asked what information their evolve_one_step function uses and what it ignores. The answer is this slide."
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#the-model-forgets-where-it-started",
+    "href": "slides/topic-08-sequence-evolution.html#the-model-forgets-where-it-started",
+    "title": "Modeling sequence evolution",
+    "section": "The model forgets where it started",
+    "text": "The model forgets where it started\nStart 1,000 sites as A and let them evolve:\n\nAt first, almost all are still A\nOver time, A is lost and C, G, T are gained\nEventually, about 1/4 of the sites are each base, and it stays that way\n\n\nThis is the model’s stationary distribution\n\n8:45-9:45\nEvery base is lost and gained at the same rate, so the long-run frequencies are equal, regardless of starting state. This is also why the differences saturate at 3/4: a saturated descendant is a random draw of bases."
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#what-the-model-predicts",
+    "href": "slides/topic-08-sequence-evolution.html#what-the-model-predicts",
+    "title": "Modeling sequence evolution",
+    "section": "What the model predicts",
+    "text": "What the model predicts\nThe probability that a site differs from its ancestor after time \\(t\\):\n\\[\nP(\\text{different}) = \\frac{3}{4}\\left(1 - e^{-\\frac{4}{3}t}\\right)\n\\]\n\n\\(t = 0\\): \\(e^{0} = 1\\), so \\(P(\\text{different}) = 0\\)\n\\(t\\) large: \\(e^{-\\frac{4}{3}t} \\to 0\\), so \\(P(\\text{different}) \\to \\frac{3}{4}\\)\n\n\nThis is the “differences we see” curve from the saturation plot\n\n9:45-11:00\nDon’t derive it. Just check the two ends with them; this builds trust in the equation. The 4/3 comes from the rate being scaled so that t is in expected substitutions per site."
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#turning-it-around",
+    "href": "slides/topic-08-sequence-evolution.html#turning-it-around",
+    "title": "Modeling sequence evolution",
+    "section": "Turning it around",
+    "text": "Turning it around\n\nWe observe \\(p\\), the proportion of sites that differ. Solve for \\(t\\) (and replace with \\(d\\) for distance):\n\n\n\\[\nd = -\\frac{3}{4}\\ln\\left(1 - \\frac{4}{3}p\\right)\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\\(p\\) (what we see)\n0.01\n0.10\n0.30\n0.50\n0.70\n\\(\\geq 0.75\\)\n\n\n\n\n\\(d\\) (Jukes-Cantor distance)\n0.010\n0.107\n0.383\n0.824\n2.031\n\\(\\infty\\)\n\n\n\n\n\n\nSmall \\(p\\): Barely any correction needed\nLarge \\(p\\): The correction is large, and very sensitive to noise\n\\(p \\geq 0.75\\): Differences are saturated; no estimate is possible\n\n\n\n11:00-12:30\nThe Jukes-Cantor distance. They will write jc_distance in the notebook, including the p &gt;= 0.75 case (math.inf). Point at 0.50 -&gt; 0.824 and 0.70 -&gt; 2.03: near saturation, a few more differences by chance change the estimate enormously."
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#what-jukes-cantor-assumes",
+    "href": "slides/topic-08-sequence-evolution.html#what-jukes-cantor-assumes",
+    "title": "Modeling sequence evolution",
+    "section": "What Jukes-Cantor assumes",
+    "text": "What Jukes-Cantor assumes\n\nAll four bases are equally frequent\nAll substitutions are equally likely\nEvery site evolves independently and at the same rate\nThe process is the same at all times and on all lineages\n\n\n\n\n\nReal sequences break these assumptions\n\n\n\n\n12:30-13:30\nCallback to the alignment lecture: the scoring scheme was a model, and “optimal” meant optimal under our assumptions. The same is true here."
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#two-violations-of-the-assumptions",
+    "href": "slides/topic-08-sequence-evolution.html#two-violations-of-the-assumptions",
+    "title": "Modeling sequence evolution",
+    "section": "Two violations of the assumptions",
+    "text": "Two violations of the assumptions\n\n\n\nTransitions are more common\n\nPurines: A ↔︎ G\nPyrimidines: C ↔︎ T\nTransitions (within a type) usually outnumber transversions (between types), even though there are twice as many possible transversions\n\n\n\n\nSites differ in rate\n\nIn protein-coding genes, many 3rd codon position changes are synonymous\nSo 3rd positions usually evolve much faster than 1st and 2nd positions\n\n\n\n\nYou will see both in a real yeast gene in the exercise\n\n13:30-15:00\nDon’t give away the yeast numbers; Challenge 8 asks them to find these patterns. Under JC, 1 of the 3 possible changes from any base is a transition, so JC expects about one transition per two transversions."
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#a-family-of-models",
+    "href": "slides/topic-08-sequence-evolution.html#a-family-of-models",
+    "title": "Modeling sequence evolution",
+    "section": "A family of models",
+    "text": "A family of models\nSame machinery, more entries in the table:\n\n\n\n\n\n\n\n\n\nModel\nAdds\nFree parameters\n\n\n\n\nJC691\nNothing: all changes equal, all bases equal\n0\n\n\nK802\nTransitions and transversions have different rates (\\(\\kappa\\))\n1\n\n\nHKY853\nUnequal base frequencies\n4\n\n\nGTR4\nEvery pair of bases has its own rate\n8\n\n\n\n\n\nPlus: Let rates vary among sites (e.g., “+Γ”5)\n\n\nEach model is a special case of the next\n\n15:00-16:30\n“Free parameters” does not count the branch length. HKY: kappa plus 3 base frequencies (the 4th is determined because they sum to 1). GTR: 5 relative rates plus 3 frequencies. If students have ever seen “GTR+G” in a methods section, this is what it means. We may do a separate exercise on these later.\n\n\nJukes and Cantor (1969)Kimura (1980)Hasegawa et al. (1985)Tavaré (1986)Yang (1993); Yang (1994)"
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#likelihood-a-coin-flipping-example",
+    "href": "slides/topic-08-sequence-evolution.html#likelihood-a-coin-flipping-example",
+    "title": "Modeling sequence evolution",
+    "section": "Likelihood: A coin-flipping example",
+    "text": "Likelihood: A coin-flipping example\nFlip a coin 10 times: 7 heads. If \\(P(\\text{heads}) = \\theta\\):\n\\[\nL(\\theta) = \\theta^{7}(1 - \\theta)^{3}\n\\]\n\n\n\n\n\n\\(\\theta\\)\n0.3\n0.5\n0.7\n0.9\n\n\n\n\n\\(L(\\theta)\\)\n0.000075\n0.00098\n0.0022\n0.00048\n\n\n\n\n\n\n\nThe probability of the data, as a function of the parameter, is the likelihood\nThe best value (\\(\\theta = 0.7\\)) is the maximum-likelihood estimate\n\n\n16:30-18:00\nEmphasize that the data are fixed and we vary the parameter. The notebook uses this same table."
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#sites-are-coin-flips",
+    "href": "slides/topic-08-sequence-evolution.html#sites-are-coin-flips",
+    "title": "Modeling sequence evolution",
+    "section": "Sites are coin flips",
+    "text": "Sites are coin flips\nEach site “comes up different” with probability \\(P(\\text{different})\\), which depends on \\(t\\)\n\n\\(n\\) sites compared, \\(k\\) differ:\n\\[\nL(t) = P(\\text{different})^{k} \\times \\big(1 - P(\\text{different})\\big)^{n - k}\n\\]\n\n\nThe value of \\(t\\) that maximizes \\(L(t)\\) is the Jukes-Cantor distance\n\n\n\n\n\nThe Jukes-Cantor distance formula we used is a maximum likelihood estimate!\n\n\n\n\n18:00-19:15\nThey will find this numerically in the notebook: a log-likelihood curve whose peak lands on their jc_distance value. (The full JC likelihood also includes which bases are at each site, but those terms do not depend on t, so the best t is the same.)"
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#multiplying-many-probabilities",
+    "href": "slides/topic-08-sequence-evolution.html#multiplying-many-probabilities",
+    "title": "Modeling sequence evolution",
+    "section": "Multiplying many probabilities",
+    "text": "Multiplying many probabilities\nThousands of sites means multiplying thousands of probabilities (numbers less than 1)\n\n\nThe likelihood of a 1,900-base gene can be \\(\\approx 10^{-361}\\)\nThe smallest number Python can store is \\(\\approx 5 \\times 10^{-324}\\)\nSo the answer silently becomes 0.0!\n\n\n\nThe fix: \\(\\ln(a \\times b) = \\ln a + \\ln b\\)\n\n\\[\n\\ln L(t) = k \\ln P(\\text{different}) + (n - k) \\ln\\big(1 - P(\\text{different})\\big)\n\\]\n\n\n19:15-20:15\nThe 10^-361 number is the yeast gene from the notebook. Every likelihood program works with log-likelihoods for this reason."
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#why-learn-likelihood-if-we-have-a-formula",
+    "href": "slides/topic-08-sequence-evolution.html#why-learn-likelihood-if-we-have-a-formula",
+    "title": "Modeling sequence evolution",
+    "section": "Why learn likelihood if we have a formula?",
+    "text": "Why learn likelihood if we have a formula?\n\nFor K80, HKY, GTR, and for trees, there is usually no formula\nBut we can always calculate the likelihood, and search for the parameter values that maximize it\nLikelihood also lets us compare how well different models (or trees) explain the same data\n\n\nComing up: the likelihood of a tree1\n\n20:15-21:00\nPreview of the next topic(s). Felsenstein’s pruning algorithm is dynamic programming again.\n\n\nFelsenstein (1981)"
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#summary",
+    "href": "slides/topic-08-sequence-evolution.html#summary",
+    "title": "Modeling sequence evolution",
+    "section": "Summary",
+    "text": "Summary\n\n\nCounting differences underestimates evolution: Multiple hits, and differences saturate at 0.75\nThe Jukes-Cantor model is a Markov chain: Each step depends only on the current base\nThe Jukes-Cantor distance corrects for hidden changes, but gets noisy near saturation\nReal genes break the model’s assumptions, so there is a family of richer models\nThe Jukes-Cantor distance is a maximum likelihood estimate\n\n\n\n21:00-21:45\nIf short on time, cut to the first and last bullets."
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#in-the-exercise",
+    "href": "slides/topic-08-sequence-evolution.html#in-the-exercise",
+    "title": "Modeling sequence evolution",
+    "section": "In the exercise",
+    "text": "In the exercise\n\n\nWrite the model: get_different_base and evolve_one_step\nWatch 1,000 sites that start as A evolve over time\nWatch the differences between an ancestor and its descendant saturate\njc_distance: Correct for the changes you cannot see\nCompare two species of yeast, codon position by codon position\nlog_likelihood: Find where the corrected distance comes from\n\n\n\n\n\n\n\n\n\nWatch for\n\n\nHow good a simple model can be versus counting differences \n\n\n\n\n21:45-22:30\nTransitions outnumber transversions about 3 to 1 in the yeast SSA3 data. Hand off to the notebook here. Remind them the first cell needs their name."
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#exercise",
+    "href": "slides/topic-08-sequence-evolution.html#exercise",
+    "title": "Modeling sequence evolution",
+    "section": "Exercise",
+    "text": "Exercise\n\nLog into molab\nOpen the exercise in molab\nClick “Fork” button"
+  },
+  {
+    "objectID": "slides/topic-08-sequence-evolution.html#acknowledgements",
+    "href": "slides/topic-08-sequence-evolution.html#acknowledgements",
+    "title": "Modeling sequence evolution",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nI used Anthropic’s Claude (Opus 5.5 model) to generate a draft of these slides."
   },
   {
     "objectID": "slides/topic-05-string-search.html#the-question-for-today",
