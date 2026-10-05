@@ -1,0 +1,598 @@
+---
+title: "Modeling sequence evolution"
+subtitle: "Markov chains, the Jukes-Cantor model, and the changes we cannot see"
+# author: "Jamie Oaks"
+institute: "BIOL 5/6800 &mdash; Intro to Comp Bio"
+format:
+  revealjs:
+    slide-number: c/t
+    incremental: false
+    code-line-numbers: false
+    smaller: false
+    center-title-slide: true
+    history: false
+metadata-files:
+  - _metadata.yml
+bibliography: ../references.bib
+---
+
+## So far
+
+We have measured how different two sequences are by **counting differences**
+
+::: {.incremental}
+-   Hamming distance in the complexity exercise
+-   Pairwise distances to build a tree of SARS-CoV-2 variants
+:::
+
+. . .
+
+But are we measuring the thing we care about?
+
+::: {.callout-important appearance="minimal"}
+The number of **differences** between two sequences is not the same as the
+amount of **evolution** that separates them.
+:::
+
+::: {.notes}
+0:00-1:00
+
+Anchor in things they have done: Hamming distance (complexity lab) and the
+pairwise distances in Capstone 1. The question for today: do those counts
+measure evolution?
+:::
+
+## What we see vs. what happened
+
+Three sites in an ancestor and a descendant:
+
+::: {style="font-size: 90%;"}
+| Site | History | Substitutions | Differences we see |
+|:-:|:-:|:-:|:-:|
+| 1 | `A` → `G` | 1 | 1 |
+| 2 | `A` → `G` → `T` | 2 | 1 |
+| 3 | `A` → `G` → `A` | 2 | **0** |
+:::
+
+. . .
+
+5 substitutions happened, but we only observe **2** differences
+
+. . .
+
+***Multiple hits***: A later change can hide an earlier one
+
+::: {.notes}
+1:00-2:30
+
+Walk through each row. Site 2 is a second hit on an already-different site;
+site 3 is a back-substitution that erases a difference entirely. We only ever
+see the tips of the history, never the path.
+:::
+
+## Differences saturate
+
+```{python}
+#| label: fig-saturation
+#| echo: false
+#| eval: true
+#| fig-align: center
+#| fig-dpi: 600
+
+import math
+import pandas as pd
+import plotly.express as px
+import plotly.io
+
+plotly.io.renderers.default = "notebook_connected"
+
+t = [i / 100 for i in range(0, 401)]
+data = {
+    "Differences we see": [0.75 * (1 - math.exp(-4 * x / 3)) for x in t],
+    "Substitutions that happened": [x for x in t],
+}
+df = pd.DataFrame(data = data, index = t)
+
+fig = px.line(df, x = df.index, y = df.columns)
+fig.add_hline(y = 0.75, line_dash = "dot", line_color = "firebrick")
+fig.update_layout(
+    xaxis_title = "Substitutions per site",
+    yaxis_title = "Proportion of sites",
+    legend_title_text = "",
+    xaxis_range = (0, 4),
+    yaxis_range = (0, 1.25),
+    xaxis_title_font_size = 20,
+    yaxis_title_font_size = 20,
+    xaxis_tickfont_size = 16,
+    yaxis_tickfont_size = 16,
+    legend_font_size = 20,
+)
+fig.show()
+```
+
+::: {.notes}
+2:30-4:00
+
+The dotted line is 0.75. Ask: why does it level off at 0.75 and not 1? After
+enough time, the descendant's base is random, and it matches the ancestor by
+chance 1/4 of the time. Past this point, the differences carry almost no
+information about how much time has passed. They will make this plot from
+their own simulation in the exercise.
+:::
+
+## To see the hidden changes, we need a model
+
+A ***model of sequence evolution*** describes the **probabilities** of
+substitution over time
+
+. . .
+
+With a model, we can ask:
+
+::: {.incremental}
+-   How many differences should we ***expect*** after time $t$?
+-   Given the differences we ***see***, how much time most likely passed (or
+    evolution happened)?
+:::
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+This is our first real **probabilistic model** of the semester
+:::
+
+::: {.notes}
+4:00-4:45
+
+Callback to the first lecture: biology is not black and white; think
+probabilistically using models.
+:::
+
+# The Jukes-Cantor model of sequence evolution {background-color="#1b3a5c"}
+
+## The simplest possible model
+
+Chop time into many tiny steps.
+In every step, every base follows the same rule^[@JC1969]:
+
+::: {.incremental}
+1.  With a small probability (the ***rate***), the base is **substituted**
+2.  If it is substituted, it becomes one of the **other three** bases, each
+    equally likely
+:::
+
+. . .
+
+That's the entire model!
+
+. . .
+
+You will write a Python function to do this today
+
+::: {.notes}
+4:45-5:45
+
+Jukes and Cantor published this in 1969, in a chapter on protein evolution,
+before anyone could sequence DNA quickly. The model has one idea: every
+change is equally likely. They implement it with random.random() and
+random.choice() in the notebook.
+:::
+
+## Measuring time
+
+::: {.incremental}
+-   If each base has a 1% chance of changing per step, then after 100 steps, we
+    *expect* 1 substitution per site
+-   We measure time ($t$) in ***expected substitutions per site***
+-   This is how branch lengths are measured on most phylogenetic trees
+:::
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+$t = 1$ does not mean every site changed once. Some changed zero times, some
+twice, some more.
+:::
+
+::: {.notes}
+5:45-6:45
+
+This unit is worth being explicit about: it combines rate and time into one
+number. If they have looked at a tree with a scale bar of "0.05," this is what
+that means.
+:::
+
+## A picture of the model
+
+Rows: the base now. Columns: the base it changes to.
+
+::: {style="font-size: 130%;"}
+| | **A** | **C** | **G** | **T** |
+|:-:|:-:|:-:|:-:|:-:|
+| **A** | &mdash; | $\mu$ | $\mu$ | $\mu$ |
+| **C** | $\mu$ | &mdash; | $\mu$ | $\mu$ |
+| **G** | $\mu$ | $\mu$ | &mdash; | $\mu$ |
+| **T** | $\mu$ | $\mu$ | $\mu$ | &mdash; |
+:::
+
+. . .
+
+Every possible change happens at the **same rate** ($\mu$)
+
+::: {.notes}
+6:45-7:45
+
+This is the rate matrix (Q) with the diagonal left out. Do not go into the
+diagonal or matrix exponentials. The point is visual: the model is a table of
+rates, and in JC every entry is the same. Richer models, later in the lecture,
+are just this table with different entries.
+:::
+
+## A Markov chain
+
+::: {.incremental}
+-   What happens to a base next depends **only on what it is now**
+-   Not on what it used to be
+-   Not on how long it has been this base
+:::
+
+. . .
+
+A random process with this ***memoryless*** property is a ***Markov chain***
+
+. . .
+
+Nearly every model of sequence evolution used in biology is a Markov
+chain
+
+::: {.notes}
+7:45-8:45
+
+In the notebook (Challenge 3), they will be asked what information their
+evolve_one_step function uses and what it ignores. The answer is this slide.
+:::
+
+## The chain forgets where it started
+
+Start 1,000 sites as `A` and let them evolve:
+
+::: {.incremental}
+-   At first, almost all are still `A`
+-   Over time, `A` is lost and `C`, `G`, `T` are gained
+-   Eventually, about **1/4** of the sites are each base, and it stays that way
+:::
+
+. . .
+
+This is the model's ***stationary distribution***
+
+::: {.notes}
+8:45-9:45
+
+Every base is lost and gained at the same rate, so the long-run frequencies
+are equal, regardless of starting state. This is also why the differences
+saturate at 3/4: a saturated descendant is a random draw of bases.
+:::
+
+## What the model predicts
+
+The probability that a site differs from its ancestor after time $t$:
+
+$$
+P(\text{different}) = \frac{3}{4}\left(1 - e^{-\frac{4}{3}t}\right)
+$$
+
+::: {.incremental}
+-   $t = 0$: $e^{0} = 1$, so $P(\text{different}) = 0$
+-   $t$ large: $e^{-\frac{4}{3}t} \to 0$, so $P(\text{different}) \to \frac{3}{4}$
+:::
+
+. . .
+
+This is the "differences we see" curve from the saturation plot
+
+::: {.notes}
+9:45-11:00
+
+Don't derive it. Just check the two ends with them; this builds trust in the
+equation. The 4/3 comes from the rate being scaled so that t is in expected
+substitutions per site.
+:::
+
+## Turning it around
+
+We observe $p$, the proportion of sites that differ. Solve for $t$:
+
+::: {style="font-size: 80%;"}
+$$
+d = -\frac{3}{4}\ln\left(1 - \frac{4}{3}p\right)
+$$
+:::
+
+. . .
+
+::: {style="font-size: 75%;"}
+| $p$ (what we see) | 0.01 | 0.10 | 0.30 | 0.50 | 0.70 | $\geq 0.75$ |
+|:--|--:|--:|--:|--:|--:|--:|
+| $d$ (Jukes-Cantor distance) | 0.010 | 0.107 | 0.383 | 0.824 | 2.031 | $\infty$ |
+:::
+
+::: {.incremental}
+-   Small $p$: Barely any correction needed
+-   Large $p$: The correction is huge, and very sensitive to noise
+-   $p \geq 0.75$: Differences are saturated; no estimate is possible
+:::
+
+::: {.notes}
+11:00-12:30
+
+The Jukes-Cantor distance. They will write jc_distance in the notebook,
+including the p >= 0.75 case (math.inf). Point at 0.50 -> 0.824 and
+0.70 -> 2.03: near saturation, a few more differences by chance change the
+estimate enormously.
+:::
+
+# Models are assumptions {background-color="#1b3a5c"}
+
+## What Jukes-Cantor assumes
+
+::: {.incremental}
+-   All four bases are **equally frequent**
+-   All substitutions are **equally likely**
+-   Every site evolves **independently** and at the **same rate**
+-   The process is the **same at all times** and on all lineages
+:::
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+Real sequences break these assumptions
+:::
+
+::: {.notes}
+12:30-13:30
+
+Callback to the alignment lecture: the scoring scheme was a model, and
+"optimal" meant optimal under our assumptions. The same is true here.
+:::
+
+## Two violations of the assumptions
+
+::: {.columns}
+::: {.column width="50%" style="font-size: 75%;"}
+**Transitions are more common**
+
+-   Purines: `A` ↔ `G`
+-   Pyrimidines: `C` ↔ `T`
+-   Transitions (within a type) usually outnumber transversions (between
+    types), even though there are **twice** as many possible transversions
+:::
+
+::: {.column width="50%" style="font-size: 75%;"}
+**Sites differ in rate**
+
+-   In protein-coding genes, many **3rd codon position** changes are
+    synonymous
+-   So 3rd positions usually evolve much faster than 1st and 2nd positions
+:::
+:::
+
+. . .
+
+You will see both in a real yeast gene in the exercise 
+
+::: {.notes}
+13:30-15:00
+
+Don't give away the yeast numbers; Challenge 8 asks them to find these
+patterns. Under JC, 1 of the 3 possible changes from any base is a
+transition, so JC expects about one transition per two transversions.
+:::
+
+## A family of models
+
+Same machinery, more entries in the table:
+
+::: {style="font-size: 70%;"}
+| Model | Adds | Free parameters |
+|:--|:--|:-:|
+| JC69^[@JC1969] | Nothing: all changes equal, all bases equal | 0 |
+| K80^[@K2P] | Transitions and transversions have different rates ($\kappa$) | 1 |
+| HKY85^[@HKY] | Unequal base frequencies | 4 |
+| GTR^[@Tavare1986] | Every pair of bases has its own rate | 8 |
+:::
+
+. . .
+
+Plus: Let rates vary among sites (*e.g.*, "+Γ"^[@Yang1993; @Yang1994gamma])
+
+. . .
+
+Each model is a special case of the next
+
+::: {.notes}
+15:00-16:30
+
+"Free parameters" does not count the branch length. HKY: kappa plus 3 base
+frequencies (the 4th is determined because they sum to 1). GTR: 5 relative
+rates plus 3 frequencies. If students have ever seen "GTR+G" in a methods
+section, this is what it means. We may do a separate exercise on these later.
+:::
+
+# Where does the correction come from? {background-color="#1b3a5c"}
+
+## Likelihood: A coin-flipping example
+
+Flip a coin 10 times: 7 heads. If $P(\text{heads}) = \theta$:
+
+$$
+L(\theta) = \theta^{7}(1 - \theta)^{3}
+$$
+
+. . .
+
+::: {style="font-size: 90%;"}
+| $\theta$ | 0.3 | 0.5 | 0.7 | 0.9 |
+|:--|--:|--:|--:|--:|
+| $L(\theta)$ | 0.000075 | 0.00098 | **0.0022** | 0.00048 |
+:::
+
+. . .
+
+::: {.incremental}
+-   The probability of the data, as a function of the parameter, is the
+    ***likelihood***
+-   The best value ($\theta = 0.7$) is the ***maximum likelihood estimate***
+:::
+
+::: {.notes}
+16:30-18:00
+
+Emphasize that the data are fixed and we vary the parameter. The notebook
+uses this same table.
+:::
+
+## Sites are coin flips
+
+Each site "comes up different" with probability $P(\text{different})$, which
+depends on $t$
+
+. . .
+
+$n$ sites compared, $k$ differ:
+
+$$
+L(t) = P(\text{different})^{k} \times \big(1 - P(\text{different})\big)^{n - k}
+$$
+
+. . .
+
+The value of $t$ that maximizes $L(t)$ **is** the Jukes-Cantor distance
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+The Jukes-Cantor distance formula we used is a maximum likelihood estimate!
+:::
+
+::: {.notes}
+18:00-19:15
+
+They will find this numerically in the notebook: a log-likelihood curve whose
+peak lands on their jc_distance value. (The full JC likelihood also includes
+which bases are at each site, but those terms do not depend on t, so the best
+t is the same.)
+:::
+
+## Multiplying tiny numbers
+
+Thousands of sites means multiplying thousands of probabilities
+
+. . .
+
+::: {.incremental}
+-   The likelihood of a 1,900-base gene can be $\approx 10^{-361}$
+-   The smallest number Python can store is $\approx 5 \times 10^{-324}$
+-   So the answer silently becomes **0.0**!
+:::
+
+. . .
+
+The fix: $\ln(a \times b) = \ln a + \ln b$
+
+::: {style="font-size: 80%;"}
+$$
+\ln L(t) = k \ln P(\text{different}) + (n - k) \ln\big(1 - P(\text{different})\big)
+$$
+:::
+
+::: {.notes}
+19:15-20:15
+
+The 10^-361 number is the yeast gene from the notebook. Every likelihood
+program works with log-likelihoods for this reason.
+:::
+
+## Why learn likelihood if we have a formula?
+
+::: {.incremental}
+-   For K80, HKY, GTR, and for **trees**, there is usually **no formula**
+-   But we can always *calculate* the likelihood, and **search** for the
+    parameter values that maximize it
+-   Likelihood also lets us compare how well different models (or trees)
+    explain the same data
+:::
+
+. . .
+
+Coming up: the likelihood of a **tree**^[@Felsenstein1981]
+
+::: {.notes}
+20:15-21:00
+
+Preview of the next topic(s). Felsenstein's pruning algorithm is dynamic
+programming again.
+:::
+
+## Summary
+
+::: {style="font-size: 85%;"}
+::: {.incremental}
+-   Counting differences **underestimates** evolution: Multiple hits, and
+    differences **saturate** at 0.75
+-   The **Jukes-Cantor model** is a **Markov chain**: All changes equally
+    likely, and each step depends only on the current base
+-   The **Jukes-Cantor distance** corrects for hidden changes, but gets noisy near
+    saturation
+-   Real genes break the model's assumptions, so there is a **family** of richer
+    models
+-   The Jukes-Cantor distance is a **maximum likelihood** estimate
+:::
+:::
+
+::: {.notes}
+21:00-21:45
+
+If short on time, cut to the first and last bullets.
+:::
+
+## In the exercise
+
+::: {.incremental style="font-size: 85%;"}
+1.  Write the model: `get_different_base` and `evolve_one_step`
+2.  Watch 1,000 sites that start as `A` evolve over time
+3.  Watch the differences between an ancestor and its descendant saturate
+4.  `jc_distance`: Correct for the changes you cannot see
+5.  Compare two species of yeast, codon position by codon position
+6.  `log_likelihood`: Find where the correction comes from
+:::
+
+. . .
+
+::: {.callout-tip}
+## Watch for
+How good a simple model can be versus counting differences
+<!-- The yeast gene breaks one of the model's assumptions. Which one? -->
+:::
+
+::: {.notes}
+21:45-22:30
+
+Transitions outnumber transversions about 3 to 1 in the yeast SSA3 data. Hand
+off to the notebook here. Remind them the first cell needs their name.
+:::
+
+## Exercise
+
+1.  Log into [molab](https://molab.marimo.io/)
+2.  [Open the exercise in molab](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-06-sequence-evolution/sequence_evolution.py)
+3.  Click "Fork" button
+
+# References
+
+::: {#refs}
+:::
+
+## Acknowledgements
+
+I used Anthropic's Claude (Opus 5.5 model) to generate a draft of these slides.
