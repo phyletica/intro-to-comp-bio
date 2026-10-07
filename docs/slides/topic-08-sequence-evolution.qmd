@@ -31,8 +31,8 @@ bibliography: ../references.bib
 
 ::: {style="font-size: 105%;"}
 ```{.my-blue-code}
-            Site 3
-              ↓
+              Site 3
+                ↓
 Species 1:  A C G T
 Species 2:  A C A T
 ```
