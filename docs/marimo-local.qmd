@@ -1,0 +1,362 @@
+---
+title: "Running marimo notebooks on your own computer"
+---
+
+If you are having trouble logging in to molab or opening the notebooks there,
+you can run the class notebooks on your own computer instead.
+These instructions work on Windows, macOS, and Linux.
+
+You will use a free tool called
+[pixi](https://pixi.prefix.dev/latest/)
+that installs Python, marimo, and everything else the notebooks need,
+exactly as I have them set up on my computer.
+You only need to type a few short commands.
+
+The setup has three parts, and ***you only need to do them once***:
+
+1.  [Install pixi](#install-pixi)
+2.  [Download the class files](#download-the-class-files)
+3.  [Start marimo](#start-marimo)
+
+After that, [getting back into your notebooks](#each-time-you-work-on-a-notebook)
+takes two commands.
+
+::: {.callout-note}
+## Before you start
+
+-   You will need an internet connection and about 1 GB of free disk space.
+-   The first time you start marimo, it will take a few minutes to download and
+    install everything. After that, it starts in a few seconds.
+-   Below, choose the tab for your computer's operating system (Windows,
+    macOS, or Linux). Picking a tab once will switch all the tabs on this page.
+:::
+
+## Install pixi
+
+::: {.panel-tabset group="os"}
+
+### Windows
+
+1.  Download the pixi installer by clicking this link:
+    [pixi installer for Windows](https://github.com/prefix-dev/pixi/releases/latest/download/pixi-x86_64-pc-windows-msvc.msi)
+
+2.  Open your Downloads folder and double-click the file you just downloaded
+    (`pixi-x86_64-pc-windows-msvc.msi`).
+    Follow the prompts to install pixi, accepting the default options.
+
+    If Windows shows a blue "Windows protected your PC" window, click
+    "More info" and then "Run anyway."
+
+::: {.callout-tip collapse="true"}
+## The installer didn't work. Is there another way?
+
+Yes. Open the **Terminal** app (see [Open a terminal](#open-a-terminal)
+below), copy the command below, paste it into the terminal, and press Enter:
+
+```powershell
+powershell -ExecutionPolicy Bypass -c "irm -useb https://pixi.sh/install.ps1 | iex"
+```
+:::
+
+### macOS
+
+1.  Open the **Terminal** app.
+    The easiest way to find it is to press **Command (⌘) + Space**,
+    type `Terminal`, and press Enter.
+
+2.  Copy the command below, paste it into the Terminal window
+    (**Command (⌘) + V**), and press Enter:
+
+    ```bash
+    curl -fsSL https://pixi.sh/install.sh | sh
+    ```
+
+    You will see some messages about pixi being downloaded and installed.
+    When the command is done, you will get a new prompt.
+
+### Linux
+
+1.  Open a terminal.
+
+2.  Copy the command below, paste it into the terminal, and press Enter:
+
+    ```bash
+    curl -fsSL https://pixi.sh/install.sh | sh
+    ```
+
+    If you get a message that `curl` is not found, use this instead:
+
+    ```bash
+    wget -qO- https://pixi.sh/install.sh | sh
+    ```
+
+:::
+
+::: {.callout-important}
+## Close your terminal and open a new one
+
+After installing pixi, ***close any terminal windows you have open***.
+Your terminal only learns about newly installed programs when it starts, so
+pixi will not work in a terminal that was already open.
+:::
+
+### Check that pixi is installed
+
+Open a new terminal (see [Open a terminal](#open-a-terminal) below if you
+are not sure how), type the following command, and press Enter:
+
+```bash
+pixi --version
+```
+
+You should see something like `pixi 0.81.0` (your version number may be
+different).
+If you see an error that `pixi` is "not recognized" or "command not found,"
+close the terminal, open a new one, and try again.
+If you still get the error, see [Troubleshooting](#troubleshooting).
+
+## Download the class files
+
+1.  Go to the
+    [class GitHub repository](https://github.com/phyletica/intro-to-comp-bio).
+
+2.  Click the green **"Code"** button, and then click **"Download ZIP"**
+    at the bottom of the menu that pops up.
+    This will download a file named `intro-to-comp-bio-main.zip`.
+
+3.  Unzip the file:
+
+    ::: {.panel-tabset group="os"}
+
+    #### Windows
+
+    Open your Downloads folder, ***right-click*** `intro-to-comp-bio-main.zip`,
+    choose **"Extract All..."**, and then click **"Extract."**
+
+    Do ***not*** just double-click the ZIP file and work from inside it.
+    That only lets you peek at the files; it does not unzip them.
+
+    #### macOS
+
+    Open your Downloads folder and double-click `intro-to-comp-bio-main.zip`.
+    A folder named `intro-to-comp-bio-main` will appear next to it.
+
+    #### Linux
+
+    Use your file manager to extract `intro-to-comp-bio-main.zip`, or run
+    `unzip intro-to-comp-bio-main.zip` from your Downloads folder.
+
+    :::
+
+4.  Open the unzipped folder until you see a folder named `notebooks`
+    and a file named `pixi.toml`.
+    On Windows, you may need to open a second `intro-to-comp-bio-main` folder
+    inside the first one to find them, and `pixi.toml` may show up as just
+    `pixi`.
+    ***The folder that holds `notebooks` and `pixi.toml` is your class folder.***
+
+5.  Rename your class folder to `comp-bio`, and move it into your
+    ***home folder***:
+
+    ::: {.panel-tabset group="os"}
+
+    #### Windows
+
+    Your home folder is the folder with your username, such as
+    `C:\Users\YourName`.
+    To open it, open File Explorer, click in the address bar at the top,
+    type `%USERPROFILE%`, and press Enter.
+    Then drag your `comp-bio` folder into it.
+
+    #### macOS
+
+    Your home folder is the folder with your username (it has a house icon).
+    To open it, click on the desktop or a Finder window, and then in the
+    Finder menu at the top of the screen choose **Go → Home**.
+    Then drag your `comp-bio` folder into it.
+
+    #### Linux
+
+    Move the folder to your home directory (`~/comp-bio`).
+
+    :::
+
+::: {.callout-warning}
+## Don't put your class folder in OneDrive or iCloud
+
+On many computers, the Desktop and Documents folders are automatically
+backed up to OneDrive (Windows) or iCloud (macOS).
+pixi creates thousands of small files, and backing those up can make
+everything very slow or cause errors.
+Your home folder avoids this problem.
+:::
+
+## Start marimo
+
+### Open a terminal
+
+::: {.panel-tabset group="os"}
+
+#### Windows
+
+Click the Start button, type `Terminal`, and open the **Terminal** app.
+On Windows 10, if **Terminal** doesn't show up, type `PowerShell` and open
+**Windows PowerShell** instead.
+
+#### macOS
+
+Press **Command (⌘) + Space**, type `Terminal`, and press Enter.
+
+#### Linux
+
+Open your terminal app of choice.
+
+:::
+
+### Move into your class folder
+
+A new terminal starts in your home folder, which is where you put your class
+folder.
+Type the following command and press Enter:
+
+```bash
+cd comp-bio
+```
+
+The `cd` command means "change directory" (a directory is another name for a
+folder).
+
+::: {.callout-tip collapse="true"}
+## I put my class folder somewhere else. How do I get there?
+
+Type `cd` followed by a ***space*** (don't press Enter yet).
+Then drag your class folder from File Explorer or Finder and drop it onto the
+terminal window.
+The folder's location will be typed in for you.
+Now press Enter.
+:::
+
+### Run marimo
+
+Type the following command and press Enter:
+
+```bash
+pixi run start
+```
+
+The ***first time*** you do this, pixi will download and install Python,
+marimo, and the other packages the notebooks need.
+This can take several minutes, and you will see a lot of messages scroll by.
+That is normal.
+
+When it is done, marimo will open in your web browser, showing a list of the
+class notebooks.
+Click on a notebook to open it.
+If your browser doesn't open by itself, look in the terminal for a line
+starting with `http://localhost:2718` (the numbers may be different),
+and copy and paste that whole address into your web browser.
+
+::: {.callout-important}
+## Keep the terminal open while you work
+
+The terminal is running marimo for you.
+If you close the terminal window, your notebook will stop working.
+You can minimize the terminal, but don't close it until you are done.
+:::
+
+### When you are done
+
+1.  Save your notebook by pressing **Ctrl + S** (Windows and Linux) or
+    **Command (⌘) + S** (macOS).
+    marimo also saves automatically, but it doesn't hurt to make sure.
+2.  Close the browser tab.
+3.  Go back to the terminal and press **Ctrl + C** to stop marimo
+    (this is **Ctrl + C** on macOS too, not ⌘ + C).
+    If marimo asks whether you want to shut down, type `y` and press Enter.
+4.  Now you can close the terminal.
+
+Your notebooks are saved in the `notebooks` folder inside your class folder.
+
+## Each time you work on a notebook
+
+Once everything is set up, here is all you need to do:
+
+1.  [Open a terminal](#open-a-terminal).
+2.  Type `cd comp-bio` and press Enter.
+3.  Type `pixi run start` and press Enter.
+
+## Getting new notebooks
+
+When I post a new notebook during the semester, you only need to download
+that one file.
+Please do ***not*** download the whole ZIP file again, because your new class
+folder would not contain the work you have already done.
+
+1.  Go to the
+    [notebooks folder on GitHub](https://github.com/phyletica/intro-to-comp-bio/tree/main/notebooks)
+    and click into the folder for the new notebook.
+2.  Click on the notebook file (it ends in `.py`).
+3.  Near the top right of the file, click the **download** button
+    (the icon with a downward-pointing arrow, labeled "Download raw file").
+4.  Find the downloaded file in your Downloads folder, and move it into the
+    `notebooks` folder inside your class folder.
+
+The next time you run `pixi run start`, the new notebook will show up in
+marimo's list of notebooks.
+
+## Troubleshooting
+
+### "pixi is not recognized" or "pixi: command not found"
+
+Your terminal doesn't know about pixi yet.
+Close ***all*** of your terminal windows, open a new one, and try again.
+If that doesn't work, restart your computer and try again.
+If you still get the error, try installing pixi again.
+
+### "could not find pixi.toml" or "could not find a pixi workspace"
+
+The terminal is not in your class folder.
+Type the command below and press Enter to list what is in the folder your
+terminal is in:
+
+```bash
+ls
+```
+
+You should see `notebooks` and `pixi.toml` in the list.
+If you don't, you are in the wrong folder.
+See the tip under [Move into your class folder](#move-into-your-class-folder)
+for an easy way to get to the right one.
+If you see another `intro-to-comp-bio-main` folder, your class folder is
+inside it, so go back to step 4 under
+[Download the class files](#download-the-class-files).
+
+### "cd: no such file or directory" or "Cannot find path"
+
+Your class folder isn't named `comp-bio`, or it isn't in your home folder.
+Go back to step 5 under
+[Download the class files](#download-the-class-files), or use the
+drag-and-drop tip under
+[Move into your class folder](#move-into-your-class-folder).
+
+### `pixi run start` takes a very long time or fails partway through
+
+The first run downloads a lot of files, so make sure you have a good internet
+connection (campus Wi-Fi is usually fine).
+If it fails partway through, run `pixi run start` again; pixi will pick up
+where it left off.
+If it is extremely slow, make sure your class folder is not inside OneDrive
+or iCloud (see the warning under
+[Download the class files](#download-the-class-files)).
+
+### A notebook says it "Failed to download file"
+
+Some notebooks download small data files from GitHub the first time they run.
+Check that your computer is connected to the internet, and then re-run the
+notebook.
+
+### Still stuck?
+
+Please come to office hours or send me a message.
+It helps a lot if you include a screenshot of your terminal window showing
+the error message.

@@ -34,6 +34,9 @@ To work on one of the marimo Python notebooks below in molab:
     "Fork" button and confirm on the pop-up screen by clicking "Fork notebook."
     Do ***NOT*** click the dropdown next to the "Fork" button.
 
+If you are having trouble with molab, you can
+[run the notebooks on your own computer](marimo-local.qmd) instead.
+
 -   [Exercise 4: Intro to Python & marimo notebooks](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-01-intro-to-python/intro_python_marimo.py) [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-01-intro-to-python/intro_python_marimo.py)
 -   [Exercise 5: Complexity Lab](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-02-complexity/complexity_lab.py) [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-02-complexity/complexity_lab.py)
 -   [Exercise 6: String Search Lab](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-03-string-search/string_search.py) [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-03-string-search/string_search.py)
@@ -52,10 +55,14 @@ To work on a Capstone Project below in molab:
     "Fork" button and confirm on the pop-up screen by clicking "Fork notebook."
     Do ***NOT*** click the dropdown next to the "Fork" button.
 
+If you are having trouble with molab, you can
+[run the notebooks on your own computer](marimo-local.qmd) instead.
+
 -   [Capstone 1: Tracing SARS-CoV-2 variants](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/capstone-01/capstone_1.py) [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/capstone-01/capstone_1.py)
 
 ## Resources
 
+-   [Installing and running marimo locally on your own computer](marimo-local.qmd)
 -   [Intro to Linux ThinLinc](thinlinc-intro.qmd)
 -   [Learn with marimo](https://marimo.io/for-learners): A collection of marimo
     notebooks for learning Python

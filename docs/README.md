@@ -5,9 +5,9 @@ via quarto.
 
 ## Activate the project's pixi workspace
 
-The project's workspace has quarto included. To activate the workspace use:
+The project's `dev` environment has quarto included. To activate it use:
 
-    pixi shell
+    pixi shell -e dev
 
 For info about setting up the pixi workspace (which you only need to do once),
 please see the README.md in the project's base directory.
@@ -16,7 +16,7 @@ please see the README.md in the project's base directory.
 
 If you are building the site for the first time, you will also need to run the
 following commands to install quarto dependencies (assuming you have activated
-the pixi workspace):
+the pixi `dev` environment):
 
     quarto install tinytex
     quarto add r-wasm/quarto-live

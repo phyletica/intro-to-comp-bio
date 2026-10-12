@@ -16,6 +16,16 @@ and then running:
 
     pixi install
 
+This installs the default environment that students use (Python, git, uv,
+marimo, and the Python packages the notebooks import).
+To also install the instructor tools (Quarto, jupyter, pytest, ruff), run:
+
+    pixi install -e dev
+
+Students can open the class notebooks in marimo with:
+
+    pixi run start
+
 This assumes you have
 [pixi](https://pixi.prefix.dev/latest/)
 installed.
