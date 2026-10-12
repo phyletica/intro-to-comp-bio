@@ -150,12 +150,15 @@ If you still get the error, see [Troubleshooting](#troubleshooting).
 
 4.  Open the unzipped folder until you see a folder named `notebooks`
     and a file named `pixi.toml`.
+    ***The folder that holds `notebooks` and `pixi.toml` is your class folder***
+    and you want to **rename it as `comp-bio`**.
     On Windows, you may need to open a second `intro-to-comp-bio-main` folder
-    inside the first one to find them, and `pixi.toml` may show up as just
-    `pixi`.
-    ***The folder that holds `notebooks` and `pixi.toml` is your class folder.***
+    inside the first one to find `notebooks` and `pixi.toml`, and `pixi.toml`
+    may show up as just `pixi`.
+    Just make sure you rename the folder that **contains** `notebooks` and
+    `pixi.toml` as `comb-bio`.
 
-5.  Rename your class folder to `comp-bio`, and move it into your
+5.  Move your class folder that you renamed as `comp-bio` into your
     ***home folder***:
 
     ::: {.panel-tabset group="os"}
