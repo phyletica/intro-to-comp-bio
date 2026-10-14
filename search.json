@@ -14,7 +14,7 @@
     "href": "index.html#lecture-presentations",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lecture Presentations",
-    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides\nView Lecture 4 Slides\nView Lecture 5 Slides\nView Lecture 6 Slides\nView Lecture 7 Slides\nView Lecture 8 Slides",
+    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides\nView Lecture 4 Slides\nView Lecture 5 Slides\nView Lecture 6 Slides\nView Lecture 7 Slides\nView Lecture 8 Slides\nView Lecture 9 Slides",
     "crumbs": [
       "Home"
     ]
@@ -24,7 +24,7 @@
     "href": "index.html#lab-exercises",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lab exercises",
-    "text": "Lab exercises\n\nIntro to Bash\nSetting up a molab account\n\n\nPython notebook exercises\nTo work on one of the marimo Python notebooks below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button.\n\nIf you are having trouble with molab, you can run the notebooks on your own computer instead.\n\nExercise 4: Intro to Python & marimo notebooks \nExercise 5: Complexity Lab \nExercise 6: String Search Lab \nExercise 7: Sequence Alignment Lab \nExercise 8: BLAST Lab \nExercise 9: Sequence Evolution Lab",
+    "text": "Lab exercises\n\nIntro to Bash\nSetting up a molab account\n\n\nPython notebook exercises\nTo work on one of the marimo Python notebooks below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button.\n\nIf you are having trouble with molab, you can run the notebooks on your own computer instead.\n\nExercise 4: Intro to Python & marimo notebooks \nExercise 5: Complexity Lab \nExercise 6: String Search Lab \nExercise 7: Sequence Alignment Lab \nExercise 8: BLAST Lab \nExercise 9: Sequence Evolution Lab \nExercise 10: Substitution Models Lab",
     "crumbs": [
       "Home"
     ]
@@ -749,14 +749,14 @@
     "href": "slides/topic-09-substitution-models.html#last-time",
     "title": "Richer models of sequence evolution",
     "section": "Last time",
-    "text": "Last time\nThe Jukes-Cantor (JC) model: every change is equally likely\n\nBut in the yeast SSA3 gene, transitions outnumbered transversions about 3 to 1\n\n\nAnd when we simulated transition-biased evolution, the JC distance underestimated the truth\n\n\n\n\n\nA model that ignores how sequences really evolve gives biased answers\n\n\n\n\n0:00-1:15\nAnchor in Part 7 of the last exercise. The question for today: how do we build models that capture more of the biology, and how do we decide whether they are worth it?"
+    "text": "Last time\nThe Jukes-Cantor (JC) model: Every change is equally likely\n\nBut in the yeast SSA3 gene, observed transitions outnumbered transversions about 3 to 1 (each transition &gt; 6 times as fast as each transversion)\n\n\nAnd when we simulated transition-biased evolution, the JC distance underestimated the true distance\n\n\n\n\n\nA model that ignores how sequences really evolve gives biased answers\n\n\n\n\n0:00-1:15\nAnchor in Part 7 of the last exercise. The question for today: how do we build models that capture more of the biology, and how do we decide whether they are worth it?"
   },
   {
     "objectID": "slides/topic-09-substitution-models.html#kimuras-two-parameter-model",
     "href": "slides/topic-09-substitution-models.html#kimuras-two-parameter-model",
     "title": "Richer models of sequence evolution",
     "section": "Kimura’s two-parameter model1",
-    "text": "Kimura’s two-parameter model1\nTwo kinds of change, two rates:\n\n\n\n\n\n\n\n\n\n\n\n\nA\nC\nG\nT\n\n\n\n\nA\n—\n\\(\\beta\\)\n\\(\\alpha\\)\n\\(\\beta\\)\n\n\nC\n\\(\\beta\\)\n—\n\\(\\beta\\)\n\\(\\alpha\\)\n\n\nG\n\\(\\alpha\\)\n\\(\\beta\\)\n—\n\\(\\beta\\)\n\n\nT\n\\(\\beta\\)\n\\(\\alpha\\)\n\\(\\beta\\)\n—\n\n\n\n\n\n\\(\\kappa = \\alpha / \\beta\\): how many times faster each transition is than each transversion\n\n\n\\(\\kappa = 1\\) is the JC model\n\n1:15-2:45\nSame picture of the model as last lecture, but now the table has two kinds of entries. Transitions in blue. Point out that JC is a special case: set the two rates equal.\n\n\nKimura (1980)"
+    "text": "Kimura’s two-parameter model1\nTwo rates for the two kinds of change:\n\n\n\n\n\n\n\n\n\n\n\n\nA\nC\nG\nT\n\n\n\n\nA\n—\n\\(\\beta\\)\n\\(\\alpha\\)\n\\(\\beta\\)\n\n\nC\n\\(\\beta\\)\n—\n\\(\\beta\\)\n\\(\\alpha\\)\n\n\nG\n\\(\\alpha\\)\n\\(\\beta\\)\n—\n\\(\\beta\\)\n\n\nT\n\\(\\beta\\)\n\\(\\alpha\\)\n\\(\\beta\\)\n—\n\n\n\n\n\n\\(\\kappa = \\alpha / \\beta\\): How many times faster each transition is than each transversion\n\n\n\\(\\kappa = 1\\) is the JC model\n\n1:15-2:45\nSame picture of the model as last lecture, but now the table has two kinds of entries. Transitions in blue. Point out that JC is a special case: set the two rates equal.\n\n\nKimura (1980)"
   },
   {
     "objectID": "slides/topic-09-substitution-models.html#the-k80-distance",
@@ -770,7 +770,7 @@
     "href": "slides/topic-09-substitution-models.html#do-we-need-time-steps",
     "title": "Richer models of sequence evolution",
     "section": "Do we need time steps?",
-    "text": "Do we need time steps?\nLast time, we chopped time into tiny steps, each with a small chance of substitution\n\nAs the steps get smaller, we approach a continuous-time Markov chain\n\n\nInstead of a probability per step, we describe the model by rates: how many changes we expect per unit of time\n\n\n\n\n\nQ: If a site changes at rate \\(\\lambda\\), how long until it changes?\n\n\n\n\n4:15-5:15\nCallback to the derivation drop-down in the last notebook, where we took the limit as the step size went to zero. Today they will simulate without steps."
+    "text": "Do we need time steps?\nLast time, we chopped time into tiny steps, each with a small chance of substitution\n\nAs the steps get smaller, we approach a continuous-time Markov chain\n\n\nInstead of a probability per step, we describe the model by rates: How many changes we expect per unit of time\n\n\n\n\n\nQuestion: If a site changes at rate \\(\\lambda\\), how long until it changes?\n\n\n\n\n4:15-5:15\nCallback to the derivation drop-down in the last notebook, where we took the limit as the step size went to zero. Today they will simulate without steps."
   },
   {
     "objectID": "slides/topic-09-substitution-models.html#waiting-times-are-exponential",
@@ -784,70 +784,77 @@
     "href": "slides/topic-09-substitution-models.html#the-exponential-is-memoryless",
     "title": "Richer models of sequence evolution",
     "section": "The exponential is memoryless",
-    "text": "The exponential is memoryless\n\nA site that has gone a long time without changing is not “due”\nThe time until the next change does not depend on how long it has already waited\nThis is the Markov property in continuous time\n\n\nSo to simulate, we just repeat:\n\nTotal rate of leaving the current base\nDraw an exponential waiting time\nChoose the new base in proportion to its rate\n\n\n6:30-8:00\nThis is the simulate_site function in Challenge 4. Step 3 is where the model matters: under JC each base is equally likely, under K80 the transition partner gets kappa times the weight of each transversion. (This algorithm is often called the Gillespie algorithm; no need to name it.)"
+    "text": "The exponential is memoryless\n\n\nA site that has gone a long time without changing is not “due” for a change\nThe time until the next change does not depend on how long it has already waited\nThis is the Markov property in continuous time\n\n\n\nSo to simulate, we just repeat:\n\n\nCalculate the total rate of leaving the current base\nDraw an exponential waiting time using the total rate\nChoose the new base in proportion to its rate\n\n\n\n6:30-8:00\nThis is the simulate_site function in Challenge 4. Step 3 is where the model matters: under JC each base is equally likely, under K80 the transition partner gets kappa times the weight of each transversion. (This algorithm is often called the Gillespie algorithm; no need to name it.)"
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#not-all-genomes-are-25-each-base",
-    "href": "slides/topic-09-substitution-models.html#not-all-genomes-are-25-each-base",
+    "objectID": "slides/topic-09-substitution-models.html#not-all-genomes-are-25-a-c-g-t",
+    "href": "slides/topic-09-substitution-models.html#not-all-genomes-are-25-a-c-g-t",
     "title": "Richer models of sequence evolution",
-    "section": "Not all genomes are 25% each base",
-    "text": "Not all genomes are 25% each base\n\nSome genomes are GC-rich, others AT-rich\nThe HKY model1 adds base frequencies: \\(\\pi_A\\), \\(\\pi_C\\), \\(\\pi_G\\), \\(\\pi_T\\)\nThe rate of change to a base is proportional to its frequency\n\n\n\n\nStationary distribution\nA site settles at \\(\\pi\\), not \\(\\frac{1}{4}\\) each\n\nSaturation\nTwo random draws from \\(\\pi\\) match with probability \\(\\sum_i \\pi_i^2\\)\n\n\n\nWith 40% C and G: sequences saturate at \\(p \\approx 0.66\\), not 0.75\n\n8:00-9:45\n1 - (0.1^2 + 0.4^2 + 0.4^2 + 0.1^2) = 0.66. This is Challenge 6. Point out that JC would interpret a p-distance of 0.66 as a finite distance (about 1.6), when in fact those sequences are saturated. F81 (Felsenstein 1981) is HKY with kappa = 1.\n\n\nHasegawa et al. (1985)"
+    "section": "Not all genomes are 25% A, C, G, & T",
+    "text": "Not all genomes are 25% A, C, G, & T\n\n\nSome genomes are GC-rich, others AT-rich\nThe HKY model1 adds base frequencies: \\(\\pi_A\\), \\(\\pi_C\\), \\(\\pi_G\\), \\(\\pi_T\\)\nThe rate of change to a base is proportional to its frequency\n\n\n\n\n\n\nStationary distribution\nA site reaches equilibrium at \\(\\pi\\), not \\(\\frac{1}{4}\\) each\n\nSaturation\nTwo random draws from \\(\\pi\\) match with probability \\(\\sum_i \\pi_i^2\\)\n\n\n\n\nWith 40% C and G: sequences saturate at \\(p \\approx 0.66\\), not 0.75\n\n8:00-9:45\n1 - (0.1^2 + 0.4^2 + 0.4^2 + 0.1^2) = 0.66. This is Challenge 6. Point out that JC would interpret a p-distance of 0.66 as a finite distance (about 1.6), when in fact those sequences are saturated. F81 (Felsenstein 1981) is HKY with kappa = 1.\n\n\nHasegawa et al. (1985)"
   },
   {
     "objectID": "slides/topic-09-substitution-models.html#the-rate-matrix-q",
     "href": "slides/topic-09-substitution-models.html#the-rate-matrix-q",
     "title": "Richer models of sequence evolution",
     "section": "The rate matrix, \\(Q\\)",
-    "text": "The rate matrix, \\(Q\\)\nThe table of rates, with minus the total rate of leaving on the diagonal:\n\n\\[\nQ_{\\text{K80}, \\kappa = 8} = \\begin{bmatrix}\n-1 & 0.1 & 0.8 & 0.1 \\\\\n0.1 & -1 & 0.1 & 0.8 \\\\\n0.8 & 0.1 & -1 & 0.1 \\\\\n0.1 & 0.8 & 0.1 & -1\n\\end{bmatrix}\n\\]\n\n\n\nRows and columns: A, C, G, T\nEvery row sums to zero\nRates scaled so time is in expected substitutions per site\n\n\n9:45-11:00\nThe diagonal is the total_rate from the simulation, with a minus sign. Students build this as a NumPy array in Challenge 7."
+    "text": "The rate matrix, \\(Q\\)\nThe table of rates, with minus the total rate of leaving on the diagonal:\n\n\\[\nQ_{\\text{K80}, \\kappa = 8} = \\begin{bmatrix}\n-1 & 0.1 & 0.8 & 0.1 \\\\\n0.1 & -1 & 0.1 & 0.8 \\\\\n0.8 & 0.1 & -1 & 0.1 \\\\\n0.1 & 0.8 & 0.1 & -1\n\\end{bmatrix}\n\\]\n\n\n\nRows and columns: A, C, G, T\nEvery row sums to zero\nRates scaled so time is in expected substitutions per site\n\n\n\n9:45-11:00\nThe diagonal is the total_rate from the simulation, with a minus sign. Students build this as a NumPy array in Challenge 7."
   },
   {
     "objectID": "slides/topic-09-substitution-models.html#transition-probabilities",
     "href": "slides/topic-09-substitution-models.html#transition-probabilities",
     "title": "Richer models of sequence evolution",
     "section": "Transition probabilities",
-    "text": "Transition probabilities\nThe probability that base \\(i\\) is base \\(j\\) after time \\(t\\):\n\\[\nP(t) = e^{Qt}\n\\]\n\n\nThe matrix exponential: a version of \\(e^x\\) for matrices\nWe won’t calculate it by hand: scipy.linalg.expm(Q * t)\nFor JC, it gives exactly last week’s formula\nFor every other model, it gives what we can’t easily write down\n\n\n11:00-12:15\nDo not go into how expm works (eigendecomposition, Pade approximation). The point: Q holds the model, P(t) holds the probabilities we need for likelihood, and a computer turns one into the other. Challenge 8 is one line of code."
+    "text": "Transition probabilities\nThe probability that a site that starts as base \\(i\\) is base \\(j\\) after time \\(t\\):\n\\[\nP(t) = e^{Qt}\n\\]\n\n\nThe matrix exponential: A version of \\(e^x\\) for matrices\nWe won’t calculate it by hand\n\nWe’ll use scipy.linalg.expm(Q * t)\n\nFor JC, \\(e^{Qt}\\) gives exactly last week’s formula\nFor every other model, \\(e^{Qt}\\) gives what we can’t easily write down\n\n\n\n11:00-12:15\nDo not go into how expm works (eigendecomposition, Pade approximation). The point: Q holds the model, P(t) holds the probabilities we need for likelihood, and a computer turns one into the other. Challenge 8 is one line of code."
   },
   {
     "objectID": "slides/topic-09-substitution-models.html#what-pt-looks-like",
     "href": "slides/topic-09-substitution-models.html#what-pt-looks-like",
     "title": "Richer models of sequence evolution",
     "section": "What \\(P(t)\\) looks like",
-    "text": "What \\(P(t)\\) looks like\n\nK80 (\\(\\kappa = 8\\)), \\(t = 0.5\\):\n\n\n\nFrom \\ To\nA\nC\nG\nT\n\n\n\n\nA\n0.658\n0.045\n0.251\n0.045\n\n\nC\n0.045\n0.658\n0.045\n0.251\n\n\nG\n0.251\n0.045\n0.658\n0.045\n\n\nT\n0.045\n0.251\n0.045\n0.658\n\n\n\n\n\n\n\\(t = 0\\): 1s on the diagonal, 0s elsewhere\nEvery row sums to 1\nLarge \\(t\\): every row approaches \\(\\pi\\); the starting base is forgotten\n\n\n12:15-13:30\nThese are the questions in Challenge 9. Under K80 with kappa = 8, the mixing between purines and pyrimidines is slow: even at t = 10, the rows are not quite 0.25 each."
+    "text": "What \\(P(t)\\) looks like\n\nK80 (\\(\\kappa = 8\\)), \\(t = 0.5\\):\n\n\n\nFrom \\ To\nA\nC\nG\nT\n\n\n\n\nA\n0.658\n0.045\n0.251\n0.045\n\n\nC\n0.045\n0.658\n0.045\n0.251\n\n\nG\n0.251\n0.045\n0.658\n0.045\n\n\nT\n0.045\n0.251\n0.045\n0.658\n\n\n\n\n\nEvery row sums to 1; why?\nQuestion: What will it look like when \\(t = 0\\)?\nQuestion: What will it look like when \\(t\\) is very large?\n\n\n12:15-13:30\nThese are the questions in Challenge 9. Under K80 with kappa = 8, the mixing between purines and pyrimidines is slow: even at t = 10, the rows are not quite 0.25 each."
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#the-family-revisited",
-    "href": "slides/topic-09-substitution-models.html#the-family-revisited",
+    "objectID": "slides/topic-09-substitution-models.html#the-family-of-models-revisited",
+    "href": "slides/topic-09-substitution-models.html#the-family-of-models-revisited",
     "title": "Richer models of sequence evolution",
-    "section": "The family, revisited",
-    "text": "The family, revisited\n\n\n\n\nModel\nRates\nBase frequencies\nFree parameters\n\n\n\n\nJC691\nAll equal\nEqual\n0\n\n\nK802\nTransitions vs. transversions (\\(\\kappa\\))\nEqual\n1\n\n\nF813\nAll equal\nUnequal (\\(\\pi\\))\n3\n\n\nHKY854\n\\(\\kappa\\)\nUnequal (\\(\\pi\\))\n4\n\n\nGTR5\nEvery pair its own rate\nUnequal (\\(\\pi\\))\n8\n\n\n\n\n\nEvery one is a rate matrix \\(Q\\), and every one gives us \\(P(t) = e^{Qt}\\)\n\n13:30-14:45\nSame table as last lecture, with F81 added. The punchline: the machinery (Q, expm, likelihood) does not change from model to model; only the entries of Q do.\n\n\nJukes and Cantor (1969)Kimura (1980)Felsenstein (1981)Hasegawa et al. (1985)Tavaré (1986)"
+    "section": "The family of models, revisited",
+    "text": "The family of models, revisited\n\n\n\n\nModel\nRates\nBase frequencies\nFree parameters\n\n\n\n\nJC691\nAll equal\nEqual\n0\n\n\nK802\nTransitions vs. transversions (\\(\\kappa\\))\nEqual\n1\n\n\nF813\nAll equal\nUnequal (\\(\\pi\\))\n3\n\n\nHKY854\n\\(\\kappa\\)\nUnequal (\\(\\pi\\))\n4\n\n\nGTR5\nEvery pair its own rate\nUnequal (\\(\\pi\\))\n8\n\n\n\n\n\n\nEach model is a rate matrix \\(Q\\), which enables us to get \\(P(t) = e^{Qt}\\)\n\n\n13:30-14:45\nSame table as last lecture, with F81 added. The punchline: the machinery (Q, expm, likelihood) does not change from model to model; only the entries of Q do.\n\n\nJukes and Cantor (1969)Kimura (1980)Felsenstein (1981)Hasegawa et al. (1985)Tavaré (1986)"
   },
   {
     "objectID": "slides/topic-09-substitution-models.html#likelihood-under-any-model",
     "href": "slides/topic-09-substitution-models.html#likelihood-under-any-model",
     "title": "Richer models of sequence evolution",
     "section": "Likelihood under any model",
-    "text": "Likelihood under any model\nFor two aligned sequences, sum over sites (\\(x\\) in one sequence, \\(y\\) in the other):\n\\[\n\\ln L(t) = \\sum_{\\text{sites}} \\Big[\\ln(\\pi_x) + \\ln\\big(P_{xy}(t)\\big)\\Big]\n\\]\n\nYeast SSA3, 3rd codon positions:\n\n\n\n\nModel\nBest \\(t\\)\nLog-likelihood\n\n\n\n\nJC\n0.570\n−1563.6\n\n\nK80 (\\(\\kappa = 9.66\\))\n0.655\n−1473.8\n\n\n\n\n\n\nThe best \\(t\\) under each model is that model’s distance formula\n\n14:45-16:15\nStudents compute this in Challenges 10 and 11. The log-likelihoods are lower than last week’s because we now include the base frequency terms; only comparisons made the same way are meaningful."
+    "text": "Likelihood under any model\nFor two aligned sequences, product over sites (base \\(x\\) in one sequence, base \\(y\\) in the other):\n\\[\nL(t) = \\prod_{\\text{sites}} \\pi_x P_{xy}(t)\n\\]\n\nFor our computer’s sake, we turn the product into a sum of logs:\n\\[\n\\ln L(t) = \\sum_{\\text{sites}} \\Big[\\ln(\\pi_x) + \\ln\\big(P_{xy}(t)\\big)\\Big]\n\\]"
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#likelihood-of-yeast-ssa3-sequences",
+    "href": "slides/topic-09-substitution-models.html#likelihood-of-yeast-ssa3-sequences",
+    "title": "Richer models of sequence evolution",
+    "section": "Likelihood of yeast SSA3 sequences",
+    "text": "Likelihood of yeast SSA3 sequences\n3rd codon positions:\n\n\n\n\nModel\nBest \\(t\\)\nLog-likelihood\n\n\n\n\nJC\n0.570\n−1563.6\n\n\nK80 (\\(\\kappa = 9.66\\))\n0.655\n−1473.8\n\n\n\n\n\nThe \\(t\\) that maximizes the likelihood under each model is that model’s distance formula!\n\n14:45-16:15\nStudents compute this in Challenges 10 and 11. The log-likelihoods are lower than last week’s because we now include the base frequency terms; only comparisons made the same way are meaningful."
   },
   {
     "objectID": "slides/topic-09-substitution-models.html#more-parameters-always-help",
     "href": "slides/topic-09-substitution-models.html#more-parameters-always-help",
     "title": "Richer models of sequence evolution",
     "section": "More parameters always help",
-    "text": "More parameters always help\nA model with more parameters always fits at least as well\n\nSo we ask: Is the improvement worth the extra parameter?\n\nLikelihood ratio test: Is \\(2 \\times\\) the difference in log-likelihood bigger than chance alone would produce?\nAIC: Charge each parameter 1 log-likelihood unit (2 AIC units), and pick the model with the best score\n\n\n\nK80 vs. JC: about 90 log-likelihood units better, for 1 extra parameter\n\n16:15-17:45\nKeep this light; just plant the idea that model choice is a trade-off between fit and complexity. (For a likelihood ratio test with 1 extra parameter, the 5% cutoff is about 1.92 log-likelihood units.) Programs like ModelTest and ModelFinder automate this comparison across dozens of models."
+    "text": "More parameters always help\n\nA model with an extra parameter always fits at least as well; why?\n\n\n\nSo we need to ask: Is the improvement worth the extra parameter?\n\n\n\nLikelihood ratio test: Is \\(2 \\times\\) the difference in log-likelihood bigger than chance alone would produce?\nAIC1: “Charge” each parameter 1 log-likelihood unit (2 AIC units), and pick the model with the best score\n\n\n\n\n\nK80 vs. JC for the yeast gene: About 90 log-likelihood units better, for 1 extra parameter\n\n\n16:15-17:45\nAnswer to the “why?”: K80 can always set kappa = 1 and do exactly what JC does, so its best likelihood can’t be worse. Keep this light; just plant the idea that model choice is a trade-off between fit and complexity. (For a likelihood ratio test with 1 extra parameter, the 5% cutoff is about 1.92 log-likelihood units.) Programs like ModelTest and ModelFinder automate this comparison across dozens of models.\n\n\nAkaike (1974)"
   },
   {
     "objectID": "slides/topic-09-substitution-models.html#summary",
     "href": "slides/topic-09-substitution-models.html#summary",
     "title": "Richer models of sequence evolution",
     "section": "Summary",
-    "text": "Summary\n\n\nK80 gives transitions their own rate; its distance corrects JC’s bias\nIn continuous time, the wait until the next substitution is exponential and memoryless\nWith unequal base frequencies, sites settle at \\(\\pi\\) and saturate below 0.75\nAny model is a rate matrix \\(Q\\); \\(P(t) = e^{Qt}\\) gives its transition probabilities\nWith \\(P(t)\\), we can calculate the likelihood under any model, and compare models\n\n\n\n17:45-18:30\nIf short on time, cut to the last two bullets."
+    "text": "Summary\n\n\nK80 gives transitions their own rate; its distance corrects JC’s bias when transitions are faster/slower than transversions\nIn continuous time, the wait until the next substitution is exponentially distributed and memoryless\nWith unequal base frequencies, sites equilibrate at \\(\\pi\\) and saturate below a p-distance of 0.75\nAny model is a rate matrix \\(Q\\); \\(P(t) = e^{Qt}\\) gives its transition probabilities\nWith \\(P(t)\\), we can calculate the likelihood under any model, and compare models\n\n\n\n17:45-18:30\nIf short on time, cut to the last two bullets."
   },
   {
     "objectID": "slides/topic-09-substitution-models.html#in-the-exercise",
     "href": "slides/topic-09-substitution-models.html#in-the-exercise",
     "title": "Richer models of sequence evolution",
     "section": "In the exercise",
-    "text": "In the exercise\n\n\ncount_transitions_transversions and k80_distance: Fix last week’s bias\nsimulate_site: Simulate evolution in continuous time\nWatch a GC-rich model settle at its base frequencies\nget_rate_matrix and get_transition_probabilities: Build \\(Q\\) and \\(P(t)\\) with NumPy and SciPy\nlog_likelihood_pair: Compare JC and K80 on the yeast gene\n\n\n\n\n\n\n\n\n\nWatch for\n\n\nYour simulation and \\(P(t)\\) are two completely different calculations. Do they agree?\n\n\n\n\n18:30-19:30\nThey should: the plot after Challenge 8 overlays the simulated end states on the first row of P(t). Hand off to the notebook here. Remind them the first cell needs their name."
+    "text": "In the exercise\n\n\ncount_transitions_transversions and k80_distance: Fix last week’s distance bias\nsimulate_site: Simulate evolution in continuous time\nWatch a GC-rich model “settle” at its base frequencies\nget_rate_matrix and get_transition_probabilities: Build \\(Q\\) and \\(P(t)\\) with NumPy and SciPy\nlog_likelihood_pair: Compare JC and K80 on the yeast gene\n\n\n\n\n\n\n\n\n\nWatch for\n\n\nYour simulation and \\(P(t)\\) are two completely different calculations. Do they agree?\n\n\n\n\n18:30-19:30\nThey should: the plot after Challenge 8 overlays the simulated end states on the first row of P(t). Hand off to the notebook here. Remind them the first cell needs their name."
   },
   {
     "objectID": "slides/topic-09-substitution-models.html#exercise",
@@ -861,7 +868,7 @@
     "href": "slides/topic-09-substitution-models.html#acknowledgements",
     "title": "Richer models of sequence evolution",
     "section": "Acknowledgements",
-    "text": "Acknowledgements\nI used Anthropic’s Claude (Opus 5.5 model) to generate a draft of these slides."
+    "text": "Acknowledgements\nI drafted and iterated on these slides in collaboration with Anthropic’s Claude (Opus 5.5 model)."
   },
   {
     "objectID": "slides/topic-08-sequence-evolution.html#an-aside-about-terms",
