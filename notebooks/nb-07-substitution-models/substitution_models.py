@@ -1923,7 +1923,6 @@ def _(log_likelihood_pair_works, mo, site_sets, third_kappa):
     # Write your stretch goal code below that uses a for loop to try values of kappa
     # 1, 2, 3, ..., 20 and stores the kappa value with the best log-likelihood in
     # `_best_kappa` and stores the best log-likelihood in `_best_log_like`
-
     return
 
 
