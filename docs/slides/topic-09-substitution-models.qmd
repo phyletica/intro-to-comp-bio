@@ -1,0 +1,509 @@
+---
+title: "Richer models of sequence evolution"
+subtitle: "Rates, continuous time, and transition probabilities"
+# author: "Jamie Oaks"
+institute: "BIOL 5/6800 &mdash; Intro to Comp Bio"
+format:
+  revealjs:
+    slide-number: c/t
+    incremental: false
+    code-line-numbers: false
+    smaller: false
+    center-title-slide: true
+    history: false
+metadata-files:
+  - _metadata.yml
+bibliography: ../references.bib
+---
+
+## Last time
+
+The **Jukes-Cantor (JC)** model: Every change is equally likely
+
+. . .
+
+But in the yeast *SSA3* gene, observed transitions outnumbered transversions
+about **3 to 1** (each transition > 6 times as fast as each transversion)
+
+. . .
+
+And when we simulated transition-biased evolution, the JC distance
+**underestimated** the true distance
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+A model that ignores how sequences really evolve gives biased answers
+:::
+
+::: {.notes}
+0:00-1:15
+
+Anchor in Part 7 of the last exercise. The question for today: how do we build
+models that capture more of the biology, and how do we decide whether they are
+worth it?
+:::
+
+# A second rate: K80 {background-color="#1b3a5c"}
+
+## Kimura's two-parameter model^[@K2P]
+
+Two rates for the two kinds of change:
+
+::: {style="font-size: 90%;"}
+| | **A** | **C** | **G** | **T** |
+|:-:|:-:|:-:|:-:|:-:|
+| **A** | &mdash; | $\beta$ | [$\alpha$]{style="color: #0057B8;"} | $\beta$ |
+| **C** | $\beta$ | &mdash; | $\beta$ | [$\alpha$]{style="color: #0057B8;"} |
+| **G** | [$\alpha$]{style="color: #0057B8;"} | $\beta$ | &mdash; | $\beta$ |
+| **T** | $\beta$ | [$\alpha$]{style="color: #0057B8;"} | $\beta$ | &mdash; |
+:::
+
+. . .
+
+$\kappa = \alpha / \beta$: How many times faster each transition is than each
+transversion
+
+. . .
+
+$\kappa = 1$ is the JC model
+
+::: {.notes}
+1:15-2:45
+
+Same picture of the model as last lecture, but now the table has two kinds of
+entries. Transitions in blue. Point out that JC is a special case: set the two
+rates equal.
+:::
+
+## The K80 distance
+
+$S$ = proportion of sites that differ by a **transition**
+
+$V$ = proportion of sites that differ by a **transversion**
+
+$$
+d = -\frac{1}{2}\ln\left(1 - 2S - V\right) - \frac{1}{4}\ln\left(1 - 2V\right)
+$$
+
+. . .
+
+::: {style="font-size: 85%;"}
+| Yeast *SSA3* | JC | K80 | Estimated $\kappa$ |
+|:--|--:|--:|--:|
+| Whole gene | 0.182 | 0.187 | 6.2 |
+| 3rd codon positions | 0.570 | **0.655** | 9.7 |
+:::
+
+. . .
+
+The correction matters most where sequences have diverged the most
+
+::: {.notes}
+2:45-4:15
+
+Don't derive this one. The structure is the same as JC: a log that blows up near
+saturation. Students write k80_distance in Challenge 2. The kappa estimate of
+9.7 means each transition happens about 10 times as often as each transversion
+at 3rd positions.
+:::
+
+# Continuous time {background-color="#1b3a5c"}
+
+## Do we need time steps?
+
+Last time, we chopped time into tiny steps, each with a small chance of
+substitution
+
+. . .
+
+As the steps get smaller, we approach a ***continuous-time Markov chain***
+
+. . .
+
+Instead of a probability per step, we describe the model by **rates**:
+How many changes we expect per unit of time
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+Question: If a site changes at rate $\lambda$, how long until it changes?
+:::
+
+::: {.notes}
+4:15-5:15
+
+Callback to the derivation drop-down in the last notebook, where we took the
+limit as the step size went to zero. Today they will simulate without steps.
+:::
+
+## Waiting times are exponential
+
+```{python}
+#| label: fig-exponential
+#| echo: false
+#| eval: true
+#| fig-align: center
+#| fig-dpi: 600
+
+import math
+import pandas as pd
+import plotly.express as px
+import plotly.io
+
+plotly.io.renderers.default = "notebook_connected"
+
+x = [i / 100 for i in range(0, 401)]
+data = {
+    "rate = 0.5": [0.5 * math.exp(-0.5 * v) for v in x],
+    "rate = 1": [1.0 * math.exp(-1.0 * v) for v in x],
+    "rate = 2": [2.0 * math.exp(-2.0 * v) for v in x],
+}
+df = pd.DataFrame(data = data, index = x)
+
+fig = px.line(df, x = df.index, y = df.columns)
+fig.update_layout(
+    xaxis_title = "Waiting time until the next substitution",
+    yaxis_title = "Probability density",
+    legend_title_text = "",
+    xaxis_range = (0, 4),
+    yaxis_range = (0, 2),
+    xaxis_title_font_size = 20,
+    yaxis_title_font_size = 20,
+    xaxis_tickfont_size = 16,
+    yaxis_tickfont_size = 16,
+    legend_font_size = 20,
+)
+fig.show()
+```
+
+Average wait $= 1 / \text{rate}$
+
+::: {.notes}
+5:15-6:30
+
+Short waits are most likely, but long waits happen. The faster the rate, the
+shorter the average wait. In Python: rng.expovariate(rate).
+:::
+
+## The exponential is memoryless
+
+::: {.incremental style="font-size: 90%;"}
+-   A site that has gone a long time without changing is **not** "due" for a change
+-   The time until the next change does not depend on how long it has already
+    waited
+-   This is the **Markov property** in continuous time
+:::
+
+. . .
+
+So to simulate, we just repeat:
+
+::: {.incremental style="font-size: 90%;"}
+1.  Calculate the total rate of leaving the current base
+2.  Draw an exponential waiting time using the total rate
+3.  Choose the new base **in proportion to its rate**
+:::
+
+::: {.notes}
+6:30-8:00
+
+This is the simulate_site function in Challenge 4. Step 3 is where the model
+matters: under JC each base is equally likely, under K80 the transition partner
+gets kappa times the weight of each transversion. (This algorithm is often
+called the Gillespie algorithm; no need to name it.)
+:::
+
+# Unequal base frequencies {background-color="#1b3a5c"}
+
+## Not all genomes are 25% A, C, G, & T
+
+::: {.incremental style="font-size: 90%;"}
+-   Some genomes are GC-rich, others AT-rich
+-   The HKY model^[@HKY] adds base frequencies: $\pi_A$, $\pi_C$, $\pi_G$,
+    $\pi_T$
+-   The rate of change **to** a base is proportional to its frequency
+:::
+
+. . .
+
+::: {style="font-size: 90%;"}
+::: {.columns}
+::: {.column width="50%"}
+**Stationary distribution**
+
+A site reaches equilibrium at $\pi$, not $\frac{1}{4}$ each
+:::
+
+::: {.column width="50%"}
+**Saturation**
+
+Two random draws from $\pi$ match with probability $\sum_i \pi_i^2$
+:::
+:::
+:::
+
+. . .
+
+With 40% `C` and `G`: sequences saturate at $p \approx 0.66$, not 0.75
+
+::: {.notes}
+8:00-9:45
+
+1 - (0.1^2 + 0.4^2 + 0.4^2 + 0.1^2) = 0.66. This is Challenge 6. Point out
+that JC would interpret a p-distance of 0.66 as a finite distance (about 1.6),
+when in fact those sequences are saturated. F81 (Felsenstein 1981) is HKY
+with kappa = 1.
+:::
+
+# From rates to probabilities {background-color="#1b3a5c"}
+
+## The rate matrix, $Q$
+
+The table of rates, with **minus the total rate of leaving** on the diagonal:
+
+::: {style="font-size: 90%;"}
+$$
+Q_{\text{K80}, \kappa = 8} = \begin{bmatrix}
+-1 & 0.1 & 0.8 & 0.1 \\
+0.1 & -1 & 0.1 & 0.8 \\
+0.8 & 0.1 & -1 & 0.1 \\
+0.1 & 0.8 & 0.1 & -1
+\end{bmatrix}
+$$
+:::
+
+::: {.incremental style="font-size: 85%;"}
+-   Rows and columns: `A`, `C`, `G`, `T`
+-   Every row sums to zero
+-   Rates scaled so time is in expected substitutions per site
+:::
+
+::: {.notes}
+9:45-11:00
+
+The diagonal is the total_rate from the simulation, with a minus sign. Students
+build this as a NumPy array in Challenge 7.
+:::
+
+## Transition probabilities
+
+The probability that a site that starts as base $i$ is base $j$ after time $t$:
+
+$$
+P(t) = e^{Qt}
+$$
+
+::: {.incremental style="font-size: 85%;"}
+-   The ***matrix exponential***: A version of $e^x$ for matrices
+-   We won't calculate it by hand
+    -   We'll use `scipy.linalg.expm(Q * t)`
+-   For JC, $e^{Qt}$ gives exactly last week's formula
+-   For every other model, $e^{Qt}$ gives what we can't easily write down
+:::
+
+::: {.notes}
+11:00-12:15
+
+Do not go into how expm works (eigendecomposition, Pade approximation). The
+point: Q holds the model, P(t) holds the probabilities we need for likelihood,
+and a computer turns one into the other. Challenge 8 is one line of code.
+:::
+
+## What $P(t)$ looks like
+
+::: {style="font-size: 75%;"}
+K80 ($\kappa = 8$), $t = 0.5$:
+
+| From \\ To | **A** | **C** | **G** | **T** |
+|:-:|--:|--:|--:|--:|
+| **A** | 0.658 | 0.045 | 0.251 | 0.045 |
+| **C** | 0.045 | 0.658 | 0.045 | 0.251 |
+| **G** | 0.251 | 0.045 | 0.658 | 0.045 |
+| **T** | 0.045 | 0.251 | 0.045 | 0.658 |
+:::
+
+::: {.incremental}
+-   Every row sums to 1; why?
+-   Question: What will it look like when $t = 0$?
+-   Question: What will it look like when $t$ is very large?
+:::
+
+::: {.notes}
+12:15-13:30
+
+These are the questions in Challenge 9. Under K80 with kappa = 8, the mixing
+between purines and pyrimidines is slow: even at t = 10, the rows are not
+quite 0.25 each.
+:::
+
+## The family of models, revisited
+
+::: {style="font-size: 70%;"}
+| Model | Rates | Base frequencies | Free parameters |
+|:--|:--|:--|:-:|
+| JC69^[@JC1969] | All equal | Equal | 0 |
+| K80^[@K2P] | Transitions vs. transversions ($\kappa$) | Equal | 1 |
+| F81^[@Felsenstein1981] | All equal | Unequal ($\pi$) | 3 |
+| HKY85^[@HKY] | $\kappa$ | Unequal ($\pi$) | 4 |
+| GTR^[@Tavare1986] | Every pair its own rate | Unequal ($\pi$) | 8 |
+:::
+
+. . .
+
+::: {style="font-size: 85%;"}
+Each model is a rate matrix $Q$, which enables us to get $P(t) = e^{Qt}$
+:::
+
+::: {.notes}
+13:30-14:45
+
+Same table as last lecture, with F81 added. The punchline: the machinery
+(Q, expm, likelihood) does not change from model to model; only the entries of
+Q do.
+:::
+
+# Which model is better? {background-color="#1b3a5c"}
+
+## Likelihood under any model
+
+For two aligned sequences, product over sites (base $x$ in one sequence, base $y$
+in the other):
+
+$$
+L(t) = \prod_{\text{sites}} \pi_x P_{xy}(t)
+$$
+
+. . .
+
+For our computer's sake, we turn the product into a sum of logs:
+
+$$
+\ln L(t) = \sum_{\text{sites}} \Big[\ln(\pi_x) + \ln\big(P_{xy}(t)\big)\Big]
+$$
+
+## Likelihood of yeast *SSA3* sequences
+
+3rd codon positions:
+
+::: {style="font-size: 95%;"}
+| Model | Best $t$ | Log-likelihood |
+|:--|--:|--:|
+| JC | 0.570 | −1563.6 |
+| K80 ($\kappa = 9.66$) | 0.655 | **−1473.8** |
+:::
+
+. . .
+
+The $t$ that maximizes the likelihood under each model is that model's distance
+formula!
+
+::: {.notes}
+14:45-16:15
+
+Students compute this in Challenges 10 and 11. The log-likelihoods are lower
+than last week's because we now include the base frequency terms; only
+comparisons made the same way are meaningful.
+:::
+
+## More parameters always help
+
+::: {style="font-size: 95%;"}
+A model with an extra parameter always fits **at least** as well; why?
+:::
+
+. . .
+
+::: {style="font-size: 95%;"}
+So we need to ask: Is the improvement worth the extra parameter?
+:::
+
+::: {.incremental style="font-size: 85%;"}
+-   ***Likelihood ratio test***: Is $2 \times$ the difference in log-likelihood
+    bigger than chance alone would produce?
+-   ***AIC***^[@Akaike1974]: "Charge" each parameter 1 log-likelihood unit (2 AIC units), and
+    pick the model with the best score
+:::
+
+. . .
+
+::: {style="font-size: 95%;"}
+K80 vs. JC for the yeast gene: About **90** log-likelihood units better, for
+**1** extra parameter
+:::
+
+::: {.notes}
+16:15-17:45
+
+Answer to the "why?": K80 can always set kappa = 1 and do exactly what JC
+does, so its best likelihood can't be worse. Keep this light; just plant the
+idea that model choice is a trade-off between fit and complexity. (For a likelihood ratio test with 1 extra parameter, the
+5% cutoff is about 1.92 log-likelihood units.) Programs like ModelTest and
+ModelFinder automate this comparison across dozens of models.
+:::
+
+## Summary
+
+::: {style="font-size: 85%;"}
+::: {.incremental}
+-   **K80** gives transitions their own rate; its distance corrects JC's bias
+    when transitions are faster/slower than transversions
+-   In **continuous time**, the wait until the next substitution is
+    **exponentially distributed** and **memoryless**
+-   With unequal **base frequencies**, sites equilibrate at $\pi$ and saturate below
+    a p-distance of 0.75
+-   Any model is a **rate matrix** $Q$; $P(t) = e^{Qt}$ gives its transition
+    probabilities
+-   With $P(t)$, we can calculate the **likelihood** under any model, and compare
+    models
+:::
+:::
+
+::: {.notes}
+17:45-18:30
+
+If short on time, cut to the last two bullets.
+:::
+
+## In the exercise
+
+::: {.incremental style="font-size: 85%;"}
+1.  `count_transitions_transversions` and `k80_distance`: Fix last week's distance bias
+2.  `simulate_site`: Simulate evolution in continuous time
+3.  Watch a GC-rich model "settle" at its base frequencies
+4.  `get_rate_matrix` and `get_transition_probabilities`: Build $Q$ and
+    $P(t)$ with NumPy and SciPy
+5.  `log_likelihood_pair`: Compare JC and K80 on the yeast gene
+:::
+
+. . .
+
+::: {.callout-tip}
+## Watch for
+Your simulation and $P(t)$ are two completely different calculations. Do they
+agree?
+:::
+
+::: {.notes}
+18:30-19:30
+
+They should: the plot after Challenge 8 overlays the simulated end states on
+the first row of P(t). Hand off to the notebook here. Remind them the first
+cell needs their name.
+:::
+
+## Exercise
+
+1.  Log into [molab](https://molab.marimo.io/)
+2.  [Open the exercise in molab](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-07-substitution-models/substitution_models.py)
+3.  Click "Fork" button
+
+# References
+
+::: {#refs}
+:::
+
+## Acknowledgements
+
+I drafted and iterated on these slides in collaboration with
+Anthropic's Claude (Opus 5.5 model).
