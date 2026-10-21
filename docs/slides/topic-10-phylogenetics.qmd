@@ -493,8 +493,8 @@ over this list.
 
 ::: {style="font-size: 85%;"}
 [Newick format](https://en.wikipedia.org/wiki/Newick_format)
-is named after Newick's seafood restaurant in Dover, NH.
-Where phylogeneticists met in 1986 to agree on the format
+is named after Newick's seafood restaurant in Dover, NH, where a committee of
+phylogeneticists met in 1986 to agree on the format
 :::
 
 ::: {style="text-align: center;"}
@@ -580,8 +580,8 @@ root, so that each subtree's calculation is done only once.
 ## Felsenstein's pruning algorithm^[@Felsenstein1981]
 
 For each node, from the tips to the root, calculate its ***conditional
-likelihoods***: $L_{\text{node}}(i)$ = probability of the data that descends
-from the node, **if** the node has base $i$
+likelihoods***: $L_{\text{node}}(i)$ = probability of the data at the tips that
+descend from the node, **if** the node has base $i$
 
 In doing this, the pruning algorithm follows ***3 rules***
 
@@ -589,9 +589,10 @@ In doing this, the pruning algorithm follows ***3 rules***
 6:15-8:15
 
 Software documentation (e.g., BEAGLE, used by BEAST and MrBayes) often calls
-these "partial likelihoods" or "partials"; same thing. Rule 2 is the heart: "the probability of the child's data, if the parent has
-base i" is a sum over what the child could have, and children evolve
-independently, so we multiply over children. Postorder guarantees children are
+these "partial likelihoods" or "partials"; same thing. Rule 2 is the heart: "the
+probability of the child's data, if the parent has base i" is a sum over what
+the child could have, and children evolve independently, so we multiply over
+children. Postorder guarantees children are
 done before parents. Challenges 4 through 7 build these three rules one at a
 time.
 :::
@@ -631,17 +632,18 @@ $$
 . . .
 
 ::: {style="font-size: 85%;"}
-For example: Parent ($i$) = `A` and child ($j$) = `G`, what's the probability that `A`
-    evolved to `G` along the branch connecting them
-    ($P_{A\rightarrow G}(t_{\text{child}})$)
-    times the probability the child with base `G` gave rise to the bases of its
-    descendants ($L_{\text{child}}(G)$)
+For example, if the parent ($i$) has `A` and the child ($j$) has `G`, the term
+in the sum is the probability that `A` evolved to `G` along the branch
+connecting them ($P_{A\rightarrow G}(t_{\text{child}})$), times the probability
+of the data at the tips that descend from the child, if the child has `G`
+($L_{\text{child}}(G)$)
 :::
 
 . . .
 
 ::: {.callout-important appearance="minimal"}
-This is ***dynamic programming***: Re-using $L_{\text{child}}$ for each $L_{\text{parent}}$
+This is ***dynamic programming*** (like Needleman-Wunsch alignment!): Each
+$L_{\text{child}}$ is calculated once, and re-used for every base of the parent
 :::
 
 ## Pruning algorithm Rule 3
@@ -659,9 +661,12 @@ This is a weighted average!
 
 For example:
 
--   For $i =$ `A`, the probability of the root having `A` ($\pi_A$)
-    times the probability the root with base `A` gave rise to the bases of all
-    the tips ($L_{\text{root}}(A)$)
+::: {style="font-size: 85%;"}
+-   For $i =$ `A`: The probability of the root having `A` ($\pi_A$), times
+    the probability of the data at all the tips, if the root has `A`
+    ($L_{\text{root}}(A)$)
+-   Add these products for all four bases
+:::
 
 ## Pruning, step by step
 
@@ -820,13 +825,14 @@ with their own pruning code, and explore the effect of Omicron's branch length
 with a slider.
 :::
 
-# Other methods
+# Other methods {background-color="#1b3a5c"}
 
 ## Parsimony
 
 ::: {.incremental style="font-size: 85%;"}
 -   ***Maximum parsimony***: Choose the tree that needs the **fewest changes**
--   Fast, and intuitive: In the exercise, it would use **only** the "two pairs" sites
+-   Fast, and intuitive: For the four genomes in the exercise, it would use
+    **only** the "two pairs" sites
     -   3 favor Tree 1 and 1 favors Tree 2
     -   All other sites are ignored!
 -   But it ignores branch lengths and multiple hits, so it can be
@@ -850,7 +856,7 @@ genomes sequenced during the pandemic. We won't code parsimony.
 
 ::: {.incremental}
 -   We will skip these today
--   But, your used two of these methods in Capstone 1!
+-   But you used two of these methods in Capstone 1!
     -   ***Neighbor-joining*** and ***UPGMA***
 :::
 
@@ -876,26 +882,13 @@ $$
 For our example site:
 :::
 
-::: {.columns}
-::: {.column width="49%"}
 ::: {style="font-size: 65%;"}
-| $L_\text{root}(\texttt{A})$ | 0.0266 |
-|:--|:--|
-| $L_\text{root}(\texttt{C})$ | 0.0029 |
-| $L_\text{root}(\texttt{G})$ | **0.0385** |
-| $L_\text{root}(\texttt{T})$ | 0.0029 |
-:::
-:::
-
-::: {.column width="49%"}
-::: {style="font-size: 65%;"}
-| $Pr(\text{root} = \texttt{A}\,|\,\text{data})$ | 0.375 |
-|:--|:--|
-| $Pr(\text{root} = \texttt{C}\,|\,\text{data})$ | 0.042 |
-| $Pr(\text{root} = \texttt{G}\,|\,\text{data})$ | **0.542** |
-| $Pr(\text{root} = \texttt{T}\,|\,\text{data})$ | 0.042 |
-:::
-:::
+| Base ($i$) | $L_\text{root}(i)$ | $\Pr(\text{root has base } i \mid \text{data})$ |
+|:-:|--:|--:|
+| `A` | 0.0266 | 0.375 |
+| `C` | 0.0029 | 0.042 |
+| `G` | **0.0385** | **0.542** |
+| `T` | 0.0029 | 0.042 |
 :::
 
 . . .
@@ -918,7 +911,7 @@ ancestral reconstruction is from Yang et al. (1995).[@YangKumarNei1995]
 -   For models like JC, K80, and HKY, the likelihood **doesn't depend on where
     the root is**
 -   We can slide the root anywhere, like a rope over a pulley
--   So, to reconstruct **any** ancestor: ***Re-root*** the tree at that ancestor,
+-   So, to reconstruct **any** ancestor: ***Reroot*** the tree at that ancestor,
     and use the probabilities at the root
 :::
 
@@ -982,8 +975,8 @@ Every reconstruction has a probability of about 0.9999 or higher
 ::: {.notes}
 17:15-18:00
 
-D614G (a
-spike protein change that made the virus spread faster) was already in the B.1
+D614G (a spike protein change that made the virus spread faster) was already in
+the B.1
 ancestor. The GGG to AAC change (two amino acids of the nucleocapsid protein)
 happened on the branch between the B.1 and B.1.1 ancestors. 3,037 and 14,408
 are early B.1-defining changes.
@@ -1005,7 +998,7 @@ are early B.1-defining changes.
 ::: {.notes}
 18:00-19:00
 
-N501Y: Asparagine -> Tyrosine at 501st amino acid of spike gene
+N501Y: Asparagine (N) to tyrosine (Y) at amino acid 501 of the spike protein.
 
 This is the stretch goal: reconstruct the whole B.1.1 ancestral genome and list
 its differences from Wuhan. N501Y shows up, and it shouldn't. A reconstruction
