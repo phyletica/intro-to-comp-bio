@@ -1,0 +1,1078 @@
+---
+title: "Phylogenetics"
+subtitle: "The likelihood of a tree, and the ancestors within it"
+# author: "Jamie Oaks"
+institute: "BIOL 5/6800 &mdash; Intro to Comp Bio"
+format:
+  revealjs:
+    slide-number: c/t
+    incremental: false
+    code-line-numbers: false
+    smaller: false
+    center-title-slide: true
+    history: false
+metadata-files:
+  - _metadata.yml
+bibliography: ../references.bib
+---
+
+```{python}
+#| label: setup-draw-tree
+#| echo: false
+#| eval: true
+
+import math
+
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.linalg import expm
+
+BASES = "ACGT"
+
+
+def parse_newick(newick):
+    """Parse a Newick string into a postorder list of node dicts."""
+    newick = newick.strip().rstrip(";")
+    nodes = []
+    position = 0
+
+    def read_name_and_length():
+        nonlocal position
+        start = position
+        while position < len(newick) and newick[position] not in ":,()":
+            position += 1
+        name = newick[start:position].strip()
+        length = None
+        if position < len(newick) and newick[position] == ":":
+            position += 1
+            start = position
+            while position < len(newick) and newick[position] not in ",()":
+                position += 1
+            length = float(newick[start:position])
+        return name, length
+
+    def read_subtree():
+        nonlocal position
+        children = []
+        if newick[position] == "(":
+            position += 1
+            while True:
+                children.append(read_subtree())
+                if newick[position] == ",":
+                    position += 1
+                else:
+                    position += 1
+                    break
+        name, length = read_name_and_length()
+        nodes.append({"name": name, "children": children, "length": length})
+        return len(nodes) - 1
+
+    read_subtree()
+    nodes[-1]["length"] = None
+    return nodes
+
+
+def draw_tree(axes, tree, title = "", node_labels = None, fontsize = 16):
+    """Draw a postorder list of nodes on matplotlib axes."""
+    n = len(tree)
+    parent = [None] * n
+    for i, node in enumerate(tree):
+        for c in node["children"]:
+            parent[c] = i
+    x = [0.0] * n
+    for i in reversed(range(n - 1)):
+        x[i] = x[parent[i]] + tree[i]["length"]
+    y = [0.0] * n
+    k = 0
+    for i, node in enumerate(tree):
+        if not node["children"]:
+            y[i] = k
+            k += 1
+        else:
+            y[i] = sum(y[c] for c in node["children"]) / len(node["children"])
+    max_x = max(x)
+    for i, node in enumerate(tree):
+        if parent[i] is not None:
+            axes.plot([x[parent[i]], x[i]], [y[i], y[i]], color = "black", lw = 2)
+        if node["children"]:
+            ys = [y[c] for c in node["children"]]
+            axes.plot([x[i], x[i]], [min(ys), max(ys)], color = "black", lw = 2)
+            label = (node_labels or {}).get(node["name"], node["name"])
+            if label:
+                axes.text(x[i] + 0.01 * max_x, y[i], label, ha = "left",
+                          va = "center", fontsize = fontsize * 0.8,
+                          color = "#0057B8",
+                          bbox = {"facecolor": "white", "edgecolor": "none",
+                                  "pad": 1})
+        else:
+            axes.text(x[i] + 0.02 * max_x, y[i], node["name"], va = "center",
+                      fontsize = fontsize)
+    axes.set_xlim(-0.02 * max_x, 1.35 * max_x)
+    axes.set_ylim(-0.7, k - 0.3)
+    axes.invert_yaxis()
+    axes.axis("off")
+    axes.set_title(title, fontsize = fontsize)
+
+
+def draw_pruning_step(tree, site_bases, rate_matrix, base_frequencies, step):
+    """Draw the pruning algorithm after `step` nodes have been visited.
+
+    Step 0 is before any node is visited; steps 1 to len(tree) visit the nodes
+    in postorder; the last step (len(tree) + 1) combines the root's conditional
+    likelihoods into the likelihood of the site. This function does its own
+    calculations, so it works before you have completed the challenges.
+
+    Returns:
+        matplotlib.figure.Figure: The figure.
+    """
+    number_of_nodes = len(tree)
+    last_step = number_of_nodes + 1
+    step = max(0, min(step, last_step))
+
+    # Run the pruning algorithm, keeping everything we need to show
+    matrices = [None if node["length"] is None
+                else expm(rate_matrix * node["length"]) for node in tree]
+    node_likelihoods = []
+    child_sums = []  # For each node, the bracketed sum for each of its children
+    for node in tree:
+        if not node["children"]:
+            base = site_bases[node["name"]]
+            vector = np.zeros(4)
+            if base in BASES:
+                vector[BASES.index(base)] = 1.0
+            else:
+                vector[:] = 1.0
+            node_likelihoods.append(vector)
+            child_sums.append([])
+        else:
+            sums = [matrices[child] @ node_likelihoods[child]
+                    for child in node["children"]]
+            node_likelihoods.append(np.prod(sums, axis = 0))
+            child_sums.append(sums)
+    frequencies = np.array([base_frequencies[base] for base in BASES])
+    site_likelihood = float(frequencies @ node_likelihoods[-1])
+
+    # Where to draw each node
+    parent = [None] * number_of_nodes
+    for index, node in enumerate(tree):
+        for child in node["children"]:
+            parent[child] = index
+    x = [0.0] * number_of_nodes
+    for index in reversed(range(number_of_nodes - 1)):
+        x[index] = x[parent[index]] + tree[index]["length"]
+    y = [0.0] * number_of_nodes
+    next_tip = 0
+    for index, node in enumerate(tree):
+        if not node["children"]:
+            y[index] = next_tip
+            next_tip += 1
+        else:
+            y[index] = float(np.mean([y[child] for child in node["children"]]))
+    max_x = max(x)
+
+    current = step - 1 if 1 <= step <= number_of_nodes else None
+    done = set(range(min(step, number_of_nodes)))
+    highlight = "darkorange"
+
+    figure = plt.figure(figsize = (11, 6.2))
+    grid = figure.add_gridspec(2, 2, height_ratios = [3, 1.4],
+                               width_ratios = [1.1, 1], hspace = 0.25,
+                               wspace = 0.05)
+    tree_axes = figure.add_subplot(grid[0, 0])
+    table_axes = figure.add_subplot(grid[0, 1])
+    text_axes = figure.add_subplot(grid[1, :])
+
+    # The tree
+    for index, node in enumerate(tree):
+        color, width = "black", 2
+        if current is not None and parent[index] == current:
+            color, width = "steelblue", 4
+        if parent[index] is not None:
+            tree_axes.plot([x[parent[index]], x[index]], [y[index], y[index]],
+                           color = color, linewidth = width, zorder = 1)
+        if node["children"]:
+            child_ys = [y[child] for child in node["children"]]
+            tree_axes.plot([x[index], x[index]], [min(child_ys), max(child_ys)],
+                           color = "black", linewidth = 2, zorder = 1)
+        if node["length"] is not None:
+            tree_axes.text((x[parent[index]] + x[index]) / 2, y[index] + 0.12,
+                           f"{node['length']:g}", ha = "center", va = "top",
+                           fontsize = 9, color = "gray")
+    for index, node in enumerate(tree):
+        if index == current:
+            face, size = highlight, 260
+        elif current is not None and parent[index] == current:
+            face, size = "steelblue", 160
+        elif index in done:
+            face, size = "dimgray", 90
+        else:
+            face, size = "white", 90
+        tree_axes.scatter([x[index]], [y[index]], s = size, color = face,
+                          edgecolor = "black", zorder = 3)
+        label = node["name"] or f"node {index}"
+        if not node["children"]:
+            tree_axes.text(x[index] + 0.04 * max_x, y[index],
+                           f"{label}:  {site_bases[node['name']]}",
+                           va = "center", fontsize = 13)
+        else:
+            tree_axes.text(x[index] - 0.03 * max_x, y[index] - 0.18, label,
+                           ha = "right", va = "bottom", fontsize = 11,
+                           color = "firebrick")
+    tree_axes.set_xlim(-0.25 * max_x, 1.45 * max_x)
+    tree_axes.set_ylim(-0.8, next_tip - 0.2)
+    tree_axes.invert_yaxis()
+    tree_axes.axis("off")
+    tree_axes.set_title("The tree (visited in postorder)", fontsize = 13)
+
+    # The list of conditional likelihoods, one row per node
+    table_axes.set_xlim(0, 6)
+    table_axes.set_ylim(number_of_nodes + 0.6, -1)
+    table_axes.axis("off")
+    table_axes.set_title("node_likelihoods", fontsize = 13, family = "monospace")
+    for column, base in enumerate(BASES):
+        table_axes.text(2.5 + column, -0.4, base, ha = "center", va = "center",
+                        fontsize = 13, fontweight = "bold")
+    for index, node in enumerate(tree):
+        row = index + 0.5
+        table_axes.text(0.05, row, f"[{index}] {node['name'] or 'node ' + str(index)}",
+                        va = "center", fontsize = 11,
+                        color = highlight if index == current else "black",
+                        fontweight = "bold" if index == current else "normal")
+        for column in range(4):
+            box = plt.Rectangle((2.05 + column, row - 0.42), 0.9, 0.84,
+                                facecolor = "white", edgecolor = "lightgray")
+            if index in done:
+                vector = node_likelihoods[index]
+                share = vector[column] / vector.max()
+                box.set_facecolor(plt.cm.Blues(0.08 + 0.7 * share))
+                if vector[column] in (0.0, 1.0):
+                    text = f"{vector[column]:.0f}"
+                else:
+                    text = f"{vector[column]:.4f}"
+                table_axes.text(2.5 + column, row, text, ha = "center",
+                                va = "center", fontsize = 10,
+                                color = "white" if share > 0.6 else "black")
+            if index == current:
+                box.set_edgecolor(highlight)
+                box.set_linewidth(2.5)
+            table_axes.add_patch(box)
+
+    # What happens at this step
+    text_axes.axis("off")
+    if step == 0:
+        lines = [
+            "Start: No conditional likelihoods have been calculated yet.",
+            "We will visit the nodes in postorder (the order of the list), so "
+            + "every child is visited before its parent.",
+        ]
+    elif current is not None:
+        node = tree[current]
+        name = node["name"] or f"node {current}"
+        if not node["children"]:
+            base = site_bases[node["name"]]
+            vector = ", ".join(f"{value:.0f}" for value in node_likelihoods[current])
+            if base in BASES:
+                lines = [f"Rule 1 (a tip): {name} has {base}, so its conditional "
+                         + f"likelihoods are ({vector}).",
+                         "The probability of the data at a tip is 1 for the base "
+                         + "we observed, and 0 for the other bases."]
+            else:
+                lines = [f"Rule 1 (a tip): {name}'s base is missing ({base}), so "
+                         + f"its conditional likelihoods are ({vector}).",
+                         "We would see the same missing data no matter which base "
+                         + "is really there."]
+        else:
+            children = node["children"]
+            names = [tree[child]["name"] or f"node {child}" for child in children]
+            brackets = " × ".join(
+                rf"[$\sum_j P_{{ij}}({tree[child]['length']:g})\,"
+                + rf"L_{{\mathrm{{{child_name}}}}}(j)$]"
+                for child, child_name in zip(children, names)
+            )
+            lines = [f"Rule 2 (an internal node): For each base $i$ of {name}, "
+                     + f"multiply over its children ({', '.join(names)}):",
+                     rf"$L_{{\mathrm{{{name.replace(' ', '~')}}}}}(i)$ = " + brackets]
+            for column, base in enumerate(BASES):
+                factors = " × ".join(f"{sums[column]:.4f}"
+                                     for sums in child_sums[current])
+                lines.append(f"    {base}:  {factors} = "
+                             + f"{node_likelihoods[current][column]:.4f}")
+    else:
+        root = node_likelihoods[-1]
+        terms = " + ".join(f"{frequencies[column]:g} × {root[column]:.4f}"
+                           for column in range(4))
+        lines = [r"Rule 3 (the root): $L_{\mathrm{site}} = \sum_i \pi_i\,"
+                 + r"L_{\mathrm{root}}(i)$",
+                 f"= {terms}",
+                 f"= {site_likelihood:.4f},   so the log-likelihood of the site "
+                 + f"is ln({site_likelihood:.4f}) = {math.log(site_likelihood):.4f}"]
+    text_axes.text(0.0, 1.0, "\n".join(lines), va = "top", ha = "left",
+                   fontsize = 12, linespacing = 1.5, transform = text_axes.transAxes)
+    figure.suptitle(f"Step {step} of {last_step}", fontsize = 14, x = 0.12,
+                    ha = "left")
+    return figure
+
+
+def pruning_animation_html(
+    tree, site_bases, rate_matrix, base_frequencies, seconds_per_step = 2.5
+):
+    """Make an HTML player that steps through `draw_pruning_step`.
+
+    Returns:
+        str: HTML (with a little JavaScript) to display with `mo.iframe`.
+    """
+    import base64
+    import io
+    import json
+
+    frames = []
+    for step in range(len(tree) + 2):
+        figure = draw_pruning_step(tree, site_bases, rate_matrix,
+                                   base_frequencies, step)
+        buffer = io.BytesIO()
+        figure.savefig(buffer, format = "png", dpi = 90)
+        plt.close(figure)
+        frames.append("data:image/png;base64,"
+                      + base64.b64encode(buffer.getvalue()).decode())
+    milliseconds = int(1000 * seconds_per_step)
+    return f"""
+    <div style="font-family: sans-serif; text-align: center;">
+      <img id="pruning-frame" src="{frames[0]}" style="max-width: 100%; max-height: 540px;">
+      <div style="margin-top: 6px;">
+        <button id="pruning-previous">&#9664; Previous</button>
+        <button id="pruning-play">&#9654; Play</button>
+        <button id="pruning-next">Next &#9654;</button>
+      </div>
+    </div>
+    <script>
+      {{
+      const frames = {json.dumps(frames)};
+      let index = 0;
+      let timer = null;
+      const image = document.getElementById("pruning-frame");
+      const play = document.getElementById("pruning-play");
+      function show(i) {{
+        index = (i + frames.length) % frames.length;
+        image.src = frames[index];
+      }}
+      function stop() {{
+        clearInterval(timer);
+        timer = null;
+        play.innerHTML = "&#9654; Play";
+      }}
+      document.getElementById("pruning-previous").onclick = () => {{ stop(); show(index - 1); }};
+      document.getElementById("pruning-next").onclick = () => {{ stop(); show(index + 1); }};
+      play.onclick = () => {{
+        if (timer) {{ stop(); return; }}
+        if (index === frames.length - 1) {{ show(0); }}
+        play.innerHTML = "&#10074;&#10074; Pause";
+        timer = setInterval(() => {{
+          if (index === frames.length - 1) {{ stop(); return; }}
+          show(index + 1);
+        }}, {milliseconds});
+      }};
+      }}
+    </script>
+    """
+```
+
+## Last time
+
+Any model of sequence evolution is a rate matrix $Q$, and $P(t) = e^{Qt}$ gives
+us its transition probabilities
+
+. . .
+
+With $P(t)$, we calculated the likelihood of the divergence between **two**
+sequences
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+But most questions in biology involve **many** sequences, related by a **tree**
+:::
+
+::: {.notes}
+0:00-1:00
+
+Today we extend likelihood from a pair of sequences to a tree, and use it to
+reconstruct ancestors of SARS-CoV-2 lineages.
+:::
+
+# Trees {background-color="#1b3a5c"}
+
+## Tree terms
+
+::: {.columns}
+::: {.column width="55%"}
+```{python}
+#| label: tree-terms
+#| echo: false
+#| eval: true
+#| fig-width: 6
+#| fig-height: 4
+
+_tree = parse_newick(
+    "((Human:0.1,Chimp:0.1)Primates:0.3,(Mouse:0.2,Rat:0.2)Rodents:0.2)Root;"
+)
+_figure, _axes = plt.subplots(figsize = (6, 4))
+draw_tree(_axes, _tree)
+plt.show()
+```
+:::
+
+::: {.column width="45%"}
+::: {style="font-size: 55%;"}
+| Term | Meaning |
+|:--|:--|
+| ***Tip nodes*** | The sequences we have |
+| ***Internal nodes*** | Their ancestors (no data!) |
+| ***Branch*** | Line connecting nodes; a lineage evolving through time |
+| ***Branch length*** | Expected substitutions per site (like $t$) |
+| ***Root*** | The ancestor of everything |
+| ***Topology*** | The branching pattern |
+| ***Clade*** | An ancestor and all its descendants |
+:::
+:::
+:::
+
+::: {.notes}
+1:00-2:30
+
+Point to each part of the tree. Branch lengths are the same unit as t in the
+last two lectures. A clade is an ancestor and all its descendants (Primates,
+Rodents). Most real trees don't name internal nodes; we name some so we can
+refer to them.
+:::
+
+## Representing trees in computers
+
+[***Newick format***](https://en.wikipedia.org/wiki/Newick_format):
+Parentheses hold descendants; numbers after colons are branch lengths
+
+```
+((Human:0.1,Chimp:0.1)Primates:0.3,(Mouse:0.2,Rat:0.2)Rodents:0.2)Root;
+```
+
+. . .
+
+::: {.columns}
+::: {.column width="50%"}
+::: {style="font-size: 65%;"}
+| Index | Name | Children | Length |
+|:-:|:--|:--|--:|
+| 0 | Human | | 0.1 |
+| 1 | Chimp | | 0.1 |
+| 2 | Primates | 0, 1 | 0.3 |
+| 3 | Mouse | | 0.2 |
+| 4 | Rat | | 0.2 |
+| 5 | Rodents | 3, 4 | 0.2 |
+| 6 | Root | 2, 5 | |
+:::
+:::
+
+::: {.column width="50%"}
+::: {style="font-size: 85%;"}
+In the exercise, we represent a tree as a **list of nodes** in ***postorder***
+
+Every node comes **after** its children, so the root is **last**
+:::
+:::
+:::
+
+::: {.notes}
+2:30-3:45
+
+This is how many phylogenetics programs store trees internally. Postorder is
+exactly the order we need for the likelihood calculation: a single loop over
+the list visits children before parents. Challenge 1 is a warm-up that loops
+over this list.
+:::
+
+## Fun factoid
+
+::: {style="font-size: 85%;"}
+[Newick format](https://en.wikipedia.org/wiki/Newick_format)
+is named after Newick's seafood restaurant in Dover, NH.
+Where phylogeneticists met in 1986 to agree on the format
+:::
+
+::: {style="text-align: center;"}
+![
+    [Newick's restaurant](https://www.i95exitguide.com/highway-gourmet/newicks-seafood-restaurant-newington-nh/)
+](
+    https://www.i95exitguide.com/wp-content/uploads/2014/01/960x480-newicks-dover-new-hampshire.png
+){
+    width="80%"
+    fig-align="center"
+    fig-alt="Picture of Newick's restaurant"
+}
+:::
+
+# How many trees? {background-color="#1b3a5c"}
+
+## Tree space is enormous
+
+Unrooted trees with $n$ tips:^[@Felsenstein1978]
+$\;1 \times 3 \times 5 \times \cdots \times (2n - 5)$
+
+::: {style="font-size: 75%;"}
+| Tips | Unrooted trees | At 1 million trees per second |
+|--:|--:|--:|
+| 4 | 3 | |
+| 10 | 2,027,025 | 2 seconds |
+| 15 | $7.9 \times 10^{12}$ | 92 days |
+| 20 | $2.2 \times 10^{20}$ | 7 million years |
+| 24 | $5.6 \times 10^{26}$ | $1.8 \times 10^{13}$ years |
+:::
+
+. . .
+
+::: {style="font-size: 90%;"}
+We can't try them all!
+Programs like IQ-TREE and RAxML use **heuristic search**:
+Make small rearrangements, and keep the ones that improve the likelihood
+:::
+
+::: {.notes}
+3:45-5:15
+
+Where the formula comes from: each new tip can be added to any branch of the
+previous tree, and an unrooted tree with n - 1 tips has 2n - 5 branches. The
+universe is about 1.4e10 years old. Heuristic search usually finds very good
+trees, but there's no guarantee it finds the best one. Students write
+number_of_unrooted_trees in Challenge 2.
+:::
+
+# The likelihood of a tree {background-color="#1b3a5c"}
+
+## We don't have data from the ancestors
+
+For two sequences, each site needed one lookup. *E.g.*,
+$P_{A \rightarrow G}(t)$
+
+. . .
+
+On a tree, we have to **add up** over every possible combination of bases at the
+internal nodes
+
+. . .
+
+::: {style="font-size: 90%;"}
+An unrooted tree of 24 genomes has 22 internal nodes:
+
+$4^{22} \approx 1.8 \times 10^{13}$ combinations, for **every site**
+:::
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+Question: Is there a way to avoid repeating work?
+:::
+
+::: {.notes}
+5:15-6:15
+
+Let them think for a moment. The answer is to work from the tips toward the
+root, so that each subtree's calculation is done only once.
+:::
+
+## Felsenstein's pruning algorithm^[@Felsenstein1981]
+
+For each node, from the tips to the root, calculate its ***conditional
+likelihoods***: $L_{\text{node}}(i)$ = probability of the data that descends
+from the node, **if** the node has base $i$
+
+In doing this, the pruning algorithm follows ***3 rules***
+
+::: {.notes}
+6:15-8:15
+
+Software documentation (e.g., BEAGLE, used by BEAST and MrBayes) often calls
+these "partial likelihoods" or "partials"; same thing. Rule 2 is the heart: "the probability of the child's data, if the parent has
+base i" is a sum over what the child could have, and children evolve
+independently, so we multiply over children. Postorder guarantees children are
+done before parents. Challenges 4 through 7 build these three rules one at a
+time.
+:::
+
+## Pruning algorithm Rule 1
+
+At each **tip node**:
+the conditional likelihood is 1 for the base we observed and 0 for the other
+three bases
+
+. . .
+
+For example:
+
+::: {.incremental}
+-   The probability we observe an "`A`" in our data, given the true base is `A`
+    = 1
+-   The probability we observe an "`A`" in our data, given the true base is `C`
+    = 0
+:::
+
+## Pruning algorithm Rule 2
+
+::: {style="font-size: 85%;"}
+At each **internal node**:
+For each base $i$, multiply together, over each
+child, the probability of getting the child's data if the node has base $i$:
+:::
+
+::: {style="font-size: 85%;"}
+$$
+L_{\text{parent}}(i) = \prod_{\text{children}} \Big[ \sum_{j}
+P_{ij}(t_{\text{child}}) \, L_{\text{child}}(j) \Big]
+$$
+:::
+
+. . .
+
+::: {style="font-size: 85%;"}
+For example: Parent ($i$) = `A` and child ($j$) = `G`, what's the probability that `A`
+    evolved to `G` along the branch connecting them
+    ($P_{A\rightarrow G}(t_{\text{child}})$)
+    times the probability the child with base `G` gave rise to the bases of its
+    descendants ($L_{\text{child}}(G)$)
+:::
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+This is ***dynamic programming***: Re-using $L_{\text{child}}$ for each $L_{\text{parent}}$
+:::
+
+## Pruning algorithm Rule 3
+
+**At the root**, the likelihood of the site is the sum of the conditional
+likelihoods of the four bases, weighted by the base frequencies:
+
+$L_{\text{site}} = \sum_{i} \pi_i \, L_{\text{root}}(i)$
+
+. . .
+
+This is a weighted average!
+
+. . .
+
+For example:
+
+-   For $i =$ `A`, the probability of the root having `A` ($\pi_A$)
+    times the probability the root with base `A` gave rise to the bases of all
+    the tips ($L_{\text{root}}(A)$)
+
+## Pruning, step by step
+
+```{python}
+#| label: pruning-animation
+#| echo: false
+#| eval: true
+#| output: asis
+
+_jc_rate_matrix = np.full((4, 4), 1 / 3)
+np.fill_diagonal(_jc_rate_matrix, -1.0)
+_html = pruning_animation_html(
+    parse_newick(
+        "((Human:0.1,Chimp:0.1)Primates:0.3,(Mouse:0.2,Rat:0.2)Rodents:0.2)Root;"
+    ),
+    {"Human": "A", "Chimp": "A", "Mouse": "G", "Rat": "G"},
+    _jc_rate_matrix,
+    {"A": 0.25, "C": 0.25, "G": 0.25, "T": 0.25},
+)
+# Insert the player into the slide as raw HTML
+print("```{=html}\n" + _html + "\n```")
+```
+
+::: {.notes}
+Step through with Next (or press Play). Point out that the table on the right is
+the node_likelihoods list in the students' get_root_likelihoods function, filled
+in one row per loop iteration, in postorder. The notebook has the same
+animation, with menus to change each tip's base (e.g., make Chimp a gap).
+:::
+
+## Pruning one site
+
+```{python}
+#| label: tree-like
+#| echo: false
+#| eval: true
+#| fig-width: 7
+#| fig-height: 2.5
+#| fig-align: center
+
+_tree = parse_newick(
+    "((A Human:0.1,A Chimp:0.1)Primates:0.3,(G Mouse:0.2,G Rat:0.2)Rodents:0.2)Root;"
+)
+_figure, _axes = plt.subplots(figsize = (7, 2.5))
+draw_tree(_axes, _tree)
+plt.show()
+```
+
+::: {style="font-size: 65%;"}
+| Node | $L(\texttt{A})$ | $L(\texttt{C})$ | $L(\texttt{G})$ | $L(\texttt{T})$ |
+|:--|--:|--:|--:|--:|
+| Human, Chimp | 1 | 0 | 0 | 0 |
+| Mouse, Rat | 0 | 0 | 1 | 0 |
+| Primates | **0.8215** | 0.0010 | 0.0010 | 0.0010 |
+| Rodents | 0.0034 | 0.0034 | **0.6797** | 0.0034 |
+| Root | 0.0266 | 0.0029 | **0.0385** | 0.0029 |
+:::
+
+::: {style="font-size: 70%;"}
+$L_{\text{site}} = \frac{1}{4}(0.0266 + 0.0029 + 0.0385 + 0.0029) = 0.0177$
+:::
+
+::: {.notes}
+8:15-9:45
+
+Primates, A: each child has P_AA(0.1) = 0.906, so 0.906 squared = 0.82.
+The root slightly favors G because the Rodents' branch (0.2) is shorter than
+the Primates' branch (0.3). This example tree is the one in the notebook; these
+numbers are in its tests.
+:::
+
+## Two shortcuts
+
+::: {.incremental style="font-size: 90%;"}
+-   **Missing data**: A gap at a tip gives conditional likelihoods of
+    $(1, 1, 1, 1)$
+    -   A site with **no** data has likelihood 1 ($\log 1 = 0$)
+-   **Site patterns**: Identical columns of the alignment have identical
+    likelihoods
+    -   Four SARS-CoV-2 genomes: 29,903 sites, but only **56** patterns
+:::
+
+::: {.notes}
+9:45-10:45
+
+So we don't need to throw out gaps or ambiguous bases. The notebook's
+tree_log_likelihood function counts patterns and calculates each one once,
+which makes the whole-genome calculation fast enough for molab.
+:::
+
+# Which tree is best? {background-color="#1b3a5c"}
+
+## SARS-CoV-2 lineages
+
+::: {style="font-size: 75%;"}
+| Name | Pango lineage^[@Rambaut2020] |
+|:--|:--|
+| Wuhan | `B` (the reference genome) |
+| B.1 | `B.1` |
+| Delta | `B.1.617.2` |
+| Alpha | `B.1.1.7` |
+| Gamma | `P.1` = `B.1.1.28.1` |
+| Omicron | `BA.1.1` = `B.1.1.529.1.1` |
+:::
+
+. . .
+
+::: {style="font-size: 85%;"}
+Lineage names work like addresses: `B.1.1` descends from `B.1`, which descends
+from `B`
+:::
+
+::: {.notes}
+10:45-11:45
+
+The genomes are from GenBank, aligned to the Wuhan-Hu-1 reference with
+Nextclade, which keeps the reference's coordinates. The names hint at the
+answer for the next slide, which is a nice sanity check.
+:::
+
+## Three trees (unrooted) for four genomes
+
+::: {style="font-size: 75%;"}
+| Tree | Log-likelihood | Worse by |
+|:--|--:|--:|
+| 1: (Wuhan, Delta), (Alpha, Omicron) | **−42,433.11** | |
+| 2: (Wuhan, Alpha), (Delta, Omicron) | −42,444.08 | 10.96 |
+| 3: (Wuhan, Omicron), (Delta, Alpha) | −42,447.15 | 14.04 |
+:::
+
+. . .
+
+::: {style="font-size: 75%;"}
+How much does each kind of site favor Tree 1 over Tree 2?
+
+| Kind of site | Sites | Tree 1 − Tree 2 |
+|:--|--:|--:|
+| Two pairs (*e.g.*, `AATT`) | 4 | **+12.49** |
+| All four the same | 29,750 | +2.01 |
+| One genome differs | 98 | −4.44 |
+| Three or more bases | 2 | +0.93 |
+| Missing data | 49 | −0.02 |
+:::
+
+::: {.notes}
+11:45-13:15
+
+Branch lengths for each tree are at their maximum likelihood values (computed
+for the students). The four "two pairs" sites (22,995, 23,063, 28,882, and
+28,883) do most of the work of choosing the topology, but every site
+contributes, because each tree has its own branch lengths and every site helps
+estimate them: To explain the pair sites with extra changes, Trees 2 and 3 need
+longer branches, which fit the one-genome-differs sites a little better and the
+thousands of constant sites a little worse. Students calculate these numbers
+with their own pruning code, and explore the effect of Omicron's branch length
+with a slider.
+:::
+
+# Other methods
+
+## Parsimony
+
+::: {.incremental style="font-size: 85%;"}
+-   ***Maximum parsimony***: Choose the tree that needs the **fewest changes**
+-   Fast, and intuitive: In the exercise, it would use **only** the "two pairs" sites
+    -   3 favor Tree 1 and 1 favors Tree 2
+    -   All other sites are ignored!
+-   But it ignores branch lengths and multiple hits, so it can be
+    **positively misleading**: Long branches attract each other^[@Felsenstein1978lba]
+-   Still useful when branches are **very short**: UShER^[@Turakhia2021] uses
+    parsimony to place millions of SARS-CoV-2 genomes on a tree
+:::
+
+::: {.notes}
+13:15-14:30
+
+Long-branch attraction: two long branches pick up the same changes by chance
+(multiple hits), and parsimony mistakes those for shared history. Likelihood
+models multiple hits, so it doesn't fall into the same trap (when the model is
+reasonable). With SARS-CoV-2, branches are so short that multiple hits are
+rare, so parsimony works well, and it's fast enough to handle the millions of
+genomes sequenced during the pandemic. We won't code parsimony.
+:::
+
+## Distance-based algorithms
+
+::: {.incremental}
+-   We will skip these today
+-   But, your used two of these methods in Capstone 1!
+    -   ***Neighbor-joining*** and ***UPGMA***
+:::
+
+
+# Reconstructing ancestors {background-color="#1b3a5c"}
+
+## What base did the root have?
+
+::: {style="font-size: 85%;"}
+The conditional likelihoods at the root also give us the probability of each base:
+:::
+
+::: {style="font-size: 80%;"}
+$$
+\Pr(\text{root has base } i \mid \text{data}) = \frac{\pi_i \,
+L_{\text{root}}(i)}{\sum_{k} \pi_k \, L_{\text{root}}(k)}
+$$
+:::
+
+. . .
+
+::: {style="font-size: 85%;"}
+For our example site:
+:::
+
+::: {.columns}
+::: {.column width="49%"}
+::: {style="font-size: 65%;"}
+| $L_\text{root}(\texttt{A})$ | 0.0266 |
+|:--|:--|
+| $L_\text{root}(\texttt{C})$ | 0.0029 |
+| $L_\text{root}(\texttt{G})$ | **0.0385** |
+| $L_\text{root}(\texttt{T})$ | 0.0029 |
+:::
+:::
+
+::: {.column width="49%"}
+::: {style="font-size: 65%;"}
+| $Pr(\text{root} = \texttt{A}\,|\,\text{data})$ | 0.375 |
+|:--|:--|
+| $Pr(\text{root} = \texttt{C}\,|\,\text{data})$ | 0.042 |
+| $Pr(\text{root} = \texttt{G}\,|\,\text{data})$ | **0.542** |
+| $Pr(\text{root} = \texttt{T}\,|\,\text{data})$ | 0.042 |
+:::
+:::
+:::
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+Question: But what about the other ancestors?
+:::
+
+::: {.notes}
+14:30-15:30
+
+This is just Bayes' rule, with the base frequencies as the prior on the root's
+base. Students write root_state_probabilities in Challenge 9. This approach to
+ancestral reconstruction is from Yang et al. (1995).[@YangKumarNei1995]
+:::
+
+## The pulley principle^[@Felsenstein1981]
+
+::: {.incremental style="font-size: 90%;"}
+-   For models like JC, K80, and HKY, the likelihood **doesn't depend on where
+    the root is**
+-   We can slide the root anywhere, like a rope over a pulley
+-   So, to reconstruct **any** ancestor: ***Re-root*** the tree at that ancestor,
+    and use the probabilities at the root
+:::
+
+::: {.notes}
+15:30-16:30
+
+These models are "time reversible": evolving forward from A to G has the same
+probability as backward from G to A (weighted by base frequencies). In the
+notebook, students check that the log-likelihood of the six-genome tree is
+identical before and after rerooting. The reroot function is given.
+:::
+
+## The ancestors of SARS-CoV-2 lineages
+
+```{python}
+#| label: six-genomes
+#| echo: false
+#| eval: true
+#| fig-align: center
+#| fig-width: 9
+#| fig-height: 4.2
+
+_tree = parse_newick(
+    "(Wuhan:0.000133475,B.1:0.000133667,"
+    + "(Delta:0.000936309,((Alpha:0.000704525,Omicron:0.00170696):0.0000336162,"
+    + "Gamma:0.00106654)B.1.1 ancestor:0.000135986):0.00000001)B.1 ancestor;"
+)
+_figure, _axes = plt.subplots(figsize = (9, 4.2))
+draw_tree(_axes, _tree, fontsize = 15)
+plt.show()
+```
+
+::: {style="font-size: 80%;"}
+The maximum likelihood tree of six genomes (JC model)
+:::
+
+::: {.notes}
+16:30-17:15
+
+The tree was estimated with IQ-TREE; students are given it. The two named
+internal nodes are the ancestors we will reconstruct by rerooting at each.
+:::
+
+## Reconstructed bases
+
+::: {style="font-size: 60%;"}
+| Position | Wuhan | B.1 | Delta | Alpha | Gamma | Omicron | B.1 ancestor | B.1.1 ancestor |
+|--:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| 3,037 | `C` | `T` | `T` | `T` | `T` | `T` | **`T`** | **`T`** |
+| 14,408 | `C` | `T` | `T` | `T` | `T` | `T` | **`T`** | **`T`** |
+| 23,403 (D614G) | `A` | `G` | `G` | `G` | `G` | `G` | **`G`** | **`G`** |
+| 28,881–3 | `GGG` | `GGG` | `TGG` | `AAC` | `AAC` | `AAC` | **`GGG`** | **`AAC`** |
+:::
+
+. . .
+
+::: {style="font-size: 85%;"}
+Every reconstruction has a probability of about 0.9999 or higher
+:::
+
+::: {.notes}
+17:15-18:00
+
+D614G (a
+spike protein change that made the virus spread faster) was already in the B.1
+ancestor. The GGG to AAC change (two amino acids of the nucleocapsid protein)
+happened on the branch between the B.1 and B.1.1 ancestors. 3,037 and 14,408
+are early B.1-defining changes.
+:::
+
+## Confident is not the same as correct
+
+::: {.incremental style="font-size: 90%;"}
+-   Alpha, Gamma, and Omicron all have **N501Y** (position 23,063, in the spike
+    protein)
+-   So our reconstruction says the B.1.1 ancestor had it too (probability
+    0.9999)
+-   But N501Y arose **independently** in each of these lineages, favored by
+    natural selection (***convergent evolution***)
+-   Our model knows nothing about selection, and our sample has no early B.1.1
+    genomes
+:::
+
+::: {.notes}
+18:00-19:00
+
+N501Y: Asparagine -> Tyrosine at 501st amino acid of spike gene
+
+This is the stretch goal: reconstruct the whole B.1.1 ancestral genome and list
+its differences from Wuhan. N501Y shows up, and it shouldn't. A reconstruction
+is only as good as the model and the sampling of sequences.
+:::
+
+## Summary
+
+::: {style="font-size: 85%;"}
+::: {.incremental}
+-   A tree can be stored as a **list of nodes in postorder**
+-   The number of trees grows **astronomically**, so programs use a **heuristic
+    search**
+-   **Felsenstein's pruning algorithm** uses **dynamic programming** to
+    calculate the likelihood of a tree from the tips to the root
+-   A few sites strongly favor one tree, but **every** site informs the branch
+    lengths; **parsimony** uses only those few sites, and can be misled by long
+    branches
+-   The root's conditional likelihoods give **ancestral base probabilities**, and the
+    **pulley principle** lets us reroot to reconstruct any ancestor
+:::
+:::
+
+::: {.notes}
+19:00-19:45
+
+If short on time, cut to the last two bullets.
+:::
+
+## In the exercise
+
+::: {.incremental style="font-size: 85%;"}
+1.  `get_tip_names`: Loop over a tree's list of nodes
+2.  `number_of_unrooted_trees`: Count tree space
+3.  `tip_likelihoods`, `combine_children`, `get_root_likelihoods`,
+    `site_log_likelihood`: Build the pruning algorithm, one rule at a time
+4.  Compare three trees for four SARS-CoV-2 genomes
+5.  `root_state_probabilities` and `reconstruct_ancestor`: Reconstruct the
+    ancestors of SARS-CoV-2 lineages
+:::
+
+. . .
+
+::: {.callout-tip}
+## Watch for
+Does rerooting the tree change its likelihood?
+:::
+
+::: {.notes}
+19:45-20:30
+
+It shouldn't (the pulley principle), and the notebook checks. Hand off to the
+notebook here. Remind them the first cell needs their name.
+:::
+
+## Exercise
+
+1.  Log into [molab](https://molab.marimo.io/)
+2.  [Open the exercise in molab](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-08-phylogenetics/phylogenetics.py)
+3.  Click "Fork" button
+
+# References
+
+::: {#refs}
+:::
+
+## Acknowledgements
+
+I drafted and iterated on these slides in collaboration with
+Anthropic's Claude (Opus 5.5 model).
