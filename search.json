@@ -1554,7 +1554,7 @@
     "href": "slides/topic-10-phylogenetics.html#representing-trees-in-computers",
     "title": "Phylogenetics",
     "section": "Representing trees in computers",
-    "text": "Representing trees in computers\nNewick format: Parentheses hold descendants; numbers after colons are branch lengths\n((Human:0.1,Chimp:0.1)Primates:0.3,(Mouse:0.2,Rat:0.2)Rodents:0.2)Root;\n\n\n\n\n\n\n\nIndex\nName\nChildren\nLength\n\n\n\n\n0\nHuman\n\n0.1\n\n\n1\nChimp\n\n0.1\n\n\n2\nPrimates\n0, 1\n0.3\n\n\n3\nMouse\n\n0.2\n\n\n4\nRat\n\n0.2\n\n\n5\nRodents\n3, 4\n0.2\n\n\n6\nRoot\n2, 5\n\n\n\n\n\n\n\nIn the exercise, we represent a tree as a list of nodes in postorder\nEvery node comes after its children, so the root is last\n\n\n\n2:30-3:45\nThis is how many phylogenetics programs store trees internally. Postorder is exactly the order we need for the likelihood calculation: a single loop over the list visits children before parents. Challenge 1 is a warm-up that loops over this list."
+    "text": "Representing trees in computers\nNewick format: Parentheses hold descendants; numbers after colons are branch lengths\n((Human:0.1,Chimp:0.1)Primates:0.3,(Mouse:0.2,Rat:0.2)Rodents:0.2)Root;"
   },
   {
     "objectID": "slides/topic-10-phylogenetics.html#fun-factoid",
@@ -1562,6 +1562,13 @@
     "title": "Phylogenetics",
     "section": "Fun factoid",
     "text": "Fun factoid\n\nNewick format is named after Newick’s seafood restaurant in Dover, NH, where a committee of phylogeneticists met in 1986 to agree on the format\n\n\n\n\n\nNewick’s restaurant"
+  },
+  {
+    "objectID": "slides/topic-10-phylogenetics.html#representing-trees-in-computers-1",
+    "href": "slides/topic-10-phylogenetics.html#representing-trees-in-computers-1",
+    "title": "Phylogenetics",
+    "section": "Representing trees in computers",
+    "text": "Representing trees in computers\n\nIn the exercise, we represent a tree as a list of nodes in postorder\nEvery node comes after its children, so the root is last\n\n\n\n\n\n\n\nIndex\nName\nChildren\nLength\n\n\n\n\n0\nHuman\n\n0.1\n\n\n1\nChimp\n\n0.1\n\n\n2\nPrimates\n0, 1\n0.3\n\n\n3\nMouse\n\n0.2\n\n\n4\nRat\n\n0.2\n\n\n5\nRodents\n3, 4\n0.2\n\n\n6\nRoot\n2, 5\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n2:30-3:45\nThis is how many phylogenetics programs store trees internally. Postorder is exactly the order we need for the likelihood calculation: a single loop over the list visits children before parents. Challenge 1 is a warm-up that loops over this list."
   },
   {
     "objectID": "slides/topic-10-phylogenetics.html#tree-space-is-enormous",
@@ -1575,14 +1582,14 @@
     "href": "slides/topic-10-phylogenetics.html#we-dont-have-data-from-the-ancestors",
     "title": "Phylogenetics",
     "section": "We don’t have data from the ancestors",
-    "text": "We don’t have data from the ancestors\nFor two sequences, each site needed one lookup. E.g., \\(P_{A \\rightarrow G}(t)\\)\n\nOn a tree, we have to add up over every possible combination of bases at the internal nodes\n\n\n\nAn unrooted tree of 24 genomes has 22 internal nodes:\n\\(4^{22} \\approx 1.8 \\times 10^{13}\\) combinations, for every site\n\n\n\n\n\n\nQuestion: Is there a way to avoid repeating work?\n\n\n\n\n5:15-6:15\nLet them think for a moment. The answer is to work from the tips toward the root, so that each subtree’s calculation is done only once."
+    "text": "We don’t have data from the ancestors\n\nFor two sequences, each site needed one lookup. E.g., \\(P_{A \\rightarrow G}(t)\\)\n\n\n\n\n\nOn a tree, we have to add up over every possible combination of bases at the internal nodes\nAn unrooted tree of 24 genomes has 22 internal nodes:\n\\(4^{22} \\approx 1.8 \\times 10^{13}\\) combinations, for every site\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nQuestion: Is there a way to avoid repeating work?\n\n\n\n\n5:15-6:15\nLet them think for a moment. The answer is to work from the tips toward the root, so that each subtree’s calculation is done only once."
   },
   {
     "objectID": "slides/topic-10-phylogenetics.html#felsensteins-pruning-algorithm",
     "href": "slides/topic-10-phylogenetics.html#felsensteins-pruning-algorithm",
     "title": "Phylogenetics",
     "section": "Felsenstein’s pruning algorithm1",
-    "text": "Felsenstein’s pruning algorithm1\nFor each node, from the tips to the root, calculate its conditional likelihoods: \\(L_{\\text{node}}(i)\\) = probability of the data at the tips that descend from the node, if the node has base \\(i\\)\nIn doing this, the pruning algorithm follows 3 rules\n\n6:15-8:15\nSoftware documentation (e.g., BEAGLE, used by BEAST and MrBayes) often calls these “partial likelihoods” or “partials”; same thing. Rule 2 is the heart: “the probability of the child’s data, if the parent has base i” is a sum over what the child could have, and children evolve independently, so we multiply over children. Postorder guarantees children are done before parents. Challenges 4 through 7 build these three rules one at a time.\n\nFelsenstein (1981)"
+    "text": "Felsenstein’s pruning algorithm1\nFor each node, from the tips to the root, calculate its conditional likelihoods: \\(L_{\\text{node}}(i)\\) = probability of the data at the tips that descend from the node, if the node has base \\(i\\)\n\n\n\n\n\n\n\n\n\n\nIn doing this, the pruning algorithm follows 3 rules\n\n6:15-8:15\nSoftware documentation (e.g., BEAGLE, used by BEAST and MrBayes) often calls these “partial likelihoods” or “partials”; same thing. Rule 2 is the heart: “the probability of the child’s data, if the parent has base i” is a sum over what the child could have, and children evolve independently, so we multiply over children. Postorder guarantees children are done before parents. Challenges 4 through 7 build these three rules one at a time.\n\n\nFelsenstein (1981)"
   },
   {
     "objectID": "slides/topic-10-phylogenetics.html#pruning-algorithm-rule-1",
@@ -1613,11 +1620,11 @@
     "text": "Pruning, step by step\n\n\n    \n      \n      \n        ◀ Previous\n        ▶ Play\n        Next ▶\n      \n    \n    \n    \n\n\nStep through with Next (or press Play). Point out that the table on the right is the node_likelihoods list in the students’ get_root_likelihoods function, filled in one row per loop iteration, in postorder. The notebook has the same animation, with menus to change each tip’s base (e.g., make Chimp a gap)."
   },
   {
-    "objectID": "slides/topic-10-phylogenetics.html#pruning-one-site",
-    "href": "slides/topic-10-phylogenetics.html#pruning-one-site",
+    "objectID": "slides/topic-10-phylogenetics.html#pruning-algo-for-one-site",
+    "href": "slides/topic-10-phylogenetics.html#pruning-algo-for-one-site",
     "title": "Phylogenetics",
-    "section": "Pruning one site",
-    "text": "Pruning one site\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNode\n\\(L(\\texttt{A})\\)\n\\(L(\\texttt{C})\\)\n\\(L(\\texttt{G})\\)\n\\(L(\\texttt{T})\\)\n\n\n\n\nHuman, Chimp\n1\n0\n0\n0\n\n\nMouse, Rat\n0\n0\n1\n0\n\n\nPrimates\n0.8215\n0.0010\n0.0010\n0.0010\n\n\nRodents\n0.0034\n0.0034\n0.6797\n0.0034\n\n\nRoot\n0.0266\n0.0029\n0.0385\n0.0029\n\n\n\n\n\n\\(L_{\\text{site}} = \\frac{1}{4}(0.0266 + 0.0029 + 0.0385 + 0.0029) = 0.0177\\)\n\n\n8:15-9:45\nPrimates, A: each child has P_AA(0.1) = 0.906, so 0.906 squared = 0.82. The root slightly favors G because the Rodents’ branch (0.2) is shorter than the Primates’ branch (0.3). This example tree is the one in the notebook; these numbers are in its tests."
+    "section": "Pruning algo for one site",
+    "text": "Pruning algo for one site\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNode\n\\(L(\\texttt{A})\\)\n\\(L(\\texttt{C})\\)\n\\(L(\\texttt{G})\\)\n\\(L(\\texttt{T})\\)\n\n\n\n\nHuman, Chimp\n1\n0\n0\n0\n\n\nMouse, Rat\n0\n0\n1\n0\n\n\nPrimates\n0.8215\n0.0010\n0.0010\n0.0010\n\n\nRodents\n0.0034\n0.0034\n0.6797\n0.0034\n\n\nRoot\n0.0266\n0.0029\n0.0385\n0.0029\n\n\n\n\n\n\\(L_{\\text{site}} = \\frac{1}{4}(0.0266 + 0.0029 + 0.0385 + 0.0029) = 0.0177\\)\n\n\n8:15-9:45\nPrimates, A: each child has P_AA(0.1) = 0.906, so 0.906 squared = 0.82. The root slightly favors G because the Rodents’ branch (0.2) is shorter than the Primates’ branch (0.3). This example tree is the one in the notebook; these numbers are in its tests."
   },
   {
     "objectID": "slides/topic-10-phylogenetics.html#two-shortcuts",
@@ -1645,7 +1652,7 @@
     "href": "slides/topic-10-phylogenetics.html#parsimony",
     "title": "Phylogenetics",
     "section": "Parsimony",
-    "text": "Parsimony\n\n\nMaximum parsimony: Choose the tree that needs the fewest changes\nFast, and intuitive: For the four genomes in the exercise, it would use only the “two pairs” sites\n\n3 favor Tree 1 and 1 favors Tree 2\nAll other sites are ignored!\n\nBut it ignores branch lengths and multiple hits, so it can be positively misleading: Long branches attract each other1\nStill useful when branches are very short: UShER2 uses parsimony to place millions of SARS-CoV-2 genomes on a tree\n\n\n\n13:15-14:30\nLong-branch attraction: two long branches pick up the same changes by chance (multiple hits), and parsimony mistakes those for shared history. Likelihood models multiple hits, so it doesn’t fall into the same trap (when the model is reasonable). With SARS-CoV-2, branches are so short that multiple hits are rare, so parsimony works well, and it’s fast enough to handle the millions of genomes sequenced during the pandemic. We won’t code parsimony.\n\nFelsenstein (1978a)Turakhia et al. (2021)"
+    "text": "Parsimony\n\n\nMaximum parsimony: Choose the tree that needs the fewest changes\nFast, and intuitive: For the four genomes in the exercise, it would use only the “two pairs” sites\n\n3 favor Tree 1 and 1 favors Tree 2\nAll other sites are ignored!\n\nIt ignores branch lengths and multiple hits, so it can be positively misleading: Long branches attract each other1\nStill useful when branches are very short: UShER2 uses parsimony to place millions of SARS-CoV-2 genomes on a tree\n\n\n\n13:15-14:30\nLong-branch attraction: two long branches pick up the same changes by chance (multiple hits), and parsimony mistakes those for shared history. Likelihood models multiple hits, so it doesn’t fall into the same trap (when the model is reasonable). With SARS-CoV-2, branches are so short that multiple hits are rare, so parsimony works well, and it’s fast enough to handle the millions of genomes sequenced during the pandemic. We won’t code parsimony.\n\nFelsenstein (1978a)Turakhia et al. (2021)"
   },
   {
     "objectID": "slides/topic-10-phylogenetics.html#distance-based-algorithms",
