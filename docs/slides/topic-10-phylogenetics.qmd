@@ -454,7 +454,50 @@ Parentheses hold descendants; numbers after colons are branch lengths
 ((Human:0.1,Chimp:0.1)Primates:0.3,(Mouse:0.2,Rat:0.2)Rodents:0.2)Root;
 ```
 
-. . .
+```{python}
+#| label: tree-vs-newick
+#| echo: false
+#| eval: true
+#| fig-width: 7
+#| fig-height: 4
+#| fig-align: center
+
+_tree = parse_newick(
+    "((Human:0.1,Chimp:0.1)Primates:0.3,(Mouse:0.2,Rat:0.2)Rodents:0.2)Root;"
+)
+_figure, _axes = plt.subplots(figsize = (6, 4))
+draw_tree(_axes, _tree)
+plt.show()
+```
+
+
+## Fun factoid
+
+::: {style="font-size: 80%;"}
+[Newick format](https://en.wikipedia.org/wiki/Newick_format)
+is named after Newick's seafood restaurant in Dover, NH, where a committee of
+phylogeneticists met in 1986 to agree on the format
+:::
+
+::: {style="text-align: center;"}
+![
+    [Newick's restaurant](https://www.i95exitguide.com/highway-gourmet/newicks-seafood-restaurant-newington-nh/)
+](
+    https://www.i95exitguide.com/wp-content/uploads/2014/01/960x480-newicks-dover-new-hampshire.png
+){
+    width="80%"
+    fig-align="center"
+    fig-alt="Picture of Newick's restaurant"
+}
+:::
+
+## Representing trees in computers
+
+::: {style="font-size: 85%;"}
+In the exercise, we represent a tree as a **list of nodes** in ***postorder***
+
+Every node comes **after** its children, so the root is **last**
+:::
 
 ::: {.columns}
 ::: {.column width="50%"}
@@ -472,11 +515,20 @@ Parentheses hold descendants; numbers after colons are branch lengths
 :::
 
 ::: {.column width="50%"}
-::: {style="font-size: 85%;"}
-In the exercise, we represent a tree as a **list of nodes** in ***postorder***
+```{python}
+#| label: tree-as-list
+#| echo: false
+#| eval: true
+#| fig-width: 6
+#| fig-height: 4
 
-Every node comes **after** its children, so the root is **last**
-:::
+_tree = parse_newick(
+    "((Human:0.1,Chimp:0.1)Primates:0.3,(Mouse:0.2,Rat:0.2)Rodents:0.2)Root;"
+)
+_figure, _axes = plt.subplots(figsize = (5.5, 4))
+draw_tree(_axes, _tree)
+plt.show()
+```
 :::
 :::
 
@@ -487,26 +539,6 @@ This is how many phylogenetics programs store trees internally. Postorder is
 exactly the order we need for the likelihood calculation: a single loop over
 the list visits children before parents. Challenge 1 is a warm-up that loops
 over this list.
-:::
-
-## Fun factoid
-
-::: {style="font-size: 85%;"}
-[Newick format](https://en.wikipedia.org/wiki/Newick_format)
-is named after Newick's seafood restaurant in Dover, NH, where a committee of
-phylogeneticists met in 1986 to agree on the format
-:::
-
-::: {style="text-align: center;"}
-![
-    [Newick's restaurant](https://www.i95exitguide.com/highway-gourmet/newicks-seafood-restaurant-newington-nh/)
-](
-    https://www.i95exitguide.com/wp-content/uploads/2014/01/960x480-newicks-dover-new-hampshire.png
-){
-    width="80%"
-    fig-align="center"
-    fig-alt="Picture of Newick's restaurant"
-}
 :::
 
 # How many trees? {background-color="#1b3a5c"}
@@ -548,20 +580,41 @@ number_of_unrooted_trees in Challenge 2.
 
 ## We don't have data from the ancestors
 
+::: {style="font-size: 90%;"}
 For two sequences, each site needed one lookup. *E.g.*,
 $P_{A \rightarrow G}(t)$
+:::
 
 . . .
 
+::: {.columns}
+::: {.column width="50%"}
+::: {style="font-size: 80%;"}
 On a tree, we have to **add up** over every possible combination of bases at the
 internal nodes
 
-. . .
-
-::: {style="font-size: 90%;"}
 An unrooted tree of 24 genomes has 22 internal nodes:
 
 $4^{22} \approx 1.8 \times 10^{13}$ combinations, for **every site**
+:::
+:::
+
+::: {.column width="50%"}
+```{python}
+#| label: tree-ancestors
+#| echo: false
+#| eval: true
+#| fig-width: 6
+#| fig-height: 4
+
+_tree = parse_newick(
+    "((A Human:0.1,A Chimp:0.1)Primates:0.3,(G Mouse:0.2,G Rat:0.2)Rodents:0.2)Root;"
+)
+_figure, _axes = plt.subplots(figsize = (5.5, 4))
+draw_tree(_axes, _tree)
+plt.show()
+```
+:::
 :::
 
 . . .
@@ -582,6 +635,24 @@ root, so that each subtree's calculation is done only once.
 For each node, from the tips to the root, calculate its ***conditional
 likelihoods***: $L_{\text{node}}(i)$ = probability of the data at the tips that
 descend from the node, **if** the node has base $i$
+
+```{python}
+#| label: tree-prune
+#| echo: false
+#| eval: true
+#| fig-width: 6
+#| fig-height: 3
+#| fig-align: center
+
+_tree = parse_newick(
+    "((A Human:0.1,A Chimp:0.1)Primates:0.3,(G Mouse:0.2,G Rat:0.2)Rodents:0.2)Root;"
+)
+_figure, _axes = plt.subplots(figsize = (6, 3))
+draw_tree(_axes, _tree)
+plt.show()
+```
+
+. . .
 
 In doing this, the pruning algorithm follows ***3 rules***
 
@@ -697,7 +768,7 @@ in one row per loop iteration, in postorder. The notebook has the same
 animation, with menus to change each tip's base (e.g., make Chimp a gap).
 :::
 
-## Pruning one site
+## Pruning algo for one site
 
 ```{python}
 #| label: tree-like
@@ -829,13 +900,13 @@ with a slider.
 
 ## Parsimony
 
-::: {.incremental style="font-size: 85%;"}
+::: {.incremental style="font-size: 80%;"}
 -   ***Maximum parsimony***: Choose the tree that needs the **fewest changes**
 -   Fast, and intuitive: For the four genomes in the exercise, it would use
     **only** the "two pairs" sites
     -   3 favor Tree 1 and 1 favors Tree 2
     -   All other sites are ignored!
--   But it ignores branch lengths and multiple hits, so it can be
+-   It ignores branch lengths and multiple hits, so it can be
     **positively misleading**: Long branches attract each other^[@Felsenstein1978lba]
 -   Still useful when branches are **very short**: UShER^[@Turakhia2021] uses
     parsimony to place millions of SARS-CoV-2 genomes on a tree
