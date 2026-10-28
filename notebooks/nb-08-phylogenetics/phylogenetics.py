@@ -1067,7 +1067,9 @@ def _():
     for _base, _expected in _tip_likelihoods_test_cases:
         try:
             _found = tip_likelihoods(_base)
-            _ok = np.allclose(_found, _expected)
+            # Check the shape first, so that a scalar (e.g., 1.0) can't pass by
+            # broadcasting in np.allclose
+            _ok = (np.shape(_found) == (4,)) and np.allclose(_found, _expected)
         except Exception as _error:
             _found = f"an error ({type(_error).__name__}: {_error})"
             _ok = False
