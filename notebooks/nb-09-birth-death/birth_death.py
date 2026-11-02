@@ -2235,8 +2235,9 @@ def _(mo):
         the present; by simulating trees with missing species, we can ask how many
         species a clade would need to have for a model to explain its tree
 
-    In the next exercise, we will see that the same models, with "birth" as
-    infection and "death" as recovery, describe the spread of an epidemic!
+    Birth-death models are used across many fields of biology. For example, the
+    same models, with "birth" as infection and "death" as recovery, describe
+    the spread of an epidemic!
     """)
     return
 
