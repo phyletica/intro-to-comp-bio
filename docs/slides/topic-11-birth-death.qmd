@@ -856,7 +856,15 @@ signal of extinction in a tree of living species, and it is subtle. Challenge 7.
 
 ## *Cyrtodactylus*
 
-![](../images/cyrtodactylus-lekaguli.jpg){.absolute top="10%" left="0" width="100%" style="max-width: none;"}
+::: {style="text-align: center;"}
+![[*Cyrtodactylus lekaguli*](https://commons.wikimedia.org/wiki/File:Cyrtodactylus_lekaguli.jpg)](
+    ../images/cyrtodactylus-lekaguli.jpg
+){
+    width="75%"
+    fig-align="center"
+    fig-alt="Picture of *Cyrtodactylus lekaguli* gecko"
+}
+:::
 
 ::: footer
 [*Cyrtodactylus lekaguli*](https://commons.wikimedia.org/wiki/File:Cyrtodactylus_lekaguli.jpg)
