@@ -1,0 +1,1070 @@
+---
+title: "Birth-death models"
+subtitle: "How lineages multiply and vanish"
+# author: "Jamie Oaks"
+institute: "BIOL 5/6800 &mdash; Intro to Comp Bio"
+format:
+  revealjs:
+    slide-number: c/t
+    incremental: false
+    code-line-numbers: false
+    smaller: false
+    center-title-slide: true
+    history: false
+    include-in-header:
+      - text: |
+          <style>
+          .reveal p > img,
+          .reveal figure {
+            margin-bottom: 0px !important;
+            padding-bottom: 0px !important;
+          }
+          </style>
+metadata-files:
+  - _metadata.yml
+bibliography: ../references.bib
+---
+
+```{python}
+#| label: setup
+#| echo: false
+#| eval: true
+
+import math
+import random
+import re
+
+import matplotlib.pyplot as plt
+
+GRAY = "#b0b0b0"
+RED = "firebrick"
+
+
+def simulate_pure_birth(birth_rate, max_time, rng):
+    """Number of lineages through time under pure birth, from 1 lineage."""
+    lineages, clock = 1, 0.0
+    times, counts = [0.0], [1]
+    while True:
+        clock += rng.expovariate(lineages * birth_rate)
+        if clock > max_time:
+            break
+        lineages += 1
+        times.append(clock)
+        counts.append(lineages)
+    times.append(max_time)
+    counts.append(lineages)
+    return times, counts
+
+
+def simulate_birth_death(birth_rate, death_rate, max_time, rng):
+    """Number of lineages through time under birth-death, from 1 lineage."""
+    lineages, clock = 1, 0.0
+    times, counts = [0.0], [1]
+    while lineages > 0:
+        clock += rng.expovariate(lineages * (birth_rate + death_rate))
+        if clock > max_time:
+            break
+        if rng.random() < birth_rate / (birth_rate + death_rate):
+            lineages += 1
+        else:
+            lineages -= 1
+        times.append(clock)
+        counts.append(lineages)
+    times.append(max_time)
+    counts.append(lineages)
+    return times, counts
+
+
+def simulate_history(birth_rate, death_rate, max_time, rng):
+    """Simulate a complete tree from the root (2 lineages), keeping its history.
+
+    Trees where either side of the root dies out are thrown out and redone.
+    Each lineage is a branch, stored by index; lineage 0 is the root.
+    """
+    while True:
+        start, end = [0.0, 0.0, 0.0], [0.0, None, None]
+        children, extinct = [[1, 2], [], []], [False, False, False]
+        living = [1, 2]
+        events = []  # (time, "split" or "extinction")
+        clock = 0.0
+        while living:
+            clock += rng.expovariate(len(living) * (birth_rate + death_rate))
+            if clock > max_time:
+                break
+            lineage = living.pop(rng.randrange(len(living)))
+            end[lineage] = clock
+            if rng.random() < birth_rate / (birth_rate + death_rate):
+                for _ in range(2):
+                    start.append(clock)
+                    end.append(None)
+                    children.append([])
+                    extinct.append(False)
+                    children[lineage].append(len(start) - 1)
+                    living.append(len(start) - 1)
+                events.append((clock, "split"))
+            else:
+                extinct[lineage] = True
+                events.append((clock, "extinction"))
+        for lineage in living:
+            end[lineage] = max_time
+        has_living = [False] * len(start)
+        for i in reversed(range(len(start))):
+            if children[i]:
+                has_living[i] = any(has_living[c] for c in children[i])
+            else:
+                has_living[i] = not extinct[i]
+        if has_living[1] and has_living[2]:
+            return {"start": start, "end": end, "children": children,
+                    "extinct": extinct, "events": events,
+                    "max_time": max_time}
+
+
+def history_to_tree(history, now = None):
+    """Convert a history into a list of nodes in postorder, as of time `now`."""
+    if now is None:
+        now = history["max_time"]
+    start, end = history["start"], history["end"]
+    order, stack = [], [(0, False)]
+    while stack:
+        index, done = stack.pop()
+        if done:
+            order.append(index)
+        else:
+            stack.append((index, True))
+            if end[index] <= now:
+                for child in reversed(history["children"][index]):
+                    stack.append((child, False))
+    new_index, tree = {}, []
+    for index in order:
+        kids = history["children"][index] if end[index] <= now else []
+        new_index[index] = len(tree)
+        tree.append({
+            "name": f"L{index}",
+            "children": [new_index[c] for c in kids],
+            "length": min(end[index], now) - start[index],
+            "extinct": history["extinct"][index] and end[index] <= now,
+        })
+    tree[-1]["length"] = None
+    return tree
+
+
+def get_node_times(tree):
+    parent = [None] * len(tree)
+    for i, node in enumerate(tree):
+        for c in node["children"]:
+            parent[c] = i
+    times = [0.0] * len(tree)
+    for i in reversed(range(len(tree) - 1)):
+        times[i] = times[parent[i]] + tree[i]["length"]
+    return times
+
+
+def get_branching_times(tree):
+    times = get_node_times(tree)
+    return sorted(times[i] for i, node in enumerate(tree) if node["children"])
+
+
+def prune_tips(tree, keep):
+    pruned, new_index = [], [None] * len(tree)
+    for index, node in enumerate(tree):
+        if not node["children"]:
+            if keep(node):
+                pruned.append(dict(node))
+                new_index[index] = len(pruned) - 1
+            continue
+        kept = [new_index[c] for c in node["children"] if new_index[c] is not None]
+        if not kept:
+            continue
+        if len(kept) == 1:
+            only = pruned[kept[0]]
+            only["length"] = None if node["length"] is None else only["length"] + node["length"]
+            new_index[index] = kept[0]
+            continue
+        new_node = dict(node)
+        new_node["children"] = kept
+        pruned.append(new_node)
+        new_index[index] = len(pruned) - 1
+    pruned[-1]["length"] = None
+    return pruned
+
+
+def is_extant(node):
+    return not node.get("extinct", False)
+
+
+def draw_tree(axes, tree, title = "", y_positions = None, max_time = None,
+              fontsize = 16, linewidth = 2, show_extinctions = True):
+    """Draw a tree with time running left to right; dead lineages in gray."""
+    x = get_node_times(tree)
+    dead = [False] * len(tree)
+    y = [0.0] * len(tree)
+    next_y = 0
+    for i, node in enumerate(tree):
+        if not node["children"]:
+            dead[i] = node.get("extinct", False)
+            if y_positions is None:
+                y[i] = next_y
+                next_y += 1
+            else:
+                y[i] = y_positions[node["name"]]
+        else:
+            dead[i] = all(dead[c] for c in node["children"])
+            ys = [y[c] for c in node["children"]]
+            y[i] = (min(ys) + max(ys)) / 2
+    parent = [None] * len(tree)
+    for i, node in enumerate(tree):
+        for c in node["children"]:
+            parent[c] = i
+    for i, node in enumerate(tree):
+        color = GRAY if dead[i] else "black"
+        if parent[i] is not None:
+            axes.plot([x[parent[i]], x[i]], [y[i], y[i]], color = color,
+                      lw = linewidth, solid_capstyle = "butt")
+        if node["children"]:
+            ys = [y[c] for c in node["children"]]
+            axes.plot([x[i], x[i]], [min(ys), max(ys)], color = color,
+                      lw = linewidth)
+        elif node.get("extinct", False) and show_extinctions:
+            axes.plot(x[i], y[i], marker = "x", color = GRAY, ms = 8, mew = 2.5)
+    rows = len(y_positions) if y_positions is not None else next_y
+    right = max_time if max_time is not None else max(x)
+    axes.set_xlim(-0.03 * right, 1.03 * right)
+    axes.set_ylim(-0.8, rows - 0.2)
+    axes.invert_yaxis()
+    axes.set_yticks([])
+    for side in ["left", "right", "top"]:
+        axes.spines[side].set_visible(False)
+    axes.tick_params(labelsize = fontsize * 0.8)
+    axes.set_xlabel("Time since the root", fontsize = fontsize)
+    axes.set_title(title, fontsize = fontsize)
+
+
+def plot_ltt(axes, branching_times, end_time, **style):
+    times = list(branching_times) + [end_time]
+    counts = list(range(2, len(branching_times) + 2))
+    counts.append(counts[-1])
+    axes.step(times, counts, where = "post", **style)
+
+
+def draw_growth_frame(history, frame):
+    """Frame 0 is the root; frame k shows the tree after the k-th event.
+
+    After the last event come two more frames: the complete tree at the
+    present, and the reconstructed tree.
+    """
+    events = history["events"]
+    max_time = history["max_time"]
+    final_tree = history_to_tree(history)
+    y_positions = {}
+    row = 0
+    for node in final_tree:
+        if not node["children"]:
+            y_positions[node["name"]] = row
+            row += 1
+
+    figure, (tree_axes, count_axes) = plt.subplots(
+        1, 2, figsize = (11, 4.8), gridspec_kw = {"width_ratios": [3, 2]})
+    reconstructed = frame == len(events) + 2
+    if reconstructed:
+        tree = prune_tips(final_tree, is_extant)
+        draw_tree(tree_axes, tree, max_time = max_time,
+                  title = "The reconstructed tree: what we can see")
+        message = "Only the lineages alive today"
+    else:
+        now = 0.0 if frame == 0 else (
+            max_time if frame > len(events) else events[frame - 1][0])
+        tree = history_to_tree(history, now)
+        # Lineages still growing (alive at `now`) keep their final y position
+        positions = {}
+        for node in tree:
+            if not node["children"]:
+                positions[node["name"]] = y_positions.get(node["name"])
+        # A lineage that later splits sits halfway between its final tips
+        layout = {}
+        for node in final_tree:
+            if not node["children"]:
+                layout[node["name"]] = y_positions[node["name"]]
+            else:
+                ys = [layout[final_tree[c]["name"]] for c in node["children"]]
+                layout[node["name"]] = (min(ys) + max(ys)) / 2
+        for name in positions:
+            positions[name] = layout[name]
+        draw_tree(tree_axes, tree, y_positions = positions, max_time = max_time,
+                  title = "The complete tree")
+        tree_axes.set_ylim(-0.8, len(y_positions) - 0.2)
+        tree_axes.invert_yaxis()
+        if frame > 0:
+            tree_axes.axvline(now, color = RED, lw = 1, ls = ":")
+        if frame == 0:
+            message = "Start: 2 lineages at the root"
+        elif frame > len(events):
+            message = "The present"
+        else:
+            kind = events[frame - 1][1]
+            message = f"Event {frame}: {'a split' if kind == 'split' else 'an extinction'}"
+
+    # Number of lineages through time (complete tree), up to now
+    times, counts, lineages = [0.0], [2], 2
+    last = len(events) if frame > len(events) else frame
+    for time, kind in events[:last]:
+        lineages += 1 if kind == "split" else -1
+        times.append(time)
+        counts.append(lineages)
+    end = max_time if frame > len(events) else times[-1]
+    times.append(end)
+    counts.append(lineages)
+    count_axes.step(times, counts, where = "post", color = "black", lw = 2.5)
+    count_axes.set_xlim(-0.03 * max_time, 1.03 * max_time)
+    count_axes.set_ylim(0, max(len(y_positions) - 4, 12))
+    count_axes.set_xlabel("Time since the root", fontsize = 16)
+    count_axes.set_ylabel("Living lineages", fontsize = 16)
+    count_axes.tick_params(labelsize = 13)
+    count_axes.set_title(message, fontsize = 16, color = RED)
+    for side in ["right", "top"]:
+        count_axes.spines[side].set_visible(False)
+    figure.tight_layout()
+    return figure
+
+
+def growth_animation_html(history, seconds_per_step = 1.2):
+    """An HTML player that steps through `draw_growth_frame`."""
+    import base64
+    import io
+    import json
+
+    frames = []
+    for frame in range(len(history["events"]) + 3):
+        figure = draw_growth_frame(history, frame)
+        buffer = io.BytesIO()
+        figure.savefig(buffer, format = "png", dpi = 90)
+        plt.close(figure)
+        frames.append("data:image/png;base64,"
+                      + base64.b64encode(buffer.getvalue()).decode())
+    milliseconds = int(1000 * seconds_per_step)
+    return f"""
+    <div style="font-family: sans-serif; text-align: center;">
+      <img id="growth-frame" src="{frames[0]}" style="max-width: 100%; max-height: 520px;">
+      <div style="margin-top: 6px;">
+        <button id="growth-previous">&#9664; Previous</button>
+        <button id="growth-play">&#9654; Play</button>
+        <button id="growth-next">Next &#9654;</button>
+      </div>
+    </div>
+    <script>
+      {{
+      const frames = {json.dumps(frames)};
+      let index = 0;
+      let timer = null;
+      const image = document.getElementById("growth-frame");
+      const play = document.getElementById("growth-play");
+      function show(i) {{
+        index = (i + frames.length) % frames.length;
+        image.src = frames[index];
+      }}
+      function stop() {{
+        clearInterval(timer);
+        timer = null;
+        play.innerHTML = "&#9654; Play";
+      }}
+      document.getElementById("growth-previous").onclick = () => {{ stop(); show(index - 1); }};
+      document.getElementById("growth-next").onclick = () => {{ stop(); show(index + 1); }};
+      play.onclick = () => {{
+        if (timer) {{ stop(); return; }}
+        if (index === frames.length - 1) {{ show(0); }}
+        play.innerHTML = "&#10074;&#10074; Pause";
+        timer = setInterval(() => {{
+          if (index === frames.length - 1) {{ stop(); return; }}
+          show(index + 1);
+        }}, {milliseconds});
+      }};
+      }}
+    </script>
+    """
+
+
+def read_nexus_tree(path):
+    """Read the first tree in a NEXUS file (dropping [comments])."""
+    text = re.sub(r"\[.*?\]", "", open(path).read(), flags = re.S)
+    newick = re.search(r"^\s*tree\s+[^=]+=\s*(.*?);", text,
+                       flags = re.S | re.I | re.M).group(1)
+    nodes, position = [], 0
+
+    def read_name_and_length():
+        nonlocal position
+        start = position
+        while position < len(newick) and newick[position] not in ":,()":
+            position += 1
+        name = newick[start:position].strip().strip("'\"")
+        length = None
+        if position < len(newick) and newick[position] == ":":
+            position += 1
+            start = position
+            while position < len(newick) and newick[position] not in ",()":
+                position += 1
+            length = float(newick[start:position])
+        return name, length
+
+    def read_subtree():
+        nonlocal position
+        children = []
+        if newick[position] == "(":
+            position += 1
+            while True:
+                children.append(read_subtree())
+                position += 1
+                if newick[position - 1] == ")":
+                    break
+        name, length = read_name_and_length()
+        nodes.append({"name": name, "children": children, "length": length})
+        return len(nodes) - 1
+
+    read_subtree()
+    nodes[-1]["length"] = None
+    return nodes
+
+
+GECKO_TREE = prune_tips(
+    read_nexus_tree("../../notebooks/data/Cyrtodactylus-beast-tree.nex"),
+    lambda node: node["name"][0].islower(),
+)
+GECKO_TIPS = len(GECKO_TREE) // 2 + 1
+GECKO_AGE = max(get_node_times(GECKO_TREE))
+```
+
+## Last time
+
+We used a **tree** to learn about how **sequences** evolve
+
+. . .
+
+But where does the tree come from?
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+Today: What process **grows** a tree, and what can a tree of living species
+tell us about that process?
+:::
+
+::: {.notes}
+0:00-1:00
+
+Flip the question around: last time the tree was fixed and sequences evolved
+along it; today the tree itself is the outcome of a random process. Next time,
+the same models describe the spread of an epidemic.
+:::
+
+# Lineages that split {background-color="#1b3a5c"}
+
+## Birth-death (BD) models
+
+Every branch of a tree of species is a ***lineage***
+
+::: {.incremental style="font-size: 90%;"}
+-   Each lineage splits in two (***speciation***, or "birth") at rate $\lambda$
+-   Each lineage dies out (***extinction***, or "death") at rate $\mu$
+-   Rates are per lineage, per unit of time (*e.g.*, per million years)
+-   When $\mu = 0$, it's the ***pure-birth*** (or ***Yule***) model^[@Yule1925]
+:::
+
+. . .
+
+::: {style="font-size: 85%;"}
+The same models describe anything that multiplies and dies
+
+-   Cells in a tumor, individuals in a population, **infections in an
+    epidemic**
+:::
+
+::: {.notes}
+1:00-2:30
+
+lambda = birth (speciation) rate, mu = death (extinction) rate. Both are
+constant here, and every lineage has the same rates. When mu = 0, this is the
+pure-birth, or Yule, model (Yule 1925, modeling the number of species per
+genus).
+:::
+
+## One lineage is like one site
+
+In the substitution models exercise, a site waited an **exponential** time
+before its next change
+
+. . .
+
+A lineage waits an exponential time, with rate $\lambda$, before it splits
+
+. . .
+
+With $n$ lineages, each with speciation rate $\lambda$ and extinction rate $\mu$:
+
+$$
+\text{total rate} = n\lambda + n\mu = n(\lambda + \mu)
+$$
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+The more lineages there are, the faster new ones appear!
+:::
+
+::: {.notes}
+2:30-4:00
+
+Rates add: if each lineage splits lambda times per unit of time on average,
+n lineages split n * lambda times. Because the exponential is memoryless, after
+every event we just draw a new waiting time from the new total rate.
+:::
+
+## The Gillespie algorithm^[@Gillespie1977]
+
+Simulate one event at a time:
+
+::: {.incremental}
+1.  Calculate the **total rate**: $n(\lambda + \mu)$
+2.  Draw an exponential **waiting time** using the total rate, and move the
+    clock forward
+3.  Choose **which event** happened:
+    -   A split, with probability $\frac{\lambda}{\lambda + \mu}$ ($n$ goes up by 1)
+    -   An extinction otherwise ($n$ goes down by 1)
+4.  Repeat until the clock passes the present, or $n = 0$
+:::
+
+::: {.notes}
+4:00-5:30
+
+This is exactly the recipe from simulate_site: total rate, waiting time,
+choose the event in proportion to its rate. Now we name it. Gillespie developed
+it for chemical reactions, but it works for any process like this.
+Students write simulate_pure_birth (steps 1 and 2) and then
+simulate_birth_death (adds step 3).
+:::
+
+## Growing a tree, event by event
+
+```{python}
+#| label: growth-animation
+#| echo: false
+#| eval: true
+#| output: asis
+
+_history = simulate_history(1.0, 0.5, 2.5, random.Random(2))
+print("```{=html}\n" + growth_animation_html(_history) + "\n```")
+```
+
+::: {.notes}
+5:30-7:30
+
+Birth rate 1, death rate 0.5. Step through with Next (or Play). Each step is
+one trip through the loop. Point out: the right panel is what the students'
+functions return (number of lineages through time); extinct lineages turn gray
+with an x. The last two frames show the complete tree at the present, and then
+what we can actually see: the reconstructed tree (more on this later).
+:::
+
+## Pure-birth simulations and expectations
+
+```{python}
+#| label: yule-growth
+#| echo: false
+#| eval: true
+#| fig-width: 11
+#| fig-height: 3.6
+#| fig-align: center
+
+_rng = random.Random(1925)
+_figure, _axes = plt.subplots(1, 2, figsize = (11, 3.6))
+for _ in range(20):
+    _times, _counts = simulate_pure_birth(1.0, 5.0, _rng)
+    for _ax in _axes:
+        _ax.step(_times, _counts, where = "post", color = GRAY, lw = 1.2)
+_t = [_i / 20 for _i in range(101)]
+for _ax in _axes:
+    _ax.plot(_t, [math.exp(_v) for _v in _t], color = RED, lw = 3,
+             label = r"Expected: $e^{\lambda t}$")
+    _ax.set_xlabel("Time", fontsize = 16)
+    _ax.set_ylabel("Number of lineages", fontsize = 16)
+    _ax.tick_params(labelsize = 13)
+    _ax.legend(fontsize = 14, loc = "upper left")
+    for _side in ["right", "top"]:
+        _ax.spines[_side].set_visible(False)
+_axes[1].set_yscale("log")
+_axes[0].set_title("Regular axis", fontsize = 16)
+_axes[1].set_title("Log axis", fontsize = 16)
+_figure.tight_layout()
+plt.show()
+```
+
+::: {.incremental style="font-size: 73%;"}
+-   The number of lineages grows **exponentially** with rate $\lambda$
+    -   When $\mu > 0$, the exponential growth rate is $r = \lambda - \mu$
+-   **Questions**: Why are the curves straight on a log axis? Why do they
+    differ the most near the start?
+:::
+
+::: {.notes}
+7:30-9:00
+
+20 pure-birth simulations, lambda = 1. ln(e^(lambda t)) = lambda t, so
+exponential growth is a straight line with slope lambda on a log axis.
+Early on, a clade's fate depends on a few highly variable waiting times; later,
+many lineages average out, and the curves run parallel. These are the
+Challenge 2 questions; don't give the answers away completely.
+:::
+
+# Adding extinction {background-color="#1b3a5c"}
+
+## How often does a clade die out?
+
+::: {style="font-size: 80%;"}
+```{python}
+#| label: extinction-table
+#| echo: false
+#| eval: true
+#| output: asis
+
+_rng = random.Random(1948)
+_rows = []
+for _mu in [0.0, 0.25, 0.5, 0.75, 1.0]:
+    _dead = 0
+    for _ in range(2000):
+        if simulate_birth_death(1.0, _mu, 5.0, _rng)[1][-1] == 0:
+            _dead += 1
+    _eventually = f"{min(_mu, 1.0):.2f}"
+    _rows.append(f"| {_mu:.2f} | {_dead / 2000:.2f} | {_eventually} |")
+print(
+    "::: {style=\"font-size: 85%;\"}\n"
+    + "| Death rate, $\\mu$ ($\\lambda = 1$) | Extinct by time 5 (simulated) "
+    + "| Eventually extinct |\n"
+    + "|:-:|:-:|:-:|\n"
+    + "\n".join(_rows)
+    + "\n:::"
+)
+```
+:::
+
+. . .
+
+::: {style="font-size: 90%;"}
+A clade that starts with one lineage eventually dies out with probability
+$\mu / \lambda$ (when $\mu < \lambda$)^[@Kendall1948]
+:::
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+Even when splits are **twice** as common as extinctions, about **half** of all
+clades die out
+:::
+
+::: {.notes}
+9:00-10:30
+
+Each row: 2,000 simulated clades starting from one lineage, birth rate 1. The
+net diversification rate r = lambda - mu sets average growth, e^(rt), but the
+average hides a lot. Most clades that die do so early, when they have only one
+or a few lineages. Students reproduce this table in the notebook.
+:::
+
+## Every clade we study is a survivor
+
+```{python}
+#| label: survivors
+#| echo: false
+#| eval: true
+#| fig-width: 7
+#| fig-height: 3.1
+#| fig-align: center
+
+_rng = random.Random(1)
+_finals = [simulate_birth_death(1.0, 0.5, 6.0, _rng)[1][-1] for _ in range(1000)]
+_survivors = [_c for _c in _finals if _c > 0]
+_figure, _axes = plt.subplots(figsize = (7, 3.1))
+_axes.hist(_finals, bins = 30, color = "#4a6d8c", edgecolor = "white")
+_axes.set_xlabel("Number of lineages after 6 units of time", fontsize = 16)
+_axes.set_ylabel("Number of clades", fontsize = 16)
+_axes.tick_params(labelsize = 13)
+for _side in ["right", "top"]:
+    _axes.spines[_side].set_visible(False)
+_figure.tight_layout()
+plt.show()
+SURVIVOR_MEAN = sum(_survivors) / len(_survivors)
+EXTINCT_FRACTION = _finals.count(0) / len(_finals)
+```
+
+::: {style="font-size: 80%;"}
+$\lambda = 1$, $\mu = 0.5$: `{python} f"{EXTINCT_FRACTION:.0%}"` of clades are
+extinct; survivors average `{python} f"{SURVIVOR_MEAN:.0f}"` lineages
+:::
+
+::: {.incremental style="font-size: 75%;"}
+-   That's about **twice** the expectation of the BD process ($e^{rt} \approx
+    20$)
+-   Question: How might studying only the "winners" bias what we learn?
+-   This is why phylogenetic BD methods condition on survival
+:::
+
+::: {.notes}
+10:30-12:00
+
+This is the histogram students plot themselves in Challenge 4 (their first
+plotting code). Survivors got lucky early, so they look like they diversified
+faster than the rates really are. That's why birth-death methods used with real
+trees condition on survival.
+:::
+
+# What do we observe? {background-color="#1b3a5c"}
+
+## Complete vs. reconstructed trees
+
+```{python}
+#| label: complete-reconstructed
+#| echo: false
+#| eval: true
+#| fig-width: 11
+#| fig-height: 4.1
+#| fig-align: center
+
+_history = simulate_history(1.0, 0.5, 4.0, random.Random(12))
+_complete = history_to_tree(_history)
+_reconstructed = prune_tips(_complete, is_extant)
+_figure, _axes = plt.subplots(1, 2, figsize = (11, 4.1))
+draw_tree(_axes[0], _complete, title = "Complete tree", linewidth = 1.5)
+draw_tree(_axes[1], _reconstructed, title = "Reconstructed tree", linewidth = 1.5,
+          max_time = 4.0)
+_figure.tight_layout()
+plt.show()
+EXAMPLE_RECONSTRUCTED = _reconstructed
+```
+
+::: {style="font-size: 75%;"}
+The ***reconstructed tree***^[@Nee1994] is what we estimate from data:
+Sans unsampled extant species and most extinct lineages
+:::
+
+::: {.notes}
+12:00-13:00
+
+Same model (lambda = 1, mu = 0.5), 4 units of time. Every gray lineage left no
+living descendants, so it is invisible to us. The reconstructed tree is the
+complete tree with every extinct lineage pruned away. In the notebook,
+simulating trees and drawing them are done for the students.
+:::
+
+## Lineages through time
+
+```{python}
+#| label: ltt
+#| echo: false
+#| eval: true
+#| fig-width: 11
+#| fig-height: 3.8
+#| fig-align: center
+
+_figure, _axes = plt.subplots(1, 2, figsize = (11, 3.8))
+draw_tree(_axes[0], EXAMPLE_RECONSTRUCTED, title = "Reconstructed tree",
+          linewidth = 1.5, max_time = 4.0)
+plot_ltt(_axes[1], get_branching_times(EXAMPLE_RECONSTRUCTED), 4.0,
+         color = "black", lw = 2.5)
+_axes[1].set_xlabel("Time since the root", fontsize = 16)
+_axes[1].set_ylabel("Number of lineages", fontsize = 16)
+_axes[1].set_title("Lineages-through-time (LTT) plot", fontsize = 16)
+_axes[1].set_xlim(-0.12, 4.12)
+_axes[1].tick_params(labelsize = 13)
+for _side in ["right", "top"]:
+    _axes[1].spines[_side].set_visible(False)
+_figure.tight_layout()
+plt.show()
+```
+
+::: {style="font-size: 85%;"}
+2 lineages at the root, and every split adds one, so all we need are the
+***branching times***: the times of the internal nodes
+:::
+
+::: {.notes}
+13:00-14:00
+
+Students write get_branching_times in Challenge 6: loop over the nodes,
+keep the times of the ones with children, and sort them (the root is last in
+postorder, so sorting matters).
+:::
+
+## The pull of the present
+
+```{python}
+#| label: pull-of-present
+#| echo: false
+#| eval: true
+#| fig-width: 11
+#| fig-height: 3.8
+#| fig-align: center
+
+_rng = random.Random(1994)
+_max_time = 8.0
+_grid = [_i * _max_time / 80 for _i in range(81)]
+_figure, _axes = plt.subplots(1, 2, figsize = (11, 3.8), sharey = True)
+for _ax, (_name, _lam, _mu) in zip(
+    _axes, [("Pure birth", 0.5, 0.0), ("Lots of extinction", 2.0, 1.5)]
+):
+    _sums = [0.0] * len(_grid)
+    for _ in range(30):
+        _tree = prune_tips(history_to_tree(
+            simulate_history(_lam, _mu, _max_time, _rng)), is_extant)
+        _times = get_branching_times(_tree)
+        plot_ltt(_ax, _times, _max_time, color = GRAY, lw = 1, alpha = 0.6)
+        for _g, _t in enumerate(_grid):
+            _sums[_g] += math.log(1 + sum(1 for _b in _times if _b <= _t))
+    _ax.plot(_grid, [math.exp(_s / 30) for _s in _sums], color = RED, lw = 3,
+             label = "Average")
+    _ax.plot(_grid, [2 * math.exp(0.5 * _t) for _t in _grid], color = "black",
+             ls = "--", lw = 1.2, label = "Slope of $r$")
+    _ax.set_yscale("log")
+    _ax.set_title(f"{_name}: $\\lambda = {_lam}$, $\\mu = {_mu}$", fontsize = 16)
+    _ax.set_xlabel("Time since the root", fontsize = 16)
+    _ax.tick_params(labelsize = 13)
+    _ax.legend(fontsize = 13, loc = "upper left")
+    for _side in ["right", "top"]:
+        _ax.spines[_side].set_visible(False)
+_axes[0].set_ylabel("Number of lineages", fontsize = 16)
+_figure.tight_layout()
+plt.show()
+```
+
+::: {style="font-size: 80%;"}
+Both BD models have the same net diversification rate,
+$r = \lambda - \mu = 0.5$
+:::
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+Question: Why does extinction make the LTT plot bend **up** near the present?
+:::
+
+::: {.notes}
+14:00-16:00
+
+30 reconstructed trees per model. Let them think before answering: recent
+lineages haven't had time to go extinct yet, so near the present the tree shows
+splits at close to lambda; deeper in the past, only survivors remain, so the
+slope is close to r. This "pull of the present" (Nee et al. 1994) is the main
+signal of extinction in a tree of living species, and it is subtle. Challenge 7.
+:::
+
+# Bent-toed geckos {background-color="#1b3a5c"}
+
+## *Cyrtodactylus*
+
+![](../images/cyrtodactylus-lekaguli.jpg){.absolute top="10%" left="0" width="100%" style="max-width: none;"}
+
+::: footer
+[*Cyrtodactylus lekaguli*](https://commons.wikimedia.org/wiki/File:Cyrtodactylus_lekaguli.jpg)
+[Rushenb](https://commons.wikimedia.org/wiki/User:Rushenb) (2016) Wikimedia Commons
+:::
+
+## *Cyrtodactylus*
+
+```{python}
+#| label: gecko-tree
+#| echo: false
+#| eval: true
+#| fig-width: 10
+#| fig-height: 4.0
+#| fig-align: center
+
+_figure, _axes = plt.subplots(1, 2, figsize = (10, 4.0),
+                              gridspec_kw = {"width_ratios": [2, 2.5]})
+draw_tree(_axes[0], GECKO_TREE, linewidth = 0.6,
+          title = f"{GECKO_TIPS} species of Cyrtodactylus")
+_axes[0].set_xlabel("Millions of years since the root", fontsize = 14)
+plot_ltt(_axes[1], get_branching_times(GECKO_TREE), GECKO_AGE,
+         color = RED, lw = 2.5)
+_axes[1].set_yscale("log")
+_axes[1].set_xlabel("Millions of years since the root", fontsize = 14)
+_axes[1].set_ylabel("Number of lineages", fontsize = 14)
+_axes[1].set_title("Lineages through time", fontsize = 16)
+_axes[1].tick_params(labelsize = 12)
+for _side in ["right", "top"]:
+    _axes[1].spines[_side].set_visible(False)
+_figure.tight_layout()
+plt.show()
+```
+
+::: {style="font-size: 80%;"}
+A time-calibrated tree^[@Grismer2022peerj] of 345 of the 406 described
+species^[@ReptileDatabase2026];
+the root is about `{python} f"{GECKO_AGE:.0f}"` million years old
+:::
+
+::: {.notes}
+16:00-17:00
+
+Bent-toed geckos: a very species-rich genus, and new species are still being
+described at a high rate, so 406 is a moving target. The outgroup species are
+removed in the notebook with the same prune_tips function used to remove
+extinct lineages. Don't interpret the LTT shape yet; that's the payoff of the
+exercise.
+:::
+
+## Estimating the birth rate
+
+Under **pure birth**, the maximum likelihood estimate of $\lambda$ is:
+
+$$
+\hat{\lambda} = \frac{n - 2}{L}
+$$
+
+::: {.incremental style="font-size: 85%;"}
+-   $n - 2$: the number of splits after the root
+-   $L$: the sum of all branch lengths, the total time lineages had to split
+-   So $\hat{\lambda}$ is splits per lineage per unit of time
+:::
+
+. . .
+
+::: {style="font-size: 85%;"}
+We can simulate trees under the model, and ask: **Does the gecko tree
+look like them?**
+:::
+
+::: {.notes}
+17:00-18:00
+
+Challenge 8: estimate_birth_rate, a single loop over the nodes. In the
+notebook, they compare the gecko LTT plot to 100 pure-birth trees with the same
+number of tips and the same root age (Challenge 9). The estimate is about 0.07
+splits per lineage per million years, but don't give it away.
+:::
+
+## Unsampled species
+
+```{python}
+#| label: missing-species
+#| echo: false
+#| eval: true
+#| fig-width: 11
+#| fig-height: 3.2
+#| fig-align: center
+
+for _seed in range(1000):
+    _history = simulate_history(1.0, 0.0, 2.0, random.Random(_seed))
+    _complete = history_to_tree(_history)
+    _tips = [_n for _n in _complete if not _n["children"]]
+    if len(_tips) == 12:
+        break
+_rng = random.Random(4)
+for _node in _rng.sample(_tips, 4):
+    # Mark 4 species as unsampled (drawn in gray, like extinct lineages)
+    _node["extinct"] = True
+_sampled = prune_tips(_complete, is_extant)
+
+_figure, _axes = plt.subplots(1, 3, figsize = (11, 3.2))
+draw_tree(_axes[0], _complete, title = "All 12 species", show_extinctions = False)
+draw_tree(_axes[1], _sampled, title = "8 sampled species", max_time = 2.0)
+plot_ltt(_axes[2], get_branching_times(_complete), 2.0, color = GRAY, lw = 2.5,
+         label = "All 12")
+plot_ltt(_axes[2], get_branching_times(_sampled), 2.0, color = "black", lw = 2.5,
+         label = "8 sampled")
+_axes[2].set_xlabel("Time since the root", fontsize = 16)
+_axes[2].set_ylabel("Lineages", fontsize = 16)
+_axes[2].set_yticks([2, 4, 6, 8, 10, 12])
+_axes[2].set_xlim(-0.06, 2.06)
+_axes[2].tick_params(labelsize = 13)
+_axes[2].legend(fontsize = 13, loc = "upper left")
+for _side in ["right", "top"]:
+    _axes[2].spines[_side].set_visible(False)
+_figure.tight_layout()
+plt.show()
+```
+
+. . .
+
+::: {style="font-size: 80%;"}
+Every unsampled species removes a split, mostly **recent** ones, so the LTT plot
+flattens near the present
+:::
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+The gecko tree is missing at least 61 described species. Question: How many
+species would a pure-birth model need to explain the gecko tree?
+:::
+
+::: {.notes}
+18:00-19:00
+
+The gray tips are species we don't have DNA from. Removing them removes the
+splits that join them to their closest relatives, which tend to be young. In
+the notebook, students write simulate_sampled_tree (Challenge 10), and then use
+a slider to change the total number of gecko species from 406 (described) to
+2,006, keeping 345 in each simulated tree. Don't give away the answer
+(roughly 1,100 to 2,000, depending on which part of the tree they match).
+:::
+
+## Summary
+
+::: {style="font-size: 80%;"}
+::: {.incremental}
+-   In a **birth-death model**, each lineage splits at rate $\lambda$ and
+    dies out at rate $\mu$
+-   The **Gillespie algorithm** simulates it one event at a time:
+    total rate &rarr; waiting time &rarr; which event
+-   Lineages grow **exponentially**, but many clades go **extinct**, so living
+    clades are a biased sample of "winners"
+-   We usually see only the **reconstructed tree**; extinction leaves a subtle
+    signature in it, the **pull of the present**
+-   An **LTT plot** summarizes a tree, so we can compare real trees to the model
+-   **Unsampled species** remove recent splits, which flattens an LTT plot near
+    the present
+:::
+:::
+
+::: {.notes}
+19:00-19:30
+
+If short on time, skip straight to the exercise slide.
+:::
+
+## In the exercise
+
+::: {.incremental style="font-size: 85%;"}
+1.  `simulate_pure_birth` and `simulate_birth_death`: The Gillespie algorithm
+2.  How often do clades go extinct?
+3.  `plot_final_counts`: Your first plot!
+4.  `get_branching_times`: LTT plots and the pull of the present
+5.  `estimate_birth_rate` and `simulate_sampled_tree`: Lineages of bent-toed
+    geckos through time
+:::
+
+. . .
+
+::: {.callout-tip}
+## Watch for
+Under a pure-birth model, how many gecko species are still undescribed?
+:::
+
+::: {.notes}
+19:30-20:15
+
+Point out that this is the first time they write plotting code; the recipe in
+the notebook walks them through it. Hand off to the notebook here. Remind them
+the first cell needs their name.
+:::
+
+## Exercise
+
+1.  Log into [molab](https://molab.marimo.io/)
+2.  [Open the exercise in molab](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-09-birth-death/birth_death.py)
+3.  Click "Fork" button
+
+# References
+
+::: {#refs}
+:::
+
+## Acknowledgements
+
+I drafted and iterated on these slides in collaboration with
+Anthropic's Claude (Opus 5.5 model).
