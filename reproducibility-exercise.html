@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Reproducibility exercise: git and pixi – Intro to Comp Bio</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/quarto-axe/axe-check.js" type="module"></script>
+<script id="quarto-axe-checker-options" type="text/plain">dHJ1ZQ==</script>
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-e92560308db78fb8ed0b17e96801fa58.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
+      Intro to Comp Bio
+      </li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Intro to Comp Bio</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#part-1-your-project-repository" id="toc-part-1-your-project-repository" class="nav-link active" data-scroll-target="#part-1-your-project-repository">Part 1: Your project repository</a>
+  <ul class="collapse">
+  <li><a href="#make-your-copy-and-open-your-codespace" id="toc-make-your-copy-and-open-your-codespace" class="nav-link" data-scroll-target="#make-your-copy-and-open-your-codespace">Make your copy and open your codespace</a></li>
+  <li><a href="#what-is-a-git-repository" id="toc-what-is-a-git-repository" class="nav-link" data-scroll-target="#what-is-a-git-repository">What is a git repository?</a></li>
+  <li><a href="#your-first-commit" id="toc-your-first-commit" class="nav-link" data-scroll-target="#your-first-commit">Your first commit</a></li>
+  <li><a href="#questions" id="toc-questions" class="nav-link" data-scroll-target="#questions">Questions</a></li>
+  </ul></li>
+  <li><a href="#part-2-a-reproducible-environment" id="toc-part-2-a-reproducible-environment" class="nav-link" data-scroll-target="#part-2-a-reproducible-environment">Part 2: A reproducible environment</a>
+  <ul class="collapse">
+  <li><a href="#create-the-environment" id="toc-create-the-environment" class="nav-link" data-scroll-target="#create-the-environment">Create the environment</a></li>
+  <li><a href="#commit-the-environment" id="toc-commit-the-environment" class="nav-link" data-scroll-target="#commit-the-environment">Commit the environment</a></li>
+  <li><a href="#add-a-program-that-isnt-python" id="toc-add-a-program-that-isnt-python" class="nav-link" data-scroll-target="#add-a-program-that-isnt-python">Add a program that isn’t Python</a></li>
+  <li><a href="#questions-1" id="toc-questions-1" class="nav-link" data-scroll-target="#questions-1">Questions</a></li>
+  </ul></li>
+  <li><a href="#part-3-estimating-the-tree-with-iq-tree" id="toc-part-3-estimating-the-tree-with-iq-tree" class="nav-link" data-scroll-target="#part-3-estimating-the-tree-with-iq-tree">Part 3: Estimating the tree with IQ-TREE</a>
+  <ul class="collapse">
+  <li><a href="#get-the-data" id="toc-get-the-data" class="nav-link" data-scroll-target="#get-the-data">Get the data</a></li>
+  <li><a href="#run-iq-tree" id="toc-run-iq-tree" class="nav-link" data-scroll-target="#run-iq-tree">Run IQ-TREE</a></li>
+  <li><a href="#decide-what-to-commit" id="toc-decide-what-to-commit" class="nav-link" data-scroll-target="#decide-what-to-commit">Decide what to commit</a></li>
+  <li><a href="#questions-2" id="toc-questions-2" class="nav-link" data-scroll-target="#questions-2">Questions</a></li>
+  </ul></li>
+  <li><a href="#part-4-fitting-the-clock-and-using-your-projects-history" id="toc-part-4-fitting-the-clock-and-using-your-projects-history" class="nav-link" data-scroll-target="#part-4-fitting-the-clock-and-using-your-projects-history">Part 4: Fitting the clock, and using your project’s history</a>
+  <ul class="collapse">
+  <li><a href="#add-the-analysis-script" id="toc-add-the-analysis-script" class="nav-link" data-scroll-target="#add-the-analysis-script">Add the analysis script</a></li>
+  <li><a href="#change-the-analysis" id="toc-change-the-analysis" class="nav-link" data-scroll-target="#change-the-analysis">Change the analysis</a></li>
+  <li><a href="#go-back-in-time" id="toc-go-back-in-time" class="nav-link" data-scroll-target="#go-back-in-time">Go back in time</a></li>
+  <li><a href="#why-the-seed-matters" id="toc-why-the-seed-matters" class="nav-link" data-scroll-target="#why-the-seed-matters">Why the seed matters</a></li>
+  <li><a href="#questions-3" id="toc-questions-3" class="nav-link" data-scroll-target="#questions-3">Questions</a></li>
+  </ul></li>
+  <li><a href="#part-5-prove-its-reproducible" id="toc-part-5-prove-its-reproducible" class="nav-link" data-scroll-target="#part-5-prove-its-reproducible">Part 5: Prove it’s reproducible</a>
+  <ul class="collapse">
+  <li><a href="#questions-4" id="toc-questions-4" class="nav-link" data-scroll-target="#questions-4">Questions</a></li>
+  </ul></li>
+  <li><a href="#optional-reproduce-a-classmates-analysis" id="toc-optional-reproduce-a-classmates-analysis" class="nav-link" data-scroll-target="#optional-reproduce-a-classmates-analysis">Optional: Reproduce a classmate’s analysis</a></li>
+  <li><a href="#quick-reference" id="toc-quick-reference" class="nav-link" data-scroll-target="#quick-reference">Quick reference</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Reproducibility exercise: git and pixi</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In this exercise, you will turn the molecular clock analysis from Capstone Project 2 into a <strong><em>reproducible project</em></strong>: one that anyone (including you, a year from now) can download and rerun with a single command, using exactly the same software, and get exactly the same results. Along the way, you will:</p>
+<ol type="1">
+<li>Use <strong><em>git</em></strong> to keep track of every change to your project, and <strong><em>GitHub</em></strong> to back it up</li>
+<li>Use <strong><em>pixi</em></strong> to create a <strong><em>project environment</em></strong> with Python, the Python packages we’ve been using, and a program that isn’t Python at all: <a href="https://iqtree.github.io/">IQ-TREE</a>, the program I used to estimate the tree of 24 SARS-CoV-2 genomes in Capstone Project 2</li>
+<li>Estimate that tree yourself, fit the molecular clock to it, and record every step, so that the whole analysis can be rerun with one command</li>
+<li>Prove that your project is reproducible by deleting your computer and rebuilding everything from your GitHub repository</li>
+</ol>
+<p>There is no new Python or biology in this exercise. Everything new is about <strong><em>how</em></strong> we do the work.</p>
+<p>The exercise has five parts. Each part takes about 30 to 45 minutes, and each one ends with saving your work to GitHub, so you can stop at the end of any part and pick up where you left off next time. Put your answers to the questions into the Exercise 12 quiz on Canvas.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Save your work to GitHub at the end of every part
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Your codespace is <strong><em>temporary</em></strong>. It stops on its own after 30 minutes of inactivity, and GitHub <strong><em>deletes</em></strong> codespaces that haven’t been used for 30 days, <strong><em>even if they contain work you haven’t pushed to GitHub</em></strong>. Your work is only safe once you have committed it and pushed it to GitHub (you’ll learn how in Part 1).</p>
+</div>
+</div>
+<section id="part-1-your-project-repository" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-your-project-repository">Part 1: Your project repository</h2>
+<section id="make-your-copy-and-open-your-codespace" class="level3">
+<h3 class="anchored" data-anchor-id="make-your-copy-and-open-your-codespace">Make your copy and open your codespace</h3>
+<ol type="1">
+<li><p>Go to the <a href="https://github.com/phyletica/comp-bio-project-template">Comp Bio project template</a> on GitHub, and follow the instructions in its README under <strong><em>“Make your own copy of this repository”</em></strong> and <strong><em>“Open your codespace.”</em></strong> Name your repository <code>comp-bio-project</code>, and choose <strong><em>Public</em></strong>.</p></li>
+<li><p>Once your codespace is ready, you should see your files on the left side of VS Code and a <strong><em>terminal</em></strong> at the bottom. Click in the terminal and check that you’re in your project’s folder:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">pwd</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-a</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You should be in <code>/workspaces/comp-bio-project</code>, and see <code>README.md</code> and a folder named <code>.devcontainer</code> (plus a folder named <code>.git</code>; more on that below).</p></li>
+</ol>
+<p>The terminal is the same Bash command line you used in the <a href="./bash-exercise.html">Bash exercise</a>, running on a Linux computer in the cloud. All of the commands in this exercise are typed in the terminal.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Copying commands
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Hover over any code block on this page and click the clipboard icon in its upper right corner to copy it. To paste into the terminal, use <strong>Ctrl + Shift + V</strong> (or right-click and choose “Paste”).</p>
+</div>
+</div>
+</section>
+<section id="what-is-a-git-repository" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-a-git-repository">What is a git repository?</h3>
+<p>Your project folder is a <strong><em>git repository</em></strong>. That means git is keeping a history of the folder in the hidden <code>.git</code> folder. (Never edit or delete the <code>.git</code> folder!) The history is a series of <strong><em>commits</em></strong>: snapshots of your files, each with a message describing what changed, who changed it, and when. Your repository on GitHub has a copy of the same history.</p>
+<p>Making a commit takes three steps:</p>
+<ol type="1">
+<li><strong>Change</strong> some files (<em>e.g.</em>, edit them, create them, or delete them)</li>
+<li><strong>Stage</strong> the changes you want to include in the next commit, with <code>git add</code></li>
+<li><strong>Commit</strong> the staged changes, with <code>git commit</code>, which saves the snapshot in your repository’s history</li>
+</ol>
+<p>Then, <code>git push</code> sends your new commits to GitHub.</p>
+</section>
+<section id="your-first-commit" class="level3">
+<h3 class="anchored" data-anchor-id="your-first-commit">Your first commit</h3>
+<ol type="1">
+<li><p>Let’s see what git thinks of our repository right now:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>git status</code> should say <code>nothing to commit, working tree clean</code>, which means none of your files have changed since the last commit. <code>git log</code> lists the commits in your repository’s history (just one so far, which GitHub made when you copied the template).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Leaving <code>git log</code> (and <code>git diff</code>)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When the output of a git command is longer than your terminal, git shows it one page at a time. Use the arrow keys to scroll, and press <strong>q</strong> to quit and get back to the command line.</p>
+</div>
+</div></li>
+<li><p>In the file list on the left of VS Code, click <code>README.md</code> to open it. At the very top of the file, add these lines (with your name), and leave a blank line between them and the rest of the file:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>README.md</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="README.md"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Dating the ancestor of SARS-CoV-2</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Author: Your Name</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>A reproducible molecular clock analysis of 24</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>SARS-CoV-2 genomes, for BIOL 5/6800.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>VS Code saves automatically after a moment (or press <strong>Ctrl + S</strong>).</p></li>
+<li><p>Now ask git again:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+<li><p>Stage your change, and ask git again:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add README.md</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+<li><p>Commit your change, with a message that says what you changed:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Add project title and author to README"</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You should see two commits now, with yours at the top. The long string of letters and numbers next to each commit is its <strong><em>hash</em></strong>: a unique ID for that snapshot.</p></li>
+<li><p>Send your commit to GitHub:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Go to your repository’s page on GitHub (<code>github.com/your-username/comp-bio-project</code>) and refresh it. Your README should show your changes, and near the top of the file list, you should see your commit message.</p></li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Always use <code>-m</code> with <code>git commit</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you forget the <code>-m "message"</code> part, git opens a text editor in the terminal and waits for you to type a message there. If that happens, the easiest way out is to close the editor: if the bottom of the terminal shows <code>^X Exit</code>, press <strong>Ctrl + X</strong>; if it shows a lot of <code>~</code> characters, type <code>:q!</code> and press Enter. Then run the <code>git commit</code> command again with <code>-m</code>.</p>
+</div>
+</div>
+</section>
+<section id="questions" class="level3">
+<h3 class="anchored" data-anchor-id="questions">Questions</h3>
+<p><strong>Question 1</strong>: Paste the URL of your GitHub repository (<em>e.g.</em>, <code>https://github.com/your-username/comp-bio-project</code>).</p>
+<p><strong>Question 2</strong>: What did <code>git status</code> say about <code>README.md</code> (a) after you edited it, but before <code>git add</code>, and (b) after <code>git add</code>, but before <code>git commit</code>?</p>
+</section>
+</section>
+<section id="part-2-a-reproducible-environment" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-a-reproducible-environment">Part 2: A reproducible environment</h2>
+<p>The codespace already has Python on it, but it’s not the Python we want. Check which version it is:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This is the Python that came with the codespace’s operating system. Someone else’s computer (or this codespace, next year) will have a different version, with different packages installed, or none at all. If our analysis depends on “whatever is installed on this computer,” we can’t expect it to give the same results anywhere else.</p>
+<p>Instead, we will use <strong><em>pixi</em></strong> to create a <strong><em>project environment</em></strong>: a folder of software that belongs to this project, with every package’s version written down so that the environment can be rebuilt exactly, anywhere.</p>
+<section id="create-the-environment" class="level3">
+<h3 class="anchored" data-anchor-id="create-the-environment">Create the environment</h3>
+<ol type="1">
+<li><p>Tell pixi to start managing an environment for this project:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> init</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>pixi init</code> created three files:</p>
+<ul>
+<li><code>pixi.toml</code>: the <strong><em>manifest</em></strong>, which lists what our project needs</li>
+<li><code>.gitignore</code>: a list of files and folders that git should ignore</li>
+<li><code>.gitattributes</code>: settings that tell git how to treat certain files</li>
+</ul>
+<p>Click <code>pixi.toml</code> in VS Code to open it. It doesn’t list any software yet; the <code>[dependencies]</code> section is empty.</p></li>
+<li><p>Add Python and the Python packages we need:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> add <span class="st">"python=3.14.*"</span> numpy scipy matplotlib marimo</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This takes a minute or two. pixi figures out a set of package versions that work together (<em>e.g.</em>, which versions of NumPy work with Python 3.14), downloads them from <a href="https://conda-forge.org/">conda-forge</a> (a large, free collection of scientific software), and installs them into a hidden folder named <code>.pixi</code> in your project.</p>
+<p>The <code>"python=3.14.*"</code> part asks for Python version 3.14 (any 3.14.x release), instead of whatever version is newest on the day you run the command. (In October 2026, the newest version was 3.15, which was released so recently that some packages, including one marimo needs, didn’t work with it yet!)</p></li>
+<li><p>Look at <code>pixi.toml</code> again. The <code>[dependencies]</code> section now lists each package with a range of versions (something like <code>numpy = "&gt;=2.3.5,&lt;3"</code>). There is also a new file, <code>pixi.lock</code>, the <strong><em>lock file</em></strong>. Open it and scroll through it (it’s long!). It lists the <strong><em>exact</em></strong> version of every package that pixi installed, including the packages that our packages need, and the address it was downloaded from.</p>
+<ul>
+<li>The manifest (<code>pixi.toml</code>) says what we <strong><em>asked for</em></strong></li>
+<li>The lock file (<code>pixi.lock</code>) says exactly what we <strong><em>got</em></strong></li>
+</ul>
+<p>When pixi builds the environment from a lock file, it installs exactly those versions.</p></li>
+<li><p>Compare the Python in the codespace to the Python in our environment:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run python <span class="at">--version</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>pixi run</code> runs a command <strong><em>inside</em></strong> the project environment. <code>pixi list</code> lists every package in the environment, and its version.</p></li>
+</ol>
+</section>
+<section id="commit-the-environment" class="level3">
+<h3 class="anchored" data-anchor-id="commit-the-environment">Commit the environment</h3>
+<ol type="1">
+<li><p>Check what has changed:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Notice that the <code>.pixi</code> folder, which holds the installed software, is <strong><em>not</em></strong> listed. Look in <code>.gitignore</code> to see why. We never commit the installed software, only the instructions for rebuilding it (<code>pixi.toml</code> and <code>pixi.lock</code>).</p></li>
+<li><p>Stage and commit the four new files, and push:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add pixi.toml pixi.lock .gitignore .gitattributes</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Create a pixi environment with Python 3.14"</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+</ol>
+</section>
+<section id="add-a-program-that-isnt-python" class="level3">
+<h3 class="anchored" data-anchor-id="add-a-program-that-isnt-python">Add a program that isn’t Python</h3>
+<p>IQ-TREE is written in C++, not Python, so you can’t install it with Python’s usual tools (and it doesn’t work in molab). But it is available from <a href="https://bioconda.github.io/">bioconda</a>, a collection of bioinformatics software that works with pixi.</p>
+<ol type="1">
+<li><p>Tell pixi to look for software in bioconda (after conda-forge), and add IQ-TREE:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> workspace channel add bioconda</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> add iqtree</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run iqtree3 <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+<li><p>See what changed, using <code>git diff</code>, which shows exactly which lines changed in each file since the last commit:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff pixi.toml</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff <span class="at">--stat</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>In <code>git diff</code>, lines that start with <code>-</code> (in red) were removed, and lines that start with <code>+</code> (in green) were added. <code>git diff --stat</code> summarizes how much each file changed. (<code>pixi.lock</code> shows up as <code>Bin</code>, because the <code>.gitattributes</code> file tells git not to bother showing line-by-line changes for it; it’s written by pixi, not by people.)</p></li>
+<li><p>Commit and push:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add pixi.toml pixi.lock</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Add IQ-TREE from bioconda"</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+</ol>
+</section>
+<section id="questions-1" class="level3">
+<h3 class="anchored" data-anchor-id="questions-1">Questions</h3>
+<p><strong>Question 3</strong>: What version of Python did <code>python3 --version</code> report, and what version did <code>pixi run python --version</code> report?</p>
+<p><strong>Question 4</strong>: What range of versions does <code>pixi.toml</code> list for <code>numpy</code>? What exact version of NumPy is in your environment (look for it in <code>pixi list</code>)? Why is it useful to have both?</p>
+<p><strong>Question 5</strong>: What version of IQ-TREE is in your environment (look for <code>iqtree</code> in <code>pixi list</code>)? Write it down; you will need it in Part 5.</p>
+<p><strong>Question 6</strong>: Why doesn’t git list the <code>.pixi</code> folder in <code>git status</code>, and why don’t we want to commit it?</p>
+</section>
+</section>
+<section id="part-3-estimating-the-tree-with-iq-tree" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-estimating-the-tree-with-iq-tree">Part 3: Estimating the tree with IQ-TREE</h2>
+<p>To make an analysis reproducible, we need to record not only the software, but also the <strong><em>steps</em></strong>: the exact commands we ran, in order. pixi can store commands in <code>pixi.toml</code> as <strong><em>tasks</em></strong>, which anyone can run with <code>pixi run &lt;task name&gt;</code>.</p>
+<section id="get-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="get-the-data">Get the data</h3>
+<ol type="1">
+<li><p>Add a task that downloads the alignment of 24 SARS-CoV-2 genomes we’ve been using (it’s one long command; use the copy button!):</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> task add get-data <span class="st">"mkdir -p data &amp;&amp; curl -L -o data/sars-cov-2.fasta https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/SARS-CoV-2.nextclade.aligned.fasta"</span> <span class="at">--description</span> <span class="st">"Download the SARS-CoV-2 alignment"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Look at the new <code>[tasks]</code> section of <code>pixi.toml</code> to see the task.</p></li>
+<li><p>Run the task, and check that it worked:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run get-data</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"&gt;"</span> data/sars-cov-2.fasta</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You should see the names of the 24 genomes.</p></li>
+<li><p>The alignment is small (about 700 KB), so we will commit a copy of it. That way, our project still works even if the file at that web address changes or disappears, and the task records where the data came from.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add pixi.toml data/sars-cov-2.fasta</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Add task to download the SARS-CoV-2 alignment, and the data"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>What about big data?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>GitHub doesn’t allow files larger than 100 MB, and repositories should stay under a few GB. For big data sets, we would commit only the task that downloads the data from a permanent public archive (like GenBank), and tell git to ignore the data files.</p>
+</div>
+</div>
+</section>
+<section id="run-iq-tree" class="level3">
+<h3 class="anchored" data-anchor-id="run-iq-tree">Run IQ-TREE</h3>
+<ol type="1">
+<li><p>Add a task that runs IQ-TREE on the alignment:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> task add tree <span class="st">"mkdir -p results &amp;&amp; iqtree3 -s data/sars-cov-2.fasta -m HKY -seed 1 -T 1 --prefix results/tree --redo"</span> <span class="at">--description</span> <span class="st">"Estimate a maximum likelihood tree with IQ-TREE"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Here’s what each part of the IQ-TREE command does:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Option</th>
+<th style="text-align: left;">What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>-s data/sars-cov-2.fasta</code></td>
+<td style="text-align: left;">The alignment to analyze</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>-m HKY</code></td>
+<td style="text-align: left;">Use the HKY model of sequence evolution (as in Capstone Project 2)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>-seed 1</code></td>
+<td style="text-align: left;">The <strong><em>seed</em></strong> of IQ-TREE’s random number generator (more on this in Part 4)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>-T 1</code></td>
+<td style="text-align: left;">Use one processor (the results can differ slightly with more)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>--prefix results/tree</code></td>
+<td style="text-align: left;">Name the output files <code>results/tree.*</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>--redo</code></td>
+<td style="text-align: left;">Overwrite the output files if they already exist</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>Run it:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run tree</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>IQ-TREE prints a lot as it searches for the maximum likelihood tree, but it only takes a few seconds. Near the end, look for the <code>BEST SCORE FOUND</code>: the log-likelihood of the best tree it found.</p></li>
+<li><p>See what IQ-TREE created:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> results</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+</ol>
+</section>
+<section id="decide-what-to-commit" class="level3">
+<h3 class="anchored" data-anchor-id="decide-what-to-commit">Decide what to commit</h3>
+<p>IQ-TREE writes several files. The one we need is <code>results/tree.treefile</code>, which has the tree in Newick format (click it in VS Code to take a look). The others are reports, logs, and temporary files that IQ-TREE can recreate in a few seconds. Open <code>results/tree.log</code> and look at its first few lines: it records the date and time IQ-TREE ran, so it changes <strong><em>every</em></strong> time we run IQ-TREE, even when the results are exactly the same.</p>
+<p>We’ll tell git to ignore IQ-TREE’s other files.</p>
+<ol type="1">
+<li><p>Open <code>.gitignore</code> in VS Code, and add these lines to the end of the file:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>.gitignore</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename=".gitignore"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a># IQ-TREE files that we can recreate, and that change every time IQ-TREE runs</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>results/*.log</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>results/*.iqtree</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>results/*.ckp.gz</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>results/*.bionj</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>results/*.mldist</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Each line is a <strong><em>pattern</em></strong>, where <code>*</code> means “anything.” For example, <code>results/*.log</code> matches every file in <code>results</code> whose name ends with <code>.log</code>. Lines that start with <code>#</code> are comments.</p></li>
+<li><p>Check that git now ignores those files (only <code>results/tree.treefile</code> should be listed in the <code>results</code> folder):</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status <span class="at">--untracked-files</span><span class="op">=</span>all</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+<li><p>Commit and push:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .gitignore pixi.toml results/tree.treefile</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Estimate the ML tree with IQ-TREE"</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+</ol>
+</section>
+<section id="questions-2" class="level3">
+<h3 class="anchored" data-anchor-id="questions-2">Questions</h3>
+<p><strong>Question 7</strong>: What was the log-likelihood of the best tree IQ-TREE found (the <code>BEST SCORE FOUND</code>)?</p>
+<p><strong>Question 8</strong>: Why is it a good idea to tell git to ignore files like <code>results/tree.log</code>?</p>
+</section>
+</section>
+<section id="part-4-fitting-the-clock-and-using-your-projects-history" class="level2">
+<h2 class="anchored" data-anchor-id="part-4-fitting-the-clock-and-using-your-projects-history">Part 4: Fitting the clock, and using your project’s history</h2>
+<section id="add-the-analysis-script" class="level3">
+<h3 class="anchored" data-anchor-id="add-the-analysis-script">Add the analysis script</h3>
+<ol type="1">
+<li><p>Download the script that fits the molecular clock, and run it:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> scripts</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> <span class="at">-o</span> scripts/clock.py https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/scripts/clock.py</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run python scripts/clock.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Open <code>scripts/clock.py</code> in VS Code and skim it. It’s the same code we used in Capstone Project 2, as a plain Python script instead of a notebook: it reads IQ-TREE’s tree, calculates each genome’s distance from the root, fits the clock, prints the results, and saves a plot to <code>results/clock.png</code>. Click <code>results/clock.png</code> in VS Code to see the plot.</p></li>
+<li><p>Add a task for it. The <code>--depends-on tree</code> part tells pixi that this task needs the <code>tree</code> task to run first:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> task add clock <span class="st">"python scripts/clock.py"</span> <span class="at">--depends-on</span> tree <span class="at">--description</span> <span class="st">"Fit a molecular clock to the tree"</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> task list</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run clock</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now one command, <code>pixi run clock</code>, runs the whole analysis, from the alignment to the plot.</p></li>
+<li><p>Commit and push:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add pixi.toml scripts/clock.py results/clock.png</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Add the molecular clock script and task"</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+</ol>
+</section>
+<section id="change-the-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="change-the-analysis">Change the analysis</h3>
+<p>In Capstone Project 2, we found that Omicron doesn’t follow the clock. Let’s change the analysis to leave Omicron out, and use git to see and record the change.</p>
+<ol type="1">
+<li><p>In <code>scripts/clock.py</code>, find this line near the top:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>scripts/clock.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29" data-filename="scripts/clock.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>EXCLUDED_LINEAGES <span class="op">=</span> []</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>and change it to:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>scripts/clock.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30" data-filename="scripts/clock.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>EXCLUDED_LINEAGES <span class="op">=</span> [<span class="st">"Omicron"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+<li><p>Rerun the analysis, and see what changed:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run clock</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff scripts/clock.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>git status</code> lists <code>results/clock.png</code> and <code>scripts/clock.py</code> as changed, but not <code>results/tree.treefile</code>. IQ-TREE ran again, but because we used the same data, software, and seed, it produced exactly the same tree file, so git sees no change.</p></li>
+<li><p>Look at the new plot, then commit and push:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add scripts/clock.py results/clock.png</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Leave Omicron out of the clock"</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+</ol>
+</section>
+<section id="go-back-in-time" class="level3">
+<h3 class="anchored" data-anchor-id="go-back-in-time">Go back in time</h3>
+<p>Git keeps every version of every file you’ve committed, so you can always look at (or go back to) an earlier version.</p>
+<ol type="1">
+<li><p>List your commits, one per line:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log <span class="at">--oneline</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>HEAD</code> is git’s name for your latest commit, and <code>HEAD~1</code> means “one commit before <code>HEAD</code>.”</p></li>
+<li><p>Bring back the plot from the commit before your latest one, and look at it in VS Code (it should include Omicron again):</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> restore <span class="at">--source</span><span class="op">=</span>HEAD~1 results/clock.png</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+<li><p>Put the latest version back:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> restore results/clock.png</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>git restore &lt;file&gt;</code>, without <code>--source</code>, throws away any changes to the file since your last commit. This is also how you undo a mistake: if you break a file, you can always get back the last version you committed.</p></li>
+</ol>
+</section>
+<section id="why-the-seed-matters" class="level3">
+<h3 class="anchored" data-anchor-id="why-the-seed-matters">Why the seed matters</h3>
+<p>IQ-TREE uses random numbers while it searches for the best tree. The seed determines which random numbers it gets: the same seed gives the same random numbers, and so the same results. (If you don’t give IQ-TREE a seed, it picks one based on the current time.) Let’s see what happens with a different seed.</p>
+<ol type="1">
+<li><p>In <code>pixi.toml</code>, in the <code>tree</code> task, change <code>-seed 1</code> to <code>-seed 2</code>. Then run the analysis again, and see what changed:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run clock</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff <span class="at">--color-words</span><span class="op">=</span><span class="st">'[^,():]+'</span> results/tree.treefile</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The <code>--color-words</code> option shows the changes word by word (here, each name and branch length is a “word”), instead of line by line. The old values are in red and the new values are in green.</p></li>
+<li><p>Compare the clock’s results to what it printed before (the rate, the date of the ancestor, and <span class="math inline">\(R^2\)</span>).</p></li>
+<li><p>Undo the change to the seed, and the results it produced:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> restore pixi.toml results/</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+</ol>
+</section>
+<section id="questions-3" class="level3">
+<h3 class="anchored" data-anchor-id="questions-3">Questions</h3>
+<p><strong>Question 9</strong>: With Omicron left out, what rate (substitutions per genome per year) and date of the ancestor did the clock estimate? (They should be close to what you found in Capstone Project 2.)</p>
+<p><strong>Question 10</strong>: When you changed the seed to 2, what changed in <code>results/tree.treefile</code>? Did the clock’s printed results change? Do you think the tree from seed 2 is a different scientific result than the tree from seed 1? Why is it still important to record the seed?</p>
+</section>
+</section>
+<section id="part-5-prove-its-reproducible" class="level2">
+<h2 class="anchored" data-anchor-id="part-5-prove-its-reproducible">Part 5: Prove it’s reproducible</h2>
+<p>So far, everything has been on one computer: your codespace. The real test of reproducibility is whether the project works on a <strong><em>new</em></strong> computer. So, let’s delete your codespace, make a brand new one, and rebuild everything from your GitHub repository.</p>
+<ol type="1">
+<li><p>First, make sure all of your work is on GitHub. <code>git status</code> should say <code>nothing to commit, working tree clean</code>, and <code>Your branch is up to date with 'origin/main'</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>If not, commit and push before you go on! Anything that isn’t pushed will be lost when you delete the codespace.</p></li>
+<li><p>Go to <a href="https://github.com/codespaces" class="uri">https://github.com/codespaces</a>, click the <strong>“…”</strong> next to your codespace, and choose <strong>“Delete.”</strong></p></li>
+<li><p>Go to your repository on GitHub, and create a new codespace (<strong>“Code”</strong> → <strong>“Codespaces”</strong> → <strong>“Create codespace on main”</strong>). While it starts up, it will automatically run <code>pixi install</code>, which rebuilds your environment from <code>pixi.toml</code> and <code>pixi.lock</code>.</p></li>
+<li><p>In the new codespace, check your environment, and rerun the whole analysis:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> list</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run clock</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+</ol>
+<p>If <code>git status</code> says <code>nothing to commit, working tree clean</code>, then you just reproduced your entire analysis, on a new computer, from scratch, and got <strong><em>exactly</em></strong> the same tree and the same plot, down to the last byte.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>What if git says a file changed?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>IQ-TREE sometimes uses slightly different (but equally correct) arithmetic on different kinds of processors, so on a different computer the branch lengths in <code>results/tree.treefile</code> might differ in their last digits. If git says that the tree file changed, look at the changes with <code>git diff --color-words='[^,():]+' results/tree.treefile</code> to see how big they are, and then use <code>git restore results/</code> to go back to your committed results.</p>
+</div>
+</div>
+<section id="questions-4" class="level3">
+<h3 class="anchored" data-anchor-id="questions-4">Questions</h3>
+<p><strong>Question 11</strong>: After rerunning the analysis in your new codespace, what did <code>git status</code> say? What does that tell you about your results?</p>
+<p><strong>Question 12</strong>: What version of IQ-TREE is in your new environment? Is it the same as in Part 2 (Question 5)? Which file made sure of that?</p>
+<p><strong>Question 13</strong>: In your own words, describe one way that git, and one way that pixi, would help you (or someone else) if you came back to this project a year from now.</p>
+</section>
+</section>
+<section id="optional-reproduce-a-classmates-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="optional-reproduce-a-classmates-analysis">Optional: Reproduce a classmate’s analysis</h2>
+<p>Anyone can rebuild and rerun a public project. Ask a classmate for their repository’s URL, and try it in your codespace (replace <code>their-username</code> with their GitHub username):</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /tmp</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/their-username/comp-bio-project</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> comp-bio-project</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run clock</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /workspaces/comp-bio-project</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>git clone</code> downloads a copy of a repository, including its whole history. Did you get exactly their results?</p>
+</section>
+<section id="quick-reference" class="level2">
+<h2 class="anchored" data-anchor-id="quick-reference">Quick reference</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Command</th>
+<th style="text-align: left;">What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>git status</code></td>
+<td style="text-align: left;">Show which files have changed since your last commit</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>git add &lt;file&gt;</code></td>
+<td style="text-align: left;">Stage a file’s changes for your next commit</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>git commit -m "message"</code></td>
+<td style="text-align: left;">Save a snapshot of the staged changes, with a message</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>git push</code></td>
+<td style="text-align: left;">Send your commits to GitHub</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>git log --oneline</code></td>
+<td style="text-align: left;">List your commits, newest first</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>git diff &lt;file&gt;</code></td>
+<td style="text-align: left;">Show what changed in a file since your last commit</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>git restore &lt;file&gt;</code></td>
+<td style="text-align: left;">Throw away a file’s changes since your last commit</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>git restore --source=HEAD~1 &lt;file&gt;</code></td>
+<td style="text-align: left;">Bring back a file as it was one commit ago</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>git clone &lt;URL&gt;</code></td>
+<td style="text-align: left;">Download a copy of a repository</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>pixi init</code></td>
+<td style="text-align: left;">Start a pixi project (creates <code>pixi.toml</code>)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>pixi add &lt;package&gt;</code></td>
+<td style="text-align: left;">Add a package to the environment (updates <code>pixi.toml</code> and <code>pixi.lock</code>)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>pixi list</code></td>
+<td style="text-align: left;">List the packages in the environment, and their versions</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>pixi run &lt;command&gt;</code></td>
+<td style="text-align: left;">Run a command inside the environment</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>pixi task add &lt;name&gt; "&lt;command&gt;"</code></td>
+<td style="text-align: left;">Save a command as a task in <code>pixi.toml</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>pixi run &lt;task&gt;</code></td>
+<td style="text-align: left;">Run a task</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>pixi install</code></td>
+<td style="text-align: left;">Rebuild the environment from <code>pixi.toml</code> and <code>pixi.lock</code></td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+            // default icon
+            link.classList.add("external");
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
