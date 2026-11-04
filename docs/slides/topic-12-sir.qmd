@@ -592,7 +592,7 @@ reasonable (Challenge 8).
 ::: {.notes}
 15:00-16:00
 
-Graded for correctness (24 points + 3 extra credit); each code challenge has a
+Graded for correctness (25 points + 3 extra credit); each code challenge has a
 test cell. Remind them that simulate_birth_death is at the top of the notebook
 as a model for Challenge 1.
 :::
