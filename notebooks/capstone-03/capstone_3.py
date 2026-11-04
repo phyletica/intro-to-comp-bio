@@ -507,13 +507,13 @@ def _(mo, simulate_sir_works):
 
     _rng = random.Random(1927)
     _figure, (_left, _right) = plt.subplots(1, 2, figsize = (11, 4))
-    _maj_spread_label = "Major spread"
-    _min_spread_label = "Minor spread"
+    _maj_spread_label = "Major outbreak"
+    _min_spread_label = "Minor outbreak"
     _n_sims = 20
     _n_maj_spread = 0
     for _ in range(_n_sims):
         _times, _susceptible, _infected = simulate_sir(SCHOOL_SIZE, 1, 1.0, 0.5, _rng)
-        if max(_infected) < (0.1 * SCHOOL_SIZE):
+        if SCHOOL_SIZE - _susceptible[-1] < 0.1 * SCHOOL_SIZE:
             _left.step(_times, _infected, where = "post", color = "blue",
                        label = _min_spread_label, alpha = 0.6, linewidth = 2)
         else:
