@@ -1,0 +1,608 @@
+---
+title: "SIR models"
+subtitle: "How outbreaks grow, peak, and end"
+# author: "Jamie Oaks"
+institute: "BIOL 5/6800 &mdash; Intro to Comp Bio"
+format:
+  revealjs:
+    slide-number: c/t
+    incremental: false
+    code-line-numbers: false
+    smaller: false
+    center-title-slide: true
+    history: false
+    include-in-header:
+      - text: |
+          <style>
+          .reveal p > img,
+          .reveal figure {
+            margin-bottom: 0px !important;
+            padding-bottom: 0px !important;
+          }
+          </style>
+metadata-files:
+  - _metadata.yml
+bibliography: ../references.bib
+---
+
+```{python}
+#| label: setup
+#| echo: false
+#| eval: true
+
+import random
+
+import matplotlib.pyplot as plt
+from matplotlib.patches import FancyBboxPatch
+
+GRAY = "#b0b0b0"
+RED = "firebrick"
+BLUE = "steelblue"
+SCHOOL_SIZE = 763
+OUTBREAK_DATES = [
+    "Jan 22", "Jan 23", "Jan 24", "Jan 25", "Jan 26", "Jan 27", "Jan 28",
+    "Jan 29", "Jan 30", "Jan 31", "Feb 1", "Feb 2", "Feb 3", "Feb 4",
+]
+IN_BED = [3, 8, 26, 76, 225, 298, 258, 233, 189, 128, 68, 29, 14, 4]
+
+
+def simulate_sir(population_size, initial_infected, beta, gamma, rng):
+    """Gillespie simulation of the SIR model, until no one is infected."""
+    s, i, clock = population_size - initial_infected, initial_infected, 0.0
+    times, s_counts, i_counts = [0.0], [s], [i]
+    while i > 0:
+        infection_rate = beta * s * i / population_size
+        total_rate = infection_rate + gamma * i
+        clock += rng.expovariate(total_rate)
+        if rng.random() < infection_rate / total_rate:
+            s, i = s - 1, i + 1
+        else:
+            i -= 1
+        times.append(clock)
+        s_counts.append(s)
+        i_counts.append(i)
+    return times, s_counts, i_counts
+
+
+def simulate_sir_euler(population_size, initial_infected, beta, gamma,
+                       max_time, time_step):
+    """Euler's method for the SIR model."""
+    s, i, r = population_size - initial_infected, initial_infected, 0.0
+    times, s_counts, i_counts, r_counts = [0.0], [s], [i], [r]
+    for step in range(round(max_time / time_step)):
+        new_infections = beta * s * i * time_step / population_size
+        recoveries = gamma * i * time_step
+        s, i, r = s - new_infections, i + new_infections - recoveries, r + recoveries
+        times.append((step + 1) * time_step)
+        s_counts.append(s)
+        i_counts.append(i)
+        r_counts.append(r)
+    return times, s_counts, i_counts, r_counts
+
+
+def tidy(axes, fontsize = 16):
+    axes.tick_params(labelsize = fontsize * 0.8)
+    for side in ["right", "top"]:
+        axes.spines[side].set_visible(False)
+```
+
+## Last time
+
+Lineages **split** (birth) and **die** (death) at random
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+Today: The same model, but the "lineages" are **infections**
+:::
+
+. . .
+
+-   An infected person passes the virus on: "birth" of an infection
+-   An infected person recovers: "death" of an infection
+
+::: {.notes}
+0:00-1:00
+
+Last time, the recap of the birth-death lab ended with this idea. Today we
+take it seriously: an outbreak is a birth-death process, with one twist. This
+deck introduces the concepts for Capstone 3, which students work on outside of
+class.
+:::
+
+# The SIR model {background-color="#1b3a5c"}
+
+## Three groups of people^[@Kermack1927]
+
+```{python}
+#| label: compartments
+#| echo: false
+#| eval: true
+#| fig-width: 11
+#| fig-height: 2.6
+#| fig-align: center
+
+_figure, _axes = plt.subplots(figsize = (11, 2.6))
+_boxes = [("S", "Susceptible", BLUE, 0.0), ("I", "Infected", RED, 5.0),
+          ("R", "Recovered", "dimgray", 10.0)]
+for _letter, _name, _color, _x in _boxes:
+    _axes.add_patch(FancyBboxPatch((_x, 0.0), 2.2, 1.6,
+                                   boxstyle = "round,pad=0.08",
+                                   facecolor = _color, edgecolor = "none"))
+    _axes.text(_x + 1.1, 0.95, _letter, ha = "center", va = "center",
+               fontsize = 30, color = "white", fontweight = "bold")
+    _axes.text(_x + 1.1, 0.35, _name, ha = "center", va = "center",
+               fontsize = 15, color = "white")
+for _x0, _label in [(2.5, "infection\n" + r"$\beta I S / N$"),
+                    (7.5, "recovery\n" + r"$\gamma I$")]:
+    _axes.annotate("", xy = (_x0 + 2.2, 0.6), xytext = (_x0, 0.6),
+                   arrowprops = dict(arrowstyle = "-|>", lw = 2.5,
+                                     color = "black", mutation_scale = 25))
+    _axes.text(_x0 + 1.1, 0.8, _label, ha = "center", va = "bottom",
+               fontsize = 16, linespacing = 1.4)
+_axes.set_xlim(-0.3, 12.5)
+_axes.set_ylim(-0.3, 1.9)
+_axes.axis("off")
+plt.show()
+```
+
+::: {.incremental style="font-size: 80%;"}
+-   $N$ people: $S + I + R = N$
+-   Each infected person recovers at rate $\gamma$ (on average, after
+    $1 / \gamma$ days)
+-   Each infected person passes on the virus at rate $\beta$, but only
+    a fraction, $S / N$, of the people they meet are susceptible
+    -   So, transmission rate is $\beta \frac{S}{N}$ per infected person
+:::
+
+::: {.notes}
+1:00-3:00
+
+Recovered people are immune (or isolated); either way they're out of the game.
+Recovery is exactly like extinction in a birth-death model: total rate gamma
+times I. Infection is like birth, with a twist: the rate per infected person is
+beta times S/N, so it slows down as the virus runs out of susceptible people.
+:::
+
+## Compared to a birth-death model
+
+::: {style="font-size: 85%;"}
+| | Birth-death | SIR |
+|:--|:-:|:-:|
+| What multiplies? | Lineages, $n$ | Infections, $I$ |
+| Total rate of "births" | $\lambda n$ | $\beta \frac{S}{N} \cdot I$ |
+| Total rate of "deaths" | $\mu n$ | $\gamma I$ |
+:::
+
+. . .
+
+At the start of an outbreak, $S / N \approx 1$, so it ***is*** a birth-death
+process with $\lambda = \beta$ and $\mu = \gamma$
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+The difference: Each infection "uses up" a susceptible person, so the outbreak
+slows down as $S$ shrinks
+:::
+
+::: {.notes}
+3:00-4:00
+
+Keep this table in mind; it's the key to Part 2 of the capstone.
+:::
+
+## The basic reproduction number
+
+$R_0$: The average number of people one infected person infects, when everyone
+else is susceptible
+
+. . .
+
+Infects at rate $\beta$, for an average of $1 / \gamma$ days:
+
+$$
+R_0 = \frac{\beta}{\gamma}
+$$
+
+. . .
+
+::: {.callout-tip}
+## Question
+What do you think happens when $R_0 < 1$? When $R_0 > 1$?
+:::
+
+::: {.notes}
+4:00-5:00
+
+The R in R0 is not the R in SIR. Take a couple of answers: if each infected
+person infects fewer than one other on average, each "generation" is smaller
+than the last. Students explore the threshold with sliders in Challenge 6.
+:::
+
+# Simulating an outbreak one event at a time {background-color="#1b3a5c"}
+
+## The Gillespie algorithm, again^[@Gillespie1977]
+
+::: {.incremental style="font-size: 88%;"}
+1.  Calculate the total (population) rates: infection $\beta I S / N$ and
+    recovery $\gamma I$
+2.  Draw an exponential **waiting time** using the **total rate**
+3.  Choose **which event** happened, with probability proportional to its rate
+    -   Infection: $S - 1$, $I + 1$
+    -   Recovery: $I - 1$
+4.  Repeat until $I = 0$
+:::
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+Same recipe as `simulate_birth_death`, with different rates
+:::
+
+::: {.notes}
+5:00-6:00
+
+Students write simulate_sir in Challenge 1 by adapting simulate_birth_death,
+which is given at the top of the capstone. No max_time: every outbreak ends,
+because each person can be infected only once.
+:::
+
+## Minor and major outbreaks
+
+```{python}
+#| label: stochastic
+#| echo: false
+#| eval: true
+#| fig-width: 11
+#| fig-height: 4
+#| fig-align: center
+
+_rng = random.Random(1927)
+_figure, (_left, _right) = plt.subplots(1, 2, figsize = (11, 4))
+_maj_spread_label = "Major outbreak"
+_min_spread_label = "Minor outbreak"
+_n_sims = 20
+_n_maj_spread = 0
+for _ in range(20):
+    _t, _s, _i = simulate_sir(SCHOOL_SIZE, 1, 1.0, 0.5, _rng)
+    _left.step(_t, _i, where = "post", color = RED, alpha = 0.6, lw = 1.2)
+    if SCHOOL_SIZE - _s[-1] < 0.1 * SCHOOL_SIZE:
+        _left.step(_t, _i, where = "post", color = "blue", alpha = 0.6, lw = 1.9,
+                   label = _min_spread_label)
+    else:
+        _left.step(_t, _i, where = "post", color = RED, alpha = 0.6, lw = 1.2,
+                   label = _maj_spread_label)
+        _n_maj_spread += 1
+_left.set_xlabel("Days", fontsize = 16)
+_left.set_ylabel("Infected", fontsize = 16)
+_left.set_title("20 outbreaks", fontsize = 16)
+_legend_handles, _legend_labels = _left.get_legend_handles_labels()
+_uniq_legend_entries = dict(zip(_legend_labels, _legend_handles))
+_annot_legend_entries = {}
+for _label, _handle in _uniq_legend_entries.items():
+    if _label == _min_spread_label:
+        _annot_legend_entries[f"{_label} ({_n_sims - _n_maj_spread})"] = _handle
+    else:
+        _annot_legend_entries[f"{_label} ({_n_maj_spread})"] = _handle
+_left.legend(_annot_legend_entries.values(), _annot_legend_entries.keys())
+_sizes = []
+for _ in range(1000):
+    _t, _s, _i = simulate_sir(SCHOOL_SIZE, 1, 1.0, 0.5, _rng)
+    _sizes.append(SCHOOL_SIZE - _s[-1])
+_right.hist(_sizes, bins = 50, color = GRAY)
+_right.set_xlabel("Total number infected", fontsize = 16)
+_right.set_ylabel("Outbreaks", fontsize = 16)
+_right.set_title("1,000 outbreaks", fontsize = 16)
+for _ax in (_left, _right):
+    tidy(_ax)
+_figure.tight_layout()
+plt.show()
+```
+
+::: {style="font-size: 85%;"}
+$N = 763$, one infected person, $\beta = 1$, $\gamma = 0.5$ per day
+($R_0 = 2$)
+:::
+
+::: {.notes}
+6:00-7:30
+
+Almost no outbreaks in between: either the virus disappears after a handful of
+infections, or most of the school gets infected. Ask: what does this remind you
+of from last time? (Clades that either go extinct early or grow big.)
+:::
+
+## How often does an outbreak fizzle out?
+
+```{python}
+#| label: fizzle-table
+#| echo: false
+#| eval: true
+#| output: asis
+
+_rng = random.Random(1978)
+_rows = []
+for _r0 in [1.5, 2.0, 3.0]:
+    _minor = 0
+    for _ in range(1000):
+        _t, _s, _i = simulate_sir(SCHOOL_SIZE, 1, _r0 * 0.5, 0.5, _rng)
+        if SCHOOL_SIZE - _s[-1] < 0.1 * SCHOOL_SIZE:
+            _minor += 1
+    _rows.append(f"| {_r0} | {_minor / 1000:.2f} |")
+print(
+    "::: {style=\"font-size: 85%;\"}\n"
+    + "| $R_0$ | Fraction of minor outbreaks (simulated) |\n"
+    + "|:-:|:-:|\n"
+    + "\n".join(_rows)
+    + "\n:::"
+)
+```
+
+. . .
+
+::: {.callout-tip}
+## Question
+Last time, a clade starting with one lineage eventually died out with
+probability $\mu / \lambda$.^[@Kendall1948]
+What should the probability be here?
+:::
+
+::: {.notes}
+7:30-9:00
+
+Don't give it away completely; this is Challenge 3. (Answer: early on it's a
+birth-death process with lambda = beta and mu = gamma, so mu/lambda =
+gamma/beta = 1/R0: 0.67, 0.50, 0.33.) Point out the public-health meaning: one
+infected traveler doesn't guarantee an epidemic, but repeated introductions
+eventually get "lucky."
+:::
+
+# The average outbreak {background-color="#1b3a5c"}
+
+## Euler's method {.smaller}
+
+In a short time $\Delta t$, the **expected** numbers of events are:
+
+$$
+\text{new infections} = \frac{\beta I S}{N} \Delta t
+\qquad
+\text{recoveries} = \gamma I \Delta t
+$$
+
+. . .
+
+Update, and repeat, one time step at a time:
+
+$$
+\begin{aligned}
+S &\leftarrow S - \text{new infections} \\
+I &\leftarrow I + \text{new infections} - \text{recoveries} \\
+R &\leftarrow R + \text{recoveries}
+\end{aligned}
+$$
+
+. . .
+
+-   Solves the SIR ***differential equations***, *e.g.*,
+    $\frac{dI}{dt} = \frac{\beta I S}{N} - \gamma I$
+-   Smaller $\Delta t$ &rarr; closer to the exact solution (but more steps)
+
+::: {.notes}
+9:00-10:30
+
+S, I, and R are now averages, so they can be fractions of people. Emphasize:
+calculate both amounts before updating anything. Students write
+simulate_sir_euler (Challenge 4) and their own plotting function (Challenge 5).
+In Challenge 6 they try big time steps to see what goes wrong.
+:::
+
+## Random outbreaks vs. the average
+
+```{python}
+#| label: stochastic-vs-euler
+#| echo: false
+#| eval: true
+#| fig-width: 10
+#| fig-height: 3.5
+#| fig-align: center
+
+_rng = random.Random(3)
+_figure, _axes = plt.subplots(figsize = (10, 3.5))
+_shown = 0
+while _shown < 15:
+    _t, _s, _i = simulate_sir(SCHOOL_SIZE, 1, 1.0, 0.5, _rng)
+    if SCHOOL_SIZE - _s[-1] < 0.1 * SCHOOL_SIZE:
+        continue
+    _axes.step(_t, _i, where = "post", color = GRAY, lw = 1)
+    _shown += 1
+_t, _s, _i, _r = simulate_sir_euler(SCHOOL_SIZE, 1, 1.0, 0.5, 40.0, 0.01)
+_axes.plot(_t, _i, color = RED, lw = 3.5, label = "Euler's method")
+_axes.plot([], [], color = GRAY, lw = 1, label = "15 major outbreaks (Gillespie)")
+_axes.set_xlabel("Days", fontsize = 16)
+_axes.set_ylabel("Infected", fontsize = 16)
+_axes.legend(fontsize = 14, frameon = False)
+tidy(_axes)
+_figure.tight_layout()
+plt.show()
+```
+
+::: {style="font-size: 85%;"}
+-   Major outbreaks have the same **shape**
+    -   Randomness early on mostly shifts **when** they take off
+:::
+
+::: {.notes}
+10:30-11:30
+
+Same parameters as before (R0 = 2). Only major outbreaks shown. The early,
+random phase is like the start of the birth-death simulations (most variable
+near the start); once hundreds of people are involved, the randomness averages
+out.
+:::
+
+## Why does an outbreak peak?
+
+```{python}
+#| label: peak
+#| echo: false
+#| eval: true
+#| fig-width: 10
+#| fig-height: 2.9
+#| fig-align: center
+
+_t, _s, _i, _r = simulate_sir_euler(SCHOOL_SIZE, 1, 1.0, 0.5, 40.0, 0.01)
+_peak = _i.index(max(_i))
+_figure, _axes = plt.subplots(figsize = (10, 2.9))
+_axes.plot(_t, [_v / SCHOOL_SIZE for _v in _s], color = BLUE, lw = 3,
+           label = "$S / N$")
+_axes.plot(_t, [_v / SCHOOL_SIZE for _v in _i], color = RED, lw = 3,
+           label = "$I / N$")
+_axes.axvline(_t[_peak], color = "black", ls = "--", lw = 1.5)
+_axes.text(_t[_peak] + 0.5, 0.9, "Peak of $I$", fontsize = 14)
+_axes.set_xlabel("Days", fontsize = 16)
+_axes.set_ylabel("Fraction of people", fontsize = 16)
+_axes.legend(fontsize = 14, frameon = False, loc = "center right")
+tidy(_axes)
+_figure.tight_layout()
+plt.show()
+```
+
+::: {style="font-size: 85%;"}
+Each infected person infects at rate $\beta S / N$ and recovers at rate
+$\gamma$
+:::
+
+. . .
+
+::: {.callout-tip}
+## Question
+What is $S / N$ when $I$ stops growing? (You'll find out in the capstone!)
+:::
+
+::: {.notes}
+11:30-12:30
+
+R0 = 2 here. The outbreak turns around long before it runs out of susceptible
+people. Don't give the answer (S/N = 1/R0 at the peak) away; it's Challenge 6,
+and it sets up the herd immunity extra credit (1 - 1/R0).
+:::
+
+# The boarding school {background-color="#1b3a5c"}
+
+## Influenza at a boarding school, 1978^[@Anonymous1978bmj]
+
+```{python}
+#| label: school-data
+#| echo: false
+#| eval: true
+#| fig-width: 10
+#| fig-height: 2.8
+#| fig-align: center
+
+_figure, _axes = plt.subplots(figsize = (10, 2.8))
+_axes.bar(range(1, 15), IN_BED, color = BLUE)
+_axes.set_xticks(range(1, 15), OUTBREAK_DATES, rotation = 45)
+_axes.set_ylabel("Students in bed", fontsize = 16)
+tidy(_axes, fontsize = 15)
+_figure.tight_layout()
+plt.show()
+```
+
+::: {style="font-size: 78%;"}
+-   A strain of H1N1 that hadn't circulated since the 1950s: no one was immune
+-   512 of the school's 763 students were confined to bed within two weeks
+:::
+
+::: {.notes}
+12:30-13:30
+
+From an anonymous report in the BMJ; the counts were only published as a
+figure, so these numbers are digitized (via De Vries et al. 2006, as used in
+the R package outbreaks) and vary slightly among sources. It's one of the
+most-used datasets in epidemiology courses.
+:::
+
+## Fitting the model to the data {.smaller}
+
+For each $\beta$ and $\gamma$, how far are the predictions from the counts?
+
+$$
+\text{sum of squares} = \sum_{\text{days}} \left(\text{observed} -
+\text{predicted}\right)^2
+$$
+
+::: {.incremental}
+-   ***Least squares***: The best fit has the **smallest** sum of squares (like
+    `linregress` in Capstone 2)
+-   ***Grid search***: Try every combination of $\beta$ and $\gamma$ from two
+    lists, and keep the best
+:::
+
+. . .
+
+::: {.callout-tip}
+## Watch for
+How contagious was this virus? And why did only 512 students end up in bed?
+:::
+
+::: {.notes}
+13:30-14:30
+
+The predictions come from Euler's method (a helper function in the capstone).
+We treat students in bed as the infected group, and start with one infected student on
+January 21. Students should think about whether those assumptions are
+reasonable (Challenge 8).
+:::
+
+## Summary
+
+::: {style="font-size: 90%;"}
+-   The **SIR model**: infections at rate $\beta I S / N$, recoveries at rate
+    $\gamma I$
+-   $R_0 = \beta / \gamma$: the average number of people one case infects
+-   Near its start, an outbreak is a **birth-death process**, so many
+    outbreaks **fizzle out** by chance
+-   **Euler's method** calculates the average course of an outbreak, one small
+    time step at a time
+-   Fitting the model to data tells us how contagious a virus is
+:::
+
+::: {.notes}
+14:30-15:00
+:::
+
+## Capstone 3
+
+::: {style="font-size: 85%;"}
+1.  `simulate_sir`: The Gillespie algorithm for outbreaks
+2.  `fraction_minor_outbreaks`: How often does an outbreak fizzle out?
+3.  `simulate_sir_euler` and `plot_sir`: Explore the average outbreak, with
+    sliders
+4.  `sum_of_squares` and `fit_sir`: Fit the model to the boarding school
+5.  Extra credit: How many students would the school have needed to vaccinate?
+:::
+
+## Capstone 3
+
+1.  Log into [molab](https://molab.marimo.io/)
+2.  [Open Capstone 3 in molab](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/capstone-03/capstone_3.py)
+3.  Click "Fork" button
+
+::: {.notes}
+15:00-16:00
+
+Graded for correctness (24 points + 3 extra credit); each code challenge has a
+test cell. Remind them that simulate_birth_death is at the top of the notebook
+as a model for Challenge 1.
+:::
+
+# References
+
+::: {#refs}
+:::
+
+## Acknowledgements
+
+I drafted and iterated on these slides in collaboration with
+Anthropic's Claude (Opus 5.5 model).
