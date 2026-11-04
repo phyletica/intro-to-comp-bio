@@ -14,7 +14,7 @@
     "href": "index.html#lecture-presentations",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lecture Presentations",
-    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides\nView Lecture 4 Slides\nView Lecture 5 Slides\nView Lecture 6 Slides\nView Lecture 7 Slides\nView Lecture 8 Slides\nView Lecture 9 Slides\nView Lecture 10 Slides\nView Lecture 11 Slides",
+    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides\nView Lecture 4 Slides\nView Lecture 5 Slides\nView Lecture 6 Slides\nView Lecture 7 Slides\nView Lecture 8 Slides\nView Lecture 9 Slides\nView Lecture 10 Slides\nView Lecture 11 Slides\nView Lecture 12 Slides",
     "crumbs": [
       "Home"
     ]
@@ -34,7 +34,7 @@
     "href": "index.html#capstone-projects",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Capstone projects",
-    "text": "Capstone projects\nTo work on a Capstone Project below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button.\n\nIf you are having trouble with molab, you can run the notebooks on your own computer instead.\n\nCapstone 1: Tracing SARS-CoV-2 variants \nCapstone 2: Dating the ancestor of SARS-CoV-2",
+    "text": "Capstone projects\nTo work on a Capstone Project below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button.\n\nIf you are having trouble with molab, you can run the notebooks on your own computer instead.\n\nCapstone 1: Tracing SARS-CoV-2 variants \nCapstone 2: Dating the ancestor of SARS-CoV-2 \nCapstone 3: Influenza at a boarding school",
     "crumbs": [
       "Home"
     ]
@@ -1061,6 +1061,118 @@
     "objectID": "slides/topic-09-substitution-models.html#acknowledgements",
     "href": "slides/topic-09-substitution-models.html#acknowledgements",
     "title": "Richer models of sequence evolution",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nI drafted and iterated on these slides in collaboration with Anthropic’s Claude (Opus 5.5 model)."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#last-time",
+    "href": "slides/topic-12-sir.html#last-time",
+    "title": "SIR models",
+    "section": "Last time",
+    "text": "Last time\nLineages split (birth) and die (death) at random\n\n\n\n\nToday: The same model, but the “lineages” are infections\n\n\n\n\n\n\nAn infected person passes the virus on: “birth” of an infection\nAn infected person recovers: “death” of an infection\n\n\n0:00-1:00\nLast time, the recap of the birth-death lab ended with this idea. Today we take it seriously: an outbreak is a birth-death process, with one twist. This deck introduces the concepts for Capstone 3, which students work on outside of class."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#three-groups-of-people",
+    "href": "slides/topic-12-sir.html#three-groups-of-people",
+    "title": "SIR models",
+    "section": "Three groups of people1",
+    "text": "Three groups of people1\n\n\n\n\n\n\n\n\n\n\n\n\\(N\\) people: \\(S + I + R = N\\)\nEach infected person recovers at rate \\(\\gamma\\) (on average, after \\(1 / \\gamma\\) days)\nEach infected person passes on the virus at rate \\(\\beta\\), but only a fraction, \\(S / N\\), of the people they meet are susceptible\n\nSo, transmission rate is \\(\\beta \\frac{S}{N}\\) per infected person\n\n\n\n\n1:00-3:00\nRecovered people are immune (or isolated); either way they’re out of the game. Recovery is exactly like extinction in a birth-death model: total rate gamma times I. Infection is like birth, with a twist: the rate per infected person is beta times S/N, so it slows down as the virus runs out of susceptible people.\n\nKermack and McKendrick (1927)"
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#compared-to-a-birth-death-model",
+    "href": "slides/topic-12-sir.html#compared-to-a-birth-death-model",
+    "title": "SIR models",
+    "section": "Compared to a birth-death model",
+    "text": "Compared to a birth-death model\n\n\n\n\n\nBirth-death\nSIR\n\n\n\n\nWhat multiplies?\nLineages, \\(n\\)\nInfections, \\(I\\)\n\n\nTotal rate of “births”\n\\(\\lambda n\\)\n\\(\\beta \\frac{S}{N} \\cdot I\\)\n\n\nTotal rate of “deaths”\n\\(\\mu n\\)\n\\(\\gamma I\\)\n\n\n\n\n\nAt the start of an outbreak, \\(S / N \\approx 1\\), so it is a birth-death process with \\(\\lambda = \\beta\\) and \\(\\mu = \\gamma\\)\n\n\n\n\n\nThe difference: Each infection “uses up” a susceptible person, so the outbreak slows down as \\(S\\) shrinks\n\n\n\n\n3:00-4:00\nKeep this table in mind; it’s the key to Part 2 of the capstone."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#the-basic-reproduction-number",
+    "href": "slides/topic-12-sir.html#the-basic-reproduction-number",
+    "title": "SIR models",
+    "section": "The basic reproduction number",
+    "text": "The basic reproduction number\n\\(R_0\\): The average number of people one infected person infects, when everyone else is susceptible\n\nInfects at rate \\(\\beta\\), for an average of \\(1 / \\gamma\\) days:\n\\[\nR_0 = \\frac{\\beta}{\\gamma}\n\\]\n\n\n\n\n\n\n\n\nQuestion\n\n\nWhat do you think happens when \\(R_0 &lt; 1\\)? When \\(R_0 &gt; 1\\)?\n\n\n\n\n4:00-5:00\nThe R in R0 is not the R in SIR. Take a couple of answers: if each infected person infects fewer than one other on average, each “generation” is smaller than the last. Students explore the threshold with sliders in Challenge 6."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#the-gillespie-algorithm-again",
+    "href": "slides/topic-12-sir.html#the-gillespie-algorithm-again",
+    "title": "SIR models",
+    "section": "The Gillespie algorithm, again1",
+    "text": "The Gillespie algorithm, again1\n\n\nCalculate the total (population) rates: infection \\(\\beta I S / N\\) and recovery \\(\\gamma I\\)\nDraw an exponential waiting time using the total rate\nChoose which event happened, with probability proportional to its rate\n\nInfection: \\(S - 1\\), \\(I + 1\\)\nRecovery: \\(I - 1\\)\n\nRepeat until \\(I = 0\\)\n\n\n\n\n\n\nSame recipe as simulate_birth_death, with different rates\n\n\n\n\n5:00-6:00\nStudents write simulate_sir in Challenge 1 by adapting simulate_birth_death, which is given at the top of the capstone. No max_time: every outbreak ends, because each person can be infected only once.\n\n\nGillespie (1977)"
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#minor-and-major-outbreaks",
+    "href": "slides/topic-12-sir.html#minor-and-major-outbreaks",
+    "title": "SIR models",
+    "section": "Minor and major outbreaks",
+    "text": "Minor and major outbreaks\n\n\n\n\n\n\n\n\n\n\n\\(N = 763\\), one infected person, \\(\\beta = 1\\), \\(\\gamma = 0.5\\) per day (\\(R_0 = 2\\))\n\n\n6:00-7:30\nAlmost no outbreaks in between: either the virus disappears after a handful of infections, or most of the school gets infected. Ask: what does this remind you of from last time? (Clades that either go extinct early or grow big.)"
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#how-often-does-an-outbreak-fizzle-out",
+    "href": "slides/topic-12-sir.html#how-often-does-an-outbreak-fizzle-out",
+    "title": "SIR models",
+    "section": "How often does an outbreak fizzle out?",
+    "text": "How often does an outbreak fizzle out?\n\n\n\n\n\n\\(R_0\\)\nFraction of minor outbreaks (simulated)\n\n\n\n\n1.5\n0.65\n\n\n2.0\n0.52\n\n\n3.0\n0.34\n\n\n\n\n\n\n\n\n\n\n\n\nQuestion\n\n\nLast time, a clade starting with one lineage eventually died out with probability \\(\\mu / \\lambda\\).1 What should the probability be here?\n\n\n\n\n7:30-9:00\nDon’t give it away completely; this is Challenge 3. (Answer: early on it’s a birth-death process with lambda = beta and mu = gamma, so mu/lambda = gamma/beta = 1/R0: 0.67, 0.50, 0.33.) Point out the public-health meaning: one infected traveler doesn’t guarantee an epidemic, but repeated introductions eventually get “lucky.”\n\n\nKendall (1948)"
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#eulers-method",
+    "href": "slides/topic-12-sir.html#eulers-method",
+    "title": "SIR models",
+    "section": "Euler’s method",
+    "text": "Euler’s method\nIn a short time \\(\\Delta t\\), the expected numbers of events are:\n\\[\n\\text{new infections} = \\frac{\\beta I S}{N} \\Delta t\n\\qquad\n\\text{recoveries} = \\gamma I \\Delta t\n\\]\n\nUpdate, and repeat, one time step at a time:\n\\[\n\\begin{aligned}\nS &\\leftarrow S - \\text{new infections} \\\\\nI &\\leftarrow I + \\text{new infections} - \\text{recoveries} \\\\\nR &\\leftarrow R + \\text{recoveries}\n\\end{aligned}\n\\]\n\n\n\nSolves the SIR differential equations, e.g., \\(\\frac{dI}{dt} = \\frac{\\beta I S}{N} - \\gamma I\\)\nSmaller \\(\\Delta t\\) → closer to the exact solution (but more steps)\n\n\n9:00-10:30\nS, I, and R are now averages, so they can be fractions of people. Emphasize: calculate both amounts before updating anything. Students write simulate_sir_euler (Challenge 4) and their own plotting function (Challenge 5). In Challenge 6 they try big time steps to see what goes wrong."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#random-outbreaks-vs.-the-average",
+    "href": "slides/topic-12-sir.html#random-outbreaks-vs.-the-average",
+    "title": "SIR models",
+    "section": "Random outbreaks vs. the average",
+    "text": "Random outbreaks vs. the average\n\n\n\n\n\n\n\n\n\n\n\nMajor outbreaks have the same shape\n\nRandomness early on mostly shifts when they take off\n\n\n\n\n10:30-11:30\nSame parameters as before (R0 = 2). Only major outbreaks shown. The early, random phase is like the start of the birth-death simulations (most variable near the start); once hundreds of people are involved, the randomness averages out."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#why-does-an-outbreak-peak",
+    "href": "slides/topic-12-sir.html#why-does-an-outbreak-peak",
+    "title": "SIR models",
+    "section": "Why does an outbreak peak?",
+    "text": "Why does an outbreak peak?\n\n\n\n\n\n\n\n\n\n\nEach infected person infects at rate \\(\\beta S / N\\) and recovers at rate \\(\\gamma\\)\n\n\n\n\n\n\n\n\nQuestion\n\n\nWhat is \\(S / N\\) when \\(I\\) stops growing? (You’ll find out in the capstone!)\n\n\n\n\n11:30-12:30\nR0 = 2 here. The outbreak turns around long before it runs out of susceptible people. Don’t give the answer (S/N = 1/R0 at the peak) away; it’s Challenge 6, and it sets up the herd immunity extra credit (1 - 1/R0)."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#influenza-at-a-boarding-school-1978",
+    "href": "slides/topic-12-sir.html#influenza-at-a-boarding-school-1978",
+    "title": "SIR models",
+    "section": "Influenza at a boarding school, 19781",
+    "text": "Influenza at a boarding school, 19781\n\n\n\n\n\n\n\n\n\n\n\nA strain of H1N1 that hadn’t circulated since the 1950s: no one was immune\n512 of the school’s 763 students were confined to bed within two weeks\n\n\n\n12:30-13:30\nFrom an anonymous report in the BMJ; the counts were only published as a figure, so these numbers are digitized (via De Vries et al. 2006, as used in the R package outbreaks) and vary slightly among sources. It’s one of the most-used datasets in epidemiology courses.\n\nAnonymous (1978)"
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#fitting-the-model-to-the-data",
+    "href": "slides/topic-12-sir.html#fitting-the-model-to-the-data",
+    "title": "SIR models",
+    "section": "Fitting the model to the data",
+    "text": "Fitting the model to the data\nFor each \\(\\beta\\) and \\(\\gamma\\), how far are the predictions from the counts?\n\\[\n\\text{sum of squares} = \\sum_{\\text{days}} \\left(\\text{observed} -\n\\text{predicted}\\right)^2\n\\]\n\nLeast squares: The best fit has the smallest sum of squares (like linregress in Capstone 2)\nGrid search: Try every combination of \\(\\beta\\) and \\(\\gamma\\) from two lists, and keep the best\n\n\n\n\n\n\n\n\nWatch for\n\n\nHow contagious was this virus? And why did only 512 students end up in bed?\n\n\n\n\n13:30-14:30\nThe predictions come from Euler’s method (a helper function in the capstone). We treat students in bed as the infected group, and start with one infected student on January 21. Students should think about whether those assumptions are reasonable (Challenge 8)."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#summary",
+    "href": "slides/topic-12-sir.html#summary",
+    "title": "SIR models",
+    "section": "Summary",
+    "text": "Summary\n\n\nThe SIR model: infections at rate \\(\\beta I S / N\\), recoveries at rate \\(\\gamma I\\)\n\\(R_0 = \\beta / \\gamma\\): the average number of people one case infects\nNear its start, an outbreak is a birth-death process, so many outbreaks fizzle out by chance\nEuler’s method calculates the average course of an outbreak, one small time step at a time\nFitting the model to data tells us how contagious a virus is\n\n\n\n14:30-15:00"
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#capstone-3",
+    "href": "slides/topic-12-sir.html#capstone-3",
+    "title": "SIR models",
+    "section": "Capstone 3",
+    "text": "Capstone 3\n\n\nsimulate_sir: The Gillespie algorithm for outbreaks\nfraction_minor_outbreaks: How often does an outbreak fizzle out?\nsimulate_sir_euler and plot_sir: Explore the average outbreak, with sliders\nsum_of_squares and fit_sir: Fit the model to the boarding school\nExtra credit: How many students would the school have needed to vaccinate?"
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#capstone-3-1",
+    "href": "slides/topic-12-sir.html#capstone-3-1",
+    "title": "SIR models",
+    "section": "Capstone 3",
+    "text": "Capstone 3\n\nLog into molab\nOpen Capstone 3 in molab\nClick “Fork” button\n\n\n15:00-16:00\nGraded for correctness (25 points + 3 extra credit); each code challenge has a test cell. Remind them that simulate_birth_death is at the top of the notebook as a model for Challenge 1."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#acknowledgements",
+    "href": "slides/topic-12-sir.html#acknowledgements",
+    "title": "SIR models",
     "section": "Acknowledgements",
     "text": "Acknowledgements\nI drafted and iterated on these slides in collaboration with Anthropic’s Claude (Opus 5.5 model)."
   },
