@@ -26,7 +26,7 @@ with app.setup:
         "Jan 22", "Jan 23", "Jan 24", "Jan 25", "Jan 26", "Jan 27", "Jan 28",
         "Jan 29", "Jan 30", "Jan 31", "Feb 1", "Feb 2", "Feb 3", "Feb 4",
     ]
-    # The number of boys confined to bed on each day
+    # The number of students confined to bed on each day
     IN_BED = [3, 8, 26, 76, 225, 298, 258, 233, 189, 128, 68, 29, 14, 4]
 
 
@@ -58,13 +58,13 @@ def _(mo):
     mo.md(r"""
     ## The objective
 
-    In January 1978, influenza swept through a boarding school for boys in the
+    In January 1978, influenza swept through a boarding school for students in the
     north of England.
     The virus was a strain of H1N1 influenza that had not circulated in people
-    since the 1950s, so none of the boys had immunity to it.
-    In just two weeks, 512 of the 763 boys at the school were sick enough to be
+    since the 1950s, so none of the students had immunity to it.
+    In just two weeks, 512 of the 763 students at the school were sick enough to be
     confined to bed.
-    The school's doctors counted how many boys were in bed each day (plotted in the
+    The school's doctors counted how many students were in bed each day (plotted in the
     next cell), and these counts have become one of the most famous datasets in
     epidemiology.
 
@@ -94,7 +94,7 @@ def _(mo):
     ///
 
     **You do not need to edit the next cell.**
-    It plots the number of boys confined to bed each day during the 1978 influenza
+    It plots the number of students confined to bed each day during the 1978 influenza
     outbreak at the English boarding school.
     """)
     return
@@ -106,8 +106,8 @@ def _():
     _axes.bar(OUTBREAK_DAYS, IN_BED, color = "steelblue")
     _axes.set_xticks(OUTBREAK_DAYS, OUTBREAK_DATES, rotation = 45)
     _axes.set_xlabel("Date (1978)")
-    _axes.set_ylabel("Number of boys in bed")
-    _axes.set_title(f"Influenza at a boarding school with {SCHOOL_SIZE} boys")
+    _axes.set_ylabel("Number of students in bed")
+    _axes.set_title(f"Influenza at a boarding school with {SCHOOL_SIZE} students")
     _figure.tight_layout()
     _figure
     return
@@ -215,10 +215,13 @@ def _(mo):
     ***transmission rate*** of $\beta$ (the Greek letter "beta") per day.
     But a contact only causes an infection if the other person is susceptible,
     and only a fraction, $S / N$, of the population is susceptible.
-    So, with $I$ infected people, infections happen at a total rate of:
+    So, the actual transmission rate is $\beta \frac{S}{N}$ per day per
+    infected person.
+    With $I$ infected people in the population, infections happen at a
+    **total** rate of:
 
     $$
-    \beta I \frac{S}{N} = \frac{\beta S I}{N}
+    \beta \frac{S}{N} I = \frac{\beta I S}{N}
     $$
 
     At the start of an outbreak, almost everyone is susceptible, so $S / N$ is
@@ -253,12 +256,12 @@ def _(mo):
     Inside the loop, under the "`Add your code here!`" comment, write code to:
 
     1.  Calculate the total rate of **infections**,
-        $\beta S I / N$, and the total rate of **recoveries**, $\gamma I$
+        $\beta I S / N$, and the total rate of **recoveries**, $\gamma I$
     2.  Add them to get the **total rate** of events
     3.  Draw a **waiting time** with the `rng.expovariate` function, and add it to
         `clock`
     4.  Choose **which event** happened: With probability
-        $\text{(infection rate)} / \text{(total rate)}$, it's an infection
+        $\text{(total infection rate)} / \text{(total rate)}$, it's an infection
         (subtract 1 from `susceptible`, and add 1 to `infected`); otherwise, it's a
         recovery (subtract 1 from `infected`)
     5.  **Record** the event, by appending `clock` to `times`, `susceptible` to
@@ -327,7 +330,7 @@ def simulate_sir(population_size, initial_infected, transmission_rate,
             raise RuntimeError(
                 "Too many events! Each person can only be infected once and "
                 + "recover once. Did you add your code inside the loop? Is your "
-                + "infection rate beta * S * I / N, and does each event change "
+                + "infection rate beta * I * S / N, and does each event change "
                 + "the right numbers?"
             )
         # Add your code here!
@@ -455,7 +458,7 @@ def _():
                 simulate_sir_works = False
                 _messages.append(
                     "Big outbreaks infect the wrong fraction of the population. "
-                    + "Is your infection rate beta * S * I / N?"
+                    + "Is your infection rate beta * I * S / N?"
                 )
 
         # Test 6: The same seed should give the same results
@@ -792,7 +795,7 @@ def _(mo):
     expected number of recoveries is the recovery rate times $\Delta t$:
 
     $$
-    \text{new infections} = \frac{\beta S I}{N} \Delta t
+    \text{new infections} = \frac{\beta I S}{N} \Delta t
     \qquad
     \text{recoveries} = \gamma I \Delta t
     $$
@@ -825,8 +828,8 @@ def _(mo):
 
     $$
     \begin{aligned}
-    \frac{dS}{dt} &= -\frac{\beta S I}{N} \\
-    \frac{dI}{dt} &= \frac{\beta S I}{N} - \gamma I \\
+    \frac{dS}{dt} &= -\frac{\beta I S}{N} \\
+    \frac{dI}{dt} &= \frac{\beta I S}{N} - \gamma I \\
     \frac{dR}{dt} &= \gamma I
     \end{aligned}
     $$
@@ -851,7 +854,7 @@ def _(mo):
     `number_of_steps` times.
     In each step:
 
-    1.  Calculate the number of new infections, $\beta S I \Delta t / N$, and the
+    1.  Calculate the number of new infections, $\beta I S \Delta t / N$, and the
         number of recoveries, $\gamma I \Delta t$, during the time step
         (`time_step` is $\Delta t$)
     2.  Update `susceptible`, `infected`, and `recovered`
@@ -984,7 +987,7 @@ def _():
                 simulate_sir_euler_works = False
                 _messages.append(
                     "The fraction eventually infected is off. Are your new "
-                    + "infections beta * S * I * time_step / N?"
+                    + "infections beta * I * S * time_step / N?"
                 )
 
     except Exception as _error:
@@ -1242,18 +1245,18 @@ def _(mo):
     # Part 4: The boarding school
 
     Now, let's fit the SIR model to the outbreak at the boarding school, to
-    estimate how contagious the virus was ($\beta$) and how long boys stayed
+    estimate how contagious the virus was ($\beta$) and how long students stayed
     infectious ($1 / \gamma$).
     We will make a few simplifying assumptions:
 
-    -   The number of boys **in bed** each day is the number of **infected**
-        boys, $I$
+    -   The number of students **in bed** each day is the number of **infected**
+        students, $I$
     -   The outbreak started on **January 21** (day 0, the day before the first
-        count) with **one** infected boy
-    -   All 763 boys mixed with each other equally
+        count) with **one** infected student
+    -   All 763 students mixed with each other equally
 
     The `predict_in_bed` function below uses your `simulate_sir_euler` function
-    (with a time step of 0.1 days) to predict the number of infected boys on each
+    (with a time step of 0.1 days) to predict the number of infected students on each
     day, for a transmission rate and a recovery rate.
     **You do not need to edit this function.**
     """)
@@ -1507,7 +1510,7 @@ def _(mo):
     transmission rates (from 1.0 to 2.5 per day) and 61 recovery rates (from 0.2
     to 0.8 per day), which is 4,636 combinations, so it might take a few seconds.
     Then, it plots the counts from the school (bars) along with the
-    best-fitting model (line), and calculates how many boys the model predicts
+    best-fitting model (line), and calculates how many students the model predicts
     were infected by the end of the outbreak.
     **You do not need to edit the next cell.**
     """)
@@ -1534,18 +1537,18 @@ def _(fit_sir_works, mo):
     # The best-fitting model, over the 14 days of the outbreak
     _times, _s, _i, _r = simulate_sir_euler(
         SCHOOL_SIZE, 1, fitted_transmission_rate, fitted_recovery_rate, 14.0, 0.1)
-    # And over a longer time, to see how many boys are eventually infected
+    # And over a longer time, to see how many students are eventually infected
     _long = simulate_sir_euler(
         SCHOOL_SIZE, 1, fitted_transmission_rate, fitted_recovery_rate, 60.0, 0.1)
     _ever_infected = SCHOOL_SIZE - _long[1][-1]
 
     _figure, _axes = plt.subplots(figsize = (8, 4.5))
-    _axes.bar(OUTBREAK_DAYS, IN_BED, color = "steelblue", label = "Boys in bed")
+    _axes.bar(OUTBREAK_DAYS, IN_BED, color = "steelblue", label = "Students in bed")
     _axes.plot(_times, _i, color = "firebrick", linewidth = 2.5,
                label = "SIR model (infected)")
     _axes.set_xticks(OUTBREAK_DAYS, OUTBREAK_DATES, rotation = 45)
     _axes.set_xlabel("Date (1978)")
-    _axes.set_ylabel("Number of boys")
+    _axes.set_ylabel("Number of students")
     _axes.set_title("The best-fitting SIR model")
     _axes.legend()
     _figure.tight_layout()
@@ -1555,7 +1558,7 @@ def _(fit_sir_works, mo):
         mo.md(
             "| $\\beta$ (per day) | $\\gamma$ (per day) | $R_0$ "
             + "| Infectious period, $1 / \\gamma$ (days) | Sum of squares "
-            + "| Boys ever infected (model) | Boys ever in bed (data) |\n"
+            + "| Students ever infected (model) | Students ever in bed (data) |\n"
             + "|--:|--:|--:|--:|--:|--:|--:|\n"
             + f"| {fitted_transmission_rate:.2f} | {fitted_recovery_rate:.2f} "
             + f"| {fitted_r0:.2f} | {1 / fitted_recovery_rate:.2f} "
@@ -1573,21 +1576,21 @@ def _(mo):
     Double-click this cell and answer the questions below.
 
     1.  **What are the best-fitting values of $R_0$ and the infectious period
-        ($1 / \gamma$)? Based on your table in Part 2, if one infected boy
+        ($1 / \gamma$)? Based on your table in Part 2, if one infected student
         brought this virus into the school, about how likely was it that a major
         outbreak would follow?**
 
         **Answer**:
 
-    2.  **The model predicts that almost every boy was eventually infected, but
-        only 512 of the 763 boys were ever confined to bed. Give two reasons the
+    2.  **The model predicts that almost every student was eventually infected, but
+        only 512 of the 763 students were ever confined to bed. Give two reasons the
         model and the data could disagree.**
 
         **Answer**:
 
-    3.  **We assumed that the number of boys in bed is the number of infected (and
-        infectious) boys. Why might that not be quite right? (Hint: Think about when
-        a sick boy is infectious, and whether boys in bed can infect others.)**
+    3.  **We assumed that the number of students in bed is the number of infected (and
+        infectious) students. Why might that not be quite right? (Hint: Think about when
+        a sick student is infectious, and whether students in bed can infect others.)**
 
         **Answer**:
     """)
@@ -1599,9 +1602,9 @@ def _(mo):
     mo.md(r"""
     ## <font color=red> Extra credit challenge (3 points) </font>
 
-    If some boys had been vaccinated before the outbreak, they would have been
+    If some students had been vaccinated before the outbreak, they would have been
     immune from the start.
-    How many boys would the school have needed to vaccinate to prevent a major
+    How many students would the school have needed to vaccinate to prevent a major
     outbreak?
 
     Your `simulate_sir_euler` function has an argument we haven't used yet,
@@ -1609,16 +1612,16 @@ def _(mo):
     In the cell below, beneath the "`Write your extra credit code here`" comment,
     write code to:
 
-    1.  Loop over the fractions of boys vaccinated in the list
+    1.  Loop over the fractions of students vaccinated in the list
         `vaccinated_fractions` (defined for you: 0, 0.05, 0.10, ..., 0.95)
-    2.  For each fraction, calculate the number of boys vaccinated (the fraction
+    2.  For each fraction, calculate the number of students vaccinated (the fraction
         times `SCHOOL_SIZE`), and use `simulate_sir_euler` to calculate an
-        outbreak in the school that starts with 1 infected boy, using the
+        outbreak in the school that starts with 1 infected student, using the
         best-fitting rates (`fitted_transmission_rate` and
         `fitted_recovery_rate`), with `initial_recovered` set to the number
         vaccinated, for 200 days, with a time step of 0.1
-    3.  Calculate the number of boys who were **infected** during the outbreak
-        (careful: Vaccinated boys are not susceptible at the start, but they
+    3.  Calculate the number of students who were **infected** during the outbreak
+        (careful: Vaccinated students are not susceptible at the start, but they
         were never infected either!), and print it along with the fraction
         vaccinated
 
@@ -1627,12 +1630,12 @@ def _(mo):
     your answers.
 
     1.  **What is the smallest fraction vaccinated (in the list) at which fewer
-        than 20 boys are infected? How does it compare to $1 - 1 / R_0$ (calculated
+        than 20 students are infected? How does it compare to $1 - 1 / R_0$ (calculated
         for you in the cell below, using the best-fitting $R_0$)?**
 
         **Answer**:
 
-    2.  **Why don't we need to vaccinate every boy to prevent a major outbreak?
+    2.  **Why don't we need to vaccinate every student to prevent a major outbreak?
         (Hint: In Challenge 6, you found that the number of infected people
         falls when $S / N$ is less than $1 / R_0$.)**
 
@@ -1659,7 +1662,7 @@ def _(mo):
     mo.md(r"""
     ## Recap
 
-    Starting from the daily counts of boys in bed at a boarding school in 1978,
+    Starting from the daily counts of students in bed at a boarding school in 1978,
     you:
 
     -   Simulated outbreaks under the **SIR model** with the **Gillespie
@@ -1672,7 +1675,7 @@ def _(mo):
         found that an outbreak only grows when $R_0 > 1$, and peaks when
         $S / N = 1 / R_0$
     -   **Fit** the model to the boarding-school data by **least squares**, and
-        estimated that each infected boy infected almost four others, which made
+        estimated that each infected student infected almost four others, which made
         a major outbreak very likely once the virus arrived
 
     Models like these were used throughout the COVID-19 pandemic to estimate
@@ -1709,7 +1712,7 @@ def _(mo):
     mo.md(r"""
     ## Acknowledgements
 
-    The counts of boys in bed are from a report, "Influenza in a boarding school,"
+    The counts of students in bed are from a report, "Influenza in a boarding school,"
     *British Medical Journal* 1:587 (4 March 1978).
     The report showed the counts only in a figure, so the exact numbers differ a
     little between sources; we use the version in the
