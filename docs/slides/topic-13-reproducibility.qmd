@@ -1,0 +1,447 @@
+---
+title: "Reproducible computational research"
+subtitle: "Keeping track of your code, software, and steps with git and pixi"
+# author: "Jamie Oaks"
+institute: "BIOL 5/6800 &mdash; Intro to Comp Bio"
+format:
+  revealjs:
+    slide-number: c/t
+    incremental: false
+    code-line-numbers: false
+    smaller: false
+    center-title-slide: true
+    history: false
+metadata-files:
+  - _metadata.yml
+bibliography: ../references.bib
+---
+
+## Last time
+
+In Capstone Project 2, you fit a molecular clock to a tree of 24 SARS-CoV-2
+genomes
+
+. . .
+
+I estimated that tree with a program called IQ-TREE, on my computer
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+Could ***you*** redo the whole analysis, from the genomes to the clock?
+Could ***I*** redo it a year from now?
+:::
+
+::: {.notes}
+0:00-1:30
+
+The capstone handed them a tree. Ask: what would you need from me to make that
+tree yourself? (The data, the program, the right version of it, the exact
+command, the settings.) That list is today's topic.
+:::
+
+## Will it run next year?
+
+A true story from October 2026:
+
+::: {style="font-size: 85%;"}
+1.  A command that set up a marimo notebook worked fine in September
+2.  In October, ***the same command*** failed with a long error message
+3.  Nothing about the notebook had changed
+:::
+
+. . .
+
+::: {style="font-size: 85%;"}
+What changed? **Python 3.15** was released.
+The command asked for "the newest Python," and one of marimo's
+dependencies didn't work with 3.15 yet
+:::
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+Software changes under your feet, even when your code doesn't
+:::
+
+::: {.notes}
+1:30-3:00
+
+This happened while I was preparing the course materials (pixi's notebook
+sandbox picked Python 3.15, and marimo's `loro` dependency had no build for
+3.15 yet). The fix was one line: ask for Python 3.14 specifically. That's
+the idea behind everything today: write down exactly what you need.
+:::
+
+## A reproducibility problem
+
+In a survey of 1,576 researchers:^[@Baker2016]
+
+::: {.incremental}
+-   More than **70%** had tried and failed to reproduce ***another***
+    scientist's experiments
+-   More than **50%** had failed to reproduce ***their own***
+:::
+
+. . .
+
+Computational work ***should*** be the easy case: a computer does the same
+thing every time, if we give it the same data, code, software, and steps
+
+::: {.notes}
+3:00-4:00
+
+Most of the survey is about wet-lab work, where reproducing results is
+genuinely hard. Computational results should be perfectly reproducible, but
+in practice they often aren't, because people don't record enough.
+:::
+
+## What we need to record
+
+::: {style="font-size: 80%;"}
+| Ingredient | Example | How we'll record it |
+|:--|:--|:--|
+| **Data** | The 24 aligned genomes | Commit a copy, and how we downloaded it |
+| **Code** | `clock.py` | ***git*** |
+| **Software** | Python 3.14, NumPy, IQ-TREE, ... | ***pixi*** |
+| **Steps** | The exact IQ-TREE command | ***pixi tasks*** |
+| **Randomness** | IQ-TREE's random search | A ***seed*** |
+:::
+
+. . .
+
+See @Sandve2013 and @Wilson2017 for more good habits
+
+::: {.notes}
+4:00-5:00
+
+This table is the whole lecture. Everything else is how to do each row.
+:::
+
+# Version control with git {background-color="#1b3a5c"}
+
+## Without version control
+
+::: {style="font-size: 160%;"}
+```
+clock.py
+clock_v2.py
+clock_v2_fixed.py
+clock_FINAL.py
+clock_FINAL_omicron_removed_USE_THIS_ONE.py
+```
+:::
+
+. . .
+
+-   Which version made Figure 2?
+-   What changed between them?
+-   What if I delete the wrong one?
+
+::: {.notes}
+5:00-6:00
+
+Everyone has done this. Ask who has a "final_final" file somewhere.
+:::
+
+## Git keeps a history of snapshots
+
+A ***commit*** is a snapshot of your files, with a message, an author, and a
+date
+
+::: {style="font-size: 112%;"}
+```
+$ git log --oneline
+36c37de Leave Omicron out of the clock
+2fc175a Add the molecular clock script and task
+99de975 Estimate the ML tree with IQ-TREE
+f9d8d06 Add task to download the SARS-CoV-2 alignment, and the data
+3d7a7c5 Add IQ-TREE from bioconda
+f2f0520 Create a pixi environment with Python 3.14
+12f7a96 Add project title and author to README
+539e886 Initial commit
+```
+:::
+
+. . .
+
+One file name, and every version of it, forever
+
+::: {.notes}
+6:00-7:00
+
+This is the history you'll build in the exercise. The hex codes are hashes:
+unique IDs for each snapshot. Good commit messages say what changed, so the
+log reads like a lab notebook.
+:::
+
+## Making a commit
+
+```{=html}
+<div style="display: flex; align-items: center; justify-content: center; gap: 0.3em; font-size: 0.75em; margin: 0.5em 0;">
+<div style="border: 3px solid #1b3a5c; border-radius: 10px; padding: 0.35em 0.6em; text-align: center; background: #eef3f8; line-height: 1.2;">Your files<br><span style="font-size: 70%;">working folder</span></div>
+<div style="text-align: center; line-height: 1.1;"><code style="font-size: 70%; white-space: nowrap;">git add</code><br><span style="font-size: 150%;">&#10230;</span></div>
+<div style="border: 3px solid #1b3a5c; border-radius: 10px; padding: 0.35em 0.6em; text-align: center; background: #eef3f8; line-height: 1.2;">Staged<br><span style="font-size: 70%;">changes</span></div>
+<div style="text-align: center; line-height: 1.1;"><code style="font-size: 70%; white-space: nowrap;">git commit</code><br><span style="font-size: 150%;">&#10230;</span></div>
+<div style="border: 3px solid #1b3a5c; border-radius: 10px; padding: 0.35em 0.6em; text-align: center; background: #eef3f8; line-height: 1.2;">Your history<br><span style="font-size: 70%;">.git folder</span></div>
+<div style="text-align: center; line-height: 1.1;"><code style="font-size: 70%; white-space: nowrap;">git push</code><br><span style="font-size: 150%;">&#10230;</span></div>
+<div style="border: 3px solid #1b3a5c; border-radius: 10px; padding: 0.35em 0.6em; text-align: center; background: #eef3f8; line-height: 1.2;">GitHub<br><span style="font-size: 70%;">backup &amp; sharing</span></div>
+</div>
+```
+
+. . .
+
+::: {style="font-size: 85%;"}
+-   ***Stage*** (`git add`) chooses which changes go in the next snapshot
+-   ***Commit*** (`git commit -m "message"`) saves the snapshot
+-   ***Push*** (`git push`) backs it up on GitHub, where others can see it
+:::
+
+::: {.notes}
+7:00-8:30
+
+The staging step is the one people find odd. It lets you make several changes
+and commit them as separate, meaningful snapshots. `git status` tells you which
+box each change is in; run it constantly.
+:::
+
+## Everyday git
+
+::: {style="font-size: 80%;"}
+| Command | What it does |
+|:--|:--|
+| `git status` | What has changed since my last commit? |
+| `git diff <file>` | ***Exactly*** what changed, line by line |
+| `git add <file>` | Stage a file's changes for the next commit |
+| `git commit -m "..."` | Save a snapshot of the staged changes |
+| `git push` | Send my commits to GitHub |
+| `git log --oneline` | List my commits |
+| `git restore <file>` | Undo changes since my last commit |
+:::
+
+::: {.notes}
+8:30-9:30
+
+These seven commands cover almost everything you'll do with git in this course.
+:::
+
+## What to commit
+
+::: {style="font-size: 80%;"}
+| Commit it | Don't commit it |
+|:--|:--|
+| Code and scripts | Installed software (`.pixi/`) |
+| The instructions for the software (`pixi.toml`, `pixi.lock`) | Files that change every run (logs with dates) |
+| Small data, and where it came from | Big data (record how to get it instead) |
+| Key results (the tree, the figure) | Temporary files |
+:::
+
+. . .
+
+A `.gitignore` file lists what git should ignore
+
+::: {.notes}
+9:30-10:30
+
+Rule of thumb: commit what you can't easily recreate, plus small results you
+want to compare between versions. Big data goes in a public archive (like
+GenBank), and the repository records how to download it.
+:::
+
+# Reproducible environments with pixi {background-color="#1b3a5c"}
+
+## "It works on my computer"
+
+Our analysis needs Python, NumPy, SciPy, matplotlib, and IQ-TREE
+
+. . .
+
+Each of those needs other packages, which need other packages, ...
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+Each one has a version, and a different version can change your results, or
+break your code
+:::
+
+::: {.notes}
+10:30-11:30
+
+In the exercise, `pixi list` will show how many packages are really in the
+environment (many more than the five we ask for).
+:::
+
+## A project environment
+
+```{=html}
+<div style="display: flex; align-items: center; justify-content: center; gap: 0.3em; font-size: 0.75em; margin: 0.5em 0;">
+<div style="border: 3px solid #1b3a5c; border-radius: 10px; padding: 0.35em 0.6em; text-align: center; background: #eef3f8; line-height: 1.2;"><code>pixi.toml</code><br><span style="font-size: 70%;">what we asked for</span></div>
+<div style="text-align: center; line-height: 1.1;"><code style="font-size: 70%; white-space: nowrap;">pixi solves</code><br><span style="font-size: 150%;">&#10230;</span></div>
+<div style="border: 3px solid #1b3a5c; border-radius: 10px; padding: 0.35em 0.6em; text-align: center; background: #eef3f8; line-height: 1.2;"><code>pixi.lock</code><br><span style="font-size: 70%;">exactly what we got</span></div>
+<div style="text-align: center; line-height: 1.1;"><code style="font-size: 70%; white-space: nowrap;">pixi install</code><br><span style="font-size: 150%;">&#10230;</span></div>
+<div style="border: 3px solid #1b3a5c; border-radius: 10px; padding: 0.35em 0.6em; text-align: center; background: #eef3f8; line-height: 1.2;"><code>.pixi/</code><br><span style="font-size: 70%;">the installed software</span></div>
+</div>
+```
+
+. . .
+
+::: {style="font-size: 85%;"}
+-   **Commit** `pixi.toml` and `pixi.lock`: small text files
+-   **Don't commit** `.pixi/`: big, and pixi can rebuild it, ***exactly***,
+    from the lock file
+:::
+
+::: {.notes}
+11:30-13:00
+
+The manifest says "Python 3.14, any NumPy 2." The lock file says "Python
+3.14.x, NumPy 2.y.z, and these 70-odd other packages, downloaded from these
+exact addresses." Anyone with the lock file gets the same environment.
+:::
+
+## Building an environment
+
+```{.bash filename="Terminal"}
+pixi init
+pixi add "python=3.14.*" numpy scipy matplotlib marimo
+pixi workspace channel add bioconda
+pixi add iqtree
+```
+
+. . .
+
+::: {style="font-size: 80%;"}
+-   Packages come from ***channels***: [conda-forge](https://conda-forge.org/)
+    (general scientific software) and [bioconda](https://bioconda.github.io/)
+    (bioinformatics)
+-   They include programs that ***aren't Python***, like IQ-TREE
+    (molab can only install Python packages)
+-   `"python=3.14.*"` pins the version we care about
+:::
+
+::: {.notes}
+13:00-14:30
+
+conda (and its faster cousins mamba and pixi) all use the same channels.
+pixi adds lock files and tasks, and keeps each environment inside its project
+folder.
+:::
+
+## Recording the steps: tasks
+
+A ***task*** saves a command in `pixi.toml`, so anyone can rerun it
+
+::: {style="font-size: 120%;"}
+```{.toml filename="pixi.toml (simplified)"}
+[tasks]
+get-data = "curl -L -o data/sars-cov-2.fasta https://..."
+tree = "iqtree3 -s data/sars-cov-2.fasta -m HKY -seed 1 ..."
+clock = { cmd = "python scripts/clock.py", depends-on = ["tree"] }
+```
+:::
+
+. . .
+
+```{.bash filename="Terminal"}
+pixi run clock
+```
+
+One command runs the whole analysis, from the alignment to the figure
+
+::: {.notes}
+14:30-16:00
+
+(pixi will also add a description to each task in the exercise.) `-seed 1`
+fixes IQ-TREE's random numbers, so it finds exactly the same tree every time.
+Without a seed, IQ-TREE picks one from the clock, and the branch lengths can
+differ slightly between runs. In the exercise you'll try seed 2 and use git to
+see what changed.
+:::
+
+# The exercise {background-color="#1b3a5c"}
+
+## Codespaces
+
+A ***codespace*** is a Linux computer in the cloud, which you use in your web
+browser, with git and pixi already installed
+
+. . .
+
+::: {.callout-warning appearance="minimal"}
+Codespaces are ***temporary***: GitHub deletes a codespace after 30 days
+without use, even if your work isn't pushed. **Commit and push often!**
+:::
+
+::: {.notes}
+16:00-17:00
+
+They have free hours each month (more with GitHub's student benefits). Stop
+the codespace when you're done to save hours.
+:::
+
+## The real test
+
+At the end of the exercise, you will:
+
+::: {.incremental}
+1.  ***Delete*** your codespace
+2.  Make a brand new one from your GitHub repository
+3.  Run `pixi run clock`
+4.  Run `git status`
+:::
+
+. . .
+
+::: {style="font-size: 160%;"}
+```
+nothing to commit, working tree clean
+```
+:::
+
+The new computer reproduced your tree and figure, ***exactly***
+
+::: {.notes}
+17:00-18:00
+
+This is the payoff. If every byte of the tree and the figure matches what
+they committed, git has nothing to report.
+:::
+
+## The plan
+
+::: {style="font-size: 85%;"}
+1.  **Your project repository**: Make your copy, and your first commit
+2.  **A reproducible environment**: Python, packages, and IQ-TREE with pixi
+3.  **Estimating the tree**: IQ-TREE as a pixi task; what to commit
+4.  **Fitting the clock**: Change the analysis; go back in time with git;
+    why the seed matters
+5.  **Prove it's reproducible**: Delete, rebuild, rerun
+:::
+
+. . .
+
+Each part ends with a push, so you can stop after any part
+
+::: {.notes}
+18:00-19:00
+
+Each part is about 30 to 45 minutes; we'll do this over a few class periods.
+:::
+
+## Exercise
+
+1.  Open the [reproducibility exercise](../reproducibility-exercise.qmd)
+2.  Follow the steps to copy the
+    [project template](https://github.com/phyletica/comp-bio-project-template)
+    and open your codespace
+
+# References
+
+::: {#refs}
+:::
+
+## Acknowledgements
+
+I drafted and iterated on these slides in collaboration with
+Anthropic's Claude (Opus 5.5 model).

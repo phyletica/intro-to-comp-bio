@@ -19,6 +19,7 @@ slide presentations compiled for this term.
 *   [View Lecture 10 Slides](slides/topic-10-phylogenetics.qmd)
 *   [View Lecture 11 Slides](slides/topic-11-birth-death.qmd)
 *   [View Lecture 12 Slides](slides/topic-12-sir.qmd)
+*   [View Lecture 13 Slides](slides/topic-13-reproducibility.qmd)
 
 <!-- *Note: You can use your spacebar or arrow keys to navigate the slides once opened.* -->
 
@@ -26,6 +27,7 @@ slide presentations compiled for this term.
 
 -   [Intro to Bash](bash-exercise.qmd)
 -   [Setting up a molab account](molab-sign-up.qmd)
+-   [Exercise 13: Reproducibility with git and pixi](reproducibility-exercise.qmd)
 
 ### Python notebook exercises
 
