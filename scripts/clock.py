@@ -21,23 +21,6 @@ import math
 import matplotlib.pyplot as plt
 from scipy.stats import linregress
 
-
-# --------------------------------------------------------------------------- #
-# Settings
-# --------------------------------------------------------------------------- #
-
-# The tree estimated by IQ-TREE, and where to save the plot
-TREE_PATH = "results/tree.treefile"
-FIGURE_PATH = "results/clock.png"
-
-# The number of sites in the alignment, to convert distances from
-# substitutions per site to substitutions per genome
-GENOME_LENGTH = 29903
-
-# Lineages to leave out of the clock (e.g., ["Omicron"])
-EXCLUDED_LINEAGES = []
-
-
 # --------------------------------------------------------------------------- #
 # Functions
 # --------------------------------------------------------------------------- #
@@ -221,45 +204,60 @@ def plot_clock(years, substitutions, lineages, rate, ancestor_year, title = ""):
     figure.tight_layout()
     return figure
 
+if __name__ == "__main__":
+    # ----------------------------------------------------------------------- #
+    # Settings
+    # ----------------------------------------------------------------------- #
+    
+    # The tree estimated by IQ-TREE, and where to save the plot
+    tree_path = "results/tree.treefile"
+    figure_path = "results/clock.png"
+    
+    # The number of sites in the alignment, to convert distances from
+    # substitutions per site to substitutions per genome
+    genome_length = 29903
+    
+    # Lineages to leave out of the clock (e.g., ["Omicron"])
+    excluded_lineages = []
 
-# --------------------------------------------------------------------------- #
-# The analysis
-# --------------------------------------------------------------------------- #
-
-# Read the tree estimated by IQ-TREE
-with open(TREE_PATH) as tree_file:
-    tree = parse_newick(tree_file.read())
-
-# Each tip's name is the genome's description line from the FASTA file, with
-# four parts separated by "|": the lineage's common name, its Pango lineage,
-# its GenBank accession number, and the date it was collected
-# (e.g., "Delta|B.1.617.2|OL524349.1|2021-07-24")
-distances = root_to_tip_distances(tree)
-years = []
-substitutions = []
-lineages = []
-for name, distance in distances.items():
-    lineage, pango_lineage, accession, date = name.split("|")
-    if lineage in EXCLUDED_LINEAGES:
-        continue
-    years.append(date_to_year(date))
-    substitutions.append(distance * GENOME_LENGTH)
-    lineages.append(lineage)
-
-# Fit the clock
-rate, ancestor_year, r_squared = fit_clock(years, substitutions)
-
-# Report the results
-title = f"Molecular clock fit to {len(years)} genomes"
-if len(EXCLUDED_LINEAGES) > 0:
-    title += f" (without {', '.join(EXCLUDED_LINEAGES)})"
-print(title)
-print(f"  Rate: {rate:.1f} substitutions per genome per year "
-      + f"({rate / GENOME_LENGTH:.2e} per site per year)")
-print(f"  Date of the ancestor: {year_to_date(ancestor_year)} ({ancestor_year:.2f})")
-print(f"  R-squared: {r_squared:.2f}")
-
-# Plot the clock and save the plot
-figure = plot_clock(years, substitutions, lineages, rate, ancestor_year, title = title)
-figure.savefig(FIGURE_PATH, dpi = 150)
-print(f"  Saved the plot to {FIGURE_PATH}")
+    # ----------------------------------------------------------------------- #
+    # The analysis
+    # ----------------------------------------------------------------------- #
+    
+    # Read the tree estimated by IQ-TREE
+    with open(tree_path) as tree_file:
+        tree = parse_newick(tree_file.read())
+    
+    # Each tip's name is the genome's description line from the FASTA file,
+    # with four parts separated by "|": the lineage's common name, its Pango
+    # lineage, its GenBank accession number, and the date it was collected
+    # (e.g., "Delta|B.1.617.2|OL524349.1|2021-07-24")
+    distances = root_to_tip_distances(tree)
+    years = []
+    substitutions = []
+    lineages = []
+    for name, distance in distances.items():
+        lineage, pango_lineage, accession, date = name.split("|")
+        if lineage in excluded_lineages:
+            continue
+        years.append(date_to_year(date))
+        substitutions.append(distance * genome_length)
+        lineages.append(lineage)
+    
+    # Fit the clock
+    rate, ancestor_year, r_squared = fit_clock(years, substitutions)
+    
+    # Report the results
+    title = f"Molecular clock fit to {len(years)} genomes"
+    if len(excluded_lineages) > 0:
+        title += f" (without {', '.join(excluded_lineages)})"
+    print(title)
+    print(f"  Rate: {rate:.1f} substitutions per genome per year "
+          + f"({rate / genome_length:.2e} per site per year)")
+    print(f"  Date of the ancestor: {year_to_date(ancestor_year)} ({ancestor_year:.2f})")
+    print(f"  R-squared: {r_squared:.2f}")
+    
+    # Plot the clock and save the plot
+    figure = plot_clock(years, substitutions, lineages, rate, ancestor_year, title = title)
+    figure.savefig(figure_path, dpi = 150)
+    print(f"  Saved the plot to {figure_path}")
