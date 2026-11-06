@@ -1,0 +1,818 @@
+---
+title: "Reproducibility exercise: git and pixi"
+format:
+  html:
+    code-overflow: wrap
+---
+
+In this exercise, you will turn the molecular clock analysis from Capstone
+Project 2 into a ***reproducible project***: one that anyone (including you,
+a year from now) can download and rerun with a single command, using exactly
+the same software, and get exactly the same results.
+Along the way, you will:
+
+1.  Use ***git*** to keep track of every change to your project, and
+    ***GitHub*** to back it up
+2.  Use ***pixi*** to create a ***project environment*** with
+    all the software needed for the project, including:
+    
+    -   Python
+    -   Python packages
+    -   [IQ-TREE](https://iqtree.github.io/), the program I used to estimate
+        the tree of 24 SARS-CoV-2 genomes in Capstone Project 2
+
+3.  Estimate that tree yourself, fit the molecular clock to it, and record
+    every step, so that the whole analysis can be rerun with one command
+4.  Prove that your project is reproducible by deleting your project and
+    rebuilding everything from your GitHub repository
+
+There is no new Python or biology in this exercise.
+Everything new is about ***how*** we do the work.
+
+The exercise has five parts.
+Each part takes about 30 minutes, and each one ends with saving your
+work to GitHub, so you can stop at the end of any part and pick up where you
+left off later.
+Put your answers to the questions into the Exercise 13 quiz on Canvas.
+
+::: {.callout-important}
+## Save your work to GitHub at the end of every part
+
+Your GitHub codespace is ***temporary***.
+It stops on its own after 30 minutes of inactivity, and GitHub ***deletes***
+codespaces that haven't been used for 30 days, ***even if they contain work
+you haven't pushed to GitHub***.
+Your work is only safe once you have committed it and pushed it to GitHub
+(you'll learn how in Part 1).
+:::
+
+## Part 1: Your project repository
+
+### Make your copy and open your codespace
+
+1.  Go to the
+    [Comp Bio project template](https://github.com/phyletica/comp-bio-project-template)
+    on GitHub, and follow the instructions in its README under the following
+    two sections **ONLY**:
+
+    -   ***"Make your own copy of this repository"***:
+        Name your repository `comp-bio-project`, and choose ***Public***
+    -   ***"Open your codespace"***: When you get a "Do you trust the authors
+        of the files in this folder?" pop-up, click "Trust Folder & Continue"
+
+    Stop and come back here once you get to ***"Set up your project environment"***
+    (don't set up the environment; we will do that below)
+
+2.  Once your codespace is ready, you should see your files on the left side
+    of VS Code and a ***terminal*** at the bottom.
+    Click in the terminal and check that you're in your project's folder:
+
+    ```{.bash filename="Terminal"}
+    pwd
+    ls -a
+    ```
+
+    `pwd` (**p**rint **w**orking **d**irectory) tells you what directory
+    ("folder") you are in, which should be `/workspaces/comp-bio-project`.
+    This folder you are in is called your ***working directory***.
+    `ls -a` lists all files and directories in your working directory. When you
+    run this command, you should see `README.md` and a folder named
+    `.devcontainer` (plus a folder named `.git`; more on that below).
+
+The terminal is the same Bash command line you used in the
+[Bash exercise](bash-exercise.qmd), running on a Linux computer in the cloud.
+All of the commands in this exercise are typed in the terminal.
+
+::: {.callout-tip}
+## Copying commands
+
+Hover over any code block on this page and click the clipboard icon in its
+upper right corner to copy it.
+To paste into the terminal, use **Ctrl + Shift + V** (or right-click and
+choose "Paste").
+:::
+
+### What is a git repository?
+
+Your project folder is a ***git repository***.
+That means git is keeping a history of the folder in the hidden `.git`
+folder.
+(Never edit or delete the `.git` folder!)
+The history is a series of ***commits***: snapshots of your files, each with
+a message describing what changed, who changed it, and when.
+Your repository on GitHub is a copy of the same history.
+
+Making a commit takes three steps:
+
+1.  **Change** some files (*e.g.*, edit them, create them, or delete them)
+2.  **Stage** the changes you want to include in the next commit, with
+    `git add`
+3.  **Commit** the staged changes, with `git commit`, which saves the snapshot
+    in your repository's history
+
+Then, `git push` sends your new commits to your copy of the repo on GitHub.
+
+### Your first commit
+
+1.  Let's see what git thinks of our repository right now by running these two
+    commands in the terminal:
+
+    ```{.bash filename="Terminal"}
+    git status
+    git log
+    ```
+
+    `git status` should say `nothing to commit, working tree clean`, which
+    means none of your files have changed since the last commit.
+    `git log` lists the commits in your repository's history (just one so far,
+    which GitHub made when you copied the template).
+
+    ::: {.callout-note}
+    ## Leaving `git log` (and `git diff`)
+    When the output of a git command is longer than your terminal, git shows
+    it one page at a time.
+    Use the arrow keys to scroll, and press **q** to quit and get back to the
+    command line.
+    :::
+
+2.  In the file list on the left of VS Code, click `README.md` to open it.
+    At the very top of the file, add these lines (with your name), and
+    leave a blank line between them and the rest of the file
+    (**note**: To add the text below to the `README.md` file, you will edit it
+    using the top window of VS Code, not the terminal):
+
+    ```{.markdown filename="README.md"}
+    # Dating the ancestor of SARS-CoV-2
+
+    Author: Your Name
+
+    A reproducible molecular clock analysis of 24
+    SARS-CoV-2 genomes, for BIOL 5/6800.
+    ```
+
+    VS Code saves automatically after a moment (or press **Ctrl + S**).
+
+3.  Now, return to the terminal window, and ask git again:
+
+    ```{.bash filename="Terminal"}
+    git status
+    ```
+
+    **Note**: You will need the output from this command for Question 2 below.
+
+4.  Stage your change, and ask git again:
+
+    ```{.bash filename="Terminal"}
+    git add README.md
+    git status
+    ```
+
+    **Note**: You will need the output from `git status` for Question 2 below.
+
+5.  Commit your change, with a message that says what you changed:
+
+    ```{.bash filename="Terminal"}
+    git commit -m "Adding project title and author to README"
+    git log
+    ```
+
+    You should see two commits now, with yours at the top.
+    The long string of letters and numbers next to each commit is its
+    ***hash***: a unique ID for that snapshot.
+
+6.  Send your commit to GitHub:
+
+    ```{.bash filename="Terminal"}
+    git push
+    ```
+
+    Go to your repository's page on GitHub (`github.com/your-username/comp-bio-project`)
+    and refresh it.
+    Your README should show your changes, and near the top of the file list,
+    you should see your commit message.
+
+::: {.callout-tip}
+## Always use `-m` with `git commit`
+If you forget the `-m "message"` part, git opens a text editor in the
+terminal and waits for you to type a message there.
+If that happens, the easiest way out is to close the editor: If the bottom of
+the terminal shows `^X Exit`, press **Ctrl + X**; if it shows a lot of `~`
+characters, type `:q!` and press Enter.
+Then run the `git commit` command again with `-m`.
+:::
+
+### Questions
+
+**Question 1**: Paste the URL of your GitHub repository (*e.g.*,
+`https://github.com/your-username/comp-bio-project`).
+
+**Question 2**: What did `git status` say about `README.md` (a) after you
+edited it, but before `git add`, and (b) after `git add`, but before
+`git commit`?
+
+## Part 2: A reproducible environment
+
+Just like any computer, your codespace already has software that 
+came with the codespace's operating system.
+Someone else's computer (or this codespace, next year) will have different
+versions of software, with different packages installed, or none at all.
+If our analysis depends on "whatever is installed on this computer," we can't
+expect it to give the same results anywhere else.
+
+To get around this problem, we will use ***pixi*** to create a ***project
+environment***: a folder of software that belongs to this project, with every
+package's version written down so that the environment can be rebuilt exactly,
+anywhere.
+
+### Create the environment
+
+1.  Tell pixi to start managing an environment for this project:
+
+    ```{.bash filename="Terminal"}
+    pixi init
+    git status
+    ```
+
+    `pixi init` created three files:
+
+    -   `pixi.toml`: the ***manifest***, which lists what our project needs
+    -   `.gitignore`: a list of files and folders that git should ignore
+    -   `.gitattributes`: settings that tell git how to treat certain files
+
+    Click `pixi.toml` in VS Code to open it.
+    It doesn't list any software yet; the `[dependencies]` section is empty.
+
+2.  Return to the terminal window and add Python and the Python packages we
+    need using the following command:
+
+    ```{.bash filename="Terminal"}
+    pixi add "python=3.14.*" numpy scipy matplotlib marimo
+    ```
+
+    This takes a minute or two.
+    pixi figures out a set of package versions that work together (*e.g.*,
+    which versions of NumPy work with Python 3.14), downloads them from
+    [conda-forge](https://conda-forge.org/) (a large, free collection of
+    scientific software), and installs them into a hidden folder named
+    `.pixi` in your project.
+
+    The `"python=3.14.*"` part asks for Python version 3.14 (any 3.14.x
+    release), instead of whatever version is newest on the day you run the
+    command, which might not be compatible with your project's code or
+    the packages it depends on.
+
+3.  Look at `pixi.toml` again.
+    The `[dependencies]` section now lists each package with a range of
+    versions (something like `numpy = ">=2.3.5,<3"`).
+    There is also a new file, `pixi.lock`, the ***lock file***.
+    Open it and scroll through it (it's long!).
+    It lists the ***exact*** version of every package that pixi installed,
+    including the packages that our packages need, and the address it was
+    downloaded from.
+
+    -   The manifest (`pixi.toml`) says what we ***asked for***
+    -   The lock file (`pixi.lock`) says exactly what we ***got***
+
+    When pixi builds the environment from a lock file, it installs exactly
+    those versions.
+
+4.  Confirm the version of Python pixi installed in our environment:
+
+    ```{.bash filename="Terminal"}
+    pixi run python --version
+    pixi list
+    ```
+
+    `pixi run` runs a command ***inside*** the project environment.
+    `pixi list` lists every package in the environment, and its version (pixi
+    installed **a lot** of packages that the packages we requested depend on!).
+
+### Commit the environment
+
+1.  Check what has changed:
+
+    ```{.bash filename="Terminal"}
+    git status
+    ```
+
+    Notice that the `.pixi` folder, which holds the installed software, is
+    ***not*** listed.
+    Look in `.gitignore` to see why.
+    We never commit the installed software, only the instructions for
+    rebuilding it (`pixi.toml` and `pixi.lock`).
+
+2.  Stage and commit the four new files, and push:
+
+    ```{.bash filename="Terminal"}
+    git add pixi.toml pixi.lock .gitignore .gitattributes
+    git commit -m "Creating a pixi environment with Python 3.14"
+    git push
+    ```
+
+### Add a program that isn't Python
+
+IQ-TREE is written in C++, not Python, so you can't install it with Python's
+usual tools (and it doesn't work in molab).
+But it is available from [bioconda](https://bioconda.github.io/), a
+collection of bioinformatics software that works with pixi.
+
+1.  Tell pixi to look for software in bioconda (after conda-forge), and add
+    IQ-TREE:
+
+    ```{.bash filename="Terminal"}
+    pixi workspace channel add bioconda
+    pixi add iqtree
+    pixi run iqtree3 --version
+    ```
+
+2.  See what changed, using `git diff`, which shows exactly which lines
+    changed in each file since the last commit:
+
+    ```{.bash filename="Terminal"}
+    git status
+    git diff pixi.toml
+    git diff --stat
+    ```
+
+    In `git diff`, lines that start with `-` (in red) were removed, and lines
+    that start with `+` (in green) were added.
+    `git diff --stat` summarizes how much each file changed.
+    (`pixi.lock` shows up as `Bin` because the `.gitattributes` file tells git
+    not to bother showing line-by-line changes for it; it's written by pixi,
+    not by people.)
+
+3.  Commit and push:
+
+    ```{.bash filename="Terminal"}
+    git add pixi.toml pixi.lock
+    git commit -m "Adding IQ-TREE from bioconda"
+    git push
+    ```
+
+### Questions
+
+**Question 3**: What version of Python did `pixi run python --version` report?
+
+**Question 4**: What range of versions does `pixi.toml` list for `numpy`?
+What exact version of NumPy is in your environment (look for it in
+`pixi list`)?
+Why is it useful to have both?
+
+**Question 5**: What version of IQ-TREE is in your environment (look for
+`iqtree` in `pixi list`)?
+Write it down; you will need it in Part 5.
+
+**Question 6**: Why doesn't git list the `.pixi` folder in `git status`, and
+why don't we want to commit it?
+
+## Part 3: Estimating the tree with IQ-TREE
+
+To make an analysis reproducible, we need to record not only the software,
+but also the ***steps***: the exact commands we ran, in order.
+pixi can store commands in `pixi.toml` as ***tasks***, which anyone can run
+with `pixi run <task name>`.
+
+### Get the data
+
+1.  Add a task that downloads the alignment of 24 SARS-CoV-2 genomes we've
+    been using (it's one long command; use the copy button!):
+
+    ```{.bash filename="Terminal"}
+    pixi task add get-data "mkdir -p data && curl -L -o data/sars-cov-2.fasta https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/SARS-CoV-2.nextclade.aligned.fasta" --description "Download the SARS-CoV-2 alignment"
+    ```
+
+    Look at the new `[tasks]` section of `pixi.toml` to see the task.
+
+2.  Run the task, and check that it worked:
+
+    ```{.bash filename="Terminal"}
+    pixi run get-data
+    grep ">" data/sars-cov-2.fasta
+    ```
+
+    You should see the names of the 24 genomes.
+
+3.  The alignment is small (about 700 KB), so we will commit a copy of it.
+    That way, our project still works even if the file at that web address
+    changes or disappears, and the task records where the data came from.
+
+    ```{.bash filename="Terminal"}
+    git add pixi.toml data/sars-cov-2.fasta
+    git commit -m "Adding task to download the SARS-CoV-2 alignment, and the data"
+    ```
+
+::: {.callout-note}
+## What about big data?
+GitHub doesn't allow files larger than 100 MB, and repositories should stay
+under a few GB.
+For big data sets, we would commit only the task that downloads the data
+from a permanent public archive (like GenBank), and tell git to ignore the
+data files.
+:::
+
+### Run IQ-TREE
+
+1.  Add a task that runs IQ-TREE on the alignment:
+
+    ```{.bash filename="Terminal"}
+    pixi task add tree "mkdir -p results && iqtree3 -s data/sars-cov-2.fasta -m HKY -seed 1 -T 1 --prefix results/tree --redo" --description "Estimate a maximum likelihood tree with IQ-TREE"
+    ```
+
+    Here's what each part of the IQ-TREE command does:
+
+    | Option | What it does |
+    |:--|:--|
+    | `-s data/sars-cov-2.fasta` | The alignment to analyze |
+    | `-m HKY` | Use the HKY model of sequence evolution (as in Capstone Project 2) |
+    | `-seed 1` | The ***seed*** of IQ-TREE's random number generator (more on this in Part 4) |
+    | `-T 1` | Use one processor (the results can differ slightly with more) |
+    | `--prefix results/tree` | Begin all output files with the prefix `results/tree.*` |
+    | `--redo` | Overwrite the output files if they already exist |
+
+2.  Run it:
+
+    ```{.bash filename="Terminal"}
+    pixi run tree
+    ```
+
+    IQ-TREE prints a lot as it searches for the maximum likelihood tree, but it
+    only takes a few seconds.
+    Near the end, look for the `BEST SCORE FOUND`: the log-likelihood of the
+    best tree it found.
+
+3.  See what IQ-TREE created:
+
+    ```{.bash filename="Terminal"}
+    ls results
+    git status
+    ```
+
+### Decide what to commit
+
+IQ-TREE writes several files.
+The one we need is `results/tree.treefile`, which has the tree in Newick
+format (click it in VS Code to take a look).
+The others are reports, logs, and temporary files that IQ-TREE can recreate
+in a few seconds.
+Open `results/tree.log` and look at its first few lines: it records the date
+and time IQ-TREE ran, so it changes ***every*** time we run IQ-TREE, even
+when the results are exactly the same.
+It's not worth cluttering our git database with these trivial changes.
+
+We'll tell git to ignore IQ-TREE's other files.
+
+1.  Open `.gitignore` in VS Code, and add these lines to the end of the file:
+
+    ```{.default filename=".gitignore"}
+    # IQ-TREE files that we can recreate, and that change every time IQ-TREE runs
+    results/*.log
+    results/*.iqtree
+    results/*.ckp.gz
+    results/*.bionj
+    results/*.mldist
+    ```
+
+    Each line is a ***pattern***, where `*` means "anything."
+    For example, `results/*.log` matches every file in `results` whose name
+    ends with `.log`.
+    Lines that start with `#` are comments.
+
+2.  Check that git now ignores those files (only `results/tree.treefile`
+    should be listed in the `results` folder):
+
+    ```{.bash filename="Terminal"}
+    git status --untracked-files=all
+    ```
+
+3.  Commit and push:
+
+    ```{.bash filename="Terminal"}
+    git add .gitignore pixi.toml results/tree.treefile
+    git commit -m "Estimating the ML tree with IQ-TREE"
+    git push
+    ```
+
+### Questions
+
+**Question 7**: What was the log-likelihood of the best tree IQ-TREE found
+(the `BEST SCORE FOUND`)?
+
+**Question 8**: Why is it a good idea to tell git to ignore files like
+`results/tree.log`?
+
+## Part 4: Fitting the clock, and using your project's history
+
+### Add the analysis script
+
+1.  Download the script that fits the molecular clock:
+
+    ```{.bash filename="Terminal"}
+    mkdir -p scripts
+    curl -L -o scripts/clock.py https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/scripts/clock.py
+    ```
+
+    Open `scripts/clock.py` in VS Code and skim it.
+    It's the same code we used in Capstone Project 2, as a plain Python
+    script instead of a notebook: It reads IQ-TREE's tree, calculates each
+    genome's distance from the root, fits the clock, prints the results, and
+    saves a plot to `results/clock.png`.
+
+2.  Now, try running the `clock.py` Python script:
+
+    ```{.bash filename="Terminal"}
+    pixi run python scripts/clock.py
+    ```
+
+    When it finishes, click `results/clock.png` in VS Code to view the plot the
+    script created.
+
+3.  Add a task for it.
+    The `--depends-on tree` part tells pixi that this task needs the `tree`
+    task to run first:
+
+    ```{.bash filename="Terminal"}
+    pixi task add clock "python scripts/clock.py" --depends-on tree --description "Fit a molecular clock to the tree"
+    ```
+
+    You can verify that pixi added the task using:
+
+    ```{.bash filename="Terminal"}
+    pixi task list
+    ```
+
+    Now, run the new `clock` task:
+
+    ```{.bash filename="Terminal"}
+    pixi run clock
+    ```
+
+    One command, `pixi run clock`, runs the **whole analysis**, from
+    estimating the tree to creating the plot.
+    Nice!
+
+4.  Commit and push:
+
+    ```{.bash filename="Terminal"}
+    git add pixi.toml scripts/clock.py results/clock.png
+    git commit -m "Adding the molecular clock script and task"
+    git push
+    ```
+
+### Change the analysis
+
+In Capstone Project 2, we found that Omicron doesn't follow the clock.
+Let's change the analysis to leave Omicron out, and use git to see and record
+the change.
+
+1.  Open the `scripts/clock.py` file in the VS Code window, find this line
+    (it's about 40 lines from the bottom of the file):
+
+    ```{.python filename="scripts/clock.py"}
+    excluded_lineages = []
+    ```
+
+    and change it to:
+
+    ```{.python filename="scripts/clock.py"}
+    excluded_lineages = ["Omicron"]
+    ```
+
+2.  Rerun the analysis:
+
+    ```{.bash filename="Terminal"}
+    pixi run clock
+    ```
+
+    When it finishes, see what has changed with:
+
+    ```{.bash filename="Terminal"}
+    git status
+    ```
+
+    and:
+
+    ```{.bash filename="Terminal"}
+    git diff scripts/clock.py
+    ```
+
+
+    `git status` lists `results/clock.png` and `scripts/clock.py` as changed,
+    but not `results/tree.treefile`.
+    IQ-TREE ran again, but because we used the same data, software, and seed,
+    it produced exactly the same tree file, so git sees no change.
+
+3.  Look at the new plot, then commit and push:
+
+    ```{.bash filename="Terminal"}
+    git add scripts/clock.py results/clock.png
+    git commit -m "Leaving Omicron out of the clock"
+    git push
+    ```
+
+### Go back in time
+
+Git keeps every version of every file you've committed, so you can always
+look at (or go back to) an earlier version.
+
+1.  List your commits, one per line:
+
+    ```{.bash filename="Terminal"}
+    git log --oneline
+    ```
+
+    `HEAD` is git's name for your latest commit, and `HEAD~1` means "one
+    commit before `HEAD`."
+
+2.  Bring back the plot from the commit before your latest one, and look at
+    it in VS Code (it should include Omicron again):
+
+    ```{.bash filename="Terminal"}
+    git restore --source=HEAD~1 results/clock.png
+    git status
+    ```
+
+3.  Put the latest version back:
+
+    ```{.bash filename="Terminal"}
+    git restore results/clock.png
+    git status
+    ```
+
+    `git restore <file>`, without `--source`, throws away any changes to the
+    file since your last commit.
+    This is also how you undo a mistake: if you break a file, you can always
+    get back the last version you committed.
+
+### Why the seed matters
+
+IQ-TREE uses random numbers while it searches for the best tree.
+The seed determines which random numbers it gets: the same seed gives the
+same random numbers, and so the same results.
+(If you don't give IQ-TREE a seed, it picks one based on the current time.)
+Let's see what happens with a different seed.
+
+1.  In `pixi.toml`, in the `tree` task, change `-seed 1` to `-seed 2`.
+    Then, run the analysis again:
+
+    ```{.bash filename="Terminal"}
+    pixi run clock
+    ```
+
+    Compare the results to what it printed before (the rate, the date of the
+    ancestor, and $R^2$).
+
+    Use git to see what changed:
+
+    ```{.bash filename="Terminal"}
+    git status
+    ```
+
+    and:
+
+
+    ```{.bash filename="Terminal"}
+    git diff --color-words='[^,():]+' results/tree.treefile
+    ```
+
+    The `--color-words` option shows the changes word by word (here, each
+    name and branch length is a "word"), instead of line by line.
+    The old values are in red and the new values are in green.
+
+2.  Undo the change to the seed, and the results it produced:
+
+    ```{.bash filename="Terminal"}
+    git restore pixi.toml results/
+    ```
+
+    And confirm everything is restored to match your last commit:
+
+    ```{.bash filename="Terminal"}
+    git status
+    ```
+
+### Questions
+
+**Question 9**: With Omicron left out, what rate (substitutions per genome
+per year) and date of the ancestor did the clock estimate?
+(They should be close to what you found in Capstone Project 2.)
+
+**Question 10**: When you changed the seed to 2, what changed in
+`results/tree.treefile`?
+Did the clock's printed results change?
+Do you think the tree from seed 2 is a different scientific result than the
+tree from seed 1?
+Why is it still important to record the seed?
+
+## Part 5: Prove it's reproducible
+
+So far, everything has been on one computer: your codespace.
+The real test of reproducibility is whether the project works on a ***new***
+computer.
+So, let's delete your codespace, make a brand new one, and rebuild
+everything from your GitHub repository.
+
+1.  First, make sure all of your work is on GitHub.
+    `git status` should say `nothing to commit, working tree clean`, and
+    `Your branch is up to date with 'origin/main'`:
+
+    ```{.bash filename="Terminal"}
+    git status
+    ```
+
+    If not, commit and push before you go on!
+    Anything that isn't pushed will be lost when you delete the codespace.
+
+2.  Go to <https://github.com/codespaces>, click the **"..."** next to your
+    codespace, and choose **"Delete."**
+
+3.  Go to your repository on GitHub, and create a new codespace
+    (**"Code"** → **"Codespaces"** → **"Create codespace on main"**).
+    While it starts up, it will automatically run `pixi install`, which
+    rebuilds your environment from `pixi.toml` and `pixi.lock`.
+
+4.  In the new codespace, check your environment:
+
+    ```{.bash filename="Terminal"}
+    pixi list
+    ```
+
+    Rerun the whole analysis:
+
+    ```{.bash filename="Terminal"}
+    pixi run clock
+    ```
+
+    And check to see if anything changed:
+
+    ```{.bash filename="Terminal"}
+    git status
+    ```
+
+If `git status` says `nothing to commit, working tree clean`, then you just
+reproduced your entire analysis, on a new computer, from scratch, and got
+***exactly*** the same tree and the same plot, down to the last byte.
+
+::: {.callout-note}
+## What if git says a file changed?
+IQ-TREE sometimes uses slightly different (but equally correct) arithmetic
+on different kinds of processors, so on a different computer the branch
+lengths in `results/tree.treefile` might differ in their last digits.
+If git says that the tree file changed, look at the changes with
+`git diff --color-words='[^,():]+' results/tree.treefile` to see how big they
+are, and then use `git restore results/` to go back to your committed results.
+:::
+
+### Questions
+
+**Question 11**: After rerunning the analysis in your new codespace, what did
+`git status` say?
+What does that tell you about your results?
+
+**Question 12**: What version of IQ-TREE is in your new environment?
+Is it the same as in Part 2 (Question 5)?
+Which file made sure of that?
+
+**Question 13**: In your own words, describe one way that git, and one way
+that pixi, would help you (or someone else) if you came back to this
+project a year from now.
+
+## Optional: Reproduce a classmate's analysis
+
+Anyone can rebuild and rerun a public project.
+Ask a classmate for their repository's URL, and try it in your codespace
+(replace `their-username` below with their GitHub username):
+
+```{.bash filename="Terminal"}
+cd /tmp
+git clone https://github.com/their-username/comp-bio-project
+cd comp-bio-project
+pixi run clock
+git status
+cd /workspaces/comp-bio-project
+```
+
+`git clone` downloads a copy of a repository, including its whole history.
+Did you get exactly their results?
+
+## Quick reference
+
+| Command | What it does |
+|:--|:--|
+| `git status` | Show which files have changed since your last commit |
+| `git add <file>` | Stage a file's changes for your next commit |
+| `git commit -m "message"` | Save a snapshot of the staged changes, with a message |
+| `git push` | Send your commits to GitHub |
+| `git log --oneline` | List your commits, newest first |
+| `git diff <file>` | Show what changed in a file since your last commit |
+| `git restore <file>` | Throw away a file's changes since your last commit |
+| `git restore --source=HEAD~1 <file>` | Bring back a file as it was one commit ago |
+| `git clone <URL>` | Download a copy of a repository |
+| `pixi init` | Start a pixi project (creates `pixi.toml`) |
+| `pixi workspace channel add <channel>` | Add a channel (like bioconda) for pixi to search for packages |
+| `pixi add <package>` | Add a package to the environment (updates `pixi.toml` and `pixi.lock`) |
+| `pixi list` | List the packages in the environment, and their versions |
+| `pixi run <command>` | Run a command inside the environment |
+| `pixi task add <name> "<command>"` | Save a command as a task in `pixi.toml` |
+| `pixi task list` | List the tasks in `pixi.toml` |
+| `pixi run <task>` | Run a task |
+| `pixi install` | Rebuild the environment from `pixi.toml` and `pixi.lock` |
