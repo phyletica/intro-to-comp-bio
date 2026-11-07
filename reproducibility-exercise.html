@@ -262,13 +262,18 @@ window.Quarto = {
 
 <p>In this exercise, you will turn the molecular clock analysis from Capstone Project 2 into a <strong><em>reproducible project</em></strong>: one that anyone (including you, a year from now) can download and rerun with a single command, using exactly the same software, and get exactly the same results. Along the way, you will:</p>
 <ol type="1">
-<li>Use <strong><em>git</em></strong> to keep track of every change to your project, and <strong><em>GitHub</em></strong> to back it up</li>
-<li>Use <strong><em>pixi</em></strong> to create a <strong><em>project environment</em></strong> with Python, the Python packages we’ve been using, and a program that isn’t Python at all: <a href="https://iqtree.github.io/">IQ-TREE</a>, the program I used to estimate the tree of 24 SARS-CoV-2 genomes in Capstone Project 2</li>
-<li>Estimate that tree yourself, fit the molecular clock to it, and record every step, so that the whole analysis can be rerun with one command</li>
-<li>Prove that your project is reproducible by deleting your computer and rebuilding everything from your GitHub repository</li>
+<li><p>Use <strong><em>git</em></strong> to keep track of every change to your project, and <strong><em>GitHub</em></strong> to back it up</p></li>
+<li><p>Use <strong><em>pixi</em></strong> to create a <strong><em>project environment</em></strong> with all the software needed for the project, including:</p>
+<ul>
+<li>Python</li>
+<li>Python packages</li>
+<li><a href="https://iqtree.github.io/">IQ-TREE</a>, the program I used to estimate the tree of 24 SARS-CoV-2 genomes in Capstone Project 2</li>
+</ul></li>
+<li><p>Estimate that tree yourself, fit the molecular clock to it, and record every step, so that the whole analysis can be rerun with one command</p></li>
+<li><p>Prove that your project is reproducible by deleting your project and rebuilding everything from your GitHub repository</p></li>
 </ol>
 <p>There is no new Python or biology in this exercise. Everything new is about <strong><em>how</em></strong> we do the work.</p>
-<p>The exercise has five parts. Each part takes about 30 to 45 minutes, and each one ends with saving your work to GitHub, so you can stop at the end of any part and pick up where you left off next time. Put your answers to the questions into the Exercise 12 quiz on Canvas.</p>
+<p>The exercise has five parts. Each part takes about 30 minutes, and each one ends with saving your work to GitHub, so you can stop at the end of any part and pick up where you left off later. Put your answers to the questions into the Exercise 13 quiz on Canvas.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -279,7 +284,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Your codespace is <strong><em>temporary</em></strong>. It stops on its own after 30 minutes of inactivity, and GitHub <strong><em>deletes</em></strong> codespaces that haven’t been used for 30 days, <strong><em>even if they contain work you haven’t pushed to GitHub</em></strong>. Your work is only safe once you have committed it and pushed it to GitHub (you’ll learn how in Part 1).</p>
+<p>Your GitHub codespace is <strong><em>temporary</em></strong>. It stops on its own after 30 minutes of inactivity, and GitHub <strong><em>deletes</em></strong> codespaces that haven’t been used for 30 days, <strong><em>even if they contain work you haven’t pushed to GitHub</em></strong>. Your work is only safe once you have committed it and pushed it to GitHub (you’ll learn how in Part 1).</p>
 </div>
 </div>
 <section id="part-1-your-project-repository" class="level2">
@@ -287,7 +292,12 @@ window.Quarto = {
 <section id="make-your-copy-and-open-your-codespace" class="level3">
 <h3 class="anchored" data-anchor-id="make-your-copy-and-open-your-codespace">Make your copy and open your codespace</h3>
 <ol type="1">
-<li><p>Go to the <a href="https://github.com/phyletica/comp-bio-project-template">Comp Bio project template</a> on GitHub, and follow the instructions in its README under <strong><em>“Make your own copy of this repository”</em></strong> and <strong><em>“Open your codespace.”</em></strong> Name your repository <code>comp-bio-project</code>, and choose <strong><em>Public</em></strong>.</p></li>
+<li><p>Go to the <a href="https://github.com/phyletica/comp-bio-project-template">Comp Bio project template</a> on GitHub, and follow the instructions in its README under the following two sections <strong>ONLY</strong>:</p>
+<ul>
+<li><strong><em>“Make your own copy of this repository”</em></strong>: Name your repository <code>comp-bio-project</code>, and choose <strong><em>Public</em></strong></li>
+<li><strong><em>“Open your codespace”</em></strong>: When you get a “Do you trust the authors of the files in this folder?” pop-up, click “Trust Folder &amp; Continue”</li>
+</ul>
+<p>Stop and come back here once you get to <strong><em>“Set up your project environment”</em></strong> (don’t set up the environment; we will do that below)</p></li>
 <li><p>Once your codespace is ready, you should see your files on the left side of VS Code and a <strong><em>terminal</em></strong> at the bottom. Click in the terminal and check that you’re in your project’s folder:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -296,7 +306,7 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">pwd</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-a</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>You should be in <code>/workspaces/comp-bio-project</code>, and see <code>README.md</code> and a folder named <code>.devcontainer</code> (plus a folder named <code>.git</code>; more on that below).</p></li>
+<p><code>pwd</code> (<strong>p</strong>rint <strong>w</strong>orking <strong>d</strong>irectory) tells you what directory (“folder”) you are in, which should be <code>/workspaces/comp-bio-project</code>. This folder you are in is called your <strong><em>working directory</em></strong>. <code>ls -a</code> lists all files and directories in your working directory. When you run this command, you should see <code>README.md</code> and a folder named <code>.devcontainer</code> (plus a folder named <code>.git</code>; more on that below).</p></li>
 </ol>
 <p>The terminal is the same Bash command line you used in the <a href="./bash-exercise.html">Bash exercise</a>, running on a Linux computer in the cloud. All of the commands in this exercise are typed in the terminal.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -315,19 +325,19 @@ window.Quarto = {
 </section>
 <section id="what-is-a-git-repository" class="level3">
 <h3 class="anchored" data-anchor-id="what-is-a-git-repository">What is a git repository?</h3>
-<p>Your project folder is a <strong><em>git repository</em></strong>. That means git is keeping a history of the folder in the hidden <code>.git</code> folder. (Never edit or delete the <code>.git</code> folder!) The history is a series of <strong><em>commits</em></strong>: snapshots of your files, each with a message describing what changed, who changed it, and when. Your repository on GitHub has a copy of the same history.</p>
+<p>Your project folder is a <strong><em>git repository</em></strong>. That means git is keeping a history of the folder in the hidden <code>.git</code> folder. (Never edit or delete the <code>.git</code> folder!) The history is a series of <strong><em>commits</em></strong>: snapshots of your files, each with a message describing what changed, who changed it, and when. Your repository on GitHub is a copy of the same history.</p>
 <p>Making a commit takes three steps:</p>
 <ol type="1">
 <li><strong>Change</strong> some files (<em>e.g.</em>, edit them, create them, or delete them)</li>
 <li><strong>Stage</strong> the changes you want to include in the next commit, with <code>git add</code></li>
 <li><strong>Commit</strong> the staged changes, with <code>git commit</code>, which saves the snapshot in your repository’s history</li>
 </ol>
-<p>Then, <code>git push</code> sends your new commits to GitHub.</p>
+<p>Then, <code>git push</code> sends your new commits to your copy of the repo on GitHub.</p>
 </section>
 <section id="your-first-commit" class="level3">
 <h3 class="anchored" data-anchor-id="your-first-commit">Your first commit</h3>
 <ol type="1">
-<li><p>Let’s see what git thinks of our repository right now:</p>
+<li><p>Let’s see what git thinks of our repository right now by running these two commands in the terminal:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
@@ -349,7 +359,7 @@ window.Quarto = {
 <p>When the output of a git command is longer than your terminal, git shows it one page at a time. Use the arrow keys to scroll, and press <strong>q</strong> to quit and get back to the command line.</p>
 </div>
 </div></li>
-<li><p>In the file list on the left of VS Code, click <code>README.md</code> to open it. At the very top of the file, add these lines (with your name), and leave a blank line between them and the rest of the file:</p>
+<li><p>In the file list on the left of VS Code, click <code>README.md</code> to open it. At the very top of the file, add these lines (with your name), and leave a blank line between them and the rest of the file (<strong>note</strong>: To add the text below to the <code>README.md</code> file, you will edit it using the top window of VS Code, not the terminal):</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>README.md</strong></pre>
@@ -362,13 +372,14 @@ window.Quarto = {
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>SARS-CoV-2 genomes, for BIOL 5/6800.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>VS Code saves automatically after a moment (or press <strong>Ctrl + S</strong>).</p></li>
-<li><p>Now ask git again:</p>
+<li><p>Now, return to the terminal window, and ask git again:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div></li>
+</div>
+<p><strong>Note</strong>: You will need the output from this command for Question 2 below.</p></li>
 <li><p>Stage your change, and ask git again:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -376,13 +387,14 @@ window.Quarto = {
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add README.md</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div></li>
+</div>
+<p><strong>Note</strong>: You will need the output from <code>git status</code> for Question 2 below.</p></li>
 <li><p>Commit your change, with a message that says what you changed:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Add project title and author to README"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Adding project title and author to README"</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You should see two commits now, with yours at the top. The long string of letters and numbers next to each commit is its <strong><em>hash</em></strong>: a unique ID for that snapshot.</p></li>
@@ -405,7 +417,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If you forget the <code>-m "message"</code> part, git opens a text editor in the terminal and waits for you to type a message there. If that happens, the easiest way out is to close the editor: if the bottom of the terminal shows <code>^X Exit</code>, press <strong>Ctrl + X</strong>; if it shows a lot of <code>~</code> characters, type <code>:q!</code> and press Enter. Then run the <code>git commit</code> command again with <code>-m</code>.</p>
+<p>If you forget the <code>-m "message"</code> part, git opens a text editor in the terminal and waits for you to type a message there. If that happens, the easiest way out is to close the editor: If the bottom of the terminal shows <code>^X Exit</code>, press <strong>Ctrl + X</strong>; if it shows a lot of <code>~</code> characters, type <code>:q!</code> and press Enter. Then run the <code>git commit</code> command again with <code>-m</code>.</p>
 </div>
 </div>
 </section>
@@ -417,15 +429,8 @@ window.Quarto = {
 </section>
 <section id="part-2-a-reproducible-environment" class="level2">
 <h2 class="anchored" data-anchor-id="part-2-a-reproducible-environment">Part 2: A reproducible environment</h2>
-<p>The codespace already has Python on it, but it’s not the Python we want. Check which version it is:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>Terminal</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>This is the Python that came with the codespace’s operating system. Someone else’s computer (or this codespace, next year) will have a different version, with different packages installed, or none at all. If our analysis depends on “whatever is installed on this computer,” we can’t expect it to give the same results anywhere else.</p>
-<p>Instead, we will use <strong><em>pixi</em></strong> to create a <strong><em>project environment</em></strong>: a folder of software that belongs to this project, with every package’s version written down so that the environment can be rebuilt exactly, anywhere.</p>
+<p>Just like any computer, your codespace already has software that came with the codespace’s operating system. Someone else’s computer (or this codespace, next year) will have different versions of software, with different packages installed, or none at all. If our analysis depends on “whatever is installed on this computer,” we can’t expect it to give the same results anywhere else.</p>
+<p>To get around this problem, we will use <strong><em>pixi</em></strong> to create a <strong><em>project environment</em></strong>: a folder of software that belongs to this project, with every package’s version written down so that the environment can be rebuilt exactly, anywhere.</p>
 <section id="create-the-environment" class="level3">
 <h3 class="anchored" data-anchor-id="create-the-environment">Create the environment</h3>
 <ol type="1">
@@ -434,8 +439,8 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> init</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> init</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><code>pixi init</code> created three files:</p>
 <ul>
@@ -444,31 +449,30 @@ window.Quarto = {
 <li><code>.gitattributes</code>: settings that tell git how to treat certain files</li>
 </ul>
 <p>Click <code>pixi.toml</code> in VS Code to open it. It doesn’t list any software yet; the <code>[dependencies]</code> section is empty.</p></li>
-<li><p>Add Python and the Python packages we need:</p>
+<li><p>Return to the terminal window and add Python and the Python packages we need using the following command:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> add <span class="st">"python=3.14.*"</span> numpy scipy matplotlib marimo</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> add <span class="st">"python=3.14.*"</span> numpy scipy matplotlib marimo</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This takes a minute or two. pixi figures out a set of package versions that work together (<em>e.g.</em>, which versions of NumPy work with Python 3.14), downloads them from <a href="https://conda-forge.org/">conda-forge</a> (a large, free collection of scientific software), and installs them into a hidden folder named <code>.pixi</code> in your project.</p>
-<p>The <code>"python=3.14.*"</code> part asks for Python version 3.14 (any 3.14.x release), instead of whatever version is newest on the day you run the command. (In October 2026, the newest version was 3.15, which was released so recently that some packages, including one marimo needs, didn’t work with it yet!)</p></li>
+<p>The <code>"python=3.14.*"</code> part asks for Python version 3.14 (any 3.14.x release), instead of whatever version is newest on the day you run the command, which might not be compatible with your project’s code or the packages it depends on.</p></li>
 <li><p>Look at <code>pixi.toml</code> again. The <code>[dependencies]</code> section now lists each package with a range of versions (something like <code>numpy = "&gt;=2.3.5,&lt;3"</code>). There is also a new file, <code>pixi.lock</code>, the <strong><em>lock file</em></strong>. Open it and scroll through it (it’s long!). It lists the <strong><em>exact</em></strong> version of every package that pixi installed, including the packages that our packages need, and the address it was downloaded from.</p>
 <ul>
 <li>The manifest (<code>pixi.toml</code>) says what we <strong><em>asked for</em></strong></li>
 <li>The lock file (<code>pixi.lock</code>) says exactly what we <strong><em>got</em></strong></li>
 </ul>
 <p>When pixi builds the environment from a lock file, it installs exactly those versions.</p></li>
-<li><p>Compare the Python in the codespace to the Python in our environment:</p>
+<li><p>Confirm the version of Python pixi installed in our environment:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run python <span class="at">--version</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run python <span class="at">--version</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p><code>pixi run</code> runs a command <strong><em>inside</em></strong> the project environment. <code>pixi list</code> lists every package in the environment, and its version.</p></li>
+<p><code>pixi run</code> runs a command <strong><em>inside</em></strong> the project environment. <code>pixi list</code> lists every package in the environment, and its version (pixi installed <strong>a lot</strong> of packages that the packages we requested depend on!).</p></li>
 </ol>
 </section>
 <section id="commit-the-environment" class="level3">
@@ -479,7 +483,7 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Notice that the <code>.pixi</code> folder, which holds the installed software, is <strong><em>not</em></strong> listed. Look in <code>.gitignore</code> to see why. We never commit the installed software, only the instructions for rebuilding it (<code>pixi.toml</code> and <code>pixi.lock</code>).</p></li>
 <li><p>Stage and commit the four new files, and push:</p>
@@ -487,9 +491,9 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add pixi.toml pixi.lock .gitignore .gitattributes</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Create a pixi environment with Python 3.14"</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add pixi.toml pixi.lock .gitignore .gitattributes</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Creating a pixi environment with Python 3.14"</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ol>
 </section>
@@ -502,34 +506,34 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> workspace channel add bioconda</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> add iqtree</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run iqtree3 <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> workspace channel add bioconda</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> add iqtree</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run iqtree3 <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>See what changed, using <code>git diff</code>, which shows exactly which lines changed in each file since the last commit:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff pixi.toml</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff <span class="at">--stat</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff pixi.toml</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff <span class="at">--stat</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>In <code>git diff</code>, lines that start with <code>-</code> (in red) were removed, and lines that start with <code>+</code> (in green) were added. <code>git diff --stat</code> summarizes how much each file changed. (<code>pixi.lock</code> shows up as <code>Bin</code>, because the <code>.gitattributes</code> file tells git not to bother showing line-by-line changes for it; it’s written by pixi, not by people.)</p></li>
+<p>In <code>git diff</code>, lines that start with <code>-</code> (in red) were removed, and lines that start with <code>+</code> (in green) were added. <code>git diff --stat</code> summarizes how much each file changed. (<code>pixi.lock</code> shows up as <code>Bin</code> because the <code>.gitattributes</code> file tells git not to bother showing line-by-line changes for it; it’s written by pixi, not by people.)</p></li>
 <li><p>Commit and push:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add pixi.toml pixi.lock</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Add IQ-TREE from bioconda"</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add pixi.toml pixi.lock</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Adding IQ-TREE from bioconda"</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ol>
 </section>
 <section id="questions-1" class="level3">
 <h3 class="anchored" data-anchor-id="questions-1">Questions</h3>
-<p><strong>Question 3</strong>: What version of Python did <code>python3 --version</code> report, and what version did <code>pixi run python --version</code> report?</p>
+<p><strong>Question 3</strong>: What version of Python did <code>pixi run python --version</code> report?</p>
 <p><strong>Question 4</strong>: What range of versions does <code>pixi.toml</code> list for <code>numpy</code>? What exact version of NumPy is in your environment (look for it in <code>pixi list</code>)? Why is it useful to have both?</p>
 <p><strong>Question 5</strong>: What version of IQ-TREE is in your environment (look for <code>iqtree</code> in <code>pixi list</code>)? Write it down; you will need it in Part 5.</p>
 <p><strong>Question 6</strong>: Why doesn’t git list the <code>.pixi</code> folder in <code>git status</code>, and why don’t we want to commit it?</p>
@@ -546,7 +550,7 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> task add get-data <span class="st">"mkdir -p data &amp;&amp; curl -L -o data/sars-cov-2.fasta https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/SARS-CoV-2.nextclade.aligned.fasta"</span> <span class="at">--description</span> <span class="st">"Download the SARS-CoV-2 alignment"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> task add get-data <span class="st">"mkdir -p data &amp;&amp; curl -L -o data/sars-cov-2.fasta https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/SARS-CoV-2.nextclade.aligned.fasta"</span> <span class="at">--description</span> <span class="st">"Download the SARS-CoV-2 alignment"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Look at the new <code>[tasks]</code> section of <code>pixi.toml</code> to see the task.</p></li>
 <li><p>Run the task, and check that it worked:</p>
@@ -554,8 +558,8 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run get-data</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"&gt;"</span> data/sars-cov-2.fasta</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run get-data</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"&gt;"</span> data/sars-cov-2.fasta</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You should see the names of the 24 genomes.</p></li>
 <li><p>The alignment is small (about 700 KB), so we will commit a copy of it. That way, our project still works even if the file at that web address changes or disappears, and the task records where the data came from.</p>
@@ -563,8 +567,8 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add pixi.toml data/sars-cov-2.fasta</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Add task to download the SARS-CoV-2 alignment, and the data"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add pixi.toml data/sars-cov-2.fasta</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Adding task to download the SARS-CoV-2 alignment, and the data"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -589,7 +593,7 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> task add tree <span class="st">"mkdir -p results &amp;&amp; iqtree3 -s data/sars-cov-2.fasta -m HKY -seed 1 -T 1 --prefix results/tree --redo"</span> <span class="at">--description</span> <span class="st">"Estimate a maximum likelihood tree with IQ-TREE"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> task add tree <span class="st">"mkdir -p results &amp;&amp; iqtree3 -s data/sars-cov-2.fasta -m HKY -seed 1 -T 1 --prefix results/tree --redo"</span> <span class="at">--description</span> <span class="st">"Estimate a maximum likelihood tree with IQ-TREE"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Here’s what each part of the IQ-TREE command does:</p>
 <table class="caption-top table">
@@ -622,7 +626,7 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>--prefix results/tree</code></td>
-<td style="text-align: left;">Name the output files <code>results/tree.*</code></td>
+<td style="text-align: left;">Begin all output files with the prefix <code>results/tree.*</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>--redo</code></td>
@@ -635,7 +639,7 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run tree</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run tree</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>IQ-TREE prints a lot as it searches for the maximum likelihood tree, but it only takes a few seconds. Near the end, look for the <code>BEST SCORE FOUND</code>: the log-likelihood of the best tree it found.</p></li>
 <li><p>See what IQ-TREE created:</p>
@@ -643,14 +647,14 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> results</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> results</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ol>
 </section>
 <section id="decide-what-to-commit" class="level3">
 <h3 class="anchored" data-anchor-id="decide-what-to-commit">Decide what to commit</h3>
-<p>IQ-TREE writes several files. The one we need is <code>results/tree.treefile</code>, which has the tree in Newick format (click it in VS Code to take a look). The others are reports, logs, and temporary files that IQ-TREE can recreate in a few seconds. Open <code>results/tree.log</code> and look at its first few lines: it records the date and time IQ-TREE ran, so it changes <strong><em>every</em></strong> time we run IQ-TREE, even when the results are exactly the same.</p>
+<p>IQ-TREE writes several files. The one we need is <code>results/tree.treefile</code>, which has the tree in Newick format (click it in VS Code to take a look). The others are reports, logs, and temporary files that IQ-TREE can recreate in a few seconds. Open <code>results/tree.log</code> and look at its first few lines: it records the date and time IQ-TREE ran, so it changes <strong><em>every</em></strong> time we run IQ-TREE, even when the results are exactly the same. It’s not worth cluttering our git database with these trivial changes.</p>
 <p>We’ll tell git to ignore IQ-TREE’s other files.</p>
 <ol type="1">
 <li><p>Open <code>.gitignore</code> in VS Code, and add these lines to the end of the file:</p>
@@ -658,12 +662,12 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>.gitignore</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename=".gitignore"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a># IQ-TREE files that we can recreate, and that change every time IQ-TREE runs</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>results/*.log</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>results/*.iqtree</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>results/*.ckp.gz</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>results/*.bionj</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>results/*.mldist</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename=".gitignore"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a># IQ-TREE files that we can recreate, and that change every time IQ-TREE runs</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>results/*.log</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>results/*.iqtree</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>results/*.ckp.gz</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>results/*.bionj</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>results/*.mldist</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Each line is a <strong><em>pattern</em></strong>, where <code>*</code> means “anything.” For example, <code>results/*.log</code> matches every file in <code>results</code> whose name ends with <code>.log</code>. Lines that start with <code>#</code> are comments.</p></li>
 <li><p>Check that git now ignores those files (only <code>results/tree.treefile</code> should be listed in the <code>results</code> folder):</p>
@@ -671,16 +675,16 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status <span class="at">--untracked-files</span><span class="op">=</span>all</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status <span class="at">--untracked-files</span><span class="op">=</span>all</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>Commit and push:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .gitignore pixi.toml results/tree.treefile</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Estimate the ML tree with IQ-TREE"</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .gitignore pixi.toml results/tree.treefile</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Estimating the ML tree with IQ-TREE"</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ol>
 </section>
@@ -695,34 +699,53 @@ window.Quarto = {
 <section id="add-the-analysis-script" class="level3">
 <h3 class="anchored" data-anchor-id="add-the-analysis-script">Add the analysis script</h3>
 <ol type="1">
-<li><p>Download the script that fits the molecular clock, and run it:</p>
+<li><p>Download the script that fits the molecular clock:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> scripts</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> <span class="at">-o</span> scripts/clock.py https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/scripts/clock.py</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run python scripts/clock.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> scripts</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> <span class="at">-o</span> scripts/clock.py https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/scripts/clock.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Open <code>scripts/clock.py</code> in VS Code and skim it. It’s the same code we used in Capstone Project 2, as a plain Python script instead of a notebook: it reads IQ-TREE’s tree, calculates each genome’s distance from the root, fits the clock, prints the results, and saves a plot to <code>results/clock.png</code>. Click <code>results/clock.png</code> in VS Code to see the plot.</p></li>
+<p>Open <code>scripts/clock.py</code> in VS Code and skim it. It’s the same code we used in Capstone Project 2, as a plain Python script instead of a notebook: It reads IQ-TREE’s tree, calculates each genome’s distance from the root, fits the clock, prints the results, and saves a plot to <code>results/clock.png</code>.</p></li>
+<li><p>Now, try running the <code>clock.py</code> Python script:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run python scripts/clock.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>When it finishes, click <code>results/clock.png</code> in VS Code to view the plot the script created.</p></li>
 <li><p>Add a task for it. The <code>--depends-on tree</code> part tells pixi that this task needs the <code>tree</code> task to run first:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> task add clock <span class="st">"python scripts/clock.py"</span> <span class="at">--depends-on</span> tree <span class="at">--description</span> <span class="st">"Fit a molecular clock to the tree"</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> task list</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run clock</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> task add clock <span class="st">"python scripts/clock.py"</span> <span class="at">--depends-on</span> tree <span class="at">--description</span> <span class="st">"Fit a molecular clock to the tree"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Now one command, <code>pixi run clock</code>, runs the whole analysis, from the alignment to the plot.</p></li>
+<p>You can verify that pixi added the task using:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> task list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now, run the new <code>clock</code> task:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run clock</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>One command, <code>pixi run clock</code>, runs the <strong>whole analysis</strong>, from estimating the tree to creating the plot. Nice!</p></li>
 <li><p>Commit and push:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add pixi.toml scripts/clock.py results/clock.png</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Add the molecular clock script and task"</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add pixi.toml scripts/clock.py results/clock.png</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Adding the molecular clock script and task"</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ol>
 </section>
@@ -730,28 +753,40 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="change-the-analysis">Change the analysis</h3>
 <p>In Capstone Project 2, we found that Omicron doesn’t follow the clock. Let’s change the analysis to leave Omicron out, and use git to see and record the change.</p>
 <ol type="1">
-<li><p>In <code>scripts/clock.py</code>, find this line near the top:</p>
+<li><p>Open the <code>scripts/clock.py</code> file in the VS Code window, find this line (it’s about 40 lines from the bottom of the file):</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>scripts/clock.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29" data-filename="scripts/clock.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>EXCLUDED_LINEAGES <span class="op">=</span> []</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31" data-filename="scripts/clock.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>excluded_lineages <span class="op">=</span> []</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>and change it to:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>scripts/clock.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30" data-filename="scripts/clock.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>EXCLUDED_LINEAGES <span class="op">=</span> [<span class="st">"Omicron"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32" data-filename="scripts/clock.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>excluded_lineages <span class="op">=</span> [<span class="st">"Omicron"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
-<li><p>Rerun the analysis, and see what changed:</p>
+<li><p>Rerun the analysis:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run clock</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff scripts/clock.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run clock</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>When it finishes, see what has changed with:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>and:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff scripts/clock.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><code>git status</code> lists <code>results/clock.png</code> and <code>scripts/clock.py</code> as changed, but not <code>results/tree.treefile</code>. IQ-TREE ran again, but because we used the same data, software, and seed, it produced exactly the same tree file, so git sees no change.</p></li>
 <li><p>Look at the new plot, then commit and push:</p>
@@ -759,9 +794,9 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add scripts/clock.py results/clock.png</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Leave Omicron out of the clock"</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add scripts/clock.py results/clock.png</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Leaving Omicron out of the clock"</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ol>
 </section>
@@ -774,7 +809,7 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log <span class="at">--oneline</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log <span class="at">--oneline</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><code>HEAD</code> is git’s name for your latest commit, and <code>HEAD~1</code> means “one commit before <code>HEAD</code>.”</p></li>
 <li><p>Bring back the plot from the commit before your latest one, and look at it in VS Code (it should include Omicron again):</p>
@@ -782,16 +817,16 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> restore <span class="at">--source</span><span class="op">=</span>HEAD~1 results/clock.png</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> restore <span class="at">--source</span><span class="op">=</span>HEAD~1 results/clock.png</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>Put the latest version back:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> restore results/clock.png</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> restore results/clock.png</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><code>git restore &lt;file&gt;</code>, without <code>--source</code>, throws away any changes to the file since your last commit. This is also how you undo a mistake: if you break a file, you can always get back the last version you committed.</p></li>
 </ol>
@@ -800,24 +835,42 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="why-the-seed-matters">Why the seed matters</h3>
 <p>IQ-TREE uses random numbers while it searches for the best tree. The seed determines which random numbers it gets: the same seed gives the same random numbers, and so the same results. (If you don’t give IQ-TREE a seed, it picks one based on the current time.) Let’s see what happens with a different seed.</p>
 <ol type="1">
-<li><p>In <code>pixi.toml</code>, in the <code>tree</code> task, change <code>-seed 1</code> to <code>-seed 2</code>. Then run the analysis again, and see what changed:</p>
+<li><p>In <code>pixi.toml</code>, in the <code>tree</code> task, change <code>-seed 1</code> to <code>-seed 2</code>. Then, run the analysis again:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run clock</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff <span class="at">--color-words</span><span class="op">=</span><span class="st">'[^,():]+'</span> results/tree.treefile</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run clock</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Compare the results to what it printed before (the rate, the date of the ancestor, and <span class="math inline">\(R^2\)</span>).</p>
+<p>Use git to see what changed:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>and:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff <span class="at">--color-words</span><span class="op">=</span><span class="st">'[^,():]+'</span> results/tree.treefile</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The <code>--color-words</code> option shows the changes word by word (here, each name and branch length is a “word”), instead of line by line. The old values are in red and the new values are in green.</p></li>
-<li><p>Compare the clock’s results to what it printed before (the rate, the date of the ancestor, and <span class="math inline">\(R^2\)</span>).</p></li>
 <li><p>Undo the change to the seed, and the results it produced:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> restore pixi.toml results/</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> restore pixi.toml results/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>And confirm everything is restored to match your last commit:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ol>
 </section>
@@ -836,19 +889,31 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>If not, commit and push before you go on! Anything that isn’t pushed will be lost when you delete the codespace.</p></li>
 <li><p>Go to <a href="https://github.com/codespaces" class="uri">https://github.com/codespaces</a>, click the <strong>“…”</strong> next to your codespace, and choose <strong>“Delete.”</strong></p></li>
 <li><p>Go to your repository on GitHub, and create a new codespace (<strong>“Code”</strong> → <strong>“Codespaces”</strong> → <strong>“Create codespace on main”</strong>). While it starts up, it will automatically run <code>pixi install</code>, which rebuilds your environment from <code>pixi.toml</code> and <code>pixi.lock</code>.</p></li>
-<li><p>In the new codespace, check your environment, and rerun the whole analysis:</p>
+<li><p>In the new codespace, check your environment:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> list</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run clock</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb46" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Rerun the whole analysis:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb47" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run clock</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>And check to see if anything changed:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb48" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ol>
 <p>If <code>git status</code> says <code>nothing to commit, working tree clean</code>, then you just reproduced your entire analysis, on a new computer, from scratch, and got <strong><em>exactly</em></strong> the same tree and the same plot, down to the last byte.</p>
@@ -874,17 +939,17 @@ window.Quarto = {
 </section>
 <section id="optional-reproduce-a-classmates-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="optional-reproduce-a-classmates-analysis">Optional: Reproduce a classmate’s analysis</h2>
-<p>Anyone can rebuild and rerun a public project. Ask a classmate for their repository’s URL, and try it in your codespace (replace <code>their-username</code> with their GitHub username):</p>
+<p>Anyone can rebuild and rerun a public project. Ask a classmate for their repository’s URL, and try it in your codespace (replace <code>their-username</code> below with their GitHub username):</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /tmp</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/their-username/comp-bio-project</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> comp-bio-project</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run clock</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /workspaces/comp-bio-project</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb49" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /tmp</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/their-username/comp-bio-project</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> comp-bio-project</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="ex">pixi</span> run clock</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /workspaces/comp-bio-project</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><code>git clone</code> downloads a copy of a repository, including its whole history. Did you get exactly their results?</p>
 </section>
@@ -943,20 +1008,28 @@ window.Quarto = {
 <td style="text-align: left;">Start a pixi project (creates <code>pixi.toml</code>)</td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;"><code>pixi workspace channel add &lt;channel&gt;</code></td>
+<td style="text-align: left;">Add a channel (like bioconda) for pixi to search for packages</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;"><code>pixi add &lt;package&gt;</code></td>
 <td style="text-align: left;">Add a package to the environment (updates <code>pixi.toml</code> and <code>pixi.lock</code>)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><code>pixi list</code></td>
 <td style="text-align: left;">List the packages in the environment, and their versions</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><code>pixi run &lt;command&gt;</code></td>
 <td style="text-align: left;">Run a command inside the environment</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><code>pixi task add &lt;name&gt; "&lt;command&gt;"</code></td>
 <td style="text-align: left;">Save a command as a task in <code>pixi.toml</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>pixi task list</code></td>
+<td style="text-align: left;">List the tasks in <code>pixi.toml</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>pixi run &lt;task&gt;</code></td>
