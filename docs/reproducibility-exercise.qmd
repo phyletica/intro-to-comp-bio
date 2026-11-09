@@ -30,7 +30,7 @@ There is no new Python or biology in this exercise.
 Everything new is about ***how*** we do the work.
 
 The exercise has five parts.
-Each part takes about 30 minutes, and each one ends with saving your
+Each part takes about 15--30 minutes, and each one ends with saving your
 work to GitHub, so you can stop at the end of any part and pick up where you
 left off later.
 Put your answers to the questions into the Exercise 13 quiz on Canvas.
