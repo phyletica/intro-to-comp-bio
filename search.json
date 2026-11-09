@@ -372,11 +372,11 @@
     "text": "Acknowledgements\nI drafted and iterated on these slides in collaboration with Anthropic’s Claude (Opus 5.5 model)."
   },
   {
-    "objectID": "slides/topic-13-reproducibility.html#last-time",
-    "href": "slides/topic-13-reproducibility.html#last-time",
+    "objectID": "slides/topic-13-reproducibility.html#previously",
+    "href": "slides/topic-13-reproducibility.html#previously",
     "title": "Reproducible computational research",
-    "section": "Last time",
-    "text": "Last time\nIn Capstone Project 2, you fit a molecular clock to a tree of 24 SARS-CoV-2 genomes\n\nI estimated that tree with a program called IQ-TREE, on my computer\n\n\n\n\n\nCould you redo the whole analysis, from the genomes to the clock? Could I redo it a year from now?\n\n\n\n\n0:00-1:30\nThe capstone handed them a tree. Ask: what would you need from me to make that tree yourself? (The data, the program, the right version of it, the exact command, the settings.) That list is today’s topic."
+    "section": "Previously",
+    "text": "Previously\nIn Capstone Project 2, you fit a molecular clock to a tree of 24 SARS-CoV-2 genomes\n\nI estimated that tree with a program called IQ-TREE, on my computer\n\n\n\n\n\nCould you redo the whole analysis, from the genomes to the clock? Could I redo it a year from now?\n\n\n\n\n0:00-1:30\nThe capstone handed them a tree. Ask: what would you need from me to make that tree yourself? (The data, the program, the right version of it, the exact command, the settings.) That list is today’s topic."
   },
   {
     "objectID": "slides/topic-13-reproducibility.html#will-it-run-next-year",
@@ -397,7 +397,7 @@
     "href": "slides/topic-13-reproducibility.html#what-we-need-to-record",
     "title": "Reproducible computational research",
     "section": "What we need to record",
-    "text": "What we need to record\n\n\n\n\n\n\n\n\n\nIngredient\nExample\nHow we’ll record it\n\n\n\n\nData\nThe 24 aligned genomes\nCommit a copy, and how we downloaded it\n\n\nCode\nclock.py\ngit\n\n\nSoftware\nPython 3.14, NumPy, IQ-TREE, …\npixi\n\n\nSteps\nThe exact IQ-TREE command\npixi tasks\n\n\nRandomness\nIQ-TREE’s random search\nA seed\n\n\n\n\n\nSee Sandve et al. (2013) and Wilson et al. (2017) for more good habits\n\n4:00-5:00\nThis table is the whole lecture. Everything else is how to do each row."
+    "text": "What we need to record\n\n\n\n\n\n\n\n\n\nIngredient\nExample\nHow we’ll record it\n\n\n\n\nData\nThe 24 aligned genomes\nRecord how we got it (and a copy if it’s not huge)\n\n\nCode\nclock.py\ngit\n\n\nSoftware\nPython 3.14, NumPy, IQ-TREE, …\npixi\n\n\nSteps\nThe exact IQ-TREE command\npixi tasks\n\n\nRandomness\nIQ-TREE’s random search\nA seed\n\n\n\n\n\n\nSee Sandve et al. (2013) and Wilson et al. (2017) for more good habits\n\n\n4:00-5:00\nThis table is the whole lecture. Everything else is how to do each row."
   },
   {
     "objectID": "slides/topic-13-reproducibility.html#without-version-control",
