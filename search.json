@@ -24,7 +24,7 @@
     "href": "index.html#lab-exercises",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lab exercises",
-    "text": "Lab exercises\n\nIntro to Bash\nSetting up a molab account\nExercise 13: Reproducibility with git and pixi\n\n\nPython notebook exercises\nTo work on one of the marimo Python notebooks below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button.\n\nIf you are having trouble with molab, you can run the notebooks on your own computer instead.\n\nExercise 4: Intro to Python & marimo notebooks \nExercise 5: Complexity Lab \nExercise 6: String Search Lab \nExercise 7: Sequence Alignment Lab \nExercise 8: BLAST Lab \nExercise 9: Sequence Evolution Lab \nExercise 10: Substitution Models Lab \nExercise 11: Phylogenetics Lab \nExercise 12: Birth-death Lab",
+    "text": "Lab exercises\n\nIntro to Bash\nIntro to Bash in GitHub Codespace (Exercise 2 alternative)\nSetting up a molab account\nExercise 13: Reproducibility with git and pixi\n\n\nPython notebook exercises\nTo work on one of the marimo Python notebooks below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button.\n\nIf you are having trouble with molab, you can run the notebooks on your own computer instead.\n\nExercise 4: Intro to Python & marimo notebooks \nExercise 5: Complexity Lab \nExercise 6: String Search Lab \nExercise 7: Sequence Alignment Lab \nExercise 8: BLAST Lab \nExercise 9: Sequence Evolution Lab \nExercise 10: Substitution Models Lab \nExercise 11: Phylogenetics Lab \nExercise 12: Birth-death Lab",
     "crumbs": [
       "Home"
     ]
@@ -1217,6 +1217,34 @@
     "title": "SIR models",
     "section": "Acknowledgements",
     "text": "Acknowledgements\nI drafted and iterated on these slides in collaboration with Anthropic’s Claude (Opus 5.5 model)."
+  },
+  {
+    "objectID": "bash-exercise-in-codespace.html",
+    "href": "bash-exercise-in-codespace.html",
+    "title": "Bash exercise using GitHub’s codespace",
+    "section": "",
+    "text": "Follow the instructions below to complete this exercise, and put your answers to the questions into the Exercise 2 quiz on Canvas."
+  },
+  {
+    "objectID": "bash-exercise-in-codespace.html#your-project-repository",
+    "href": "bash-exercise-in-codespace.html#your-project-repository",
+    "title": "Bash exercise using GitHub’s codespace",
+    "section": "Your project repository",
+    "text": "Your project repository\n\nMake your copy and open your codespace\n\nGo to the Comp Bio project template on GitHub, and follow the instructions in its README under the following two sections ONLY:\n\n“Make your own copy of this repository”: Name your repository bash-intro, and choose Public\n“Open your codespace”: When you get a “Do you trust the authors of the files in this folder?” pop-up, click “Trust Folder & Continue”\n\nStop and come back here once you get to “Set up your project environment” (don’t set up the environment; we don’t need it for this exercise).\nOnce your codespace is ready, you should see your files on the left side of VS Code and a terminal at the bottom. Click in the terminal and check that you’re in your project’s folder:\n\n\nTerminal\n\npwd\nls -a\n\npwd (print working directory) tells you what directory (“folder”) you are in, which should be /workspaces/comp-bio-project. This folder you are in is called your working directory. ls -a lists all files and directories in your working directory. When you run this command, you should see README.md and a folder named .devcontainer (plus a folder named .git; more on that below).\n\nThe terminal is the Bash command line running on a Linux computer in the cloud. All of the commands in this exercise are typed in the terminal."
+  },
+  {
+    "objectID": "bash-exercise-in-codespace.html#creating-a-new-directory-and-copying-files-into-it",
+    "href": "bash-exercise-in-codespace.html#creating-a-new-directory-and-copying-files-into-it",
+    "title": "Bash exercise using GitHub’s codespace",
+    "section": "Creating a new directory and copying files into it",
+    "text": "Creating a new directory and copying files into it\n\nUsing the terminal, navigate to your home directory:\n\n\nTerminal\n\ncd ~\n\nCreate a new directory called “exercise2”\n\n\nTerminal\n\nmkdir exercise2\n\nUse the curl command to download an answer1.txt file from our class GitHub repo into your new exercise2 directory:\n\n\nTerminal\n\ncurl -L -o exercise2/answer1.txt https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/answer1.txt\n\nUse the curl command again to download the SARS-CoV-2.fasta file from our class GitHub repo into your new exercise2 directory:\n\n\nTerminal\n\ncurl -L -o exercise2/SARS-CoV-2.fasta https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/SARS-CoV-2.fasta\n\nNow, move into the “exercise2” directory and confirm the files you downloaded are there:\n\n\nTerminal\n\ncd exercise2\nls\n\n\n\nQuestion 1\nUse the command line (terminal) to see what is in the answer1.txt file. Enter what you find in the file into Question 1 of the Exercise 2 quiz on Canvas.\n\nHint: The commands cat or less would be useful. I would normally encourage you to use the man command to learn more about these commands, but man doesn’t work by default in GitHub’s Codespaces. As an alternative, go to the Linux man pages online and use the search bar near the bottom of the page to search for the commands cat and less.\n\n\n\n\n\n\n\nImportantSave your work to GitHub at the end of every part\n\n\n\nYour GitHub codespace is temporary. It stops on its own after 30 minutes of inactivity, and GitHub deletes codespaces that haven’t been used for 30 days, even if they contain work you haven’t pushed to GitHub. Your work is only safe once you have committed it and pushed it to GitHub (you’ll learn how in Part 1)."
+  },
+  {
+    "objectID": "bash-exercise-in-codespace.html#manipulating-sequence-data",
+    "href": "bash-exercise-in-codespace.html#manipulating-sequence-data",
+    "title": "Bash exercise using GitHub’s codespace",
+    "section": "Manipulating sequence data",
+    "text": "Manipulating sequence data\nThe “SARS-CoV-2.fasta” file contains nucleotide sequence data from different strains of the SARS-CoV-2 virus. The sequences are in a format called FASTA. The FASTA format looks like:\n&gt;Name1\nAATCGGCTA\n&gt;Name2\nATTCGCCTA\n\nQuestion 2\nUse the command line to determine the number of sequences in the “SARS-CoV-2.fasta” file.\n\nNotice all sequences start with a “&gt;” character to specify the seqence’s name. We can use that to count the sequences efficiently. Try:\n\n\nTerminal\n\ngrep \"&gt;\" SARS-CoV-2.fasta\n\nNOTE: Putting quotes around the &gt; character is important, because in the Bash language, this character is normally used to redirect output!\ngrep is a very useful command for finding string patterns. You can learn more about it by searching for grep at the Linux man pages online.\ngrep works okay for this small FASTA file, but what if there were 1000s of sequences in the file? You wouldn’t want to count them “by hand!”\nWe can use the wc command (word count) for counting the sequences. Try:\n\n\nTerminal\n\ngrep \"&gt;\" SARS-CoV-2.fasta | wc -l\n\nThe pipe (|) character converts, or “pipes”, the output of one command to input to another command. wc -l will count the number of lines output by grep\n\nPut the number of sequences into Question 2 of the Exercise 2 quiz on Canvas.\n\n\nQuestion 3\nWhat does the -l flag in the wc -l do? Hint: use the Linux man pages online to find out!\n\n\nQuestion 4\nWhat is your output for the following command?\n\n\nTerminal\n\nwhoami\n\n\n\nQuestion 5\nWhat is your output for the following command?\n\n\nTerminal\n\necho $MACHTYPE\n\n\n\nQuestion 6\nWhat is your output for the following command?\n\n\nTerminal\n\nuname -a\n\n\n\nQuestion 7\nWhat does the -a flag do in the uname -a command? Hint: use the Linux man pages online to find out!"
   },
   {
     "objectID": "slides/topic-09-substitution-models.html#last-time",
