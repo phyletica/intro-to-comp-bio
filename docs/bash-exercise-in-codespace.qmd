@@ -15,12 +15,12 @@ to the questions into the Exercise 2 quiz on Canvas.
     two sections **ONLY**:
 
     -   ***"Make your own copy of this repository"***:
-        Name your repository `comp-bio-project`, and choose ***Public***
+        Name your repository **`bash-intro`**, and choose ***Public***
     -   ***"Open your codespace"***: When you get a "Do you trust the authors
         of the files in this folder?" pop-up, click "Trust Folder & Continue"
 
     Stop and come back here once you get to ***"Set up your project environment"***
-    (don't set up the environment; we will do that below)
+    (don't set up the environment; we don't need it for this exercise).
 
 2.  Once your codespace is ready, you should see your files on the left side
     of VS Code and a ***terminal*** at the bottom.
@@ -62,14 +62,14 @@ All of the commands in this exercise are typed in the terminal.
     curl -L -o exercise2/answer1.txt https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/answer1.txt
     ```
 
-3.  Use the `curl` command again to download the `SARS-CoV-2.fasta` file from
+4.  Use the `curl` command again to download the `SARS-CoV-2.fasta` file from
     our class GitHub repo into your new `exercise2` directory:
 
     ```{.bash filename="Terminal"}
     curl -L -o exercise2/SARS-CoV-2.fasta https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/SARS-CoV-2.fasta
     ```
 
-8.  Now, move into the "exercise2" directory and confirm the files you
+5.  Now, move into the "exercise2" directory and confirm the files you
     downloaded are there:
 
     ```{.bash filename="Terminal"}
@@ -131,7 +131,7 @@ Use the command line to determine the number of sequences in the
 
     `grep` is a very useful command for finding string patterns. You can learn
     more about it by searching for `grep` at the 
-    [Linux man pages online](https://man7.org/linux/man-pages/index.html).
+    [Linux man pages online](https://man7.org/linux/man-pages/man1/grep.1.html).
 
 -   `grep` works okay for this small FASTA file, but what if there were 1000s
     of sequences in the file? You wouldn't want to count them "by hand!"
@@ -153,7 +153,7 @@ Put the number of sequences into Question 2 of the Exercise 2 quiz on Canvas.
 
 What does the `-l` flag in the `wc -l` do?
 ***Hint***: use the
-[Linux man pages online](https://man7.org/linux/man-pages/index.html)
+[Linux man pages online](https://man7.org/linux/man-pages/man1/wc.1.html)
 to find out!
 
 ### Question 4
@@ -182,4 +182,7 @@ uname -a
 
 ### Question 7
 
-What does the `-a` flag do in the `uname -a` command (use `man` to find out!)?
+What does the `-a` flag do in the `uname -a` command?
+***Hint***: use the
+[Linux man pages online](https://man7.org/linux/man-pages/man1/uname.1.html)
+to find out!
