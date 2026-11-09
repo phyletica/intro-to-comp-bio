@@ -1,0 +1,185 @@
+---
+title: "Bash exercise using GitHub's codespace"
+---
+
+Follow the instructions below to complete this exercise, and put your answers
+to the questions into the Exercise 2 quiz on Canvas.
+
+## Your project repository
+
+### Make your copy and open your codespace
+
+1.  Go to the
+    [Comp Bio project template](https://github.com/phyletica/comp-bio-project-template)
+    on GitHub, and follow the instructions in its README under the following
+    two sections **ONLY**:
+
+    -   ***"Make your own copy of this repository"***:
+        Name your repository `comp-bio-project`, and choose ***Public***
+    -   ***"Open your codespace"***: When you get a "Do you trust the authors
+        of the files in this folder?" pop-up, click "Trust Folder & Continue"
+
+    Stop and come back here once you get to ***"Set up your project environment"***
+    (don't set up the environment; we will do that below)
+
+2.  Once your codespace is ready, you should see your files on the left side
+    of VS Code and a ***terminal*** at the bottom.
+    Click in the terminal and check that you're in your project's folder:
+
+    ```{.bash filename="Terminal"}
+    pwd
+    ls -a
+    ```
+
+    `pwd` (**p**rint **w**orking **d**irectory) tells you what directory
+    ("folder") you are in, which should be `/workspaces/comp-bio-project`.
+    This folder you are in is called your ***working directory***.
+    `ls -a` lists all files and directories in your working directory. When you
+    run this command, you should see `README.md` and a folder named
+    `.devcontainer` (plus a folder named `.git`; more on that below).
+
+The terminal is the Bash command line running on a Linux computer in the cloud.
+All of the commands in this exercise are typed in the terminal.
+
+## Creating a new directory and copying files into it
+
+1.  Using the terminal, navigate to your home directory:
+
+    ```{.bash filename="Terminal"}
+    cd ~
+    ```
+
+2.  Create a new directory called "exercise2"
+
+    ```{.bash filename="Terminal"}
+    mkdir exercise2
+    ```
+
+3.  Use the `curl` command to download an `answer1.txt` file from our class
+    GitHub repo into your new `exercise2` directory:
+
+    ```{.bash filename="Terminal"}
+    curl -L -o exercise2/answer1.txt https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/answer1.txt
+    ```
+
+3.  Use the `curl` command again to download the `SARS-CoV-2.fasta` file from
+    our class GitHub repo into your new `exercise2` directory:
+
+    ```{.bash filename="Terminal"}
+    curl -L -o exercise2/SARS-CoV-2.fasta https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/SARS-CoV-2.fasta
+    ```
+
+8.  Now, move into the "exercise2" directory and confirm the files you
+    downloaded are there:
+
+    ```{.bash filename="Terminal"}
+    cd exercise2
+    ls
+    ```
+
+### Question 1
+
+Use the command line (terminal) to see what is in the `answer1.txt` file.
+Enter what you find in the file into Question 1 of the Exercise 2 quiz on
+Canvas.
+
+-   ***Hint***: The commands `cat` or `less` would be useful. I would normally
+    encourage you to use the `man` command to learn more about these commands,
+    but `man` doesn't work by default in GitHub's Codespaces.
+    As an alternative, go to the
+    [Linux man pages online](https://man7.org/linux/man-pages/index.html)
+    and use the search bar near the bottom of the page to search for the
+    commands `cat` and `less`.
+
+::: {.callout-important}
+## Save your work to GitHub at the end of every part
+
+Your GitHub codespace is ***temporary***.
+It stops on its own after 30 minutes of inactivity, and GitHub ***deletes***
+codespaces that haven't been used for 30 days, ***even if they contain work
+you haven't pushed to GitHub***.
+Your work is only safe once you have committed it and pushed it to GitHub
+(you'll learn how in Part 1).
+:::
+
+## Manipulating sequence data
+
+The "SARS-CoV-2.fasta" file contains nucleotide sequence data from different
+strains of the SARS-CoV-2 virus.
+The sequences are in a format called FASTA.
+The FASTA format looks like:
+
+    >Name1
+    AATCGGCTA
+    >Name2
+    ATTCGCCTA
+
+### Question 2
+
+Use the command line to determine the number of sequences in the
+"SARS-CoV-2.fasta" file.
+
+-   Notice all sequences start with a ">" character to specify the seqence's
+    name. We can use that to count the sequences efficiently. Try:
+
+    ```{.bash filename="Terminal"}
+    grep ">" SARS-CoV-2.fasta
+    ```
+
+    NOTE: Putting quotes around the `>` character is important, because in the
+    Bash language, this character is normally used to redirect output!
+
+    `grep` is a very useful command for finding string patterns. You can learn
+    more about it by searching for `grep` at the 
+    [Linux man pages online](https://man7.org/linux/man-pages/index.html).
+
+-   `grep` works okay for this small FASTA file, but what if there were 1000s
+    of sequences in the file? You wouldn't want to count them "by hand!"
+
+    We can use the `wc` command (***w***ord ***c***ount) for counting the
+    sequences. Try:
+
+    ```{.bash filename="Terminal"}
+    grep ">" SARS-CoV-2.fasta | wc -l
+    ```
+
+    The pipe (`|`) character converts, or "pipes", the output of one command to
+    input to another command. `wc -l` will count the number of lines output by
+    `grep`
+
+Put the number of sequences into Question 2 of the Exercise 2 quiz on Canvas.
+
+### Question 3
+
+What does the `-l` flag in the `wc -l` do?
+***Hint***: use the
+[Linux man pages online](https://man7.org/linux/man-pages/index.html)
+to find out!
+
+### Question 4
+
+What is your output for the following command?
+
+```{.bash filename="Terminal"}
+whoami
+```
+
+### Question 5
+
+What is your output for the following command?
+
+```{.bash filename="Terminal"}
+echo $MACHTYPE
+```
+
+### Question 6
+
+What is your output for the following command?
+
+```{.bash filename="Terminal"}
+uname -a
+```
+
+### Question 7
+
+What does the `-a` flag do in the `uname -a` command (use `man` to find out!)?
