@@ -160,23 +160,35 @@ Then, `git push` sends your new commits to your copy of the repo on GitHub.
 
     **Note**: You will need the output from this command for Question 2 below.
 
-4.  Stage your change, and ask git again:
+4.  Add your change to git's staging area. This prepares it for the next
+    commit:
 
     ```{.bash filename="Terminal"}
     git add README.md
+    ```
+
+    Ask git for the status again:
+
+    ```{.bash filename="Terminal"}
     git status
     ```
 
     **Note**: You will need the output from `git status` for Question 2 below.
 
-5.  Commit your change, with a message that says what you changed:
+5.  Commit your change to git's database, with a message that says what you
+    changed:
 
     ```{.bash filename="Terminal"}
     git commit -m "Adding project title and author to README"
+    ```
+
+    Now, when you run:
+
+    ```{.bash filename="Terminal"}
     git log
     ```
 
-    You should see two commits now, with yours at the top.
+    you should see two commits, with yours at the top.
     The long string of letters and numbers next to each commit is its
     ***hash***: a unique ID for that snapshot.
 
@@ -230,6 +242,11 @@ anywhere.
 
     ```{.bash filename="Terminal"}
     pixi init
+    ```
+
+    Then, ask git to show you the status of things:
+
+    ```{.bash filename="Terminal"}
     git status
     ```
 
@@ -246,7 +263,7 @@ anywhere.
     need using the following command:
 
     ```{.bash filename="Terminal"}
-    pixi add "python=3.14.*" numpy scipy matplotlib marimo
+    pixi add "python=3.14.*" numpy scipy matplotlib
     ```
 
     This takes a minute or two.
@@ -301,11 +318,21 @@ anywhere.
     We never commit the installed software, only the instructions for
     rebuilding it (`pixi.toml` and `pixi.lock`).
 
-2.  Stage and commit the four new files, and push:
+2.  Prepare (stage) the four new files for the next commit:
 
     ```{.bash filename="Terminal"}
     git add pixi.toml pixi.lock .gitignore .gitattributes
+    ```
+
+    Then, commit the new files to the git database:
+
+    ```{.bash filename="Terminal"}
     git commit -m "Creating a pixi environment with Python 3.14"
+    ```
+
+    Lastly, use `git push` to back up your project database to GitHub:
+
+    ```{.bash filename="Terminal"}
     git push
     ```
 
@@ -316,12 +343,21 @@ usual tools (and it doesn't work in molab).
 But it is available from [bioconda](https://bioconda.github.io/), a
 collection of bioinformatics software that works with pixi.
 
-1.  Tell pixi to look for software in bioconda (after conda-forge), and add
-    IQ-TREE:
+1.  Tell pixi to look for software in bioconda (after conda-forge):
 
     ```{.bash filename="Terminal"}
     pixi workspace channel add bioconda
+    ```
+
+    Then, add IQ-TREE:
+
+    ```{.bash filename="Terminal"}
     pixi add iqtree
+    ```
+
+    Check to see which version of IQ-TREE pixi installed:
+
+    ```{.bash filename="Terminal"}
     pixi run iqtree3 --version
     ```
 
@@ -341,10 +377,15 @@ collection of bioinformatics software that works with pixi.
     not to bother showing line-by-line changes for it; it's written by pixi,
     not by people.)
 
-3.  Commit and push:
+3.  Prepare the changes to `pixi.toml` and `pixi.lock` for the next commit:
 
     ```{.bash filename="Terminal"}
     git add pixi.toml pixi.lock
+    ```
+
+    Commit the changes and push them to GitHub:
+
+    ```{.bash filename="Terminal"}
     git commit -m "Adding IQ-TREE from bioconda"
     git push
     ```
@@ -382,11 +423,18 @@ with `pixi run <task name>`.
     ```
 
     Look at the new `[tasks]` section of `pixi.toml` to see the task.
+    The `-p` option tells `mkdir` not to complain if the `data` folder already
+    exists, so the task still works if we run it again.
 
-2.  Run the task, and check that it worked:
+2.  Now, run the task:
 
     ```{.bash filename="Terminal"}
     pixi run get-data
+    ```
+
+    Check that it worked:
+
+    ```{.bash filename="Terminal"}
     grep ">" data/sars-cov-2.fasta
     ```
 
@@ -395,6 +443,9 @@ with `pixi run <task name>`.
 3.  The alignment is small (about 700 KB), so we will commit a copy of it.
     That way, our project still works even if the file at that web address
     changes or disappears, and the task records where the data came from.
+
+    Stage the new task (in `pixi.toml`) and the data file for the next commit
+    (`git add`), and then commit them to git's database:
 
     ```{.bash filename="Terminal"}
     git add pixi.toml data/sars-cov-2.fasta
@@ -484,11 +535,22 @@ We'll tell git to ignore IQ-TREE's other files.
     git status --untracked-files=all
     ```
 
-3.  Commit and push:
+3.  Stage the changes to `.gitignore` and `pixi.toml` and the tree estimated by
+    IQ-TREE:
 
     ```{.bash filename="Terminal"}
     git add .gitignore pixi.toml results/tree.treefile
+    ```
+
+    Commit the changes in git's staging area to the database:
+
+    ```{.bash filename="Terminal"}
     git commit -m "Estimating the ML tree with IQ-TREE"
+    ```
+
+    And sync your updated database with the copy on GitHub:
+
+    ```{.bash filename="Terminal"}
     git push
     ```
 
@@ -504,10 +566,16 @@ We'll tell git to ignore IQ-TREE's other files.
 
 ### Add the analysis script
 
-1.  Download the script that fits the molecular clock:
+1.  Make a new `scripts` directory ("folder"):
 
     ```{.bash filename="Terminal"}
-    mkdir -p scripts
+    mkdir scripts
+    ```
+
+    Download the `clock.py` script that fits the molecular clock into the
+    `scripts` directory:
+
+    ```{.bash filename="Terminal"}
     curl -L -o scripts/clock.py https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/scripts/clock.py
     ```
 
@@ -550,10 +618,17 @@ We'll tell git to ignore IQ-TREE's other files.
     estimating the tree to creating the plot.
     Nice!
 
-4.  Commit and push:
+4.  Add the script, the plot it created, and the changes to `pixi.toml` to
+    git's staging area:
 
     ```{.bash filename="Terminal"}
     git add pixi.toml scripts/clock.py results/clock.png
+    ```
+
+    Commit the staged changes to the database, and push the new commit to
+    GitHub:
+
+    ```{.bash filename="Terminal"}
     git commit -m "Adding the molecular clock script and task"
     git push
     ```
@@ -601,7 +676,8 @@ the change.
     IQ-TREE ran again, but because we used the same data, software, and seed,
     it produced exactly the same tree file, so git sees no change.
 
-3.  Look at the new plot, then commit and push:
+3.  Look at the new plot, then add the changes to the staging area, commit, and
+    push:
 
     ```{.bash filename="Terminal"}
     git add scripts/clock.py results/clock.png
@@ -623,20 +699,36 @@ look at (or go back to) an earlier version.
     `HEAD` is git's name for your latest commit, and `HEAD~1` means "one
     commit before `HEAD`."
 
-2.  Bring back the plot from the commit before your latest one, and look at
-    it in VS Code (it should include Omicron again):
+2.  To bring back the plot from the commit before your latest one,
+    use the `git restore` command:
 
     ```{.bash filename="Terminal"}
     git restore --source=HEAD~1 results/clock.png
+    ```
+
+    and ask git for the status:
+
+    ```{.bash filename="Terminal"}
     git status
     ```
+
+    Look at the `results/clock.png` plot in VS Code (it should include Omicron
+    again).
 
 3.  Put the latest version back:
 
     ```{.bash filename="Terminal"}
     git restore results/clock.png
+    ```
+
+    and ask git for the status:
+
+    ```{.bash filename="Terminal"}
     git status
     ```
+
+    Now, when you look at `results/clock.png` in VS Code, it should be the
+    version that excludes Omicron.
 
     `git restore <file>`, without `--source`, throws away any changes to the
     file since your last commit.
