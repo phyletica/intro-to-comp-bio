@@ -1,6 +1,6 @@
 ---
 title: "Reproducible computational research"
-subtitle: "Keeping track of your code, software, and steps with git and pixi"
+subtitle: "Keeping track of your code, software, and progress with git and pixi"
 # author: "Jamie Oaks"
 institute: "BIOL 5/6800 &mdash; Intro to Comp Bio"
 format:
@@ -16,7 +16,7 @@ metadata-files:
 bibliography: ../references.bib
 ---
 
-## Last time
+## Previously
 
 In Capstone Project 2, you fit a molecular clock to a tree of 24 SARS-CoV-2
 genomes
@@ -98,10 +98,10 @@ in practice they often aren't, because people don't record enough.
 
 ## What we need to record
 
-::: {style="font-size: 80%;"}
+::: {style="font-size: 75%;"}
 | Ingredient | Example | How we'll record it |
 |:--|:--|:--|
-| **Data** | The 24 aligned genomes | Commit a copy, and how we downloaded it |
+| **Data** | The 24 aligned genomes | Record how we got it (and a copy if it's not huge) |
 | **Code** | `clock.py` | ***git*** |
 | **Software** | Python 3.14, NumPy, IQ-TREE, ... | ***pixi*** |
 | **Steps** | The exact IQ-TREE command | ***pixi tasks*** |
@@ -110,7 +110,9 @@ in practice they often aren't, because people don't record enough.
 
 . . .
 
+::: {style="font-size: 85%;"}
 See @Sandve2013 and @Wilson2017 for more good habits
+:::
 
 ::: {.notes}
 4:00-5:00
