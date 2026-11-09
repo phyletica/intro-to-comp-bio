@@ -131,7 +131,7 @@
     "href": "reproducibility-exercise.html",
     "title": "Reproducibility exercise: git and pixi",
     "section": "",
-    "text": "In this exercise, you will turn the molecular clock analysis from Capstone Project 2 into a reproducible project: one that anyone (including you, a year from now) can download and rerun with a single command, using exactly the same software, and get exactly the same results. Along the way, you will:\nThere is no new Python or biology in this exercise. Everything new is about how we do the work.\nThe exercise has five parts. Each part takes about 30 minutes, and each one ends with saving your work to GitHub, so you can stop at the end of any part and pick up where you left off later. Put your answers to the questions into the Exercise 13 quiz on Canvas."
+    "text": "In this exercise, you will turn the molecular clock analysis from Capstone Project 2 into a reproducible project: one that anyone (including you, a year from now) can download and rerun with a single command, using exactly the same software, and get exactly the same results. Along the way, you will:\nThere is no new Python or biology in this exercise. Everything new is about how we do the work.\nThe exercise has five parts. Each part takes about 15–30 minutes, and each one ends with saving your work to GitHub, so you can stop at the end of any part and pick up where you left off later. Put your answers to the questions into the Exercise 13 quiz on Canvas."
   },
   {
     "objectID": "reproducibility-exercise.html#part-1-your-project-repository",
