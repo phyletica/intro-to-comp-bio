@@ -26,6 +26,7 @@ slide presentations compiled for this term.
 ## Lab exercises
 
 -   [Intro to Bash](bash-exercise.qmd)
+-   [Intro to Bash in GitHub Codespace (Exercise 2 alternative)](bash-exercise-in-codespace.qmd)
 -   [Setting up a molab account](molab-sign-up.qmd)
 -   [Exercise 13: Reproducibility with git and pixi](reproducibility-exercise.qmd)
 
