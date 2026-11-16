@@ -1088,7 +1088,7 @@ def draw_viterbi_step(observations, model, step,
         s = indices[i]
         lines = [f"Column {i + 1} (rolled {symbol}): For each state, take the "
                  + "best (max) of [previous score + log(transition probability)],",
-                 "then add log(emission probability). The blue arrow remembers "
+                 "then add log(emission probability). The new blue arrows remember "
                  + "which previous state was best:"]
         for k in range(number_of_states):
             options = ",  ".join(plus(scores[i - 1, j], log_transitions[j, k])
