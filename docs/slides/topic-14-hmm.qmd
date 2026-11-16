@@ -1,0 +1,1108 @@
+---
+title: "Hidden Markov models"
+subtitle: "Inferring what we can't see"
+# author: "Jamie Oaks"
+institute: "BIOL 5/6800 &mdash; Intro to Comp Bio"
+format:
+  revealjs:
+    slide-number: c/t
+    incremental: false
+    code-line-numbers: false
+    smaller: false
+    center-title-slide: true
+    history: false
+    include-in-header:
+      - text: |
+          <style>
+          .reveal p > img,
+          .reveal figure {
+            margin-bottom: 0px !important;
+            padding-bottom: 0px !important;
+          }
+          </style>
+metadata-files:
+  - _metadata.yml
+bibliography: ../references.bib
+---
+
+```{python}
+#| label: setup
+#| echo: false
+#| eval: true
+
+import math
+import random
+
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.patches import Circle, FancyArrowPatch
+
+FAIR_COLOR = "steelblue"
+LOADED_COLOR = "firebrick"
+
+casino_model = {
+    "states": ["Fair", "Loaded"],
+    "symbols": ["1", "2", "3", "4", "5", "6"],
+    "start": np.array([0.5, 0.5]),
+    "transitions": np.array([[0.95, 0.05], [0.10, 0.90]]),
+    "emissions": np.array([[1 / 6] * 6, [0.1] * 5 + [0.5]]),
+}
+
+
+def simulate_hmm(model, length, rng):
+    """Simulate symbols and hidden states (as numbers) from an HMM."""
+    number_of_states = len(model["states"])
+    symbols, states = [], []
+    state = rng.choices(range(number_of_states), weights = model["start"])[0]
+    for _ in range(length):
+        symbol = rng.choices(model["symbols"], weights = model["emissions"][state])[0]
+        states.append(state)
+        symbols.append(symbol)
+        state = rng.choices(range(number_of_states),
+                            weights = model["transitions"][state])[0]
+    return symbols, states
+
+
+def draw_two_state_diagram(
+        model,
+        colors = (FAIR_COLOR, LOADED_COLOR),
+        symbol_label = "Symbol",
+        width = 9.0,
+        height = 5.6):
+    """Draw a two-state HMM: states, transition arrows, and emission bars."""
+    names = model["states"]
+    transitions = model["transitions"]
+    figure = plt.figure(figsize = (width, height))
+    axes = figure.add_axes([0.0, 0.42, 1.0, 0.58])
+    axes.set_xlim(0, 10)
+    axes.set_ylim(0.2, 4.0)
+    axes.set_aspect("equal")
+    axes.axis("off")
+    centers = [(3.0, 1.6), (7.0, 1.6)]
+    for k, (x, y) in enumerate(centers):
+        axes.add_patch(Circle((x, y), 0.8, facecolor = colors[k], alpha = 0.15,
+                              edgecolor = "none"))
+        axes.add_patch(Circle((x, y), 0.8, facecolor = "none",
+                              edgecolor = colors[k], linewidth = 2.5))
+        axes.text(x, y, names[k], ha = "center", va = "center", fontsize = 15,
+                  fontweight = "bold", color = colors[k])
+        axes.add_patch(FancyArrowPatch(
+            (x - 0.45, y + 0.66), (x + 0.45, y + 0.66),
+            connectionstyle = "arc3,rad=-1.9", arrowstyle = "-|>",
+            mutation_scale = 18, linewidth = 2, color = "dimgray"))
+        axes.text(x, y + 2.05, f"{transitions[k, k]:.4g}", ha = "center",
+                  va = "bottom", fontsize = 13)
+    (x0, y0), (x1, y1) = centers
+    axes.add_patch(FancyArrowPatch(
+        (x0 + 0.7, y0 + 0.38), (x1 - 0.7, y1 + 0.38),
+        connectionstyle = "arc3,rad=-0.25", arrowstyle = "-|>",
+        mutation_scale = 18, linewidth = 2, color = "dimgray"))
+    axes.text(5.0, y0 + 1.0, f"{transitions[0, 1]:.4g}", ha = "center",
+              va = "bottom", fontsize = 13)
+    axes.add_patch(FancyArrowPatch(
+        (x1 - 0.7, y1 - 0.38), (x0 + 0.7, y0 - 0.38),
+        connectionstyle = "arc3,rad=-0.25", arrowstyle = "-|>",
+        mutation_scale = 18, linewidth = 2, color = "dimgray"))
+    axes.text(5.0, y0 - 1.0, f"{transitions[1, 0]:.4g}", ha = "center",
+              va = "top", fontsize = 13)
+    for k in range(2):
+        bars = figure.add_axes([0.12 + 0.46 * k, 0.11, 0.34, 0.25])
+        bars.bar(range(len(model["symbols"])), model["emissions"][k],
+                 color = colors[k], alpha = 0.8)
+        bars.set_xticks(range(len(model["symbols"])), model["symbols"])
+        bars.set_ylim(0, max(0.55, 1.15 * model["emissions"].max()))
+        bars.set_title(f"Emission probabilities: {names[k]}", fontsize = 11)
+        bars.set_xlabel(symbol_label, fontsize = 10)
+        bars.spines[["top", "right"]].set_visible(False)
+    return figure
+
+
+def draw_rolls(rolls, states, show_states = True, per_row = 20):
+    """Draw rolls as boxes, colored by hidden state (or gray if hidden)."""
+    rows = math.ceil(len(rolls) / per_row)
+    figure, axes = plt.subplots(figsize = (10, 0.75 * rows + 0.3))
+    for i, (roll, state) in enumerate(zip(rolls, states)):
+        row, column = divmod(i, per_row)
+        color = (FAIR_COLOR if state == 0 else LOADED_COLOR) if show_states \
+            else "dimgray"
+        axes.add_patch(plt.Rectangle((column + 0.05, -row - 0.9), 0.9, 0.8,
+                                     facecolor = color, alpha = 0.18 if (
+                                         show_states and state == 0) else 0.35,
+                                     edgecolor = color))
+        axes.text(column + 0.5, -row - 0.5, roll, ha = "center", va = "center",
+                  fontsize = 14, fontweight = "bold",
+                  color = color if show_states else "black")
+    axes.set_xlim(0, per_row)
+    axes.set_ylim(-rows - 0.1, 0.1)
+    axes.set_aspect("equal")
+    axes.axis("off")
+    return figure
+
+
+def viterbi_details(observations, model):
+    """Run Viterbi, keeping every score and pointer (for drawing)."""
+    log_start = np.log(model["start"])
+    log_transitions = np.log(model["transitions"])
+    log_emissions = np.log(model["emissions"])
+    indices = [model["symbols"].index(symbol) for symbol in observations]
+    n = len(indices)
+    scores = np.zeros((n, len(model["states"])))
+    pointers = np.zeros((n, len(model["states"])), dtype = int)
+    scores[0] = log_start + log_emissions[:, indices[0]]
+    for i in range(1, n):
+        candidates = scores[i - 1][:, None] + log_transitions
+        pointers[i] = candidates.argmax(axis = 0)
+        scores[i] = candidates.max(axis = 0) + log_emissions[:, indices[i]]
+    path = [0] * n
+    path[-1] = int(scores[-1].argmax())
+    for i in range(n - 1, 0, -1):
+        path[i - 1] = int(pointers[i, path[i]])
+    return indices, scores, pointers, path
+
+
+def draw_viterbi_step(observations, model, step,
+                      colors = (FAIR_COLOR, LOADED_COLOR)):
+    """Draw the Viterbi algorithm after `step` steps (same as the notebook)."""
+    observations = list(observations)
+    n = len(observations)
+    names = model["states"]
+    number_of_states = len(names)
+    log_start = np.log(model["start"])
+    log_transitions = np.log(model["transitions"])
+    log_emissions = np.log(model["emissions"])
+    indices, scores, pointers, path = viterbi_details(observations, model)
+    last_step = 2 * n
+    step = max(0, min(step, last_step))
+    filled = min(step, n)
+    current = step - 1 if 1 <= step <= n else None
+    traced = list(range(n - (step - n), n)) if step > n else []
+
+    figure = plt.figure(figsize = (11, 5.6))
+    table = figure.add_axes([0.02, 0.33, 0.96, 0.60])
+    text = figure.add_axes([0.02, 0.0, 0.96, 0.31])
+    table.set_xlim(-1.7, n - 0.4)
+    table.set_ylim(1.25 * number_of_states + 2.0, -0.7)
+    table.axis("off")
+    text.axis("off")
+    width, height = 0.62, 0.62
+
+    def row_of(k):
+        return 1.3 + 1.25 * k
+
+    table.text(-0.6, 0, "Roll", ha = "right", va = "center", fontsize = 12,
+               fontweight = "bold")
+    for i, symbol in enumerate(observations):
+        table.add_patch(plt.Rectangle((i - width / 2, -height / 2), width,
+                                      height, facecolor = "whitesmoke",
+                                      edgecolor = "gray"))
+        table.text(i, 0, symbol, ha = "center", va = "center", fontsize = 15,
+                   fontweight = "bold")
+    for k in range(number_of_states):
+        table.text(-0.6, row_of(k), names[k], ha = "right", va = "center",
+                   fontsize = 12, fontweight = "bold", color = colors[k])
+        for i in range(n):
+            face, edge, line = "white", "lightgray", 1
+            if i < filled:
+                face = "#a9c8e8" if scores[i, k] == scores[i].max() else "#dbe8f5"
+            if i in traced and path[i] == k:
+                face, edge, line = "gold", "darkgoldenrod", 2.5
+            if i == current:
+                edge, line = "darkorange", 2.5
+            table.add_patch(plt.Rectangle(
+                (i - width / 2, row_of(k) - height / 2), width, height,
+                facecolor = face, edgecolor = edge, linewidth = line, zorder = 2))
+            if i < filled:
+                table.text(i, row_of(k), f"{scores[i, k]:.1f}", ha = "center",
+                           va = "center", fontsize = 10, zorder = 3)
+
+    def arrow(i, k_from, k_to, color, line = 2.0, style = "-"):
+        table.add_patch(FancyArrowPatch(
+            (i - 1 + width / 2, row_of(k_from)), (i - width / 2, row_of(k_to)),
+            arrowstyle = "-|>", mutation_scale = 12, linewidth = line,
+            color = color, linestyle = style, zorder = 4, shrinkA = 1,
+            shrinkB = 1))
+
+    # Pointer arrows into every column filled so far (which previous state was
+    # best?); they stay visible for the rest of the animation
+    for i in range(1, filled):
+        for k in range(number_of_states):
+            arrow(i, pointers[i, k], k, "steelblue", 2.5)
+    # In the current column, also show the options that lost (gray, dashed)
+    if current is not None and current >= 1:
+        for k in range(number_of_states):
+            for j in range(number_of_states):
+                if j != pointers[current, k]:
+                    arrow(current, j, k, "lightgray", 1.2, "--")
+    # Arrows along the path we have traced back so far, drawn over the blue
+    # pointer arrows
+    for i in traced:
+        if i >= 1 and (i - 1) in traced:
+            arrow(i, path[i - 1], path[i], "darkgoldenrod", 3.5)
+    path_row = 1.3 + 1.25 * number_of_states
+    if traced:
+        table.text(-0.6, path_row, "Path", ha = "right", va = "center",
+                   fontsize = 12, fontweight = "bold")
+    for i in traced:
+        table.text(i, path_row, names[path[i]][0], ha = "center", va = "center",
+                   fontsize = 15, fontweight = "bold", color = colors[path[i]])
+
+    def fmt(value):
+        return f"{value:.2f}".replace("-", "−")
+
+    def plus(a, b):
+        return f"{fmt(a)} {'−' if b < 0 else '+'} {fmt(abs(b))}"
+
+    if step == 0:
+        lines = ["Start: One row per hidden state, one column per roll.",
+                 "Each cell will hold the log probability of the best path that "
+                 + "ends in that state at that roll."]
+    elif current == 0:
+        s = indices[0]
+        lines = [f"Column 1 (rolled {observations[0]}): "
+                 + "log(start probability) + log(emission probability):"]
+        for k in range(number_of_states):
+            lines.append(f"    {names[k]}:  {plus(log_start[k], log_emissions[k, s])}"
+                         + f" = {fmt(scores[0, k])}")
+    elif current is not None:
+        i = current
+        s = indices[i]
+        lines = [f"Column {i + 1} (rolled {observations[i]}): max over previous "
+                 + "states of [score + log(transition)], plus log(emission):"]
+        for k in range(number_of_states):
+            options = ",  ".join(plus(scores[i - 1, j], log_transitions[j, k])
+                                 for j in range(number_of_states))
+            emission = log_emissions[k, s]
+            lines.append(f"    {names[k]}:  max({options}) "
+                         + f"{'−' if emission < 0 else '+'} "
+                         + f"{fmt(abs(emission))} = {fmt(scores[i, k])}"
+                         + f"   (from {names[pointers[i, k]]})")
+    else:
+        i = traced[0]
+        if i == n - 1:
+            lines = ["Traceback: Start at the best score in the last column "
+                     + f"({names[path[i]]}, {fmt(scores[i, path[i]])}),",
+                     "and follow the arrows backward."]
+        elif i > 0:
+            lines = [f"Traceback: Roll {i + 1} is {names[path[i]]}; its arrow "
+                     + f"points back to {names[path[i - 1]]} at roll {i}."]
+        else:
+            lines = ["Done! The most probable path is "
+                     + "".join(names[k][0] for k in path)
+                     + f", with a log probability of {fmt(scores[-1].max())}."]
+    text.text(0.0, 0.98, "\n".join(lines), va = "top", ha = "left",
+              fontsize = 12, linespacing = 1.6, transform = text.transAxes)
+    figure.suptitle(f"Step {step} of {last_step}", fontsize = 14, x = 0.02,
+                    ha = "left")
+    return figure
+
+
+def viterbi_animation_html(observations, model, seconds_per_step = 1.5):
+    """Make an HTML player that steps through `draw_viterbi_step`."""
+    import base64
+    import io
+    import json
+
+    frames = []
+    for step in range(2 * len(observations) + 1):
+        figure = draw_viterbi_step(observations, model, step)
+        buffer = io.BytesIO()
+        figure.savefig(buffer, format = "png", dpi = 80)
+        plt.close(figure)
+        frames.append("data:image/png;base64,"
+                      + base64.b64encode(buffer.getvalue()).decode())
+    milliseconds = int(1000 * seconds_per_step)
+    return f"""
+    <div style="font-family: sans-serif; text-align: center;">
+      <img id="viterbi-frame" src="{frames[0]}" style="max-height: 520px;">
+      <div style="margin-top: 4px;">
+        <button id="viterbi-previous">&#9664; Previous</button>
+        <button id="viterbi-play">&#9654; Play</button>
+        <button id="viterbi-next">Next &#9654;</button>
+      </div>
+    </div>
+    <script>
+      (function() {{
+        const frames = {json.dumps(frames)};
+        let index = 0;
+        let timer = null;
+        const image = document.getElementById("viterbi-frame");
+        const play = document.getElementById("viterbi-play");
+        function show(i) {{
+          index = (i + frames.length) % frames.length;
+          image.src = frames[index];
+        }}
+        function stop() {{
+          clearInterval(timer);
+          timer = null;
+          play.innerHTML = "&#9654; Play";
+        }}
+        document.getElementById("viterbi-previous").onclick = () => {{ stop(); show(index - 1); }};
+        document.getElementById("viterbi-next").onclick = () => {{ stop(); show(index + 1); }};
+        play.onclick = () => {{
+          if (timer) {{ stop(); return; }}
+          if (index === frames.length - 1) {{ show(0); }}
+          play.innerHTML = "&#10074;&#10074; Pause";
+          timer = setInterval(() => {{
+            if (index === frames.length - 1) {{ stop(); return; }}
+            show(index + 1);
+          }}, {milliseconds});
+        }};
+      }})();
+    </script>
+    """
+```
+
+## Previously
+
+We learned to make our work **reproducible**, with git and pixi
+
+. . .
+
+Today, back to probabilistic models and algorithms!
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+How can we learn about things we **can't see**, from the clues they leave
+behind?
+:::
+
+::: {.notes}
+0:00-0:45
+
+Quick bridge from the reproducibility exercise back to algorithms. Today's model
+ties together two algorithms they already know (alignment and pruning) and sets
+up the last topic (machine learning).
+:::
+
+# Hidden states {background-color="#1b3a5c"}
+
+## What we see vs. what we want to know
+
+::: {style="font-size: 70%;"}
+| What we see | What's hidden |
+|:--|:--|
+| A genome: `...ACGGTCAGGTAAG...` | Where the genes, exons, and regulatory regions are |
+| A protein sequence | Which family it belongs to, and which parts are its domains |
+| A GPS track of a bison | Whether it's resting, foraging, or traveling |
+| A sound recording | The words being spoken |
+| A noisy signal to your phone | The bits that were sent |
+:::
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+A ***hidden Markov model*** (***HMM***) handles **all** of these, with the same
+model and the same algorithms
+:::
+
+::: {.notes}
+0:45-2:00
+
+The common thread: something hidden changes along a sequence (or through time),
+and at each step it leaves a clue we can observe. We want to go backward, from
+the clues to the hidden states. Keep this table in mind; we come back to it
+near the end.
+:::
+
+## The occasionally dishonest casino^[@Durbin1998]
+
+::: {style="font-size: 85%;"}
+-   A casino usually uses a **fair** die
+-   Every now and then, it secretly switches to a **loaded** die that rolls a 6
+    half of the time
+-   After a while, it switches back
+:::
+
+. . .
+
+```{python}
+#| label: rolls-hidden
+#| echo: false
+#| eval: true
+#| fig-align: center
+
+night_rolls, night_states = simulate_hmm(casino_model, 60, random.Random(2093))
+draw_rolls(night_rolls, night_states, show_states = False)
+plt.show()
+```
+
+. . .
+
+Where was the casino cheating?
+
+::: {.notes}
+2:00-3:00
+
+Give them a few seconds to guess where the loaded die was used. Next slide
+reveals the hidden states. This is the classic example from Durbin et al.
+(1998), and the first part of the exercise.
+:::
+
+## The occasionally dishonest casino
+
+```{python}
+#| label: rolls-revealed
+#| echo: false
+#| eval: true
+#| fig-align: center
+
+draw_rolls(night_rolls, night_states, show_states = True)
+plt.show()
+```
+
+::: {style="font-size: 85%;"}
+<span style="color: firebrick; font-weight: bold;">Red</span>: loaded die;
+<span style="color: steelblue; font-weight: bold;">blue</span>: fair die
+:::
+
+. . .
+
+-   Long runs with lots of sixes are easy to spot
+-   Short runs, and exactly where runs start and end, are hard
+
+::: {.notes}
+3:00-3:45
+
+Point out a stretch of sixes that really is loaded, and a stretch with the
+loaded die that doesn't look special at all. We need a model to reason about
+this, especially when we can't eyeball it (a million bases of DNA).
+:::
+
+<!-- ## An HMM has three parts -->
+---
+
+:::: {.columns}
+
+::: {.column width="45%"}
+
+**An HMM has three parts**
+
+::: {style="font-size: 80%;"}
+1.  ***Hidden states***: Fair or Loaded
+2.  ***Transition probabilities***: the chance of each state at the next roll,
+    given the state now
+3.  ***Emission probabilities***: the chance of each roll, given the state
+
+Plus ***start probabilities*** for the first roll
+:::
+:::
+
+::: {.column width="55%"}
+```{python}
+#| label: casino-diagram
+#| classes: r-stretch
+#| fig-align: center
+#| echo: false
+#| eval: true
+
+draw_two_state_diagram(casino_model, symbol_label = "Roll",
+                       width = 5.7, height = 5.5)
+plt.show()
+```
+:::
+
+::::
+
+. . .
+
+::: {.callout-note appearance="minimal"}
+The hidden states are a **Markov chain**, just like a site in our substitution
+models, but along a sequence instead of through time; we just can't see it!
+:::
+
+::: {.notes}
+3:45-5:00
+
+Walk through the arrows: from Fair, stay with 0.95, switch with 0.05; from
+Loaded, switch back with 0.1. On average, a run of the loaded die lasts
+1 / 0.1 = 10 rolls (the exercise asks this). Emissions: fair is flat; loaded
+rolls a 6 half the time. In Python, transitions and emissions are NumPy arrays,
+row = current state.
+:::
+
+## The probability of the rolls *and* a path
+
+A ***path*** is a sequence of hidden states, one per roll
+
+. . .
+
+::: {style="font-size: 65%;"}
+$$
+P(\texttt{266}, \text{Fair Loaded Loaded}) =
+\underbrace{0.5}_{\text{start F}}
+\underbrace{\tfrac{1}{6}}_{\text{F rolls 2}}
+\underbrace{0.05}_{\text{F}\rightarrow\text{L}}
+\underbrace{0.5}_{\text{L rolls 6}}
+\underbrace{0.9}_{\text{L}\rightarrow\text{L}}
+\underbrace{0.5}_{\text{L rolls 6}}
+\approx 0.00094
+$$
+:::
+
+. . .
+
+::: {style="font-size: 85%;"}
+With many rolls, this gets tiny, so we use **logs** (just like tree
+likelihoods):
+:::
+
+::: {style="font-size: 75%;"}
+$$
+\log P(x, \pi) = \log s_{\pi_1} + \log e_{\pi_1}(x_1) +
+\sum_{i = 2}^{n} \Big[ \log a_{\pi_{i - 1} \pi_i} + \log e_{\pi_i}(x_i) \Big]
+$$
+:::
+
+::: {.notes}
+5:00-6:15
+
+Multiply the probability of every step of the process that made the data:
+start, emit, transition, emit, transition, emit. x is the rolls, pi is the path,
+s is start, a is transition, e is emission. This is challenge 3
+(log_joint_probability).
+:::
+
+# Finding the best path {background-color="#1b3a5c"}
+
+## How many paths are there?
+
+Each roll could be fair or loaded
+
+. . .
+
+::: {style="font-size: 90%;"}
+| Rolls | Possible paths |
+|--:|--:|
+| 3 | $2^3 = 8$ |
+| 30 | $2^{30} \approx 10^9$ |
+| 300 | $2^{300} \approx 2 \times 10^{90}$ |
+| 1,000,000 bases of DNA | $2^{1{,}000{,}000}$ |
+:::
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+More paths than atoms in the universe ($\approx 10^{80}$), just like trees; we
+can't try them all!
+:::
+
+::: {.notes}
+6:15-7:00
+
+Same combinatorial explosion as the number of trees. We want the single most
+probable path without enumerating them.
+:::
+
+## The Viterbi algorithm^[@Viterbi1967]
+
+::: {style="font-size: 85%;"}
+**Key idea**: The best path that ends in state $k$ at roll $i$ came through
+**some** state $j$ at roll $i - 1$, along the best path that ends in $j$
+:::
+
+. . .
+
+::: {style="font-size: 85%;"}
+So, we only need the best path ending in **each state**, at **each roll**
+:::
+
+. . .
+
+::: {style="font-size: 85%;"}
+We fill in a table: number for rows = number of states; number of columns = length of sequence
+:::
+
+. . .
+
+::: {style="font-size: 80%;"}
+1.  **First column**: $V_k(1) = \log s_k + \log e_k(x_1)$
+2.  **Each later column**:
+    $V_k(i) = \max_j \big[ V_j(i - 1) + \log a_{jk} \big] + \log e_k(x_i)$,
+    and remember the best $j$ (a ***pointer***)
+3.  **Traceback**: Start at the best score in the last column, and follow the
+    pointers backward
+:::
+
+::: {.notes}
+7:00-8:15
+
+The table has one row per state and one column per roll. With 2 states and 300
+rolls, that's 600 cells, each needing 2 comparisons, instead of 10^90 paths.
+Steps 2 and 3 are challenges 4 (viterbi_step) and 5 (traceback).
+:::
+
+## Viterbi, step by step
+
+```{python}
+#| label: viterbi-animation
+#| echo: false
+#| eval: true
+#| output: asis
+
+print("```{=html}\n" + viterbi_animation_html(list("3152416666663142"),
+                                                casino_model) + "\n```")
+```
+
+::: {.notes}
+8:15-10:00
+
+Step through a few columns with Next, then Play the rest. Point out the blue
+arrows (pointers), and that each column only depends on the one before it.
+Then the traceback in gold. Ask: how many sixes in a row did it take to switch
+to Loaded? (The notebook has a box where they can type their own rolls.)
+:::
+
+## Haven't we seen this before?
+
+::: {style="font-size: 75%;"}
+| | Fills in a table... | At each cell... | Then... |
+|:--|:--|:--|:--|
+| **Alignment** | one cell per pair of positions | takes the **best** of 3 moves | traces back |
+| **Viterbi** | one cell per state and position | takes the **best** previous state | traces back |
+| **Pruning** | one row per node | **adds up** over the hidden bases of each child | averages at the root |
+| ***Forward algorithm*** | one cell per state and position | **adds up** over previous states | sums the last column |
+:::
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+All four are ***dynamic programming***: Solve a big problem by building up
+answers to small ones, and reuse them
+:::
+
+::: {.notes}
+10:00-11:00
+
+Viterbi is alignment-style (max + traceback). Swap max for sum and you get the
+forward algorithm, which is pruning-style: the total probability of the data
+over all hidden paths. Forward-backward gives the probability of each hidden
+state at each position, and is used to train HMMs when no states are known
+(Baum-Welch). Not in the exercise, except as an optional dropdown.
+:::
+
+## Most probable ≠ true
+
+For the 300 rolls in the exercise:
+
+::: {style="font-size: 85%;"}
+| Path | Log probability |
+|:--|--:|
+| Viterbi | $-543.1$ |
+| Always fair | $-553.6$ |
+| **The true path** | $-583.5$ |
+:::
+
+. . .
+
+::: {style="font-size: 90%;"}
+-   The true path switches dice many times, and each switch is improbable
+-   The casino doesn't always do the most probable thing!
+-   Still, the Viterbi path has the right die for **85%** of the rolls
+    ("always fair": 66%)
+:::
+
+::: {.notes}
+11:00-12:00
+
+This surprises students in the exercise, so preview it. The true path is just
+one random outcome; the Viterbi path is the single most probable path, and it
+avoids switches the rolls don't strongly support, so it misses short loaded
+runs.
+:::
+
+## How different are the dice?
+
+```{python}
+#| label: accuracy-curve
+#| echo: false
+#| eval: true
+#| fig-align: center
+#| fig-width: 7
+#| fig-height: 3.6
+
+# Average accuracy of the Viterbi path over 30 simulations of 1,000 rolls
+# each, for each probability that the loaded die rolls a 6
+_six = [0.167, 0.217, 0.267, 0.317, 0.367, 0.417, 0.467, 0.517, 0.567, 0.617,
+        0.667, 0.717, 0.767, 0.817, 0.867, 0.917]
+_accuracy = [0.650, 0.650, 0.650, 0.659, 0.692, 0.730, 0.768, 0.800, 0.829,
+             0.852, 0.871, 0.892, 0.906, 0.919, 0.937, 0.949]
+_figure, _axes = plt.subplots(figsize = (7, 3.6))
+_axes.plot(_six, _accuracy, marker = "o", color = LOADED_COLOR, linewidth = 2,
+           label = "Viterbi path")
+_axes.axhline(0.650, color = FAIR_COLOR, linestyle = "--", label = '"Always fair"')
+_axes.set_xlabel("Probability that the loaded die rolls a 6")
+_axes.set_ylabel("Accuracy")
+_axes.set_ylim(0.6, 1.0)
+_axes.legend(loc = "lower right")
+_axes.spines[["top", "right"]].set_visible(False)
+_figure.tight_layout()
+plt.show()
+```
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+We can only recover hidden states if they emit **different** things
+:::
+
+::: {.notes}
+12:00-12:45
+
+When the loaded die is barely loaded, the Viterbi path never leaves Fair. The
+more different the emissions, the better we do. The exercise has a slider for
+this. Same lesson for DNA: we need states that look different.
+:::
+
+# CpG islands {background-color="#1b3a5c"}
+
+## CpG depletion
+
+::: {style="font-size: 85%;"}
+-   A ***CpG*** is a C followed by a G on the same strand
+-   In vertebrates, most CpG C's are **methylated**, and methylated C's easily
+    mutate to T
+:::
+
+. . .
+
+::: {style="font-size: 75%;"}
+| CpGs in 2 Mb of human chromosome 19 | Observed/expected |
+|:--|--:|
+| Whole stretch | 0.45 |
+| Background | 0.38 |
+| CpG islands | 0.78 |
+:::
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+***CpG islands***: stretches of a few hundred to a few thousand bases where
+CpGs are **not** depleted, often where genes start [@GardinerGarden1987]
+:::
+
+::: {.notes}
+12:45-14:00
+
+Methylated C -> deamination -> T, so CpG becomes TpG (or CpA on the other
+strand) over evolutionary time. Islands are unmethylated, so they keep their
+CpGs, and many sit at promoters. The islands in the exercise were called by the
+UCSC Genome Browser using length/GC/CpG cutoffs; they are predictions too, which
+is a discussion question.
+:::
+
+## Training an HMM by counting
+
+When we have data with known hidden states, we can train an HMM by just **counting**:
+
+::: {style="font-size: 85%;"}
+-   $e_k(s) = \dfrac{\text{times state } k \text{ emitted } s}{\text{positions in state } k}$
+-   $a_{jk} = \dfrac{\text{times state } j \text{ was followed by } k}{\text{times state } j \text{ was followed by anything}}$
+:::
+
+. . .
+
+::: {style="font-size: 95%;"}
+-   Train on the **first** million bases, test on the **second** million
+-   Start every count at 1 (a ***pseudocount***), so no probability is 0
+:::
+
+::: {.notes}
+14:00-14:45
+
+Challenge 8 (train_hmm). They check it on the casino first: counting 50,000
+simulated rolls recovers the true probabilities. Training and testing on
+separate data previews the ML topic.
+:::
+
+## One base at a time, or pairs?
+
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {style="font-size: 75%;"}
+| | One base | Pairs |
+|:--|--:|--:|
+| Accuracy | 0.921 | **0.959** |
+| (Everything background) | 0.928 | 0.928 |
+| UCSC islands found (of 109) | 65 | **70** |
+| HMM islands that are real | 60 of 75 | **72 of 85** |
+:::
+:::
+
+::: {.column width="50%"}
+::: {style="font-size: 80%;"}
+-   One base at a time: the HMM can only see **GC content**
+-   Pairs: each observed state is a Markov chain, $P(\text{base} \mid
+    \text{previous base})$, so it can see **CpGs**
+-   $P(\texttt{G} \mid \texttt{C})$: 0.11 in the background, 0.28 in islands
+:::
+:::
+
+::::
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+We use the **same** `viterbi` function as the casino! And 27 of 29 genes start near
+an HMM island.
+:::
+
+::: {.notes}
+14:45-16:00
+
+The single-base model is no better than calling everything background; it
+confuses GC-rich stretches with islands. Using pairs of bases (16 symbols) lets
+it see the CpGs themselves. This is Justin Fay's first-order Markov chain idea.
+Genes: 27 of the 29 genes in the test half start within 500 bases of an HMM
+island (vs. 159 of 1,000 random positions).
+:::
+
+# HMMs are everywhere {background-color="#1b3a5c"}
+
+## HMMs in genomics
+
+::: {style="font-size: 60%;"}
+| Problem | Hidden states | Observations |
+|:--|:--|:--|
+| Gene finding (GENSCAN) [@Burge1997] | exon, intron, intergenic, ... | bases |
+| Protein families (Pfam, HMMER) [@Krogh1994; @Eddy2011] | match, insert, delete | amino acids |
+| Conserved elements (phastCons) [@Siepel2005] | conserved or not | alignment columns |
+| Chromatin states (ChromHMM) [@Ernst2012] | promoter, enhancer, ... | histone marks |
+| Population history (PSMC) [@Li2011] | time to common ancestor | heterozygous sites |
+:::
+
+. . .
+
+::: {.callout-note appearance="minimal" style="font-size: 80%;"}
+The first HMM for DNA split sequences into stretches with different base
+compositions [@Churchill1989], a lot like our CpG islands
+:::
+
+::: {.notes}
+16:00-17:00
+
+The point: once you can write down hidden states, transitions, and emissions,
+the same Viterbi (and forward) code does the rest. Profile HMMs power Pfam and
+HMMER (homology search, like BLAST but more sensitive). ChromHMM labels the
+genome with chromatin states from histone-mark data. PSMC infers population
+size history from a single genome. Churchill (1989) is the first HMM for DNA
+sequences: compositional segments, like our islands.
+:::
+
+## Beyond genomics
+
+::: {style="font-size: 75%;"}
+| Problem | Hidden states | Observations |
+|:--|:--|:--|
+| Animal movement [@Langrock2012] | resting, foraging, traveling | step lengths, turning angles |
+| Speech recognition [@Rabiner1989] | sounds, words | audio |
+| Digital communication [@Viterbi1967] | the bits that were sent | a noisy signal |
+:::
+
+. . .
+
+::: {.callout-important appearance="minimal"}
+Viterbi invented his algorithm to decode noisy digital signals, like those sent
+to cell phones and from spacecraft; we're using it to read genomes!
+:::
+
+::: {.notes}
+17:00-17:30
+
+Same model, same algorithms, completely different fields. Animal movement:
+GPS step lengths and turning angles emitted by behavioral states (the bison
+example from the first table). Speech recognition was the big application of
+HMMs for decades (Rabiner's tutorial is one of the most cited papers on HMMs).
+:::
+
+## Phylo-HMMs: HMMs meet pruning
+
+```{python}
+#| label: phylo-hmm
+#| echo: false
+#| eval: true
+#| fig-align: center
+#| fig-width: 10
+#| fig-height: 3.4
+
+_alignment = {
+    "Human": "ATGCTAGGACGCTGCACGTTAACT",
+    "Chimp": "ATGCTTGGACGCTGCACGTTAGCT",
+    "Mouse": "ACGTTCGGACGCTGCACGTAATCA",
+    "Chicken": "GTACTCAAACGCTGCACGTCCTTA",
+}
+_states = [0] * 7 + [1] * 12 + [0] * 5
+_figure, _axes = plt.subplots(figsize = (10, 3.4))
+for _i, _state in enumerate(_states):
+    _color = "seagreen" if _state else "lightgray"
+    _axes.add_patch(plt.Rectangle((_i, -0.2), 0.9, 4.4, facecolor = _color,
+                                  alpha = 0.25, edgecolor = "none"))
+    _axes.text(_i + 0.45, 4.6, "C" if _state else "N", ha = "center",
+               va = "center", fontsize = 12, fontweight = "bold",
+               color = "seagreen" if _state else "gray")
+for _row, (_name, _sequence) in enumerate(_alignment.items()):
+    _axes.text(-0.3, 3.5 - _row, _name, ha = "right", va = "center", fontsize = 12)
+    for _i, _base in enumerate(_sequence):
+        _axes.text(_i + 0.45, 3.5 - _row, _base, ha = "center", va = "center",
+                   fontsize = 13, family = "monospace")
+_axes.text(-0.3, 4.6, "Hidden state", ha = "right", va = "center", fontsize = 12,
+           fontweight = "bold")
+_axes.set_xlim(-3.2, len(_states))
+_axes.set_ylim(-0.4, 5.0)
+_axes.axis("off")
+_figure.tight_layout()
+plt.show()
+```
+
+::: {style="font-size: 85%;"}
+-   Hidden states: **C**onserved (evolving slowly) or **N**ot
+-   Emission probability of a column = the probability of the column on the
+    tree, from the **pruning algorithm**, with short branches in the conserved
+    state [@Siepel2005]
+:::
+
+::: {.notes}
+17:30-18:30
+
+This is where our two big algorithms meet. (The alignment on the slide is made
+up, for illustration.) Each hidden state has its own tree
+(the conserved state has its branches scaled down), the pruning algorithm gives
+P(column | state), and Viterbi or forward-backward finds the conserved
+elements. phastCons found that roughly 3-8% of the human genome is conserved.
+These are the "Conservation" tracks in the UCSC Genome Browser.
+:::
+
+## What about genes?
+
+```{python}
+#| label: hbb-decoys
+#| echo: false
+#| eval: true
+#| fig-align: center
+#| fig-width: 10
+#| fig-height: 2.3
+
+# HBB (MANE Select, GRCh38), on its own strand: 1,608 bases from the start of
+# the first exon to the end of the last exon, and where every GT and AG starts
+_length = 1608
+_exons = [(0, 142), (272, 495), (1345, 1608)]
+_gt = [21, 23, 53, 76, 83, 94, 104, 110, 119, 123, 126, 142, 146, 154, 166,
+    195, 218, 252, 279, 282, 302, 311, 326, 342, 360, 381, 388, 397, 448, 460,
+    474, 495, 499, 517, 542, 547, 553, 571, 579, 584, 618, 620, 626, 637, 643,
+    659, 672, 682, 750, 752, 787, 812, 821, 844, 846, 928, 934, 936, 941, 951,
+    953, 976, 990, 1031, 1091, 1127, 1141, 1191, 1200, 1207, 1263, 1289, 1317,
+    1357, 1363, 1367, 1369, 1408, 1429, 1432, 1439, 1441, 1464, 1489, 1507,
+    1515, 1524]
+_ag = [30, 43, 69, 72, 75, 102, 118, 129, 140, 152, 160, 164, 171, 174, 182,
+    199, 203, 205, 208, 227, 270, 298, 300, 310, 358, 364, 376, 380, 396, 427,
+    447, 451, 466, 484, 492, 498, 546, 558, 562, 570, 576, 583, 588, 600, 617,
+    625, 631, 642, 762, 776, 786, 811, 820, 933, 973, 1072, 1118, 1126, 1145,
+    1152, 1203, 1205, 1223, 1226, 1237, 1272, 1288, 1294, 1298, 1343, 1392,
+    1407, 1412, 1424, 1428, 1463, 1473, 1505, 1523, 1554, 1563]
+_figure, _axes = plt.subplots(figsize = (10, 2.3))
+_axes.vlines(_gt, 0.3, 0.55, color = "gray", linewidth = 1)
+_axes.vlines(_ag, -0.55, -0.3, color = "gray", linewidth = 1)
+_axes.plot([0, _length], [0, 0], color = "black", linewidth = 2)
+for _start, _end in _exons:
+    _axes.add_patch(plt.Rectangle((_start, -0.25), _end - _start, 0.5,
+                                  facecolor = "darkorange", edgecolor = "black",
+                                  zorder = 3))
+# The real splice sites
+_axes.vlines([142, 495], 0.3, 0.75, color = "firebrick", linewidth = 3)
+_axes.vlines([270, 1343], -0.75, -0.3, color = "firebrick", linewidth = 3)
+_axes.text(-30, 0.45, "GT", ha = "right", va = "center", fontsize = 12)
+_axes.text(-30, -0.45, "AG", ha = "right", va = "center", fontsize = 12)
+for _x, _label in [(10, "Exon 1"), (300, "Exon 2"), (1380, "Exon 3")]:
+    _axes.text(_x, 0, _label, va = "center", fontsize = 10, zorder = 4)
+_axes.set_xlim(-90, _length + 20)
+_axes.set_ylim(-0.9, 0.9)
+_axes.axis("off")
+_figure.tight_layout()
+plt.show()
+```
+
+::: {style="font-size: 75%;"}
+-   *HBB* (β-globin): <span style="color: gray;">gray</span>: all 87 GTs and 81
+    AGs; <span style="color: firebrick;">red</span>: the 2 real starts and 2
+    real ends of introns
+-   A simple exon/intron HMM did **worse** than calling everything intron on
+    chromosome 19 (65% vs. 78%)
+-   Real gene finders use codon models, separate parameters for GC-rich and
+    GC-poor DNA [@Burge1997], and models of **splice sites**
+:::
+
+::: {.notes}
+18:30-19:30
+
+The β-globin gene (HBB): three exons, two introns. I tried a simple exon/intron
+HMM while designing this exercise, and it was worse than calling everything
+intron, because exons and introns differ only a little in composition. GENSCAN
+handles this with codon-position states, different parameters for different GC
+contexts (isochores), and splice-site models. Next time: what makes a real
+splice site? We'll use machine learning to find out. (Also note: the β-globin
+genes have no CpG islands; they're only turned on in red blood cell precursors.)
+:::
+
+## Summary
+
+::: {.incremental style="font-size: 80%;"}
+-   An **HMM** has hidden **states** that follow a Markov chain
+    (**transitions**), and **emit** what we can see (**emissions**)
+-   The **Viterbi algorithm** finds the most probable path of hidden states by
+    dynamic programming: fill in a table, then trace back
+-   Max ↔ sum: Viterbi is like alignment; the forward algorithm is like
+    pruning
+-   The most probable path isn't the true path, and we can only recover
+    hidden states that emit different things
+-   When we have data with known states, we can **train** an HMM by
+    **counting**
+-   The same code finds loaded dice, CpG islands, genes, protein domains,
+    conserved elements, ...
+:::
+
+::: {.notes}
+19:30-20:00
+:::
+
+## In the exercise
+
+::: {.incremental style="font-size: 85%;"}
+1.  `simulate_hmm`: Simulate a night at the casino
+2.  `log_joint_probability`: How probable are the rolls and a path?
+3.  `viterbi_step` and `viterbi`: Catch the casino cheating
+4.  `plot_paths`: Plot the true and Viterbi paths
+5.  `train_hmm`: Learn an HMM by counting, and find CpG islands in a human
+    chromosome
+:::
+
+. . .
+
+::: {.callout-tip}
+## Watch for
+How many sixes in a row does it take to convince an HMM the die is loaded?
+:::
+
+::: {.notes}
+20:00-20:45
+
+Hand off to the notebook. The two CpG cells take 20-30 seconds each, because
+their viterbi function fills in a table with two million cells. Remind them
+the first cell needs their name.
+:::
+
+## Exercise
+
+1.  Log into [molab](https://molab.marimo.io/)
+2.  [Open the exercise in molab](https://molab.marimo.io/github/phyletica/intro-to-comp-bio/blob/main/notebooks/nb-10-hmm/hidden_markov_models.py)
+3.  Click "Fork" button
+
+# References
+
+::: {#refs}
+:::
+
+## Acknowledgements
+
+I drafted and iterated on these slides in collaboration with
+Anthropic's Claude (Opus 5.5 model).
