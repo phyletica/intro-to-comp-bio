@@ -14,7 +14,7 @@
     "href": "index.html#lecture-presentations",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lecture Presentations",
-    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides\nView Lecture 4 Slides\nView Lecture 5 Slides\nView Lecture 6 Slides\nView Lecture 7 Slides\nView Lecture 8 Slides\nView Lecture 9 Slides\nView Lecture 10 Slides\nView Lecture 11 Slides\nView Lecture 12 Slides\nView Lecture 13 Slides",
+    "text": "Lecture Presentations\n\nView Lecture 1 Slides\nView Lecture 2 Slides\nView Lecture 3 Slides\nView Lecture 4 Slides\nView Lecture 5 Slides\nView Lecture 6 Slides\nView Lecture 7 Slides\nView Lecture 8 Slides\nView Lecture 9 Slides\nView Lecture 10 Slides\nView Lecture 11 Slides\nView Lecture 12 Slides\nView Lecture 13 Slides\nView Lecture 14 Slides",
     "crumbs": [
       "Home"
     ]
@@ -24,7 +24,7 @@
     "href": "index.html#lab-exercises",
     "title": "Welcome to Intro to Comp Bio",
     "section": "Lab exercises",
-    "text": "Lab exercises\n\nIntro to Bash\nIntro to Bash in GitHub Codespace (Exercise 2 alternative)\nSetting up a molab account\nExercise 13: Reproducibility with git and pixi\n\n\nPython notebook exercises\nTo work on one of the marimo Python notebooks below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button.\n\nIf you are having trouble with molab, you can run the notebooks on your own computer instead.\n\nExercise 4: Intro to Python & marimo notebooks \nExercise 5: Complexity Lab \nExercise 6: String Search Lab \nExercise 7: Sequence Alignment Lab \nExercise 8: BLAST Lab \nExercise 9: Sequence Evolution Lab \nExercise 10: Substitution Models Lab \nExercise 11: Phylogenetics Lab \nExercise 12: Birth-death Lab",
+    "text": "Lab exercises\n\nIntro to Bash\nIntro to Bash in GitHub Codespace (Exercise 2 alternative)\nSetting up a molab account\nExercise 13: Reproducibility with git and pixi\n\n\nPython notebook exercises\nTo work on one of the marimo Python notebooks below in molab:\n\nGo to marimo’s molab website and make sure you are logged into your account\nClick the link below to open the notebook in marimo’s molab\nOnce the notebook opens in molab, at the top of the page, click the green “Fork” button and confirm on the pop-up screen by clicking “Fork notebook.” Do NOT click the dropdown next to the “Fork” button.\n\nIf you are having trouble with molab, you can run the notebooks on your own computer instead.\n\nExercise 4: Intro to Python & marimo notebooks \nExercise 5: Complexity Lab \nExercise 6: String Search Lab \nExercise 7: Sequence Alignment Lab \nExercise 8: BLAST Lab \nExercise 9: Sequence Evolution Lab \nExercise 10: Substitution Models Lab \nExercise 11: Phylogenetics Lab \nExercise 12: Birth-death Lab \nExercise 14: Hidden Markov models (HMM) Lab",
     "crumbs": [
       "Home"
     ]
@@ -953,6 +953,405 @@
     "text": "Acknowledgements\nI used Anthropic’s Claude (Opus 5.5 model) to generate a draft of these slides."
   },
   {
+    "objectID": "slides/topic-11-birth-death.html#last-time",
+    "href": "slides/topic-11-birth-death.html#last-time",
+    "title": "Birth-death models",
+    "section": "Last time",
+    "text": "Last time\nWe used a tree to learn about how sequences evolve\n\nBut where does the tree come from?\n\n\n\n\n\nToday: What process grows a tree, and what can a tree of living species tell us about that process?\n\n\n\n\n0:00-1:00\nFlip the question around: last time the tree was fixed and sequences evolved along it; today the tree itself is the outcome of a random process. Next time, the same models describe the spread of an epidemic."
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#birth-death-bd-models",
+    "href": "slides/topic-11-birth-death.html#birth-death-bd-models",
+    "title": "Birth-death models",
+    "section": "Birth-death (BD) models",
+    "text": "Birth-death (BD) models\nEvery branch of a tree of species is a lineage\n\n\nEach lineage splits in two (speciation, or “birth”) at rate \\(\\lambda\\)\nEach lineage dies out (extinction, or “death”) at rate \\(\\mu\\)\nRates are per lineage, per unit of time (e.g., per million years)\nWhen \\(\\mu = 0\\), it’s the pure-birth (or Yule) model1\n\n\n\n\nThe same models describe anything that multiplies and dies\n\nCells in a tumor, individuals in a population, infections in an epidemic\n\n\n\n1:00-2:30\nlambda = birth (speciation) rate, mu = death (extinction) rate. Both are constant here, and every lineage has the same rates. When mu = 0, this is the pure-birth, or Yule, model (Yule 1925, modeling the number of species per genus).\n\n\nYule (1925)"
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#one-lineage-is-like-one-site",
+    "href": "slides/topic-11-birth-death.html#one-lineage-is-like-one-site",
+    "title": "Birth-death models",
+    "section": "One lineage is like one site",
+    "text": "One lineage is like one site\nIn the substitution models exercise, a site waited an exponential time before its next change\n\nA lineage waits an exponential time, with rate \\(\\lambda\\), before it splits\n\n\nWith \\(n\\) lineages, each with speciation rate \\(\\lambda\\) and extinction rate \\(\\mu\\):\n\\[\n\\text{total rate} = n\\lambda + n\\mu = n(\\lambda + \\mu)\n\\]\n\n\n\n\n\nThe more lineages there are, the faster new ones appear!\n\n\n\n\n2:30-4:00\nRates add: if each lineage splits lambda times per unit of time on average, n lineages split n * lambda times. Because the exponential is memoryless, after every event we just draw a new waiting time from the new total rate."
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#the-gillespie-algorithm",
+    "href": "slides/topic-11-birth-death.html#the-gillespie-algorithm",
+    "title": "Birth-death models",
+    "section": "The Gillespie algorithm1",
+    "text": "The Gillespie algorithm1\nSimulate one event at a time:\n\nCalculate the total rate: \\(n(\\lambda + \\mu)\\)\nDraw an exponential waiting time using the total rate, and move the clock forward\nChoose which event happened:\n\nA split, with probability \\(\\frac{\\lambda}{\\lambda + \\mu}\\) (\\(n\\) goes up by 1)\nAn extinction otherwise (\\(n\\) goes down by 1)\n\nRepeat until the clock passes the present, or \\(n = 0\\)\n\n\n4:00-5:30\nThis is exactly the recipe from simulate_site: total rate, waiting time, choose the event in proportion to its rate. Now we name it. Gillespie developed it for chemical reactions, but it works for any process like this. Students write simulate_pure_birth (steps 1 and 2) and then simulate_birth_death (adds step 3).\n\nGillespie (1977)"
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#growing-a-tree-event-by-event",
+    "href": "slides/topic-11-birth-death.html#growing-a-tree-event-by-event",
+    "title": "Birth-death models",
+    "section": "Growing a tree, event by event",
+    "text": "Growing a tree, event by event\n\n\n    \n      \n      \n        ◀ Previous\n        ▶ Play\n        Next ▶\n      \n    \n    \n    \n\n\n5:30-7:30\nBirth rate 1, death rate 0.5. Step through with Next (or Play). Each step is one trip through the loop. Point out: the right panel is what the students’ functions return (number of lineages through time); extinct lineages turn gray with an x. The last two frames show the complete tree at the present, and then what we can actually see: the reconstructed tree (more on this later)."
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#pure-birth-simulations-and-expectations",
+    "href": "slides/topic-11-birth-death.html#pure-birth-simulations-and-expectations",
+    "title": "Birth-death models",
+    "section": "Pure-birth simulations and expectations",
+    "text": "Pure-birth simulations and expectations\n\n\n\n\n\n\n\n\n\n\n\nThe number of lineages grows exponentially with rate \\(\\lambda\\)\n\nWhen \\(\\mu &gt; 0\\), the exponential growth rate is \\(r = \\lambda - \\mu\\)\n\nQuestions: Why are the curves straight on a log axis? Why do they differ the most near the start?\n\n\n\n7:30-9:00\n20 pure-birth simulations, lambda = 1. ln(e^(lambda t)) = lambda t, so exponential growth is a straight line with slope lambda on a log axis. Early on, a clade’s fate depends on a few highly variable waiting times; later, many lineages average out, and the curves run parallel. These are the Challenge 2 questions; don’t give the answers away completely."
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#how-often-does-a-clade-die-out",
+    "href": "slides/topic-11-birth-death.html#how-often-does-a-clade-die-out",
+    "title": "Birth-death models",
+    "section": "How often does a clade die out?",
+    "text": "How often does a clade die out?\n\n\n\n\n\n\n\n\n\n\n\nDeath rate, \\(\\mu\\) (\\(\\lambda = 1\\))\nExtinct by time 5 (simulated)\nEventually extinct\n\n\n\n\n0.00\n0.00\n0.00\n\n\n0.25\n0.23\n0.25\n\n\n0.50\n0.49\n0.50\n\n\n0.75\n0.70\n0.75\n\n\n1.00\n0.82\n1.00\n\n\n\n\n\n\n\n\nA clade that starts with one lineage eventually dies out with probability \\(\\mu / \\lambda\\) (when \\(\\mu &lt; \\lambda\\))1\n\n\n\n\n\n\nEven when splits are twice as common as extinctions, about half of all clades die out\n\n\n\n\n9:00-10:30\nEach row: 2,000 simulated clades starting from one lineage, birth rate 1. The net diversification rate r = lambda - mu sets average growth, e^(rt), but the average hides a lot. Most clades that die do so early, when they have only one or a few lineages. Students reproduce this table in the notebook.\n\n\nKendall (1948)"
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#every-clade-we-study-is-a-survivor",
+    "href": "slides/topic-11-birth-death.html#every-clade-we-study-is-a-survivor",
+    "title": "Birth-death models",
+    "section": "Every clade we study is a survivor",
+    "text": "Every clade we study is a survivor\n\n\n\n\n\n\n\n\n\n\n\\(\\lambda = 1\\), \\(\\mu = 0.5\\): 48% of clades are extinct; survivors average 37 lineages\n\n\n\nThat’s about twice the expectation of the BD process (\\(e^{rt} \\approx\n20\\))\nQuestion: How might studying only the “winners” bias what we learn?\nThis is why phylogenetic BD methods condition on survival\n\n\n\n10:30-12:00\nThis is the histogram students plot themselves in Challenge 4 (their first plotting code). Survivors got lucky early, so they look like they diversified faster than the rates really are. That’s why birth-death methods used with real trees condition on survival."
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#complete-vs.-reconstructed-trees",
+    "href": "slides/topic-11-birth-death.html#complete-vs.-reconstructed-trees",
+    "title": "Birth-death models",
+    "section": "Complete vs. reconstructed trees",
+    "text": "Complete vs. reconstructed trees\n\n\n\n\n\n\n\n\n\n\nThe reconstructed tree1 is what we estimate from data: Sans unsampled extant species and most extinct lineages\n\n\n12:00-13:00\nSame model (lambda = 1, mu = 0.5), 4 units of time. Every gray lineage left no living descendants, so it is invisible to us. The reconstructed tree is the complete tree with every extinct lineage pruned away. In the notebook, simulating trees and drawing them are done for the students.\n\nNee et al. (1994)"
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#lineages-through-time",
+    "href": "slides/topic-11-birth-death.html#lineages-through-time",
+    "title": "Birth-death models",
+    "section": "Lineages through time",
+    "text": "Lineages through time\n\n\n\n\n\n\n\n\n\n\n2 lineages at the root, and every split adds one, so all we need are the branching times: the times of the internal nodes\n\n\n13:00-14:00\nStudents write get_branching_times in Challenge 6: loop over the nodes, keep the times of the ones with children, and sort them (the root is last in postorder, so sorting matters)."
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#the-pull-of-the-present",
+    "href": "slides/topic-11-birth-death.html#the-pull-of-the-present",
+    "title": "Birth-death models",
+    "section": "The pull of the present",
+    "text": "The pull of the present\n\n\n\n\n\n\n\n\n\n\nBoth BD models have the same net diversification rate, \\(r = \\lambda - \\mu = 0.5\\)\n\n\n\n\n\nQuestion: Why does extinction make the LTT plot bend up near the present?\n\n\n\n\n14:00-16:00\n30 reconstructed trees per model. Let them think before answering: recent lineages haven’t had time to go extinct yet, so near the present the tree shows splits at close to lambda; deeper in the past, only survivors remain, so the slope is close to r. This “pull of the present” (Nee et al. 1994) is the main signal of extinction in a tree of living species, and it is subtle. Challenge 7."
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#cyrtodactylus",
+    "href": "slides/topic-11-birth-death.html#cyrtodactylus",
+    "title": "Birth-death models",
+    "section": "Cyrtodactylus",
+    "text": "Cyrtodactylus\n\n\n\n\nCyrtodactylus lekaguli\n\n\n\n\nCyrtodactylus lekaguli Rushenb (2016) Wikimedia Commons"
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#cyrtodactylus-1",
+    "href": "slides/topic-11-birth-death.html#cyrtodactylus-1",
+    "title": "Birth-death models",
+    "section": "Cyrtodactylus",
+    "text": "Cyrtodactylus\n\n\n\n\n\n\n\n\n\n\nA time-calibrated tree1 of 345 of the 406 described species2; the root is about 52 million years old\n\n\n16:00-17:00\nBent-toed geckos: a very species-rich genus, and new species are still being described at a high rate, so 406 is a moving target. The outgroup species are removed in the notebook with the same prune_tips function used to remove extinct lineages. Don’t interpret the LTT shape yet; that’s the payoff of the exercise.\n\nGrismer et al. (2022)Uetz et al. (2026)"
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#estimating-the-birth-rate",
+    "href": "slides/topic-11-birth-death.html#estimating-the-birth-rate",
+    "title": "Birth-death models",
+    "section": "Estimating the birth rate",
+    "text": "Estimating the birth rate\nUnder pure birth, the maximum likelihood estimate of \\(\\lambda\\) is:\n\\[\n\\hat{\\lambda} = \\frac{n - 2}{L}\n\\]\n\n\n\\(n - 2\\): the number of splits after the root\n\\(L\\): the sum of all branch lengths, the total time lineages had to split\nSo \\(\\hat{\\lambda}\\) is splits per lineage per unit of time\n\n\n\n\nWe can simulate trees under the model, and ask: Does the gecko tree look like them?\n\n\n17:00-18:00\nChallenge 8: estimate_birth_rate, a single loop over the nodes. In the notebook, they compare the gecko LTT plot to 100 pure-birth trees with the same number of tips and the same root age (Challenge 9). The estimate is about 0.07 splits per lineage per million years, but don’t give it away."
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#unsampled-species",
+    "href": "slides/topic-11-birth-death.html#unsampled-species",
+    "title": "Birth-death models",
+    "section": "Unsampled species",
+    "text": "Unsampled species\n\n\n\n\n\n\n\n\n\n\n\nEvery unsampled species removes a split, mostly recent ones, so the LTT plot flattens near the present\n\n\n\n\n\n\nThe gecko tree is missing at least 61 described species. Question: How many species would a pure-birth model need to explain the gecko tree?\n\n\n\n\n18:00-19:00\nThe gray tips are species we don’t have DNA from. Removing them removes the splits that join them to their closest relatives, which tend to be young. In the notebook, students write simulate_sampled_tree (Challenge 10), and then use a slider to change the total number of gecko species from 406 (described) to 2,006, keeping 345 in each simulated tree. Don’t give away the answer (roughly 1,100 to 2,000, depending on which part of the tree they match)."
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#summary",
+    "href": "slides/topic-11-birth-death.html#summary",
+    "title": "Birth-death models",
+    "section": "Summary",
+    "text": "Summary\n\n\nIn a birth-death model, each lineage splits at rate \\(\\lambda\\) and dies out at rate \\(\\mu\\)\nThe Gillespie algorithm simulates it one event at a time: total rate → waiting time → which event\nLineages grow exponentially, but many clades go extinct, so living clades are a biased sample of “winners”\nWe usually see only the reconstructed tree; extinction leaves a subtle signature in it, the pull of the present\nAn LTT plot summarizes a tree, so we can compare real trees to the model\nUnsampled species remove recent splits, which flattens an LTT plot near the present\n\n\n\n19:00-19:30\nIf short on time, skip straight to the exercise slide."
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#in-the-exercise",
+    "href": "slides/topic-11-birth-death.html#in-the-exercise",
+    "title": "Birth-death models",
+    "section": "In the exercise",
+    "text": "In the exercise\n\n\nsimulate_pure_birth and simulate_birth_death: The Gillespie algorithm\nHow often do clades go extinct?\nplot_final_counts: Your first plot!\nget_branching_times: LTT plots and the pull of the present\nestimate_birth_rate and simulate_sampled_tree: Lineages of bent-toed geckos through time\n\n\n\n\n\n\n\n\n\nWatch for\n\n\nUnder a pure-birth model, how many gecko species are still undescribed?\n\n\n\n\n19:30-20:15\nPoint out that this is the first time they write plotting code; the recipe in the notebook walks them through it. Hand off to the notebook here. Remind them the first cell needs their name."
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#exercise",
+    "href": "slides/topic-11-birth-death.html#exercise",
+    "title": "Birth-death models",
+    "section": "Exercise",
+    "text": "Exercise\n\nLog into molab\nOpen the exercise in molab\nClick “Fork” button"
+  },
+  {
+    "objectID": "slides/topic-11-birth-death.html#acknowledgements",
+    "href": "slides/topic-11-birth-death.html#acknowledgements",
+    "title": "Birth-death models",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nI drafted and iterated on these slides in collaboration with Anthropic’s Claude (Opus 5.5 model)."
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#last-time",
+    "href": "slides/topic-09-substitution-models.html#last-time",
+    "title": "Richer models of sequence evolution",
+    "section": "Last time",
+    "text": "Last time\nThe Jukes-Cantor (JC) model: Every change is equally likely\n\nBut in the yeast SSA3 gene, observed transitions outnumbered transversions about 3 to 1 (each transition &gt; 6 times as fast as each transversion)\n\n\nAnd when we simulated transition-biased evolution, the JC distance underestimated the true distance\n\n\n\n\n\nA model that ignores how sequences really evolve gives biased answers\n\n\n\n\n0:00-1:15\nAnchor in Part 7 of the last exercise. The question for today: how do we build models that capture more of the biology, and how do we decide whether they are worth it?"
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#kimuras-two-parameter-model",
+    "href": "slides/topic-09-substitution-models.html#kimuras-two-parameter-model",
+    "title": "Richer models of sequence evolution",
+    "section": "Kimura’s two-parameter model1",
+    "text": "Kimura’s two-parameter model1\nTwo rates for the two kinds of change:\n\n\n\n\n\n\n\n\n\n\n\n\nA\nC\nG\nT\n\n\n\n\nA\n—\n\\(\\beta\\)\n\\(\\alpha\\)\n\\(\\beta\\)\n\n\nC\n\\(\\beta\\)\n—\n\\(\\beta\\)\n\\(\\alpha\\)\n\n\nG\n\\(\\alpha\\)\n\\(\\beta\\)\n—\n\\(\\beta\\)\n\n\nT\n\\(\\beta\\)\n\\(\\alpha\\)\n\\(\\beta\\)\n—\n\n\n\n\n\n\\(\\kappa = \\alpha / \\beta\\): How many times faster each transition is than each transversion\n\n\n\\(\\kappa = 1\\) is the JC model\n\n1:15-2:45\nSame picture of the model as last lecture, but now the table has two kinds of entries. Transitions in blue. Point out that JC is a special case: set the two rates equal.\n\n\nKimura (1980)"
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#the-k80-distance",
+    "href": "slides/topic-09-substitution-models.html#the-k80-distance",
+    "title": "Richer models of sequence evolution",
+    "section": "The K80 distance",
+    "text": "The K80 distance\n\\(S\\) = proportion of sites that differ by a transition\n\\(V\\) = proportion of sites that differ by a transversion\n\\[\nd = -\\frac{1}{2}\\ln\\left(1 - 2S - V\\right) - \\frac{1}{4}\\ln\\left(1 - 2V\\right)\n\\]\n\n\n\n\n\nYeast SSA3\nJC\nK80\nEstimated \\(\\kappa\\)\n\n\n\n\nWhole gene\n0.182\n0.187\n6.2\n\n\n3rd codon positions\n0.570\n0.655\n9.7\n\n\n\n\n\n\nThe correction matters most where sequences have diverged the most\n\n2:45-4:15\nDon’t derive this one. The structure is the same as JC: a log that blows up near saturation. Students write k80_distance in Challenge 2. The kappa estimate of 9.7 means each transition happens about 10 times as often as each transversion at 3rd positions."
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#do-we-need-time-steps",
+    "href": "slides/topic-09-substitution-models.html#do-we-need-time-steps",
+    "title": "Richer models of sequence evolution",
+    "section": "Do we need time steps?",
+    "text": "Do we need time steps?\nLast time, we chopped time into tiny steps, each with a small chance of substitution\n\nAs the steps get smaller, we approach a continuous-time Markov chain\n\n\nInstead of a probability per step, we describe the model by rates: How many changes we expect per unit of time\n\n\n\n\n\nQuestion: If a site changes at rate \\(\\lambda\\), how long until it changes?\n\n\n\n\n4:15-5:15\nCallback to the derivation drop-down in the last notebook, where we took the limit as the step size went to zero. Today they will simulate without steps."
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#waiting-times-are-exponential",
+    "href": "slides/topic-09-substitution-models.html#waiting-times-are-exponential",
+    "title": "Richer models of sequence evolution",
+    "section": "Waiting times are exponential",
+    "text": "Waiting times are exponential\n\n\n\n\n                            \n                                            \n\n\nFigure 1\n\n\n\n\nAverage wait \\(= 1 / \\text{rate}\\)\n\n5:15-6:30\nShort waits are most likely, but long waits happen. The faster the rate, the shorter the average wait. In Python: rng.expovariate(rate)."
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#the-exponential-is-memoryless",
+    "href": "slides/topic-09-substitution-models.html#the-exponential-is-memoryless",
+    "title": "Richer models of sequence evolution",
+    "section": "The exponential is memoryless",
+    "text": "The exponential is memoryless\n\n\nA site that has gone a long time without changing is not “due” for a change\nThe time until the next change does not depend on how long it has already waited\nThis is the Markov property in continuous time\n\n\n\nSo to simulate, we just repeat:\n\n\nCalculate the total rate of leaving the current base\nDraw an exponential waiting time using the total rate\nChoose the new base in proportion to its rate\n\n\n\n6:30-8:00\nThis is the simulate_site function in Challenge 4. Step 3 is where the model matters: under JC each base is equally likely, under K80 the transition partner gets kappa times the weight of each transversion. (This algorithm is often called the Gillespie algorithm; no need to name it.)"
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#not-all-genomes-are-25-a-c-g-t",
+    "href": "slides/topic-09-substitution-models.html#not-all-genomes-are-25-a-c-g-t",
+    "title": "Richer models of sequence evolution",
+    "section": "Not all genomes are 25% A, C, G, & T",
+    "text": "Not all genomes are 25% A, C, G, & T\n\n\nSome genomes are GC-rich, others AT-rich\nThe HKY model1 adds base frequencies: \\(\\pi_A\\), \\(\\pi_C\\), \\(\\pi_G\\), \\(\\pi_T\\)\nThe rate of change to a base is proportional to its frequency\n\n\n\n\n\n\nStationary distribution\nA site reaches equilibrium at \\(\\pi\\), not \\(\\frac{1}{4}\\) each\n\nSaturation\nTwo random draws from \\(\\pi\\) match with probability \\(\\sum_i \\pi_i^2\\)\n\n\n\n\nWith 40% C and G: sequences saturate at \\(p \\approx 0.66\\), not 0.75\n\n8:00-9:45\n1 - (0.1^2 + 0.4^2 + 0.4^2 + 0.1^2) = 0.66. This is Challenge 6. Point out that JC would interpret a p-distance of 0.66 as a finite distance (about 1.6), when in fact those sequences are saturated. F81 (Felsenstein 1981) is HKY with kappa = 1.\n\n\nHasegawa et al. (1985)"
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#the-rate-matrix-q",
+    "href": "slides/topic-09-substitution-models.html#the-rate-matrix-q",
+    "title": "Richer models of sequence evolution",
+    "section": "The rate matrix, \\(Q\\)",
+    "text": "The rate matrix, \\(Q\\)\nThe table of rates, with minus the total rate of leaving on the diagonal:\n\n\\[\nQ_{\\text{K80}, \\kappa = 8} = \\begin{bmatrix}\n-1 & 0.1 & 0.8 & 0.1 \\\\\n0.1 & -1 & 0.1 & 0.8 \\\\\n0.8 & 0.1 & -1 & 0.1 \\\\\n0.1 & 0.8 & 0.1 & -1\n\\end{bmatrix}\n\\]\n\n\n\nRows and columns: A, C, G, T\nEvery row sums to zero\nRates scaled so time is in expected substitutions per site\n\n\n\n9:45-11:00\nThe diagonal is the total_rate from the simulation, with a minus sign. Students build this as a NumPy array in Challenge 7."
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#transition-probabilities",
+    "href": "slides/topic-09-substitution-models.html#transition-probabilities",
+    "title": "Richer models of sequence evolution",
+    "section": "Transition probabilities",
+    "text": "Transition probabilities\nThe probability that a site that starts as base \\(i\\) is base \\(j\\) after time \\(t\\):\n\\[\nP(t) = e^{Qt}\n\\]\n\n\nThe matrix exponential: A version of \\(e^x\\) for matrices\nWe won’t calculate it by hand\n\nWe’ll use scipy.linalg.expm(Q * t)\n\nFor JC, \\(e^{Qt}\\) gives exactly last week’s formula\nFor every other model, \\(e^{Qt}\\) gives what we can’t easily write down\n\n\n\n11:00-12:15\nDo not go into how expm works (eigendecomposition, Pade approximation). The point: Q holds the model, P(t) holds the probabilities we need for likelihood, and a computer turns one into the other. Challenge 8 is one line of code."
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#what-pt-looks-like",
+    "href": "slides/topic-09-substitution-models.html#what-pt-looks-like",
+    "title": "Richer models of sequence evolution",
+    "section": "What \\(P(t)\\) looks like",
+    "text": "What \\(P(t)\\) looks like\n\nK80 (\\(\\kappa = 8\\)), \\(t = 0.5\\):\n\n\n\nFrom \\ To\nA\nC\nG\nT\n\n\n\n\nA\n0.658\n0.045\n0.251\n0.045\n\n\nC\n0.045\n0.658\n0.045\n0.251\n\n\nG\n0.251\n0.045\n0.658\n0.045\n\n\nT\n0.045\n0.251\n0.045\n0.658\n\n\n\n\n\nEvery row sums to 1; why?\nQuestion: What will it look like when \\(t = 0\\)?\nQuestion: What will it look like when \\(t\\) is very large?\n\n\n12:15-13:30\nThese are the questions in Challenge 9. Under K80 with kappa = 8, the mixing between purines and pyrimidines is slow: even at t = 10, the rows are not quite 0.25 each."
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#the-family-of-models-revisited",
+    "href": "slides/topic-09-substitution-models.html#the-family-of-models-revisited",
+    "title": "Richer models of sequence evolution",
+    "section": "The family of models, revisited",
+    "text": "The family of models, revisited\n\n\n\n\nModel\nRates\nBase frequencies\nFree parameters\n\n\n\n\nJC691\nAll equal\nEqual\n0\n\n\nK802\nTransitions vs. transversions (\\(\\kappa\\))\nEqual\n1\n\n\nF813\nAll equal\nUnequal (\\(\\pi\\))\n3\n\n\nHKY854\n\\(\\kappa\\)\nUnequal (\\(\\pi\\))\n4\n\n\nGTR5\nEvery pair its own rate\nUnequal (\\(\\pi\\))\n8\n\n\n\n\n\n\nEach model is a rate matrix \\(Q\\), which enables us to get \\(P(t) = e^{Qt}\\)\n\n\n13:30-14:45\nSame table as last lecture, with F81 added. The punchline: the machinery (Q, expm, likelihood) does not change from model to model; only the entries of Q do.\n\n\nJukes and Cantor (1969)Kimura (1980)Felsenstein (1981)Hasegawa et al. (1985)Tavaré (1986)"
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#likelihood-under-any-model",
+    "href": "slides/topic-09-substitution-models.html#likelihood-under-any-model",
+    "title": "Richer models of sequence evolution",
+    "section": "Likelihood under any model",
+    "text": "Likelihood under any model\nFor two aligned sequences, product over sites (base \\(x\\) in one sequence, base \\(y\\) in the other):\n\\[\nL(t) = \\prod_{\\text{sites}} \\pi_x P_{xy}(t)\n\\]\n\nFor our computer’s sake, we turn the product into a sum of logs:\n\\[\n\\ln L(t) = \\sum_{\\text{sites}} \\Big[\\ln(\\pi_x) + \\ln\\big(P_{xy}(t)\\big)\\Big]\n\\]"
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#likelihood-of-yeast-ssa3-sequences",
+    "href": "slides/topic-09-substitution-models.html#likelihood-of-yeast-ssa3-sequences",
+    "title": "Richer models of sequence evolution",
+    "section": "Likelihood of yeast SSA3 sequences",
+    "text": "Likelihood of yeast SSA3 sequences\n3rd codon positions:\n\n\n\n\nModel\nBest \\(t\\)\nLog-likelihood\n\n\n\n\nJC\n0.570\n−1563.6\n\n\nK80 (\\(\\kappa = 9.66\\))\n0.655\n−1473.8\n\n\n\n\n\nThe \\(t\\) that maximizes the likelihood under each model is that model’s distance formula!\n\n14:45-16:15\nStudents compute this in Challenges 10 and 11. The log-likelihoods are lower than last week’s because we now include the base frequency terms; only comparisons made the same way are meaningful."
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#more-parameters-always-help",
+    "href": "slides/topic-09-substitution-models.html#more-parameters-always-help",
+    "title": "Richer models of sequence evolution",
+    "section": "More parameters always help",
+    "text": "More parameters always help\n\nA model with an extra parameter always fits at least as well; why?\n\n\n\nSo we need to ask: Is the improvement worth the extra parameter?\n\n\n\nLikelihood ratio test: Is \\(2 \\times\\) the difference in log-likelihood bigger than chance alone would produce?\nAIC1: “Charge” each parameter 1 log-likelihood unit (2 AIC units), and pick the model with the best score\n\n\n\n\n\nK80 vs. JC for the yeast gene: About 90 log-likelihood units better, for 1 extra parameter\n\n\n16:15-17:45\nAnswer to the “why?”: K80 can always set kappa = 1 and do exactly what JC does, so its best likelihood can’t be worse. Keep this light; just plant the idea that model choice is a trade-off between fit and complexity. (For a likelihood ratio test with 1 extra parameter, the 5% cutoff is about 1.92 log-likelihood units.) Programs like ModelTest and ModelFinder automate this comparison across dozens of models.\n\n\nAkaike (1974)"
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#summary",
+    "href": "slides/topic-09-substitution-models.html#summary",
+    "title": "Richer models of sequence evolution",
+    "section": "Summary",
+    "text": "Summary\n\n\nK80 gives transitions their own rate; its distance corrects JC’s bias when transitions are faster/slower than transversions\nIn continuous time, the wait until the next substitution is exponentially distributed and memoryless\nWith unequal base frequencies, sites equilibrate at \\(\\pi\\) and saturate below a p-distance of 0.75\nAny model is a rate matrix \\(Q\\); \\(P(t) = e^{Qt}\\) gives its transition probabilities\nWith \\(P(t)\\), we can calculate the likelihood under any model, and compare models\n\n\n\n17:45-18:30\nIf short on time, cut to the last two bullets."
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#in-the-exercise",
+    "href": "slides/topic-09-substitution-models.html#in-the-exercise",
+    "title": "Richer models of sequence evolution",
+    "section": "In the exercise",
+    "text": "In the exercise\n\n\ncount_transitions_transversions and k80_distance: Fix last week’s distance bias\nsimulate_site: Simulate evolution in continuous time\nWatch a GC-rich model “settle” at its base frequencies\nget_rate_matrix and get_transition_probabilities: Build \\(Q\\) and \\(P(t)\\) with NumPy and SciPy\nlog_likelihood_pair: Compare JC and K80 on the yeast gene\n\n\n\n\n\n\n\n\n\nWatch for\n\n\nYour simulation and \\(P(t)\\) are two completely different calculations. Do they agree?\n\n\n\n\n18:30-19:30\nThey should: the plot after Challenge 8 overlays the simulated end states on the first row of P(t). Hand off to the notebook here. Remind them the first cell needs their name."
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#exercise",
+    "href": "slides/topic-09-substitution-models.html#exercise",
+    "title": "Richer models of sequence evolution",
+    "section": "Exercise",
+    "text": "Exercise\n\nLog into molab\nOpen the exercise in molab\nClick “Fork” button"
+  },
+  {
+    "objectID": "slides/topic-09-substitution-models.html#acknowledgements",
+    "href": "slides/topic-09-substitution-models.html#acknowledgements",
+    "title": "Richer models of sequence evolution",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nI drafted and iterated on these slides in collaboration with Anthropic’s Claude (Opus 5.5 model)."
+  },
+  {
+    "objectID": "bash-exercise-in-codespace.html",
+    "href": "bash-exercise-in-codespace.html",
+    "title": "Bash exercise using GitHub’s codespace",
+    "section": "",
+    "text": "Follow the instructions below to complete this exercise, and put your answers to the questions into the Exercise 2 quiz on Canvas."
+  },
+  {
+    "objectID": "bash-exercise-in-codespace.html#your-project-repository",
+    "href": "bash-exercise-in-codespace.html#your-project-repository",
+    "title": "Bash exercise using GitHub’s codespace",
+    "section": "Your project repository",
+    "text": "Your project repository\n\nMake your copy and open your codespace\n\nGo to the Comp Bio project template on GitHub, and follow the instructions in its README under the following two sections ONLY:\n\n“Make your own copy of this repository”: Name your repository bash-intro, and choose Public\n“Open your codespace”: When you get a “Do you trust the authors of the files in this folder?” pop-up, click “Trust Folder & Continue”\n\nStop and come back here once you get to “Set up your project environment” (don’t set up the environment; we don’t need it for this exercise).\nOnce your codespace is ready, you should see your files on the left side of VS Code and a terminal at the bottom. Click in the terminal and check that you’re in your project’s folder:\n\n\nTerminal\n\npwd\nls -a\n\npwd (print working directory) tells you what directory (“folder”) you are in, which should be /workspaces/comp-bio-project. This folder you are in is called your working directory. ls -a lists all files and directories in your working directory. When you run this command, you should see README.md and a folder named .devcontainer (plus a folder named .git; more on that below).\n\nThe terminal is the Bash command line running on a Linux computer in the cloud. All of the commands in this exercise are typed in the terminal."
+  },
+  {
+    "objectID": "bash-exercise-in-codespace.html#creating-a-new-directory-and-copying-files-into-it",
+    "href": "bash-exercise-in-codespace.html#creating-a-new-directory-and-copying-files-into-it",
+    "title": "Bash exercise using GitHub’s codespace",
+    "section": "Creating a new directory and copying files into it",
+    "text": "Creating a new directory and copying files into it\n\nUsing the terminal, navigate to your home directory:\n\n\nTerminal\n\ncd ~\n\nCreate a new directory called “exercise2”\n\n\nTerminal\n\nmkdir exercise2\n\nUse the curl command to download an answer1.txt file from our class GitHub repo into your new exercise2 directory:\n\n\nTerminal\n\ncurl -L -o exercise2/answer1.txt https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/answer1.txt\n\nUse the curl command again to download the SARS-CoV-2.fasta file from our class GitHub repo into your new exercise2 directory:\n\n\nTerminal\n\ncurl -L -o exercise2/SARS-CoV-2.fasta https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/SARS-CoV-2.fasta\n\nNow, move into the “exercise2” directory and confirm the files you downloaded are there:\n\n\nTerminal\n\ncd exercise2\nls\n\n\n\nQuestion 1\nUse the command line (terminal) to see what is in the answer1.txt file. Enter what you find in the file into Question 1 of the Exercise 2 quiz on Canvas.\n\nHint: The commands cat or less would be useful. I would normally encourage you to use the man command to learn more about these commands, but man doesn’t work by default in GitHub’s Codespaces. As an alternative, go to the Linux man pages online and use the search bar near the bottom of the page to search for the commands cat and less.\n\n\n\n\n\n\n\nImportantSave your work to GitHub at the end of every part\n\n\n\nYour GitHub codespace is temporary. It stops on its own after 30 minutes of inactivity, and GitHub deletes codespaces that haven’t been used for 30 days, even if they contain work you haven’t pushed to GitHub. Your work is only safe once you have committed it and pushed it to GitHub (you’ll learn how in Part 1)."
+  },
+  {
+    "objectID": "bash-exercise-in-codespace.html#manipulating-sequence-data",
+    "href": "bash-exercise-in-codespace.html#manipulating-sequence-data",
+    "title": "Bash exercise using GitHub’s codespace",
+    "section": "Manipulating sequence data",
+    "text": "Manipulating sequence data\nThe “SARS-CoV-2.fasta” file contains nucleotide sequence data from different strains of the SARS-CoV-2 virus. The sequences are in a format called FASTA. The FASTA format looks like:\n&gt;Name1\nAATCGGCTA\n&gt;Name2\nATTCGCCTA\n\nQuestion 2\nUse the command line to determine the number of sequences in the “SARS-CoV-2.fasta” file.\n\nNotice all sequences start with a “&gt;” character to specify the seqence’s name. We can use that to count the sequences efficiently. Try:\n\n\nTerminal\n\ngrep \"&gt;\" SARS-CoV-2.fasta\n\nNOTE: Putting quotes around the &gt; character is important, because in the Bash language, this character is normally used to redirect output!\ngrep is a very useful command for finding string patterns. You can learn more about it by searching for grep at the Linux man pages online.\ngrep works okay for this small FASTA file, but what if there were 1000s of sequences in the file? You wouldn’t want to count them “by hand!”\nWe can use the wc command (word count) for counting the sequences. Try:\n\n\nTerminal\n\ngrep \"&gt;\" SARS-CoV-2.fasta | wc -l\n\nThe pipe (|) character converts, or “pipes”, the output of one command to input to another command. wc -l will count the number of lines output by grep\n\nPut the number of sequences into Question 2 of the Exercise 2 quiz on Canvas.\n\n\nQuestion 3\nWhat does the -l flag in the wc -l do? Hint: use the Linux man pages online to find out!\n\n\nQuestion 4\nWhat is your output for the following command?\n\n\nTerminal\n\nwhoami\n\n\n\nQuestion 5\nWhat is your output for the following command?\n\n\nTerminal\n\necho $MACHTYPE\n\n\n\nQuestion 6\nWhat is your output for the following command?\n\n\nTerminal\n\nuname -a\n\n\n\nQuestion 7\nWhat does the -a flag do in the uname -a command? Hint: use the Linux man pages online to find out!"
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#last-time",
+    "href": "slides/topic-12-sir.html#last-time",
+    "title": "SIR models",
+    "section": "Last time",
+    "text": "Last time\nLineages split (birth) and die (death) at random\n\n\n\n\nToday: The same model, but the “lineages” are infections\n\n\n\n\n\n\nAn infected person passes the virus on: “birth” of an infection\nAn infected person recovers: “death” of an infection\n\n\n0:00-1:00\nLast time, the recap of the birth-death lab ended with this idea. Today we take it seriously: an outbreak is a birth-death process, with one twist. This deck introduces the concepts for Capstone 3, which students work on outside of class."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#three-groups-of-people",
+    "href": "slides/topic-12-sir.html#three-groups-of-people",
+    "title": "SIR models",
+    "section": "Three groups of people1",
+    "text": "Three groups of people1\n\n\n\n\n\n\n\n\n\n\n\n\\(N\\) people: \\(S + I + R = N\\)\nEach infected person recovers at rate \\(\\gamma\\) (on average, after \\(1 / \\gamma\\) days)\nEach infected person passes on the virus at rate \\(\\beta\\), but only a fraction, \\(S / N\\), of the people they meet are susceptible\n\nSo, transmission rate is \\(\\beta \\frac{S}{N}\\) per infected person\n\n\n\n\n1:00-3:00\nRecovered people are immune (or isolated); either way they’re out of the game. Recovery is exactly like extinction in a birth-death model: total rate gamma times I. Infection is like birth, with a twist: the rate per infected person is beta times S/N, so it slows down as the virus runs out of susceptible people.\n\nKermack and McKendrick (1927)"
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#compared-to-a-birth-death-model",
+    "href": "slides/topic-12-sir.html#compared-to-a-birth-death-model",
+    "title": "SIR models",
+    "section": "Compared to a birth-death model",
+    "text": "Compared to a birth-death model\n\n\n\n\n\nBirth-death\nSIR\n\n\n\n\nWhat multiplies?\nLineages, \\(n\\)\nInfections, \\(I\\)\n\n\nTotal rate of “births”\n\\(\\lambda n\\)\n\\(\\beta \\frac{S}{N} \\cdot I\\)\n\n\nTotal rate of “deaths”\n\\(\\mu n\\)\n\\(\\gamma I\\)\n\n\n\n\n\nAt the start of an outbreak, \\(S / N \\approx 1\\), so it is a birth-death process with \\(\\lambda = \\beta\\) and \\(\\mu = \\gamma\\)\n\n\n\n\n\nThe difference: Each infection “uses up” a susceptible person, so the outbreak slows down as \\(S\\) shrinks\n\n\n\n\n3:00-4:00\nKeep this table in mind; it’s the key to Part 2 of the capstone."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#the-basic-reproduction-number",
+    "href": "slides/topic-12-sir.html#the-basic-reproduction-number",
+    "title": "SIR models",
+    "section": "The basic reproduction number",
+    "text": "The basic reproduction number\n\\(R_0\\): The average number of people one infected person infects, when everyone else is susceptible\n\nInfects at rate \\(\\beta\\), for an average of \\(1 / \\gamma\\) days:\n\\[\nR_0 = \\frac{\\beta}{\\gamma}\n\\]\n\n\n\n\n\n\n\n\nQuestion\n\n\nWhat do you think happens when \\(R_0 &lt; 1\\)? When \\(R_0 &gt; 1\\)?\n\n\n\n\n4:00-5:00\nThe R in R0 is not the R in SIR. Take a couple of answers: if each infected person infects fewer than one other on average, each “generation” is smaller than the last. Students explore the threshold with sliders in Challenge 6."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#the-gillespie-algorithm-again",
+    "href": "slides/topic-12-sir.html#the-gillespie-algorithm-again",
+    "title": "SIR models",
+    "section": "The Gillespie algorithm, again1",
+    "text": "The Gillespie algorithm, again1\n\n\nCalculate the total (population) rates: infection \\(\\beta I S / N\\) and recovery \\(\\gamma I\\)\nDraw an exponential waiting time using the total rate\nChoose which event happened, with probability proportional to its rate\n\nInfection: \\(S - 1\\), \\(I + 1\\)\nRecovery: \\(I - 1\\)\n\nRepeat until \\(I = 0\\)\n\n\n\n\n\n\nSame recipe as simulate_birth_death, with different rates\n\n\n\n\n5:00-6:00\nStudents write simulate_sir in Challenge 1 by adapting simulate_birth_death, which is given at the top of the capstone. No max_time: every outbreak ends, because each person can be infected only once.\n\n\nGillespie (1977)"
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#minor-and-major-outbreaks",
+    "href": "slides/topic-12-sir.html#minor-and-major-outbreaks",
+    "title": "SIR models",
+    "section": "Minor and major outbreaks",
+    "text": "Minor and major outbreaks\n\n\n\n\n\n\n\n\n\n\n\\(N = 763\\), one infected person, \\(\\beta = 1\\), \\(\\gamma = 0.5\\) per day (\\(R_0 = 2\\))\n\n\n6:00-7:30\nAlmost no outbreaks in between: either the virus disappears after a handful of infections, or most of the school gets infected. Ask: what does this remind you of from last time? (Clades that either go extinct early or grow big.)"
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#how-often-does-an-outbreak-fizzle-out",
+    "href": "slides/topic-12-sir.html#how-often-does-an-outbreak-fizzle-out",
+    "title": "SIR models",
+    "section": "How often does an outbreak fizzle out?",
+    "text": "How often does an outbreak fizzle out?\n\n\n\n\n\n\\(R_0\\)\nFraction of minor outbreaks (simulated)\n\n\n\n\n1.5\n0.65\n\n\n2.0\n0.52\n\n\n3.0\n0.34\n\n\n\n\n\n\n\n\n\n\n\n\nQuestion\n\n\nLast time, a clade starting with one lineage eventually died out with probability \\(\\mu / \\lambda\\).1 What should the probability be here?\n\n\n\n\n7:30-9:00\nDon’t give it away completely; this is Challenge 3. (Answer: early on it’s a birth-death process with lambda = beta and mu = gamma, so mu/lambda = gamma/beta = 1/R0: 0.67, 0.50, 0.33.) Point out the public-health meaning: one infected traveler doesn’t guarantee an epidemic, but repeated introductions eventually get “lucky.”\n\n\nKendall (1948)"
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#eulers-method",
+    "href": "slides/topic-12-sir.html#eulers-method",
+    "title": "SIR models",
+    "section": "Euler’s method",
+    "text": "Euler’s method\nIn a short time \\(\\Delta t\\), the expected numbers of events are:\n\\[\n\\text{new infections} = \\frac{\\beta I S}{N} \\Delta t\n\\qquad\n\\text{recoveries} = \\gamma I \\Delta t\n\\]\n\nUpdate, and repeat, one time step at a time:\n\\[\n\\begin{aligned}\nS &\\leftarrow S - \\text{new infections} \\\\\nI &\\leftarrow I + \\text{new infections} - \\text{recoveries} \\\\\nR &\\leftarrow R + \\text{recoveries}\n\\end{aligned}\n\\]\n\n\n\nSolves the SIR differential equations, e.g., \\(\\frac{dI}{dt} = \\frac{\\beta I S}{N} - \\gamma I\\)\nSmaller \\(\\Delta t\\) → closer to the exact solution (but more steps)\n\n\n9:00-10:30\nS, I, and R are now averages, so they can be fractions of people. Emphasize: calculate both amounts before updating anything. Students write simulate_sir_euler (Challenge 4) and their own plotting function (Challenge 5). In Challenge 6 they try big time steps to see what goes wrong."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#random-outbreaks-vs.-the-average",
+    "href": "slides/topic-12-sir.html#random-outbreaks-vs.-the-average",
+    "title": "SIR models",
+    "section": "Random outbreaks vs. the average",
+    "text": "Random outbreaks vs. the average\n\n\n\n\n\n\n\n\n\n\n\nMajor outbreaks have the same shape\n\nRandomness early on mostly shifts when they take off\n\n\n\n\n10:30-11:30\nSame parameters as before (R0 = 2). Only major outbreaks shown. The early, random phase is like the start of the birth-death simulations (most variable near the start); once hundreds of people are involved, the randomness averages out."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#why-does-an-outbreak-peak",
+    "href": "slides/topic-12-sir.html#why-does-an-outbreak-peak",
+    "title": "SIR models",
+    "section": "Why does an outbreak peak?",
+    "text": "Why does an outbreak peak?\n\n\n\n\n\n\n\n\n\n\nEach infected person infects at rate \\(\\beta S / N\\) and recovers at rate \\(\\gamma\\)\n\n\n\n\n\n\n\n\nQuestion\n\n\nWhat is \\(S / N\\) when \\(I\\) stops growing? (You’ll find out in the capstone!)\n\n\n\n\n11:30-12:30\nR0 = 2 here. The outbreak turns around long before it runs out of susceptible people. Don’t give the answer (S/N = 1/R0 at the peak) away; it’s Challenge 6, and it sets up the herd immunity extra credit (1 - 1/R0)."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#influenza-at-a-boarding-school-1978",
+    "href": "slides/topic-12-sir.html#influenza-at-a-boarding-school-1978",
+    "title": "SIR models",
+    "section": "Influenza at a boarding school, 19781",
+    "text": "Influenza at a boarding school, 19781\n\n\n\n\n\n\n\n\n\n\n\nA strain of H1N1 that hadn’t circulated since the 1950s: no one was immune\n512 of the school’s 763 students were confined to bed within two weeks\n\n\n\n12:30-13:30\nFrom an anonymous report in the BMJ; the counts were only published as a figure, so these numbers are digitized (via De Vries et al. 2006, as used in the R package outbreaks) and vary slightly among sources. It’s one of the most-used datasets in epidemiology courses.\n\nAnonymous (1978)"
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#fitting-the-model-to-the-data",
+    "href": "slides/topic-12-sir.html#fitting-the-model-to-the-data",
+    "title": "SIR models",
+    "section": "Fitting the model to the data",
+    "text": "Fitting the model to the data\nFor each \\(\\beta\\) and \\(\\gamma\\), how far are the predictions from the counts?\n\\[\n\\text{sum of squares} = \\sum_{\\text{days}} \\left(\\text{observed} -\n\\text{predicted}\\right)^2\n\\]\n\nLeast squares: The best fit has the smallest sum of squares (like linregress in Capstone 2)\nGrid search: Try every combination of \\(\\beta\\) and \\(\\gamma\\) from two lists, and keep the best\n\n\n\n\n\n\n\n\nWatch for\n\n\nHow contagious was this virus? And why did only 512 students end up in bed?\n\n\n\n\n13:30-14:30\nThe predictions come from Euler’s method (a helper function in the capstone). We treat students in bed as the infected group, and start with one infected student on January 21. Students should think about whether those assumptions are reasonable (Challenge 8)."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#summary",
+    "href": "slides/topic-12-sir.html#summary",
+    "title": "SIR models",
+    "section": "Summary",
+    "text": "Summary\n\n\nThe SIR model: infections at rate \\(\\beta I S / N\\), recoveries at rate \\(\\gamma I\\)\n\\(R_0 = \\beta / \\gamma\\): the average number of people one case infects\nNear its start, an outbreak is a birth-death process, so many outbreaks fizzle out by chance\nEuler’s method calculates the average course of an outbreak, one small time step at a time\nFitting the model to data tells us how contagious a virus is\n\n\n\n14:30-15:00"
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#capstone-3",
+    "href": "slides/topic-12-sir.html#capstone-3",
+    "title": "SIR models",
+    "section": "Capstone 3",
+    "text": "Capstone 3\n\n\nsimulate_sir: The Gillespie algorithm for outbreaks\nfraction_minor_outbreaks: How often does an outbreak fizzle out?\nsimulate_sir_euler and plot_sir: Explore the average outbreak, with sliders\nsum_of_squares and fit_sir: Fit the model to the boarding school\nExtra credit: How many students would the school have needed to vaccinate?"
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#capstone-3-1",
+    "href": "slides/topic-12-sir.html#capstone-3-1",
+    "title": "SIR models",
+    "section": "Capstone 3",
+    "text": "Capstone 3\n\nLog into molab\nOpen Capstone 3 in molab\nClick “Fork” button\n\n\n15:00-16:00\nGraded for correctness (25 points + 3 extra credit); each code challenge has a test cell. Remind them that simulate_birth_death is at the top of the notebook as a model for Challenge 1."
+  },
+  {
+    "objectID": "slides/topic-12-sir.html#acknowledgements",
+    "href": "slides/topic-12-sir.html#acknowledgements",
+    "title": "SIR models",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nI drafted and iterated on these slides in collaboration with Anthropic’s Claude (Opus 5.5 model)."
+  },
+  {
     "objectID": "slides/topic-05-string-search.html#the-question-for-today",
     "href": "slides/topic-05-string-search.html#the-question-for-today",
     "title": "Finding sequences",
@@ -1107,401 +1506,163 @@
     "text": "Acknowledgements\nI used Anthropic’s Claude (Opus 5 model) to generate a draft of these slides."
   },
   {
-    "objectID": "slides/topic-12-sir.html#last-time",
-    "href": "slides/topic-12-sir.html#last-time",
-    "title": "SIR models",
-    "section": "Last time",
-    "text": "Last time\nLineages split (birth) and die (death) at random\n\n\n\n\nToday: The same model, but the “lineages” are infections\n\n\n\n\n\n\nAn infected person passes the virus on: “birth” of an infection\nAn infected person recovers: “death” of an infection\n\n\n0:00-1:00\nLast time, the recap of the birth-death lab ended with this idea. Today we take it seriously: an outbreak is a birth-death process, with one twist. This deck introduces the concepts for Capstone 3, which students work on outside of class."
+    "objectID": "slides/topic-14-hmm.html#previously",
+    "href": "slides/topic-14-hmm.html#previously",
+    "title": "Hidden Markov models",
+    "section": "Previously",
+    "text": "Previously\nWe learned to make our work reproducible, with git and pixi\n\nToday, back to probabilistic models and algorithms!\n\n\n\n\n\nHow can we learn about things we can’t see, from the clues they leave behind?\n\n\n\n\n0:00-0:45\nQuick bridge from the reproducibility exercise back to algorithms. Today’s model ties together two algorithms they already know (alignment and pruning) and sets up the last topic (machine learning)."
   },
   {
-    "objectID": "slides/topic-12-sir.html#three-groups-of-people",
-    "href": "slides/topic-12-sir.html#three-groups-of-people",
-    "title": "SIR models",
-    "section": "Three groups of people1",
-    "text": "Three groups of people1\n\n\n\n\n\n\n\n\n\n\n\n\\(N\\) people: \\(S + I + R = N\\)\nEach infected person recovers at rate \\(\\gamma\\) (on average, after \\(1 / \\gamma\\) days)\nEach infected person passes on the virus at rate \\(\\beta\\), but only a fraction, \\(S / N\\), of the people they meet are susceptible\n\nSo, transmission rate is \\(\\beta \\frac{S}{N}\\) per infected person\n\n\n\n\n1:00-3:00\nRecovered people are immune (or isolated); either way they’re out of the game. Recovery is exactly like extinction in a birth-death model: total rate gamma times I. Infection is like birth, with a twist: the rate per infected person is beta times S/N, so it slows down as the virus runs out of susceptible people.\n\nKermack and McKendrick (1927)"
+    "objectID": "slides/topic-14-hmm.html#what-we-see-vs.-what-we-want-to-know",
+    "href": "slides/topic-14-hmm.html#what-we-see-vs.-what-we-want-to-know",
+    "title": "Hidden Markov models",
+    "section": "What we see vs. what we want to know",
+    "text": "What we see vs. what we want to know\n\n\n\n\n\n\n\n\nWhat we see\nWhat’s hidden\n\n\n\n\nA genome: ...ACGGTCAGGTAAG...\nWhere the genes, exons, and regulatory regions are\n\n\nA protein sequence\nWhich family it belongs to, and which parts are its domains\n\n\nA GPS track of a bison\nWhether it’s resting, foraging, or traveling\n\n\nA sound recording\nThe words being spoken\n\n\nA noisy signal to your phone\nThe bits that were sent\n\n\n\n\n\n\n\n\nA hidden Markov model (HMM) handles all of these, with the same model and the same algorithms\n\n\n\n\n0:45-2:00\nThe common thread: something hidden changes along a sequence (or through time), and at each step it leaves a clue we can observe. We want to go backward, from the clues to the hidden states. Keep this table in mind; we come back to it near the end."
   },
   {
-    "objectID": "slides/topic-12-sir.html#compared-to-a-birth-death-model",
-    "href": "slides/topic-12-sir.html#compared-to-a-birth-death-model",
-    "title": "SIR models",
-    "section": "Compared to a birth-death model",
-    "text": "Compared to a birth-death model\n\n\n\n\n\nBirth-death\nSIR\n\n\n\n\nWhat multiplies?\nLineages, \\(n\\)\nInfections, \\(I\\)\n\n\nTotal rate of “births”\n\\(\\lambda n\\)\n\\(\\beta \\frac{S}{N} \\cdot I\\)\n\n\nTotal rate of “deaths”\n\\(\\mu n\\)\n\\(\\gamma I\\)\n\n\n\n\n\nAt the start of an outbreak, \\(S / N \\approx 1\\), so it is a birth-death process with \\(\\lambda = \\beta\\) and \\(\\mu = \\gamma\\)\n\n\n\n\n\nThe difference: Each infection “uses up” a susceptible person, so the outbreak slows down as \\(S\\) shrinks\n\n\n\n\n3:00-4:00\nKeep this table in mind; it’s the key to Part 2 of the capstone."
+    "objectID": "slides/topic-14-hmm.html#the-occasionally-dishonest-casino",
+    "href": "slides/topic-14-hmm.html#the-occasionally-dishonest-casino",
+    "title": "Hidden Markov models",
+    "section": "The occasionally dishonest casino1",
+    "text": "The occasionally dishonest casino1\n\n\nA casino usually uses a fair die\nEvery now and then, it secretly switches to a loaded die that rolls a 6 half of the time\nAfter a while, it switches back\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWhere was the casino cheating?\n\n2:00-3:00\nGive them a few seconds to guess where the loaded die was used. Next slide reveals the hidden states. This is the classic example from Durbin et al. (1998), and the first part of the exercise.\n\n\nDurbin et al. (1998)"
   },
   {
-    "objectID": "slides/topic-12-sir.html#the-basic-reproduction-number",
-    "href": "slides/topic-12-sir.html#the-basic-reproduction-number",
-    "title": "SIR models",
-    "section": "The basic reproduction number",
-    "text": "The basic reproduction number\n\\(R_0\\): The average number of people one infected person infects, when everyone else is susceptible\n\nInfects at rate \\(\\beta\\), for an average of \\(1 / \\gamma\\) days:\n\\[\nR_0 = \\frac{\\beta}{\\gamma}\n\\]\n\n\n\n\n\n\n\n\nQuestion\n\n\nWhat do you think happens when \\(R_0 &lt; 1\\)? When \\(R_0 &gt; 1\\)?\n\n\n\n\n4:00-5:00\nThe R in R0 is not the R in SIR. Take a couple of answers: if each infected person infects fewer than one other on average, each “generation” is smaller than the last. Students explore the threshold with sliders in Challenge 6."
+    "objectID": "slides/topic-14-hmm.html#the-occasionally-dishonest-casino-1",
+    "href": "slides/topic-14-hmm.html#the-occasionally-dishonest-casino-1",
+    "title": "Hidden Markov models",
+    "section": "The occasionally dishonest casino",
+    "text": "The occasionally dishonest casino\n\n\n\n\n\n\n\n\n\n\nRed: loaded die; blue: fair die\n\n\n\nLong runs with lots of sixes are easy to spot\nShort runs, and exactly where runs start and end, are hard\n\n\n3:00-3:45\nPoint out a stretch of sixes that really is loaded, and a stretch with the loaded die that doesn’t look special at all. We need a model to reason about this, especially when we can’t eyeball it (a million bases of DNA)."
   },
   {
-    "objectID": "slides/topic-12-sir.html#the-gillespie-algorithm-again",
-    "href": "slides/topic-12-sir.html#the-gillespie-algorithm-again",
-    "title": "SIR models",
-    "section": "The Gillespie algorithm, again1",
-    "text": "The Gillespie algorithm, again1\n\n\nCalculate the total (population) rates: infection \\(\\beta I S / N\\) and recovery \\(\\gamma I\\)\nDraw an exponential waiting time using the total rate\nChoose which event happened, with probability proportional to its rate\n\nInfection: \\(S - 1\\), \\(I + 1\\)\nRecovery: \\(I - 1\\)\n\nRepeat until \\(I = 0\\)\n\n\n\n\n\n\nSame recipe as simulate_birth_death, with different rates\n\n\n\n\n5:00-6:00\nStudents write simulate_sir in Challenge 1 by adapting simulate_birth_death, which is given at the top of the capstone. No max_time: every outbreak ends, because each person can be infected only once.\n\n\nGillespie (1977)"
-  },
-  {
-    "objectID": "slides/topic-12-sir.html#minor-and-major-outbreaks",
-    "href": "slides/topic-12-sir.html#minor-and-major-outbreaks",
-    "title": "SIR models",
-    "section": "Minor and major outbreaks",
-    "text": "Minor and major outbreaks\n\n\n\n\n\n\n\n\n\n\n\\(N = 763\\), one infected person, \\(\\beta = 1\\), \\(\\gamma = 0.5\\) per day (\\(R_0 = 2\\))\n\n\n6:00-7:30\nAlmost no outbreaks in between: either the virus disappears after a handful of infections, or most of the school gets infected. Ask: what does this remind you of from last time? (Clades that either go extinct early or grow big.)"
-  },
-  {
-    "objectID": "slides/topic-12-sir.html#how-often-does-an-outbreak-fizzle-out",
-    "href": "slides/topic-12-sir.html#how-often-does-an-outbreak-fizzle-out",
-    "title": "SIR models",
-    "section": "How often does an outbreak fizzle out?",
-    "text": "How often does an outbreak fizzle out?\n\n\n\n\n\n\\(R_0\\)\nFraction of minor outbreaks (simulated)\n\n\n\n\n1.5\n0.65\n\n\n2.0\n0.52\n\n\n3.0\n0.34\n\n\n\n\n\n\n\n\n\n\n\n\nQuestion\n\n\nLast time, a clade starting with one lineage eventually died out with probability \\(\\mu / \\lambda\\).1 What should the probability be here?\n\n\n\n\n7:30-9:00\nDon’t give it away completely; this is Challenge 3. (Answer: early on it’s a birth-death process with lambda = beta and mu = gamma, so mu/lambda = gamma/beta = 1/R0: 0.67, 0.50, 0.33.) Point out the public-health meaning: one infected traveler doesn’t guarantee an epidemic, but repeated introductions eventually get “lucky.”\n\n\nKendall (1948)"
-  },
-  {
-    "objectID": "slides/topic-12-sir.html#eulers-method",
-    "href": "slides/topic-12-sir.html#eulers-method",
-    "title": "SIR models",
-    "section": "Euler’s method",
-    "text": "Euler’s method\nIn a short time \\(\\Delta t\\), the expected numbers of events are:\n\\[\n\\text{new infections} = \\frac{\\beta I S}{N} \\Delta t\n\\qquad\n\\text{recoveries} = \\gamma I \\Delta t\n\\]\n\nUpdate, and repeat, one time step at a time:\n\\[\n\\begin{aligned}\nS &\\leftarrow S - \\text{new infections} \\\\\nI &\\leftarrow I + \\text{new infections} - \\text{recoveries} \\\\\nR &\\leftarrow R + \\text{recoveries}\n\\end{aligned}\n\\]\n\n\n\nSolves the SIR differential equations, e.g., \\(\\frac{dI}{dt} = \\frac{\\beta I S}{N} - \\gamma I\\)\nSmaller \\(\\Delta t\\) → closer to the exact solution (but more steps)\n\n\n9:00-10:30\nS, I, and R are now averages, so they can be fractions of people. Emphasize: calculate both amounts before updating anything. Students write simulate_sir_euler (Challenge 4) and their own plotting function (Challenge 5). In Challenge 6 they try big time steps to see what goes wrong."
-  },
-  {
-    "objectID": "slides/topic-12-sir.html#random-outbreaks-vs.-the-average",
-    "href": "slides/topic-12-sir.html#random-outbreaks-vs.-the-average",
-    "title": "SIR models",
-    "section": "Random outbreaks vs. the average",
-    "text": "Random outbreaks vs. the average\n\n\n\n\n\n\n\n\n\n\n\nMajor outbreaks have the same shape\n\nRandomness early on mostly shifts when they take off\n\n\n\n\n10:30-11:30\nSame parameters as before (R0 = 2). Only major outbreaks shown. The early, random phase is like the start of the birth-death simulations (most variable near the start); once hundreds of people are involved, the randomness averages out."
-  },
-  {
-    "objectID": "slides/topic-12-sir.html#why-does-an-outbreak-peak",
-    "href": "slides/topic-12-sir.html#why-does-an-outbreak-peak",
-    "title": "SIR models",
-    "section": "Why does an outbreak peak?",
-    "text": "Why does an outbreak peak?\n\n\n\n\n\n\n\n\n\n\nEach infected person infects at rate \\(\\beta S / N\\) and recovers at rate \\(\\gamma\\)\n\n\n\n\n\n\n\n\nQuestion\n\n\nWhat is \\(S / N\\) when \\(I\\) stops growing? (You’ll find out in the capstone!)\n\n\n\n\n11:30-12:30\nR0 = 2 here. The outbreak turns around long before it runs out of susceptible people. Don’t give the answer (S/N = 1/R0 at the peak) away; it’s Challenge 6, and it sets up the herd immunity extra credit (1 - 1/R0)."
-  },
-  {
-    "objectID": "slides/topic-12-sir.html#influenza-at-a-boarding-school-1978",
-    "href": "slides/topic-12-sir.html#influenza-at-a-boarding-school-1978",
-    "title": "SIR models",
-    "section": "Influenza at a boarding school, 19781",
-    "text": "Influenza at a boarding school, 19781\n\n\n\n\n\n\n\n\n\n\n\nA strain of H1N1 that hadn’t circulated since the 1950s: no one was immune\n512 of the school’s 763 students were confined to bed within two weeks\n\n\n\n12:30-13:30\nFrom an anonymous report in the BMJ; the counts were only published as a figure, so these numbers are digitized (via De Vries et al. 2006, as used in the R package outbreaks) and vary slightly among sources. It’s one of the most-used datasets in epidemiology courses.\n\nAnonymous (1978)"
-  },
-  {
-    "objectID": "slides/topic-12-sir.html#fitting-the-model-to-the-data",
-    "href": "slides/topic-12-sir.html#fitting-the-model-to-the-data",
-    "title": "SIR models",
-    "section": "Fitting the model to the data",
-    "text": "Fitting the model to the data\nFor each \\(\\beta\\) and \\(\\gamma\\), how far are the predictions from the counts?\n\\[\n\\text{sum of squares} = \\sum_{\\text{days}} \\left(\\text{observed} -\n\\text{predicted}\\right)^2\n\\]\n\nLeast squares: The best fit has the smallest sum of squares (like linregress in Capstone 2)\nGrid search: Try every combination of \\(\\beta\\) and \\(\\gamma\\) from two lists, and keep the best\n\n\n\n\n\n\n\n\nWatch for\n\n\nHow contagious was this virus? And why did only 512 students end up in bed?\n\n\n\n\n13:30-14:30\nThe predictions come from Euler’s method (a helper function in the capstone). We treat students in bed as the infected group, and start with one infected student on January 21. Students should think about whether those assumptions are reasonable (Challenge 8)."
-  },
-  {
-    "objectID": "slides/topic-12-sir.html#summary",
-    "href": "slides/topic-12-sir.html#summary",
-    "title": "SIR models",
-    "section": "Summary",
-    "text": "Summary\n\n\nThe SIR model: infections at rate \\(\\beta I S / N\\), recoveries at rate \\(\\gamma I\\)\n\\(R_0 = \\beta / \\gamma\\): the average number of people one case infects\nNear its start, an outbreak is a birth-death process, so many outbreaks fizzle out by chance\nEuler’s method calculates the average course of an outbreak, one small time step at a time\nFitting the model to data tells us how contagious a virus is\n\n\n\n14:30-15:00"
-  },
-  {
-    "objectID": "slides/topic-12-sir.html#capstone-3",
-    "href": "slides/topic-12-sir.html#capstone-3",
-    "title": "SIR models",
-    "section": "Capstone 3",
-    "text": "Capstone 3\n\n\nsimulate_sir: The Gillespie algorithm for outbreaks\nfraction_minor_outbreaks: How often does an outbreak fizzle out?\nsimulate_sir_euler and plot_sir: Explore the average outbreak, with sliders\nsum_of_squares and fit_sir: Fit the model to the boarding school\nExtra credit: How many students would the school have needed to vaccinate?"
-  },
-  {
-    "objectID": "slides/topic-12-sir.html#capstone-3-1",
-    "href": "slides/topic-12-sir.html#capstone-3-1",
-    "title": "SIR models",
-    "section": "Capstone 3",
-    "text": "Capstone 3\n\nLog into molab\nOpen Capstone 3 in molab\nClick “Fork” button\n\n\n15:00-16:00\nGraded for correctness (25 points + 3 extra credit); each code challenge has a test cell. Remind them that simulate_birth_death is at the top of the notebook as a model for Challenge 1."
-  },
-  {
-    "objectID": "slides/topic-12-sir.html#acknowledgements",
-    "href": "slides/topic-12-sir.html#acknowledgements",
-    "title": "SIR models",
-    "section": "Acknowledgements",
-    "text": "Acknowledgements\nI drafted and iterated on these slides in collaboration with Anthropic’s Claude (Opus 5.5 model)."
-  },
-  {
-    "objectID": "bash-exercise-in-codespace.html",
-    "href": "bash-exercise-in-codespace.html",
-    "title": "Bash exercise using GitHub’s codespace",
+    "objectID": "slides/topic-14-hmm.html#section",
+    "href": "slides/topic-14-hmm.html#section",
+    "title": "Hidden Markov models",
     "section": "",
-    "text": "Follow the instructions below to complete this exercise, and put your answers to the questions into the Exercise 2 quiz on Canvas."
+    "text": "An HMM has three parts\n\n\nHidden states: Fair or Loaded\nTransition probabilities: the chance of each state at the next roll, given the state now\nEmission probabilities: the chance of each roll, given the state\n\nPlus start probabilities for the first roll\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe hidden states are a Markov chain, just like a site in our substitution models, but along a sequence instead of through time; we just can’t see it!\n\n\n\n\n3:45-5:00\nWalk through the arrows: from Fair, stay with 0.95, switch with 0.05; from Loaded, switch back with 0.1. On average, a run of the loaded die lasts 1 / 0.1 = 10 rolls (the exercise asks this). Emissions: fair is flat; loaded rolls a 6 half the time. In Python, transitions and emissions are NumPy arrays, row = current state."
   },
   {
-    "objectID": "bash-exercise-in-codespace.html#your-project-repository",
-    "href": "bash-exercise-in-codespace.html#your-project-repository",
-    "title": "Bash exercise using GitHub’s codespace",
-    "section": "Your project repository",
-    "text": "Your project repository\n\nMake your copy and open your codespace\n\nGo to the Comp Bio project template on GitHub, and follow the instructions in its README under the following two sections ONLY:\n\n“Make your own copy of this repository”: Name your repository bash-intro, and choose Public\n“Open your codespace”: When you get a “Do you trust the authors of the files in this folder?” pop-up, click “Trust Folder & Continue”\n\nStop and come back here once you get to “Set up your project environment” (don’t set up the environment; we don’t need it for this exercise).\nOnce your codespace is ready, you should see your files on the left side of VS Code and a terminal at the bottom. Click in the terminal and check that you’re in your project’s folder:\n\n\nTerminal\n\npwd\nls -a\n\npwd (print working directory) tells you what directory (“folder”) you are in, which should be /workspaces/comp-bio-project. This folder you are in is called your working directory. ls -a lists all files and directories in your working directory. When you run this command, you should see README.md and a folder named .devcontainer (plus a folder named .git; more on that below).\n\nThe terminal is the Bash command line running on a Linux computer in the cloud. All of the commands in this exercise are typed in the terminal."
+    "objectID": "slides/topic-14-hmm.html#the-probability-of-the-rolls-and-a-path",
+    "href": "slides/topic-14-hmm.html#the-probability-of-the-rolls-and-a-path",
+    "title": "Hidden Markov models",
+    "section": "The probability of the rolls and a path",
+    "text": "The probability of the rolls and a path\nA path is a sequence of hidden states, one per roll\n\n\n\\[\nP(\\texttt{266}, \\text{Fair Loaded Loaded}) =\n\\underbrace{0.5}_{\\text{start F}}\n\\underbrace{\\tfrac{1}{6}}_{\\text{F rolls 2}}\n\\underbrace{0.05}_{\\text{F}\\rightarrow\\text{L}}\n\\underbrace{0.5}_{\\text{L rolls 6}}\n\\underbrace{0.9}_{\\text{L}\\rightarrow\\text{L}}\n\\underbrace{0.5}_{\\text{L rolls 6}}\n\\approx 0.00094\n\\]\n\n\n\n\nWith many rolls, this gets tiny, so we use logs (just like tree likelihoods):\n\n\n\\[\n\\log P(x, \\pi) = \\log s_{\\pi_1} + \\log e_{\\pi_1}(x_1) +\n\\sum_{i = 2}^{n} \\Big[ \\log a_{\\pi_{i - 1} \\pi_i} + \\log e_{\\pi_i}(x_i) \\Big]\n\\]\n\n\n5:00-6:15\nMultiply the probability of every step of the process that made the data: start, emit, transition, emit, transition, emit. x is the rolls, pi is the path, s is start, a is transition, e is emission. This is challenge 3 (log_joint_probability)."
   },
   {
-    "objectID": "bash-exercise-in-codespace.html#creating-a-new-directory-and-copying-files-into-it",
-    "href": "bash-exercise-in-codespace.html#creating-a-new-directory-and-copying-files-into-it",
-    "title": "Bash exercise using GitHub’s codespace",
-    "section": "Creating a new directory and copying files into it",
-    "text": "Creating a new directory and copying files into it\n\nUsing the terminal, navigate to your home directory:\n\n\nTerminal\n\ncd ~\n\nCreate a new directory called “exercise2”\n\n\nTerminal\n\nmkdir exercise2\n\nUse the curl command to download an answer1.txt file from our class GitHub repo into your new exercise2 directory:\n\n\nTerminal\n\ncurl -L -o exercise2/answer1.txt https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/answer1.txt\n\nUse the curl command again to download the SARS-CoV-2.fasta file from our class GitHub repo into your new exercise2 directory:\n\n\nTerminal\n\ncurl -L -o exercise2/SARS-CoV-2.fasta https://raw.githubusercontent.com/phyletica/intro-to-comp-bio/refs/heads/main/notebooks/data/SARS-CoV-2.fasta\n\nNow, move into the “exercise2” directory and confirm the files you downloaded are there:\n\n\nTerminal\n\ncd exercise2\nls\n\n\n\nQuestion 1\nUse the command line (terminal) to see what is in the answer1.txt file. Enter what you find in the file into Question 1 of the Exercise 2 quiz on Canvas.\n\nHint: The commands cat or less would be useful. I would normally encourage you to use the man command to learn more about these commands, but man doesn’t work by default in GitHub’s Codespaces. As an alternative, go to the Linux man pages online and use the search bar near the bottom of the page to search for the commands cat and less.\n\n\n\n\n\n\n\nImportantSave your work to GitHub at the end of every part\n\n\n\nYour GitHub codespace is temporary. It stops on its own after 30 minutes of inactivity, and GitHub deletes codespaces that haven’t been used for 30 days, even if they contain work you haven’t pushed to GitHub. Your work is only safe once you have committed it and pushed it to GitHub (you’ll learn how in Part 1)."
+    "objectID": "slides/topic-14-hmm.html#how-many-paths-are-there",
+    "href": "slides/topic-14-hmm.html#how-many-paths-are-there",
+    "title": "Hidden Markov models",
+    "section": "How many paths are there?",
+    "text": "How many paths are there?\nEach roll could be fair or loaded\n\n\n\n\n\nRolls\nPossible paths\n\n\n\n\n3\n\\(2^3 = 8\\)\n\n\n30\n\\(2^{30} \\approx 10^9\\)\n\n\n300\n\\(2^{300} \\approx 2 \\times 10^{90}\\)\n\n\n1,000,000 bases of DNA\n\\(2^{1{,}000{,}000}\\)\n\n\n\n\n\n\n\n\n\nMore paths than atoms in the universe (\\(\\approx 10^{80}\\)), just like trees; we can’t try them all!\n\n\n\n\n6:15-7:00\nSame combinatorial explosion as the number of trees. We want the single most probable path without enumerating them."
   },
   {
-    "objectID": "bash-exercise-in-codespace.html#manipulating-sequence-data",
-    "href": "bash-exercise-in-codespace.html#manipulating-sequence-data",
-    "title": "Bash exercise using GitHub’s codespace",
-    "section": "Manipulating sequence data",
-    "text": "Manipulating sequence data\nThe “SARS-CoV-2.fasta” file contains nucleotide sequence data from different strains of the SARS-CoV-2 virus. The sequences are in a format called FASTA. The FASTA format looks like:\n&gt;Name1\nAATCGGCTA\n&gt;Name2\nATTCGCCTA\n\nQuestion 2\nUse the command line to determine the number of sequences in the “SARS-CoV-2.fasta” file.\n\nNotice all sequences start with a “&gt;” character to specify the seqence’s name. We can use that to count the sequences efficiently. Try:\n\n\nTerminal\n\ngrep \"&gt;\" SARS-CoV-2.fasta\n\nNOTE: Putting quotes around the &gt; character is important, because in the Bash language, this character is normally used to redirect output!\ngrep is a very useful command for finding string patterns. You can learn more about it by searching for grep at the Linux man pages online.\ngrep works okay for this small FASTA file, but what if there were 1000s of sequences in the file? You wouldn’t want to count them “by hand!”\nWe can use the wc command (word count) for counting the sequences. Try:\n\n\nTerminal\n\ngrep \"&gt;\" SARS-CoV-2.fasta | wc -l\n\nThe pipe (|) character converts, or “pipes”, the output of one command to input to another command. wc -l will count the number of lines output by grep\n\nPut the number of sequences into Question 2 of the Exercise 2 quiz on Canvas.\n\n\nQuestion 3\nWhat does the -l flag in the wc -l do? Hint: use the Linux man pages online to find out!\n\n\nQuestion 4\nWhat is your output for the following command?\n\n\nTerminal\n\nwhoami\n\n\n\nQuestion 5\nWhat is your output for the following command?\n\n\nTerminal\n\necho $MACHTYPE\n\n\n\nQuestion 6\nWhat is your output for the following command?\n\n\nTerminal\n\nuname -a\n\n\n\nQuestion 7\nWhat does the -a flag do in the uname -a command? Hint: use the Linux man pages online to find out!"
+    "objectID": "slides/topic-14-hmm.html#the-viterbi-algorithm",
+    "href": "slides/topic-14-hmm.html#the-viterbi-algorithm",
+    "title": "Hidden Markov models",
+    "section": "The Viterbi algorithm1",
+    "text": "The Viterbi algorithm1\n\nKey idea: The best path that ends in state \\(k\\) at roll \\(i\\) came through some state \\(j\\) at roll \\(i - 1\\), along the best path that ends in \\(j\\)\n\n\n\nSo, we only need the best path ending in each state, at each roll\n\n\n\n\nWe fill in a table with one row per state and one column per roll\n\n\n\n\n\nFirst column: \\(V_k(1) = \\log s_k + \\log e_k(x_1)\\)\nEach later column: \\(V_k(i) = \\max_j \\big[ V_j(i - 1) + \\log a_{jk} \\big] + \\log e_k(x_i)\\), and remember the best \\(j\\) (a pointer)\nTraceback: Start at the best score in the last column, and follow the pointers backward\n\n\n\n7:00-8:15\nThe table has one row per state and one column per roll. With 2 states and 300 rolls, that’s 600 cells, each needing 2 comparisons, instead of 10^90 paths. Steps 2 and 3 are challenges 4 (viterbi_step) and 5 (traceback).\n\n\nViterbi (1967)"
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#last-time",
-    "href": "slides/topic-09-substitution-models.html#last-time",
-    "title": "Richer models of sequence evolution",
-    "section": "Last time",
-    "text": "Last time\nThe Jukes-Cantor (JC) model: Every change is equally likely\n\nBut in the yeast SSA3 gene, observed transitions outnumbered transversions about 3 to 1 (each transition &gt; 6 times as fast as each transversion)\n\n\nAnd when we simulated transition-biased evolution, the JC distance underestimated the true distance\n\n\n\n\n\nA model that ignores how sequences really evolve gives biased answers\n\n\n\n\n0:00-1:15\nAnchor in Part 7 of the last exercise. The question for today: how do we build models that capture more of the biology, and how do we decide whether they are worth it?"
+    "objectID": "slides/topic-14-hmm.html#viterbi-step-by-step",
+    "href": "slides/topic-14-hmm.html#viterbi-step-by-step",
+    "title": "Hidden Markov models",
+    "section": "Viterbi, step by step",
+    "text": "Viterbi, step by step\n\n\n    \n      \n      \n        ◀ Previous\n        ▶ Play\n        Next ▶\n      \n    \n    \n    \n\n\n8:15-10:00\nStep through a few columns with Next, then Play the rest. Point out the blue arrows (pointers), and that each column only depends on the one before it. Then the traceback in gold. Ask: how many sixes in a row did it take to switch to Loaded? (The notebook has a box where they can type their own rolls.)"
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#kimuras-two-parameter-model",
-    "href": "slides/topic-09-substitution-models.html#kimuras-two-parameter-model",
-    "title": "Richer models of sequence evolution",
-    "section": "Kimura’s two-parameter model1",
-    "text": "Kimura’s two-parameter model1\nTwo rates for the two kinds of change:\n\n\n\n\n\n\n\n\n\n\n\n\nA\nC\nG\nT\n\n\n\n\nA\n—\n\\(\\beta\\)\n\\(\\alpha\\)\n\\(\\beta\\)\n\n\nC\n\\(\\beta\\)\n—\n\\(\\beta\\)\n\\(\\alpha\\)\n\n\nG\n\\(\\alpha\\)\n\\(\\beta\\)\n—\n\\(\\beta\\)\n\n\nT\n\\(\\beta\\)\n\\(\\alpha\\)\n\\(\\beta\\)\n—\n\n\n\n\n\n\\(\\kappa = \\alpha / \\beta\\): How many times faster each transition is than each transversion\n\n\n\\(\\kappa = 1\\) is the JC model\n\n1:15-2:45\nSame picture of the model as last lecture, but now the table has two kinds of entries. Transitions in blue. Point out that JC is a special case: set the two rates equal.\n\n\nKimura (1980)"
+    "objectID": "slides/topic-14-hmm.html#havent-we-seen-this-before",
+    "href": "slides/topic-14-hmm.html#havent-we-seen-this-before",
+    "title": "Hidden Markov models",
+    "section": "Haven’t we seen this before?",
+    "text": "Haven’t we seen this before?\n\n\n\n\n\n\n\n\n\n\n\nFills in a table…\nAt each cell…\nThen…\n\n\n\n\nAlignment\none cell per pair of positions\ntakes the best of 3 moves\ntraces back\n\n\nViterbi\none cell per state and position\ntakes the best previous state\ntraces back\n\n\nPruning\none row per node\nadds up over the hidden bases of each child\naverages at the root\n\n\nForward algorithm\none cell per state and position\nadds up over previous states\nsums the last column\n\n\n\n\n\n\n\n\nAll four are dynamic programming: Solve a big problem by building up answers to small ones, and reuse them\n\n\n\n\n10:00-11:00\nViterbi is alignment-style (max + traceback). Swap max for sum and you get the forward algorithm, which is pruning-style: the total probability of the data over all hidden paths. Forward-backward gives the probability of each hidden state at each position, and is used to train HMMs when no states are known (Baum-Welch). Not in the exercise, except as an optional dropdown."
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#the-k80-distance",
-    "href": "slides/topic-09-substitution-models.html#the-k80-distance",
-    "title": "Richer models of sequence evolution",
-    "section": "The K80 distance",
-    "text": "The K80 distance\n\\(S\\) = proportion of sites that differ by a transition\n\\(V\\) = proportion of sites that differ by a transversion\n\\[\nd = -\\frac{1}{2}\\ln\\left(1 - 2S - V\\right) - \\frac{1}{4}\\ln\\left(1 - 2V\\right)\n\\]\n\n\n\n\n\nYeast SSA3\nJC\nK80\nEstimated \\(\\kappa\\)\n\n\n\n\nWhole gene\n0.182\n0.187\n6.2\n\n\n3rd codon positions\n0.570\n0.655\n9.7\n\n\n\n\n\n\nThe correction matters most where sequences have diverged the most\n\n2:45-4:15\nDon’t derive this one. The structure is the same as JC: a log that blows up near saturation. Students write k80_distance in Challenge 2. The kappa estimate of 9.7 means each transition happens about 10 times as often as each transversion at 3rd positions."
+    "objectID": "slides/topic-14-hmm.html#most-probable-true",
+    "href": "slides/topic-14-hmm.html#most-probable-true",
+    "title": "Hidden Markov models",
+    "section": "Most probable ≠ true",
+    "text": "Most probable ≠ true\nFor the 300 rolls in the exercise:\n\n\n\n\nPath\nLog probability\n\n\n\n\nViterbi\n\\(-543.1\\)\n\n\nAlways fair\n\\(-553.6\\)\n\n\nThe true path\n\\(-583.5\\)\n\n\n\n\n\n\n\nThe true path switches dice many times, and each switch is improbable\nThe casino doesn’t always do the most probable thing!\nStill, the Viterbi path has the right die for 85% of the rolls (“always fair”: 66%)\n\n\n\n11:00-12:00\nThis surprises students in the exercise, so preview it. The true path is just one random outcome; the Viterbi path is the single most probable path, and it avoids switches the rolls don’t strongly support, so it misses short loaded runs."
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#do-we-need-time-steps",
-    "href": "slides/topic-09-substitution-models.html#do-we-need-time-steps",
-    "title": "Richer models of sequence evolution",
-    "section": "Do we need time steps?",
-    "text": "Do we need time steps?\nLast time, we chopped time into tiny steps, each with a small chance of substitution\n\nAs the steps get smaller, we approach a continuous-time Markov chain\n\n\nInstead of a probability per step, we describe the model by rates: How many changes we expect per unit of time\n\n\n\n\n\nQuestion: If a site changes at rate \\(\\lambda\\), how long until it changes?\n\n\n\n\n4:15-5:15\nCallback to the derivation drop-down in the last notebook, where we took the limit as the step size went to zero. Today they will simulate without steps."
+    "objectID": "slides/topic-14-hmm.html#how-different-are-the-dice",
+    "href": "slides/topic-14-hmm.html#how-different-are-the-dice",
+    "title": "Hidden Markov models",
+    "section": "How different are the dice?",
+    "text": "How different are the dice?\n\n\n\n\n\n\n\n\n\n\n\n\n\nWe can only recover hidden states if they emit different things\n\n\n\n\n12:00-12:45\nWhen the loaded die is barely loaded, the Viterbi path never leaves Fair. The more different the emissions, the better we do. The exercise has a slider for this. Same lesson for DNA: we need states that look different."
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#waiting-times-are-exponential",
-    "href": "slides/topic-09-substitution-models.html#waiting-times-are-exponential",
-    "title": "Richer models of sequence evolution",
-    "section": "Waiting times are exponential",
-    "text": "Waiting times are exponential\n\n\n\n\n                            \n                                            \n\n\nFigure 1\n\n\n\n\nAverage wait \\(= 1 / \\text{rate}\\)\n\n5:15-6:30\nShort waits are most likely, but long waits happen. The faster the rate, the shorter the average wait. In Python: rng.expovariate(rate)."
+    "objectID": "slides/topic-14-hmm.html#cpg-depletion",
+    "href": "slides/topic-14-hmm.html#cpg-depletion",
+    "title": "Hidden Markov models",
+    "section": "CpG depletion",
+    "text": "CpG depletion\n\n\nA CpG is a C followed by a G on the same strand\nIn vertebrates, most CpG C’s are methylated, and methylated C’s easily mutate to T\n\n\n\n\n\n\n\nCpGs in 2 Mb of human chromosome 19\nObserved/expected\n\n\n\n\nWhole stretch\n0.45\n\n\nBackground\n0.38\n\n\nCpG islands\n0.78\n\n\n\n\n\n\n\n\n\nCpG islands: stretches of a few hundred to a few thousand bases where CpGs are not depleted, often where genes start (Gardiner-Garden and Frommer 1987)\n\n\n\n\n12:45-14:00\nMethylated C -&gt; deamination -&gt; T, so CpG becomes TpG (or CpA on the other strand) over evolutionary time. Islands are unmethylated, so they keep their CpGs, and many sit at promoters. The islands in the exercise were called by the UCSC Genome Browser using length/GC/CpG cutoffs; they are predictions too, which is a discussion question."
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#the-exponential-is-memoryless",
-    "href": "slides/topic-09-substitution-models.html#the-exponential-is-memoryless",
-    "title": "Richer models of sequence evolution",
-    "section": "The exponential is memoryless",
-    "text": "The exponential is memoryless\n\n\nA site that has gone a long time without changing is not “due” for a change\nThe time until the next change does not depend on how long it has already waited\nThis is the Markov property in continuous time\n\n\n\nSo to simulate, we just repeat:\n\n\nCalculate the total rate of leaving the current base\nDraw an exponential waiting time using the total rate\nChoose the new base in proportion to its rate\n\n\n\n6:30-8:00\nThis is the simulate_site function in Challenge 4. Step 3 is where the model matters: under JC each base is equally likely, under K80 the transition partner gets kappa times the weight of each transversion. (This algorithm is often called the Gillespie algorithm; no need to name it.)"
+    "objectID": "slides/topic-14-hmm.html#training-an-hmm-by-counting",
+    "href": "slides/topic-14-hmm.html#training-an-hmm-by-counting",
+    "title": "Hidden Markov models",
+    "section": "Training an HMM by counting",
+    "text": "Training an HMM by counting\nWhen we have data with known hidden states, we can train an HMM by just counting:\n\n\n\\(e_k(s) = \\dfrac{\\text{times state } k \\text{ emitted } s}{\\text{positions in state } k}\\)\n\\(a_{jk} = \\dfrac{\\text{times state } j \\text{ was followed by } k}{\\text{times state } j \\text{ was followed by anything}}\\)\n\n\n\n\n\nTrain on the first million bases, test on the second million\nStart every count at 1 (a pseudocount), so no probability is 0\n\n\n\n14:00-14:45\nChallenge 9 (train_hmm). They check it on the casino first: counting 50,000 simulated rolls recovers the true probabilities. Training and testing on separate data previews the ML topic."
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#not-all-genomes-are-25-a-c-g-t",
-    "href": "slides/topic-09-substitution-models.html#not-all-genomes-are-25-a-c-g-t",
-    "title": "Richer models of sequence evolution",
-    "section": "Not all genomes are 25% A, C, G, & T",
-    "text": "Not all genomes are 25% A, C, G, & T\n\n\nSome genomes are GC-rich, others AT-rich\nThe HKY model1 adds base frequencies: \\(\\pi_A\\), \\(\\pi_C\\), \\(\\pi_G\\), \\(\\pi_T\\)\nThe rate of change to a base is proportional to its frequency\n\n\n\n\n\n\nStationary distribution\nA site reaches equilibrium at \\(\\pi\\), not \\(\\frac{1}{4}\\) each\n\nSaturation\nTwo random draws from \\(\\pi\\) match with probability \\(\\sum_i \\pi_i^2\\)\n\n\n\n\nWith 40% C and G: sequences saturate at \\(p \\approx 0.66\\), not 0.75\n\n8:00-9:45\n1 - (0.1^2 + 0.4^2 + 0.4^2 + 0.1^2) = 0.66. This is Challenge 6. Point out that JC would interpret a p-distance of 0.66 as a finite distance (about 1.6), when in fact those sequences are saturated. F81 (Felsenstein 1981) is HKY with kappa = 1.\n\n\nHasegawa et al. (1985)"
+    "objectID": "slides/topic-14-hmm.html#one-base-at-a-time-or-pairs",
+    "href": "slides/topic-14-hmm.html#one-base-at-a-time-or-pairs",
+    "title": "Hidden Markov models",
+    "section": "One base at a time, or pairs?",
+    "text": "One base at a time, or pairs?\n\n\n\n\n\n\n\nOne base\nPairs\n\n\n\n\nAccuracy\n0.921\n0.959\n\n\n(Everything background)\n0.928\n0.928\n\n\nUCSC islands found (of 109)\n65\n70\n\n\nHMM islands that are real\n60 of 75\n72 of 85\n\n\n\n\n\n\n\nOne base at a time: the HMM can only see GC content\nPairs: within each hidden state, the bases follow a Markov chain, \\(P(\\text{base} \\mid \\text{previous base})\\), so it can see CpGs\n\\(P(\\texttt{G} \\mid \\texttt{C})\\): 0.11 in the background, 0.28 in islands\n\n\n\n\n\n\n\nWe use the same viterbi function as the casino! And 27 of 29 genes start near an HMM island.\n\n\n\n\n14:45-16:00\nThe single-base model is no better than calling everything background; it confuses GC-rich stretches with islands. Using pairs of bases (16 symbols) lets it see the CpGs themselves. This is Justin Fay’s first-order Markov chain idea. Genes: 27 of the 29 genes in the test half start within 500 bases of an HMM island (vs. 159 of 1,000 random positions)."
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#the-rate-matrix-q",
-    "href": "slides/topic-09-substitution-models.html#the-rate-matrix-q",
-    "title": "Richer models of sequence evolution",
-    "section": "The rate matrix, \\(Q\\)",
-    "text": "The rate matrix, \\(Q\\)\nThe table of rates, with minus the total rate of leaving on the diagonal:\n\n\\[\nQ_{\\text{K80}, \\kappa = 8} = \\begin{bmatrix}\n-1 & 0.1 & 0.8 & 0.1 \\\\\n0.1 & -1 & 0.1 & 0.8 \\\\\n0.8 & 0.1 & -1 & 0.1 \\\\\n0.1 & 0.8 & 0.1 & -1\n\\end{bmatrix}\n\\]\n\n\n\nRows and columns: A, C, G, T\nEvery row sums to zero\nRates scaled so time is in expected substitutions per site\n\n\n\n9:45-11:00\nThe diagonal is the total_rate from the simulation, with a minus sign. Students build this as a NumPy array in Challenge 7."
+    "objectID": "slides/topic-14-hmm.html#hmms-in-genomics",
+    "href": "slides/topic-14-hmm.html#hmms-in-genomics",
+    "title": "Hidden Markov models",
+    "section": "HMMs in genomics",
+    "text": "HMMs in genomics\n\n\n\n\n\n\n\n\n\nProblem\nHidden states\nObservations\n\n\n\n\nGene finding (GENSCAN) (Burge and Karlin 1997)\nexon, intron, intergenic, …\nbases\n\n\nProtein families (Pfam, HMMER) (Krogh et al. 1994; Eddy 2011)\nmatch, insert, delete\namino acids\n\n\nConserved elements (phastCons) (Siepel et al. 2005)\nconserved or not\nalignment columns\n\n\nChromatin states (ChromHMM) (Ernst and Kellis 2012)\npromoter, enhancer, …\nhistone marks\n\n\nPopulation history (PSMC) (Li and Durbin 2011)\ntime to common ancestor\nheterozygous sites\n\n\n\n\n\n\n\n\n\nThe first HMM for DNA split sequences into stretches with different base compositions (Churchill 1989), a lot like our CpG islands\n\n\n\n\n\n16:00-17:00\nThe point: once you can write down hidden states, transitions, and emissions, the same Viterbi (and forward) code does the rest. Profile HMMs power Pfam and HMMER (homology search, like BLAST but more sensitive). ChromHMM labels the genome with chromatin states from histone-mark data. PSMC infers population size history from a single genome. Churchill (1989) is the first HMM for DNA sequences: compositional segments, like our islands."
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#transition-probabilities",
-    "href": "slides/topic-09-substitution-models.html#transition-probabilities",
-    "title": "Richer models of sequence evolution",
-    "section": "Transition probabilities",
-    "text": "Transition probabilities\nThe probability that a site that starts as base \\(i\\) is base \\(j\\) after time \\(t\\):\n\\[\nP(t) = e^{Qt}\n\\]\n\n\nThe matrix exponential: A version of \\(e^x\\) for matrices\nWe won’t calculate it by hand\n\nWe’ll use scipy.linalg.expm(Q * t)\n\nFor JC, \\(e^{Qt}\\) gives exactly last week’s formula\nFor every other model, \\(e^{Qt}\\) gives what we can’t easily write down\n\n\n\n11:00-12:15\nDo not go into how expm works (eigendecomposition, Pade approximation). The point: Q holds the model, P(t) holds the probabilities we need for likelihood, and a computer turns one into the other. Challenge 8 is one line of code."
+    "objectID": "slides/topic-14-hmm.html#beyond-genomics",
+    "href": "slides/topic-14-hmm.html#beyond-genomics",
+    "title": "Hidden Markov models",
+    "section": "Beyond genomics",
+    "text": "Beyond genomics\n\n\n\n\n\n\n\n\n\nProblem\nHidden states\nObservations\n\n\n\n\nAnimal movement (Langrock et al. 2012)\nresting, foraging, traveling\nstep lengths, turning angles\n\n\nSpeech recognition (Rabiner 1989)\nsounds, words\naudio\n\n\nDigital communication (Viterbi 1967)\nthe bits that were sent\na noisy signal\n\n\n\n\n\n\n\n\nViterbi invented his algorithm to decode noisy digital signals, like those sent to cell phones and from spacecraft; we’re using it to read genomes!\n\n\n\n\n17:00-17:30\nSame model, same algorithms, completely different fields. Animal movement: GPS step lengths and turning angles emitted by behavioral states (the bison example from the first table). Speech recognition was the big application of HMMs for decades (Rabiner’s tutorial is one of the most cited papers on HMMs)."
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#what-pt-looks-like",
-    "href": "slides/topic-09-substitution-models.html#what-pt-looks-like",
-    "title": "Richer models of sequence evolution",
-    "section": "What \\(P(t)\\) looks like",
-    "text": "What \\(P(t)\\) looks like\n\nK80 (\\(\\kappa = 8\\)), \\(t = 0.5\\):\n\n\n\nFrom \\ To\nA\nC\nG\nT\n\n\n\n\nA\n0.658\n0.045\n0.251\n0.045\n\n\nC\n0.045\n0.658\n0.045\n0.251\n\n\nG\n0.251\n0.045\n0.658\n0.045\n\n\nT\n0.045\n0.251\n0.045\n0.658\n\n\n\n\n\nEvery row sums to 1; why?\nQuestion: What will it look like when \\(t = 0\\)?\nQuestion: What will it look like when \\(t\\) is very large?\n\n\n12:15-13:30\nThese are the questions in Challenge 9. Under K80 with kappa = 8, the mixing between purines and pyrimidines is slow: even at t = 10, the rows are not quite 0.25 each."
+    "objectID": "slides/topic-14-hmm.html#phylo-hmms-hmms-meet-pruning",
+    "href": "slides/topic-14-hmm.html#phylo-hmms-hmms-meet-pruning",
+    "title": "Hidden Markov models",
+    "section": "Phylo-HMMs: HMMs meet pruning",
+    "text": "Phylo-HMMs: HMMs meet pruning\n\n\n\n\n\n\n\n\n\n\n\nHidden states: Conserved (evolving slowly) or Not\nEmission probability of a column = the probability of the column on the tree, from the pruning algorithm, with short branches in the conserved state (Siepel et al. 2005)\n\n\n\n17:30-18:30\nThis is where our two big algorithms meet. (The alignment on the slide is made up, for illustration.) Each hidden state has its own tree (the conserved state has its branches scaled down), the pruning algorithm gives P(column | state), and Viterbi or forward-backward finds the conserved elements. phastCons found that roughly 3-8% of the human genome is conserved. These are the “Conservation” tracks in the UCSC Genome Browser."
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#the-family-of-models-revisited",
-    "href": "slides/topic-09-substitution-models.html#the-family-of-models-revisited",
-    "title": "Richer models of sequence evolution",
-    "section": "The family of models, revisited",
-    "text": "The family of models, revisited\n\n\n\n\nModel\nRates\nBase frequencies\nFree parameters\n\n\n\n\nJC691\nAll equal\nEqual\n0\n\n\nK802\nTransitions vs. transversions (\\(\\kappa\\))\nEqual\n1\n\n\nF813\nAll equal\nUnequal (\\(\\pi\\))\n3\n\n\nHKY854\n\\(\\kappa\\)\nUnequal (\\(\\pi\\))\n4\n\n\nGTR5\nEvery pair its own rate\nUnequal (\\(\\pi\\))\n8\n\n\n\n\n\n\nEach model is a rate matrix \\(Q\\), which enables us to get \\(P(t) = e^{Qt}\\)\n\n\n13:30-14:45\nSame table as last lecture, with F81 added. The punchline: the machinery (Q, expm, likelihood) does not change from model to model; only the entries of Q do.\n\n\nJukes and Cantor (1969)Kimura (1980)Felsenstein (1981)Hasegawa et al. (1985)Tavaré (1986)"
+    "objectID": "slides/topic-14-hmm.html#what-about-genes",
+    "href": "slides/topic-14-hmm.html#what-about-genes",
+    "title": "Hidden Markov models",
+    "section": "What about genes?",
+    "text": "What about genes?\n\n\n\n\n\n\n\n\n\n\n\nHBB (β-globin): gray: all 87 GTs and 81 AGs; red: the 2 real starts and 2 real ends of introns\nA simple exon/intron HMM did worse than calling everything intron on chromosome 19 (65% vs. 78%)\nReal gene finders use codon models, separate parameters for GC-rich and GC-poor DNA (Burge and Karlin 1997), and models of splice sites\n\n\n\n18:30-19:30\nThe β-globin gene (HBB): three exons, two introns. I tried a simple exon/intron HMM while designing this exercise, and it was worse than calling everything intron, because exons and introns differ only a little in composition. GENSCAN handles this with codon-position states, different parameters for different GC contexts (isochores), and splice-site models. Next time: what makes a real splice site? We’ll use machine learning to find out. (Also note: the β-globin genes have no CpG islands; they’re only turned on in red blood cell precursors.)"
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#likelihood-under-any-model",
-    "href": "slides/topic-09-substitution-models.html#likelihood-under-any-model",
-    "title": "Richer models of sequence evolution",
-    "section": "Likelihood under any model",
-    "text": "Likelihood under any model\nFor two aligned sequences, product over sites (base \\(x\\) in one sequence, base \\(y\\) in the other):\n\\[\nL(t) = \\prod_{\\text{sites}} \\pi_x P_{xy}(t)\n\\]\n\nFor our computer’s sake, we turn the product into a sum of logs:\n\\[\n\\ln L(t) = \\sum_{\\text{sites}} \\Big[\\ln(\\pi_x) + \\ln\\big(P_{xy}(t)\\big)\\Big]\n\\]"
-  },
-  {
-    "objectID": "slides/topic-09-substitution-models.html#likelihood-of-yeast-ssa3-sequences",
-    "href": "slides/topic-09-substitution-models.html#likelihood-of-yeast-ssa3-sequences",
-    "title": "Richer models of sequence evolution",
-    "section": "Likelihood of yeast SSA3 sequences",
-    "text": "Likelihood of yeast SSA3 sequences\n3rd codon positions:\n\n\n\n\nModel\nBest \\(t\\)\nLog-likelihood\n\n\n\n\nJC\n0.570\n−1563.6\n\n\nK80 (\\(\\kappa = 9.66\\))\n0.655\n−1473.8\n\n\n\n\n\nThe \\(t\\) that maximizes the likelihood under each model is that model’s distance formula!\n\n14:45-16:15\nStudents compute this in Challenges 10 and 11. The log-likelihoods are lower than last week’s because we now include the base frequency terms; only comparisons made the same way are meaningful."
-  },
-  {
-    "objectID": "slides/topic-09-substitution-models.html#more-parameters-always-help",
-    "href": "slides/topic-09-substitution-models.html#more-parameters-always-help",
-    "title": "Richer models of sequence evolution",
-    "section": "More parameters always help",
-    "text": "More parameters always help\n\nA model with an extra parameter always fits at least as well; why?\n\n\n\nSo we need to ask: Is the improvement worth the extra parameter?\n\n\n\nLikelihood ratio test: Is \\(2 \\times\\) the difference in log-likelihood bigger than chance alone would produce?\nAIC1: “Charge” each parameter 1 log-likelihood unit (2 AIC units), and pick the model with the best score\n\n\n\n\n\nK80 vs. JC for the yeast gene: About 90 log-likelihood units better, for 1 extra parameter\n\n\n16:15-17:45\nAnswer to the “why?”: K80 can always set kappa = 1 and do exactly what JC does, so its best likelihood can’t be worse. Keep this light; just plant the idea that model choice is a trade-off between fit and complexity. (For a likelihood ratio test with 1 extra parameter, the 5% cutoff is about 1.92 log-likelihood units.) Programs like ModelTest and ModelFinder automate this comparison across dozens of models.\n\n\nAkaike (1974)"
-  },
-  {
-    "objectID": "slides/topic-09-substitution-models.html#summary",
-    "href": "slides/topic-09-substitution-models.html#summary",
-    "title": "Richer models of sequence evolution",
+    "objectID": "slides/topic-14-hmm.html#summary",
+    "href": "slides/topic-14-hmm.html#summary",
+    "title": "Hidden Markov models",
     "section": "Summary",
-    "text": "Summary\n\n\nK80 gives transitions their own rate; its distance corrects JC’s bias when transitions are faster/slower than transversions\nIn continuous time, the wait until the next substitution is exponentially distributed and memoryless\nWith unequal base frequencies, sites equilibrate at \\(\\pi\\) and saturate below a p-distance of 0.75\nAny model is a rate matrix \\(Q\\); \\(P(t) = e^{Qt}\\) gives its transition probabilities\nWith \\(P(t)\\), we can calculate the likelihood under any model, and compare models\n\n\n\n17:45-18:30\nIf short on time, cut to the last two bullets."
+    "text": "Summary\n\n\nAn HMM has hidden states that follow a Markov chain (transitions), and emit what we can see (emissions)\nThe Viterbi algorithm finds the most probable path of hidden states by dynamic programming: fill in a table, then trace back\nMax ↔︎ sum: Viterbi is like alignment; the forward algorithm is like pruning\nThe most probable path isn’t the true path, and we can only recover hidden states that emit different things\nWhen we have data with known states, we can train an HMM by counting\nThe same code finds loaded dice, CpG islands, genes, protein domains, conserved elements, …\n\n\n\n19:30-20:00"
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#in-the-exercise",
-    "href": "slides/topic-09-substitution-models.html#in-the-exercise",
-    "title": "Richer models of sequence evolution",
+    "objectID": "slides/topic-14-hmm.html#in-the-exercise",
+    "href": "slides/topic-14-hmm.html#in-the-exercise",
+    "title": "Hidden Markov models",
     "section": "In the exercise",
-    "text": "In the exercise\n\n\ncount_transitions_transversions and k80_distance: Fix last week’s distance bias\nsimulate_site: Simulate evolution in continuous time\nWatch a GC-rich model “settle” at its base frequencies\nget_rate_matrix and get_transition_probabilities: Build \\(Q\\) and \\(P(t)\\) with NumPy and SciPy\nlog_likelihood_pair: Compare JC and K80 on the yeast gene\n\n\n\n\n\n\n\n\n\nWatch for\n\n\nYour simulation and \\(P(t)\\) are two completely different calculations. Do they agree?\n\n\n\n\n18:30-19:30\nThey should: the plot after Challenge 8 overlays the simulated end states on the first row of P(t). Hand off to the notebook here. Remind them the first cell needs their name."
+    "text": "In the exercise\n\n\nsimulate_hmm: Simulate a night at the casino\nlog_joint_probability: How probable are the rolls and a path?\nviterbi_step and viterbi: Catch the casino cheating\nplot_paths: Plot the true and Viterbi paths\ntrain_hmm: Learn an HMM by counting, and find CpG islands in a human chromosome\n\n\n\n\n\n\n\n\n\nWatch for\n\n\nHow many sixes in a row does it take to convince an HMM the die is loaded?\n\n\n\n\n20:00-20:45\nHand off to the notebook. The two CpG cells take 20-30 seconds each, because their viterbi function fills in a table with two million cells. Remind them the first cell needs their name."
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#exercise",
-    "href": "slides/topic-09-substitution-models.html#exercise",
-    "title": "Richer models of sequence evolution",
+    "objectID": "slides/topic-14-hmm.html#exercise",
+    "href": "slides/topic-14-hmm.html#exercise",
+    "title": "Hidden Markov models",
     "section": "Exercise",
     "text": "Exercise\n\nLog into molab\nOpen the exercise in molab\nClick “Fork” button"
   },
   {
-    "objectID": "slides/topic-09-substitution-models.html#acknowledgements",
-    "href": "slides/topic-09-substitution-models.html#acknowledgements",
-    "title": "Richer models of sequence evolution",
-    "section": "Acknowledgements",
-    "text": "Acknowledgements\nI drafted and iterated on these slides in collaboration with Anthropic’s Claude (Opus 5.5 model)."
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#last-time",
-    "href": "slides/topic-11-birth-death.html#last-time",
-    "title": "Birth-death models",
-    "section": "Last time",
-    "text": "Last time\nWe used a tree to learn about how sequences evolve\n\nBut where does the tree come from?\n\n\n\n\n\nToday: What process grows a tree, and what can a tree of living species tell us about that process?\n\n\n\n\n0:00-1:00\nFlip the question around: last time the tree was fixed and sequences evolved along it; today the tree itself is the outcome of a random process. Next time, the same models describe the spread of an epidemic."
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#birth-death-bd-models",
-    "href": "slides/topic-11-birth-death.html#birth-death-bd-models",
-    "title": "Birth-death models",
-    "section": "Birth-death (BD) models",
-    "text": "Birth-death (BD) models\nEvery branch of a tree of species is a lineage\n\n\nEach lineage splits in two (speciation, or “birth”) at rate \\(\\lambda\\)\nEach lineage dies out (extinction, or “death”) at rate \\(\\mu\\)\nRates are per lineage, per unit of time (e.g., per million years)\nWhen \\(\\mu = 0\\), it’s the pure-birth (or Yule) model1\n\n\n\n\nThe same models describe anything that multiplies and dies\n\nCells in a tumor, individuals in a population, infections in an epidemic\n\n\n\n1:00-2:30\nlambda = birth (speciation) rate, mu = death (extinction) rate. Both are constant here, and every lineage has the same rates. When mu = 0, this is the pure-birth, or Yule, model (Yule 1925, modeling the number of species per genus).\n\n\nYule (1925)"
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#one-lineage-is-like-one-site",
-    "href": "slides/topic-11-birth-death.html#one-lineage-is-like-one-site",
-    "title": "Birth-death models",
-    "section": "One lineage is like one site",
-    "text": "One lineage is like one site\nIn the substitution models exercise, a site waited an exponential time before its next change\n\nA lineage waits an exponential time, with rate \\(\\lambda\\), before it splits\n\n\nWith \\(n\\) lineages, each with speciation rate \\(\\lambda\\) and extinction rate \\(\\mu\\):\n\\[\n\\text{total rate} = n\\lambda + n\\mu = n(\\lambda + \\mu)\n\\]\n\n\n\n\n\nThe more lineages there are, the faster new ones appear!\n\n\n\n\n2:30-4:00\nRates add: if each lineage splits lambda times per unit of time on average, n lineages split n * lambda times. Because the exponential is memoryless, after every event we just draw a new waiting time from the new total rate."
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#the-gillespie-algorithm",
-    "href": "slides/topic-11-birth-death.html#the-gillespie-algorithm",
-    "title": "Birth-death models",
-    "section": "The Gillespie algorithm1",
-    "text": "The Gillespie algorithm1\nSimulate one event at a time:\n\nCalculate the total rate: \\(n(\\lambda + \\mu)\\)\nDraw an exponential waiting time using the total rate, and move the clock forward\nChoose which event happened:\n\nA split, with probability \\(\\frac{\\lambda}{\\lambda + \\mu}\\) (\\(n\\) goes up by 1)\nAn extinction otherwise (\\(n\\) goes down by 1)\n\nRepeat until the clock passes the present, or \\(n = 0\\)\n\n\n4:00-5:30\nThis is exactly the recipe from simulate_site: total rate, waiting time, choose the event in proportion to its rate. Now we name it. Gillespie developed it for chemical reactions, but it works for any process like this. Students write simulate_pure_birth (steps 1 and 2) and then simulate_birth_death (adds step 3).\n\nGillespie (1977)"
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#growing-a-tree-event-by-event",
-    "href": "slides/topic-11-birth-death.html#growing-a-tree-event-by-event",
-    "title": "Birth-death models",
-    "section": "Growing a tree, event by event",
-    "text": "Growing a tree, event by event\n\n\n    \n      \n      \n        ◀ Previous\n        ▶ Play\n        Next ▶\n      \n    \n    \n    \n\n\n5:30-7:30\nBirth rate 1, death rate 0.5. Step through with Next (or Play). Each step is one trip through the loop. Point out: the right panel is what the students’ functions return (number of lineages through time); extinct lineages turn gray with an x. The last two frames show the complete tree at the present, and then what we can actually see: the reconstructed tree (more on this later)."
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#pure-birth-simulations-and-expectations",
-    "href": "slides/topic-11-birth-death.html#pure-birth-simulations-and-expectations",
-    "title": "Birth-death models",
-    "section": "Pure-birth simulations and expectations",
-    "text": "Pure-birth simulations and expectations\n\n\n\n\n\n\n\n\n\n\n\nThe number of lineages grows exponentially with rate \\(\\lambda\\)\n\nWhen \\(\\mu &gt; 0\\), the exponential growth rate is \\(r = \\lambda - \\mu\\)\n\nQuestions: Why are the curves straight on a log axis? Why do they differ the most near the start?\n\n\n\n7:30-9:00\n20 pure-birth simulations, lambda = 1. ln(e^(lambda t)) = lambda t, so exponential growth is a straight line with slope lambda on a log axis. Early on, a clade’s fate depends on a few highly variable waiting times; later, many lineages average out, and the curves run parallel. These are the Challenge 2 questions; don’t give the answers away completely."
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#how-often-does-a-clade-die-out",
-    "href": "slides/topic-11-birth-death.html#how-often-does-a-clade-die-out",
-    "title": "Birth-death models",
-    "section": "How often does a clade die out?",
-    "text": "How often does a clade die out?\n\n\n\n\n\n\n\n\n\n\n\nDeath rate, \\(\\mu\\) (\\(\\lambda = 1\\))\nExtinct by time 5 (simulated)\nEventually extinct\n\n\n\n\n0.00\n0.00\n0.00\n\n\n0.25\n0.23\n0.25\n\n\n0.50\n0.49\n0.50\n\n\n0.75\n0.70\n0.75\n\n\n1.00\n0.82\n1.00\n\n\n\n\n\n\n\n\nA clade that starts with one lineage eventually dies out with probability \\(\\mu / \\lambda\\) (when \\(\\mu &lt; \\lambda\\))1\n\n\n\n\n\n\nEven when splits are twice as common as extinctions, about half of all clades die out\n\n\n\n\n9:00-10:30\nEach row: 2,000 simulated clades starting from one lineage, birth rate 1. The net diversification rate r = lambda - mu sets average growth, e^(rt), but the average hides a lot. Most clades that die do so early, when they have only one or a few lineages. Students reproduce this table in the notebook.\n\n\nKendall (1948)"
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#every-clade-we-study-is-a-survivor",
-    "href": "slides/topic-11-birth-death.html#every-clade-we-study-is-a-survivor",
-    "title": "Birth-death models",
-    "section": "Every clade we study is a survivor",
-    "text": "Every clade we study is a survivor\n\n\n\n\n\n\n\n\n\n\n\\(\\lambda = 1\\), \\(\\mu = 0.5\\): 48% of clades are extinct; survivors average 37 lineages\n\n\n\nThat’s about twice the expectation of the BD process (\\(e^{rt} \\approx\n20\\))\nQuestion: How might studying only the “winners” bias what we learn?\nThis is why phylogenetic BD methods condition on survival\n\n\n\n10:30-12:00\nThis is the histogram students plot themselves in Challenge 4 (their first plotting code). Survivors got lucky early, so they look like they diversified faster than the rates really are. That’s why birth-death methods used with real trees condition on survival."
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#complete-vs.-reconstructed-trees",
-    "href": "slides/topic-11-birth-death.html#complete-vs.-reconstructed-trees",
-    "title": "Birth-death models",
-    "section": "Complete vs. reconstructed trees",
-    "text": "Complete vs. reconstructed trees\n\n\n\n\n\n\n\n\n\n\nThe reconstructed tree1 is what we estimate from data: Sans unsampled extant species and most extinct lineages\n\n\n12:00-13:00\nSame model (lambda = 1, mu = 0.5), 4 units of time. Every gray lineage left no living descendants, so it is invisible to us. The reconstructed tree is the complete tree with every extinct lineage pruned away. In the notebook, simulating trees and drawing them are done for the students.\n\nNee et al. (1994)"
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#lineages-through-time",
-    "href": "slides/topic-11-birth-death.html#lineages-through-time",
-    "title": "Birth-death models",
-    "section": "Lineages through time",
-    "text": "Lineages through time\n\n\n\n\n\n\n\n\n\n\n2 lineages at the root, and every split adds one, so all we need are the branching times: the times of the internal nodes\n\n\n13:00-14:00\nStudents write get_branching_times in Challenge 6: loop over the nodes, keep the times of the ones with children, and sort them (the root is last in postorder, so sorting matters)."
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#the-pull-of-the-present",
-    "href": "slides/topic-11-birth-death.html#the-pull-of-the-present",
-    "title": "Birth-death models",
-    "section": "The pull of the present",
-    "text": "The pull of the present\n\n\n\n\n\n\n\n\n\n\nBoth BD models have the same net diversification rate, \\(r = \\lambda - \\mu = 0.5\\)\n\n\n\n\n\nQuestion: Why does extinction make the LTT plot bend up near the present?\n\n\n\n\n14:00-16:00\n30 reconstructed trees per model. Let them think before answering: recent lineages haven’t had time to go extinct yet, so near the present the tree shows splits at close to lambda; deeper in the past, only survivors remain, so the slope is close to r. This “pull of the present” (Nee et al. 1994) is the main signal of extinction in a tree of living species, and it is subtle. Challenge 7."
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#cyrtodactylus",
-    "href": "slides/topic-11-birth-death.html#cyrtodactylus",
-    "title": "Birth-death models",
-    "section": "Cyrtodactylus",
-    "text": "Cyrtodactylus\n\n\n\n\nCyrtodactylus lekaguli\n\n\n\n\nCyrtodactylus lekaguli Rushenb (2016) Wikimedia Commons"
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#cyrtodactylus-1",
-    "href": "slides/topic-11-birth-death.html#cyrtodactylus-1",
-    "title": "Birth-death models",
-    "section": "Cyrtodactylus",
-    "text": "Cyrtodactylus\n\n\n\n\n\n\n\n\n\n\nA time-calibrated tree1 of 345 of the 406 described species2; the root is about 52 million years old\n\n\n16:00-17:00\nBent-toed geckos: a very species-rich genus, and new species are still being described at a high rate, so 406 is a moving target. The outgroup species are removed in the notebook with the same prune_tips function used to remove extinct lineages. Don’t interpret the LTT shape yet; that’s the payoff of the exercise.\n\nGrismer et al. (2022)Uetz et al. (2026)"
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#estimating-the-birth-rate",
-    "href": "slides/topic-11-birth-death.html#estimating-the-birth-rate",
-    "title": "Birth-death models",
-    "section": "Estimating the birth rate",
-    "text": "Estimating the birth rate\nUnder pure birth, the maximum likelihood estimate of \\(\\lambda\\) is:\n\\[\n\\hat{\\lambda} = \\frac{n - 2}{L}\n\\]\n\n\n\\(n - 2\\): the number of splits after the root\n\\(L\\): the sum of all branch lengths, the total time lineages had to split\nSo \\(\\hat{\\lambda}\\) is splits per lineage per unit of time\n\n\n\n\nWe can simulate trees under the model, and ask: Does the gecko tree look like them?\n\n\n17:00-18:00\nChallenge 8: estimate_birth_rate, a single loop over the nodes. In the notebook, they compare the gecko LTT plot to 100 pure-birth trees with the same number of tips and the same root age (Challenge 9). The estimate is about 0.07 splits per lineage per million years, but don’t give it away."
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#unsampled-species",
-    "href": "slides/topic-11-birth-death.html#unsampled-species",
-    "title": "Birth-death models",
-    "section": "Unsampled species",
-    "text": "Unsampled species\n\n\n\n\n\n\n\n\n\n\n\nEvery unsampled species removes a split, mostly recent ones, so the LTT plot flattens near the present\n\n\n\n\n\n\nThe gecko tree is missing at least 61 described species. Question: How many species would a pure-birth model need to explain the gecko tree?\n\n\n\n\n18:00-19:00\nThe gray tips are species we don’t have DNA from. Removing them removes the splits that join them to their closest relatives, which tend to be young. In the notebook, students write simulate_sampled_tree (Challenge 10), and then use a slider to change the total number of gecko species from 406 (described) to 2,006, keeping 345 in each simulated tree. Don’t give away the answer (roughly 1,100 to 2,000, depending on which part of the tree they match)."
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#summary",
-    "href": "slides/topic-11-birth-death.html#summary",
-    "title": "Birth-death models",
-    "section": "Summary",
-    "text": "Summary\n\n\nIn a birth-death model, each lineage splits at rate \\(\\lambda\\) and dies out at rate \\(\\mu\\)\nThe Gillespie algorithm simulates it one event at a time: total rate → waiting time → which event\nLineages grow exponentially, but many clades go extinct, so living clades are a biased sample of “winners”\nWe usually see only the reconstructed tree; extinction leaves a subtle signature in it, the pull of the present\nAn LTT plot summarizes a tree, so we can compare real trees to the model\nUnsampled species remove recent splits, which flattens an LTT plot near the present\n\n\n\n19:00-19:30\nIf short on time, skip straight to the exercise slide."
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#in-the-exercise",
-    "href": "slides/topic-11-birth-death.html#in-the-exercise",
-    "title": "Birth-death models",
-    "section": "In the exercise",
-    "text": "In the exercise\n\n\nsimulate_pure_birth and simulate_birth_death: The Gillespie algorithm\nHow often do clades go extinct?\nplot_final_counts: Your first plot!\nget_branching_times: LTT plots and the pull of the present\nestimate_birth_rate and simulate_sampled_tree: Lineages of bent-toed geckos through time\n\n\n\n\n\n\n\n\n\nWatch for\n\n\nUnder a pure-birth model, how many gecko species are still undescribed?\n\n\n\n\n19:30-20:15\nPoint out that this is the first time they write plotting code; the recipe in the notebook walks them through it. Hand off to the notebook here. Remind them the first cell needs their name."
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#exercise",
-    "href": "slides/topic-11-birth-death.html#exercise",
-    "title": "Birth-death models",
-    "section": "Exercise",
-    "text": "Exercise\n\nLog into molab\nOpen the exercise in molab\nClick “Fork” button"
-  },
-  {
-    "objectID": "slides/topic-11-birth-death.html#acknowledgements",
-    "href": "slides/topic-11-birth-death.html#acknowledgements",
-    "title": "Birth-death models",
+    "objectID": "slides/topic-14-hmm.html#acknowledgements",
+    "href": "slides/topic-14-hmm.html#acknowledgements",
+    "title": "Hidden Markov models",
     "section": "Acknowledgements",
     "text": "Acknowledgements\nI drafted and iterated on these slides in collaboration with Anthropic’s Claude (Opus 5.5 model)."
   },
