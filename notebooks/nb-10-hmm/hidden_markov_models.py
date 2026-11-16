@@ -1033,18 +1033,22 @@ def draw_viterbi_step(observations, model, step,
             color = color, linestyle = style, zorder = 4, shrinkA = 1,
             shrinkB = 1))
 
-    # Arrows into the current column (which previous state was best?)
+    # Pointer arrows into every column filled so far (which previous state was
+    # best?); they stay visible for the rest of the animation
+    for i in range(1, filled):
+        for k in range(number_of_states):
+            arrow(i, pointers[i, k], k, "steelblue", 2.5)
+    # In the current column, also show the options that lost (gray, dashed)
     if current is not None and current >= 1:
         for k in range(number_of_states):
             for j in range(number_of_states):
-                if j == pointers[current, k]:
-                    arrow(current, j, k, "steelblue", 2.5)
-                else:
+                if j != pointers[current, k]:
                     arrow(current, j, k, "lightgray", 1.2, "--")
-    # Arrows along the path we have traced back so far
+    # Arrows along the path we have traced back so far, drawn over the blue
+    # pointer arrows
     for i in traced:
         if i >= 1 and (i - 1) in traced:
-            arrow(i, path[i - 1], path[i], "darkgoldenrod", 2.5)
+            arrow(i, path[i - 1], path[i], "darkgoldenrod", 3.5)
     # The path along the bottom
     path_row = 1.3 + 1.25 * number_of_states
     if traced:
