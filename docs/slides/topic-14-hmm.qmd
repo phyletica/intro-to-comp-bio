@@ -610,7 +610,7 @@ So, we only need the best path ending in **each state**, at **each roll**
 . . .
 
 ::: {style="font-size: 85%;"}
-We fill in a table: number for rows = number of states; number of columns = length of sequence
+We fill in a table with one row per state and one column per roll
 :::
 
 . . .
@@ -810,7 +810,7 @@ When we have data with known hidden states, we can train an HMM by just **counti
 ::: {.notes}
 14:00-14:45
 
-Challenge 8 (train_hmm). They check it on the casino first: counting 50,000
+Challenge 9 (train_hmm). They check it on the casino first: counting 50,000
 simulated rolls recovers the true probabilities. Training and testing on
 separate data previews the ML topic.
 :::
@@ -833,8 +833,8 @@ separate data previews the ML topic.
 ::: {.column width="50%"}
 ::: {style="font-size: 80%;"}
 -   One base at a time: the HMM can only see **GC content**
--   Pairs: each observed state is a Markov chain, $P(\text{base} \mid
-    \text{previous base})$, so it can see **CpGs**
+-   Pairs: within each hidden state, the bases follow a Markov chain,
+    $P(\text{base} \mid \text{previous base})$, so it can see **CpGs**
 -   $P(\texttt{G} \mid \texttt{C})$: 0.11 in the background, 0.28 in islands
 :::
 :::
